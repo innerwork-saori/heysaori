@@ -246,6 +246,16 @@
   .selected-strength .dot-strength { display: block; background: var(--accent); }
   .selected-growth .dot-growth { display: block; background: var(--accent2); }
 
+  .card-name-num {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--border);
+    letter-spacing: 0.05em;
+    margin-top: 0.2rem;
+  }
+  .selected-strength .card-name-num { color: rgba(200,80,42,0.35); }
+  .selected-growth .card-name-num { color: rgba(74,124,111,0.35); }
+
   .card-name-cn {
     font-size: 0.88rem;
     font-weight: 600;
@@ -253,13 +263,6 @@
     line-height: 1.4;
     margin-top: 0.3rem;
   }
-  .card-name-en {
-    font-size: 0.65rem;
-    color: var(--muted);
-    margin-top: 0.25rem;
-    line-height: 1.3;
-  }
-
   /* TOGGLE BUTTONS */
   .card-actions {
     display: flex;
@@ -706,63 +709,87 @@
 <script>
 const DATA = [
   {
-    category: "Action and Doing",
+    category: "Action & Execution",
     categoryZh: "行動與做事",
     items: [
-      { en: "Achievement-oriented", zh: "成就導向" },
-      { en: "Goal-focused", zh: "專注目標／目標導向" },
-      { en: "Efficiency-driven", zh: "發揮效率／提升效率" },
-      { en: "Physical Activity", zh: "肢體活動" },
-      { en: "Responsibility Commitment", zh: "責任承諾" },
-      { en: "Extensive Collection", zh: "廣泛收集" },
-      { en: "Norms and Order", zh: "規範秩序" },
-      { en: "Aesthetic Creation", zh: "美感創作" },
-      { en: "Adaptability", zh: "靈活應變" },
-      { en: "Strategic Planning", zh: "統籌規劃" },
-      { en: "Pursuing Fairness", zh: "追求公平／尊重包容" },
-      { en: "Proactive", zh: "積極主動" },
-      { en: "Problem Solving", zh: "解決問題" },
+      { no: 1,  zh: "追求品質" },
+      { no: 2,  zh: "專注目標／目標導向" },
+      { no: 3,  zh: "發揮效率／提升效率" },
+      { no: 4,  zh: "擷取重點" },
+      { no: 5,  zh: "責任承諾" },
+      { no: 6,  zh: "廣泛收集" },
+      { no: 7,  zh: "規範秩序" },
+      { no: 8,  zh: "資源應用" },
+      { no: 9,  zh: "靈活應變" },
+      { no: 10, zh: "統籌規劃" },
+      { no: 11, zh: "持續優化" },
+      { no: 12, zh: "積極主動" },
+      { no: 13, zh: "解決問題" },
+      { no: 14, zh: "冒險挑戰" },
+      { no: 15, zh: "毅力堅持" },
+      { no: 16, zh: "行動執行" },
+      { no: 17, zh: "時間管理" },
+      { no: 18, zh: "成就導向" },
     ]
   },
   {
     category: "Thinking and Mindset",
     categoryZh: "思考與心態",
     items: [
-      { en: "Self-awareness", zh: "自我察覺" },
-      { en: "Innovative Thinking", zh: "創新思維" },
-      { en: "Logical Reasoning", zh: "邏輯推理" },
-      { en: "Strategic Thinking", zh: "戰略思維／策略洞察" },
-      { en: "Conceptual Thinking", zh: "概念思考／系統思考" },
-      { en: "Love of Learning", zh: "熱愛學習／高效學習" },
-      { en: "Self-management", zh: "自我管理／自律節制" },
-      { en: "Self-belief", zh: "相信自己" },
-      { en: "Respect and Inclusion", zh: "尊重包容" },
-      { en: "Loyalty to Beliefs", zh: "忠於信念／誠信正直" },
-      { en: "Overcoming Adversity", zh: "克敵致勝" },
-      { en: "Reflecting on the Past", zh: "回溯過往／回顧復盤" },
-      { en: "Thoughtfulness", zh: "審慎周全" },
-      { en: "Imagining the Future", zh: "想像未來／描繪未來" },
-      { en: "Focus on Strengths", zh: "關注優勢" },
-      { en: "Optimism and Positivity", zh: "樂觀正向" },
-      { en: "Critical Thinking", zh: "批判思考／獨立思考" },
+      { no: 19, zh: "自我察覺" },
+      { no: 20, zh: "創新思維" },
+      { no: 21, zh: "邏輯推理" },
+      { no: 22, zh: "戰略思維／策略洞察" },
+      { no: 23, zh: "概念思考／系統思考" },
+      { no: 24, zh: "熱愛學習／高效學習" },
+      { no: 25, zh: "自我管理／自律節制" },
+      { no: 26, zh: "相信自己" },
+      { no: 27, zh: "尊重包容" },
+      { no: 28, zh: "忠於信念／誠信正直" },
+      { no: 29, zh: "克敵致勝" },
+      { no: 30, zh: "回溯過往／回顧復盤" },
+      { no: 31, zh: "審慎周全" },
+      { no: 32, zh: "想像未來／描繪未來" },
+      { no: 33, zh: "發揮優勢" },
+      { no: 34, zh: "樂觀正向" },
+      { no: 35, zh: "批判思考／獨立思考" },
+      { no: 36, zh: "深度專注" },
+      { no: 37, zh: "身心續航" },
     ]
   },
   {
-    category: "Interpersonal and Leadership",
+    category: "People & Leadership",
     categoryZh: "人際與領導",
     items: [
-      { en: "Observation and Perception", zh: "察言觀色／社交敏銳" },
-      { en: "Empathy", zh: "感同身受" },
-      { en: "Conflict Resolution", zh: "協調衝突" },
-      { en: "Helping Others", zh: "協助他人／照顧他人" },
-      { en: "Influence and Impact", zh: "推動影響" },
-      { en: "Developing Others", zh: "培養他人" },
-      { en: "Team Awareness", zh: "團隊意識／團隊合作" },
-      { en: "Leadership and Command", zh: "領導統率" },
-      { en: "Communication Skills", zh: "表達技巧" },
-      { en: "Talent Recognition", zh: "善於識人" },
-      { en: "Deepening Relationships", zh: "深化關係" },
-      { en: "Building New Connections", zh: "結識新人" },
+      { no: 38, zh: "察言觀色／社交敏銳" },
+      { no: 39, zh: "感同身受" },
+      { no: 40, zh: "協調衝突" },
+      { no: 41, zh: "客戶導向" },
+      { no: 42, zh: "推動影響" },
+      { no: 43, zh: "培養他人" },
+      { no: 44, zh: "團隊意識／團隊合作" },
+      { no: 45, zh: "領導統率" },
+      { no: 46, zh: "建立界線" },
+      { no: 47, zh: "善於識人" },
+      { no: 48, zh: "深化關係" },
+      { no: 49, zh: "結識新人" },
+      { no: 50, zh: "表達技巧" },
+      { no: 51, zh: "談判協商" },
+    ]
+  },
+  {
+    category: "Skill & Application",
+    categoryZh: "能力與應用",
+    items: [
+      { no: 52, zh: "美感創作" },
+      { no: 53, zh: "肢體活動" },
+      { no: 54, zh: "動手實作" },
+      { no: 55, zh: "科技應用" },
+      { no: 56, zh: "永續思維" },
+      { no: 57, zh: "國際移動" },
+      { no: 58, zh: "商業思維" },
+      { no: 59, zh: "照顧他人" },
+      { no: 60, zh: "財務管理" },
     ]
   }
 ];
@@ -797,8 +824,8 @@ function renderCards() {
           <div class="card-dot dot-strength"></div>
           <div class="card-dot dot-growth"></div>
         </div>
+        <div class="card-name-num">${item.no}</div>
         <div class="card-name-cn">${item.zh}</div>
-        <div class="card-name-en">${item.en}</div>
         <div class="card-actions">
           <button class="btn-toggle ${isS ? 's-active' : ''}" onclick="toggleStrength('${key}', event)">⭐ 優勢</button>
           <button class="btn-toggle ${isG ? 'g-active' : ''}" onclick="toggleGrowth('${key}', event)">🌱 成長</button>
@@ -1067,7 +1094,6 @@ function downloadMd() {
       if (!item) return;
       const note = reflections['s_' + key] || '';
       md += `### ${si++}. ${item.zh}\n\n`;
-      if (item.en) md += `*${item.en}*\n\n`;
       md += note ? `${note}\n\n` : `_（尚未填寫描述）_\n\n`;
     });
   }
@@ -1082,7 +1108,6 @@ function downloadMd() {
       if (!item) return;
       const note = reflections['g_' + key] || '';
       md += `### ${gi++}. ${item.zh}\n\n`;
-      if (item.en) md += `*${item.en}*\n\n`;
       md += note ? `${note}\n\n` : `_（尚未填寫描述）_\n\n`;
     });
   }
