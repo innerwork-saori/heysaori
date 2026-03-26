@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saori · 謝孟娟 · 職涯諮詢師</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1c1a17;
+      --ink-soft: #2e2b26;
+      --paper: #faf7f2;
+      --paper-warm: #f5f0e8;
+      --paper-mid: #ede7da;
+      --accent1: #8b6f47;
+      --accent2: #c4956a;
+      --accent3: #d4a96a;
+      --accent-sage: #7a8c72;
+      --accent-rose: #b87c6e;
+      --text-main: #2e2b26;
+      --text-mid: #5c5549;
+      --text-soft: #8c8278;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--text-main);
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--ink);
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 40%, rgba(196,149,106,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 70% at 20% 80%, rgba(122,140,114,0.08) 0%, transparent 55%),
+        linear-gradient(160deg, #1c1a17 0%, #252018 50%, #1e1b14 100%);
+    }
+
+    .hero-texture {
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='80' height='80' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      opacity: 0.4;
+    }
+
+    /* decorative lines */
+    .hero-lines {
+      position: absolute; inset: 0; pointer-events: none;
+    }
+    .hero-lines svg {
+      width: 100%; height: 100%;
+    }
+
+    .hero-inner {
+      position: relative; z-index: 2;
+      text-align: center;
+      padding: 6rem 2rem;
+      max-width: 720px;
+    }
+
+    .hero-label {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--accent3);
+      letter-spacing: 0.22em;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.2s ease forwards;
+    }
+
+    .hero-initial {
+      font-family: 'Noto Serif TC', serif;
+      font-size: clamp(5rem, 15vw, 9rem);
+      font-weight: 700;
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(250,247,242,0.15);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-name-en {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(0.85rem, 2vw, 1rem);
+      color: rgba(250,247,242,0.4);
+      letter-spacing: 0.3em;
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s ease forwards;
+    }
+
+    .hero-name {
+      font-family: 'Noto Serif TC', serif;
+      font-size: clamp(2.4rem, 7vw, 4rem);
+      font-weight: 600;
+      color: var(--paper);
+      letter-spacing: 0.08em;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.55s ease forwards;
+    }
+
+    .hero-divider {
+      width: 48px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent3), transparent);
+      margin: 0 auto 1.5rem;
+      opacity: 0;
+      animation: fadeIn 0.9s 0.75s ease forwards;
+    }
+
+    .hero-roles {
+      display: flex;
+      gap: 0.6rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.85s ease forwards;
+    }
+
+    .role-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      color: rgba(250,247,242,0.55);
+      border: 1px solid rgba(250,247,242,0.15);
+      padding: 0.3rem 0.9rem;
+      border-radius: 2px;
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 400;
+    }
+
+    .hero-cta {
+      opacity: 0;
+      animation: fadeUp 0.9s 1.05s ease forwards;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 0.85rem 2.2rem;
+      background: transparent;
+      border: 1px solid var(--accent3);
+      color: var(--accent3);
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      background: var(--accent3);
+      color: var(--ink);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeIn 1s 1.5s ease forwards;
+    }
+    .hero-scroll span {
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      color: rgba(250,247,242,0.3);
+    }
+    .scroll-line {
+      width: 1px; height: 32px;
+      background: linear-gradient(to bottom, rgba(250,247,242,0.3), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    /* ── SECTION COMMONS ── */
+    .section {
+      padding: 6rem 2rem;
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.8rem;
+      letter-spacing: 0.28em;
+      color: var(--accent2);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 600;
+      color: var(--text-main);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+
+    .section-rule {
+      width: 40px; height: 2px;
+      background: var(--accent2);
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── ABOUT ── */
+    .about-wrap {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-sidebar {
+      position: sticky;
+      top: 4rem;
+    }
+
+    .profile-emblem {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--paper);
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    .profile-emblem::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1px solid rgba(196,149,106,0.35);
+    }
+
+    .sidebar-name {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.25rem;
+    }
+    .sidebar-sub {
+      font-size: 0.72rem;
+      color: var(--text-soft);
+      letter-spacing: 0.1em;
+      line-height: 1.9;
+    }
+
+    .sidebar-divider {
+      width: 28px; height: 1px;
+      background: var(--paper-mid);
+      margin: 1.2rem 0;
+    }
+
+    .sidebar-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .tag-chip {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      padding: 0.25rem 0.6rem;
+      background: var(--paper-mid);
+      color: var(--text-mid);
+      border-radius: 2px;
+    }
+    .tag-chip.accent {
+      background: rgba(196,149,106,0.15);
+      color: var(--accent1);
+    }
+
+    .about-body p {
+      font-size: 0.95rem;
+      color: var(--text-mid);
+      line-height: 2;
+      margin-bottom: 1.4rem;
+    }
+
+    .about-quote {
+      border-left: 2px solid var(--accent2);
+      padding: 0.8rem 1.4rem;
+      margin: 2rem 0;
+      background: var(--paper-warm);
+    }
+    .about-quote p {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.95rem;
+      color: var(--text-main) !important;
+      line-height: 1.9 !important;
+      margin: 0 !important;
+    }
+
+    /* ── AUDIENCE ── */
+    .audience-section {
+      background: var(--ink);
+      padding: 6rem 2rem;
+    }
+    .audience-inner {
+      max-width: 880px;
+      margin: 0 auto;
+    }
+    .audience-section .section-title { color: var(--paper); }
+    .audience-section .section-label { color: var(--accent3); }
+    .audience-section .section-rule { background: var(--accent3); }
+
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5px;
+      background: rgba(250,247,242,0.08);
+      border: 1px solid rgba(250,247,242,0.08);
+    }
+
+    .audience-card {
+      background: var(--ink-soft);
+      padding: 2.2rem 1.8rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .audience-card:hover {
+      background: #272420;
+    }
+    .audience-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 0;
+      background: var(--accent3);
+      transition: height 0.4s ease;
+    }
+    .audience-card:hover::before {
+      height: 100%;
+    }
+    .audience-num {
+      font-family: 'EB Garamond', serif;
+      font-size: 2.4rem;
+      color: rgba(250,247,242,0.07);
+      position: absolute;
+      top: 1rem; right: 1.2rem;
+      line-height: 1;
+    }
+    .audience-icon {
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+    }
+    .audience-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--paper);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.7rem;
+    }
+    .audience-desc {
+      font-size: 0.78rem;
+      color: rgba(250,247,242,0.45);
+      line-height: 1.9;
+    }
+
+    /* ── EXPERTISE ── */
+    .expertise-section {
+      background: var(--paper-warm);
+      padding: 6rem 2rem;
+    }
+    .expertise-inner {
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    .expertise-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      margin-top: 0;
+    }
+
+    .expertise-card {
+      background: var(--paper);
+      padding: 2rem 1.8rem;
+      border-bottom: 2px solid var(--paper-mid);
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .expertise-card:hover {
+      border-color: var(--accent2);
+      transform: translateY(-3px);
+    }
+    .expertise-area {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      color: var(--accent2);
+      margin-bottom: 0.5rem;
+    }
+    .expertise-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-main);
+      letter-spacing: 0.06em;
+      margin-bottom: 1rem;
+    }
+    .expertise-list {
+      list-style: none;
+    }
+    .expertise-list li {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      padding: 0.3rem 0;
+      border-bottom: 1px solid var(--paper-mid);
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    .expertise-list li::before {
+      content: '—';
+      color: var(--accent3);
+      font-size: 0.65rem;
+      flex-shrink: 0;
+    }
+    .expertise-list li:last-child { border-bottom: none; }
+
+    /* ── EXPERIENCE ── */
+    .experience-section {
+      padding: 6rem 2rem;
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    .exp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .exp-group-label {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      color: var(--accent2);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--paper-mid);
+    }
+
+    .exp-list {
+      list-style: none;
+    }
+    .exp-list li {
+      font-size: 0.82rem;
+      color: var(--text-mid);
+      padding: 0.55rem 0;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      line-height: 1.7;
+    }
+    .exp-list li::before {
+      content: '◆';
+      font-size: 0.35rem;
+      color: var(--accent3);
+      margin-top: 0.55rem;
+      flex-shrink: 0;
+    }
+
+    .fields-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .field-pill {
+      font-size: 0.72rem;
+      padding: 0.3rem 0.85rem;
+      border: 1px solid var(--paper-mid);
+      color: var(--text-mid);
+      letter-spacing: 0.08em;
+      border-radius: 1px;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: var(--ink);
+      padding: 8rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 50% at 50% 60%, rgba(196,149,106,0.1) 0%, transparent 70%);
+    }
+    .cta-inner { position: relative; z-index: 1; }
+
+    .cta-label {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.85rem;
+      letter-spacing: 0.28em;
+      color: var(--accent3);
+      margin-bottom: 1.2rem;
+    }
+
+    .cta-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 500;
+      color: var(--paper);
+      letter-spacing: 0.08em;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .cta-sub {
+      font-size: 0.85rem;
+      color: rgba(250,247,242,0.45);
+      letter-spacing: 0.08em;
+      margin-bottom: 2.5rem;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 2;
+    }
+
+    .btn-cta {
+      display: inline-block;
+      padding: 1rem 2.8rem;
+      background: var(--accent3);
+      color: var(--ink);
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .btn-cta:hover {
+      background: var(--accent2);
+      transform: translateY(-2px);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: rgba(250,247,242,0.55);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(250,247,242,0.06);
+      font-size: 0.78rem;
+      line-height: 2;
+      letter-spacing: 0.04em;
+    }
+    footer .inner { max-width: 600px; margin: 0 auto; }
+    .footer-name {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--paper);
+      letter-spacing: 0.12em;
+      margin-bottom: 0.4rem;
+    }
+    .footer-role {
+      color: var(--accent3);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      margin-bottom: 1rem;
+    }
+    .footer-rule {
+      width: 32px; height: 1px;
+      background: rgba(250,247,242,0.2);
+      margin: 0.8rem auto;
+    }
+    .footer-link {
+      color: rgba(250,247,242,0.75);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(250,247,242,0.25);
+      padding-bottom: 1px;
+      transition: color 0.2s, border-color 0.2s;
+      font-family: 'Noto Serif TC', serif;
+      letter-spacing: 0.08em;
+    }
+    .footer-link:hover {
+      color: var(--accent3);
+      border-color: var(--accent3);
+    }
+    .footer-copy {
+      margin-top: 1.2rem;
+      font-size: 0.68rem;
+      color: rgba(250,247,242,0.3);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50%       { opacity: 0.8; transform: scaleY(1.15); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 680px) {
+      .about-wrap { grid-template-columns: 1fr; gap: 2rem; }
+      .about-sidebar { position: static; }
+      .exp-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-texture"></div>
+
+  <!-- decorative geometric lines -->
+  <div class="hero-lines" aria-hidden="true">
+    <svg viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="200" x2="400" y2="0" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <line x1="1440" y1="600" x2="1100" y2="800" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <circle cx="1200" cy="150" r="180" fill="none" stroke="rgba(250,247,242,0.04)" stroke-width="1"/>
+      <circle cx="200" cy="650" r="120" fill="none" stroke="rgba(196,149,106,0.05)" stroke-width="1"/>
+      <rect x="60" y="60" width="160" height="160" fill="none" stroke="rgba(250,247,242,0.03)" stroke-width="1" transform="rotate(15,140,140)"/>
+    </svg>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-label">Career Consultant · Multipotentialite</div>
+    <div class="hero-name-en">SAORI HSIEH · 謝孟娟</div>
+    <h1 class="hero-name">職涯諮詢師</h1>
+    <div class="hero-divider"></div>
+    <div class="hero-roles">
+      <span class="role-tag">軟體工程師</span>
+      <span class="role-tag">系統分析師</span>
+      <span class="role-tag">生涯諮詢師</span>
+      <span class="role-tag">多重潛能者</span>
+    </div>
+    <div class="hero-cta">
+      <a href="https://heysaori.com/letscounseling/" class="btn-primary">立即預約諮詢</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll" aria-hidden="true">
+    <div class="scroll-line"></div>
+    <span>scroll</span>
+  </div>
+</section>
+
+
+<!-- ══════════ ABOUT ══════════ -->
+<div class="section">
+  <div class="about-wrap">
+
+    <aside class="about-sidebar">
+      <div class="profile-emblem">S</div>
+      <div class="sidebar-name">謝孟娟</div>
+      <div class="sidebar-sub">
+        Saori Hsieh<br>
+        さおり
+      </div>
+      <div class="sidebar-divider"></div>
+      <div style="font-size:0.7rem;color:var(--text-soft);letter-spacing:0.08em;line-height:2;margin-bottom:0.8rem;">
+        熟悉領域
+      </div>
+      <div class="sidebar-tags">
+        <span class="tag-chip accent">餐飲業</span>
+        <span class="tag-chip accent">軟體業</span>
+        <span class="tag-chip">自媒體</span>
+        <span class="tag-chip">數位游牧</span>
+      </div>
+      <div style="font-size:0.7rem;color:var(--text-soft);letter-spacing:0.08em;line-height:2;margin:0.8rem 0 0.5rem;">
+        現職
+      </div>
+      <div class="sidebar-tags">
+        <span class="tag-chip">資訊開發副理</span>
+        <span class="tag-chip">職涯設計顧問</span>
+        <span class="tag-chip">生涯諮詢師 (CNC/CDA)</span>
+      </div>
+    </aside>
+
+    <div class="about-body">
+      <div class="section-label">about</div>
+      <h2 class="section-title">洞察細膩溫暖</h2>
+      <div class="section-rule"></div>
+
+      <p>
+        Hi 我是孟娟（Saori・さおり），擁有超過 15 年的軟體工程經驗，同時也是一位多重潛能者。喜歡科學、哲學、心理學、正念、身心靈等領域，並將這些洞見融入每一次的諮詢對話中。
+      </p>
+
+      <div class="about-quote">
+        <p>透過「蘇式提問」，我希望能夠陪伴每一個來訪者深入挖掘內心的真實感受，清晰辨識外在世界的實際需求，幫助找尋生命中最適合自己的位置。</p>
+      </div>
+
+      <p>
+        我相信，每一個人都值得擁有和平與幸福。只要能幫助一個人找到生命的真正方向，這個世界就會多一份溫柔與希望。
+      </p>
+      <p>
+        如果您對任何生活議題或心靈探索主題感興趣，歡迎留言，我將以「蘇式提問」的方式與您一同探索。
+      </p>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════ AUDIENCE ══════════ -->
+<div class="audience-section">
+  <div class="audience-inner">
+    <div class="section-label">who I serve</div>
+    <h2 class="section-title">適合諮詢對象</h2>
+    <div class="section-rule"></div>
+
+    <div class="audience-grid">
+      <div class="audience-card">
+        <div class="audience-num">01</div>
+        <div class="audience-icon">💼</div>
+        <div class="audience-title">職涯轉換期的上班族</div>
+        <div class="audience-desc">在現有工作感到迷茫、想轉職或升遷，但方向不清楚，需要有人幫助釐清優勢、價值與可行選項的人。</div>
+      </div>
+      <div class="audience-card">
+        <div class="audience-num">02</div>
+        <div class="audience-icon">📊</div>
+        <div class="audience-title">高壓職場中的管理者</div>
+        <div class="audience-desc">面臨職場壓力、政治或人際挑戰，需要在心理調適與策略行動上獲得兼顧內在與外在的支持。</div>
+      </div>
+      <div class="audience-card">
+        <div class="audience-num">03</div>
+        <div class="audience-icon">🌿</div>
+        <div class="audience-title">追求自我覺察與生活平衡的人</div>
+        <div class="audience-desc">想要更認識自己、梳理人生目標，並將職涯與生活結合，追求穩定又有意義的發展。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ EXPERTISE ══════════ -->
+<div class="expertise-section">
+  <div class="expertise-inner">
+    <div class="section-label">specialization</div>
+    <h2 class="section-title">諮詢專長領域</h2>
+    <div class="section-rule"></div>
+
+    <div class="expertise-grid">
+      <div class="expertise-card">
+        <div class="expertise-area">career design</div>
+        <div class="expertise-title">職涯探索與設計</div>
+        <ul class="expertise-list">
+          <li>協助釐清職業價值觀、優勢與興趣</li>
+          <li>規劃職涯轉換與發展路徑</li>
+          <li>個人品牌建立</li>
+        </ul>
+      </div>
+      <div class="expertise-card">
+        <div class="expertise-area">workplace strategy</div>
+        <div class="expertise-title">職場適應與策略</div>
+        <ul class="expertise-list">
+          <li>職場人際與溝通策略</li>
+          <li>升遷與影響力提升</li>
+          <li>高壓環境下的心理調適</li>
+        </ul>
+      </div>
+      <div class="expertise-card">
+        <div class="expertise-area">self awareness</div>
+        <div class="expertise-title">自我覺察與內在成長</div>
+        <ul class="expertise-list">
+          <li>透過「蘇式提問」深入探索自我</li>
+          <li>協助整合內外在需求，找到平衡點</li>
+          <li>幫助釐清重大抉擇中的核心動機</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ EXPERIENCE ══════════ -->
+<div class="experience-section">
+  <div class="section-label">background</div>
+  <h2 class="section-title">重要經歷</h2>
+  <div class="section-rule"></div>
+
+  <div class="exp-grid">
+    <div>
+      <div class="exp-group-label">professional experience</div>
+      <ul class="exp-list">
+        <li>知名跨國珠寶零售集團 系統分析師</li>
+        <li>知名外商餐飲集團 · 資訊開發部門副理</li>
+        <li>台灣前五大資訊軟體公司 · 軟體工程師</li>
+        <li>台灣旅行社龍頭 · 軟體工程師</li>
+        <li>新創工程師轉職學習平台 · 職涯設計顧問</li>
+        <li>烘焙坊品牌 · 營運人</li>
+        <li>CNC 職涯導航諮詢師</li>
+        <li>職游特約諮詢師</li>
+        <li>遠距抱抱生涯諮詢師</li>
+      </ul>
+    </div>
+    <div>
+      <div class="exp-group-label">certifications &amp; training</div>
+      <ul class="exp-list">
+        <li>英國牛津大學正念中心 · 正念認知療法八週課程結業</li>
+        <li>104 人力銀行職涯診療室公益 Giver</li>
+        <li>親密關係伴侶諮詢培訓結業</li>
+      </ul>
+      <div style="margin-top:2rem;">
+        <div class="exp-group-label">other skills</div>
+        <div class="fields-row">
+          <span class="field-pill">人際／親密關係諮詢</span>
+          <span class="field-pill">正念引導</span>
+          <span class="field-pill">蘇格拉底式提問</span>
+          <span class="field-pill">自架網站</span>
+          <span class="field-pill">教練</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ CTA ══════════ -->
+<section class="cta-section" id="cta">
+  <div class="cta-bg"></div>
+  <div class="cta-inner">
+    <div class="cta-label">begin your journey</div>
+    <h2 class="cta-title">
+      開始您的職涯探索之旅
+    </h2>
+    <p class="cta-sub">
+      準備好透過「蘇式提問」<br>找到屬於您的人生方向了嗎？
+    </p>
+    <a href="https://heysaori.com/letscounseling/" target="_blank" class="btn-cta">立即預約諮詢</a>
+  </div>
+</section>
+
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="inner">
+    <div class="footer-name">Saori</div>
+    <div class="footer-role">軟體工程師・系統分析師・生涯諮詢師</div>
+    <div class="footer-rule"></div>
+    <div>
+      <a href="https://heysaori.com/" target="_blank" class="footer-link">
+        人生探索手札 · heysaori.com
+      </a>
+    </div>
+    <div class="footer-copy">© Saori · 職能盤點工具</div>
+  </div>
+</footer>
+
+</body>
+</html>
