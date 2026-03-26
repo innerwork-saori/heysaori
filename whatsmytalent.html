@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>職能盤點</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #faf7f2;
+    --warm: #f0ebe0;
+    --accent: #c8502a;
+    --accent2: #4a7c6f;
+    --accent3: #d4a84b;
+    --muted: #8a7f72;
+    --border: #d8cfc0;
+    --step-bg: #f5f0e8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 20px,
+      rgba(255,255,255,0.02) 20px,
+      rgba(255,255,255,0.02) 21px
+    );
+  }
+  .header-eyebrow {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 300;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+  .header h1 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    line-height: 1.1;
+  }
+  .header p {
+    margin-top: 0.8rem;
+    font-weight: 300;
+    color: rgba(250,247,242,0.65);
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    background: var(--warm);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .step-tab {
+    flex: 1;
+    max-width: 240px;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .step-tab:hover { background: rgba(200,80,42,0.05); }
+  .step-tab.active {
+    border-bottom-color: var(--accent);
+    background: white;
+  }
+  .step-tab .tab-num {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .step-tab.active .tab-num { color: var(--accent); }
+  .step-tab .tab-title {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 0.2rem;
+    color: var(--ink);
+  }
+  .step-tab .tab-count {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 0.15rem;
+  }
+  .step-tab.active .tab-count { color: var(--accent); font-weight: 600; }
+
+  /* SECTIONS */
+  .section {
+    display: none;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+  .section.active { display: block; }
+
+  .section-header {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-header h2 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+  .section-header p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+    line-height: 1.6;
+  }
+  .count-badge {
+    background: var(--accent);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+    min-width: 120px;
+    text-align: center;
+  }
+  .count-badge.good { background: var(--accent2); }
+  .count-badge.warn { background: var(--accent3); }
+
+  /* CATEGORY */
+  .category-block { margin-bottom: 2.5rem; }
+  .category-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+    border-left: 2px solid var(--accent3);
+  }
+
+  /* CARD GRID */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.7rem;
+  }
+
+  /* COMPETENCY CARD */
+  .comp-card {
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 0.9rem 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    user-select: none;
+    overflow: hidden;
+  }
+  .comp-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: transparent;
+    transition: background 0.2s;
+  }
+  .comp-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(200,80,42,0.12);
+  }
+  .comp-card:hover::before { background: var(--accent); }
+
+  .comp-card.selected-strength {
+    background: #fff8f6;
+    border-color: var(--accent);
+    box-shadow: 0 2px 10px rgba(200,80,42,0.15);
+  }
+  .comp-card.selected-strength::before { background: var(--accent); }
+
+  .comp-card.selected-growth {
+    background: #f4faf8;
+    border-color: var(--accent2);
+    box-shadow: 0 2px 10px rgba(74,124,111,0.15);
+  }
+  .comp-card.selected-growth::before { background: var(--accent2); }
+
+  .comp-card.selected-strength.selected-growth {
+    background: linear-gradient(135deg, #fff8f6 50%, #f4faf8 50%);
+    border-color: var(--accent);
+  }
+
+  .card-icons {
+    position: absolute;
+    top: 0.5rem; right: 0.5rem;
+    display: flex;
+    gap: 3px;
+  }
+  .card-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    display: none;
+  }
+  .selected-strength .dot-strength { display: block; background: var(--accent); }
+  .selected-growth .dot-growth { display: block; background: var(--accent2); }
+
+  .card-name-cn {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.4;
+    margin-top: 0.3rem;
+  }
+  .card-name-en {
+    font-size: 0.65rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
+    line-height: 1.3;
+  }
+
+  /* TOGGLE BUTTONS */
+  .card-actions {
+    display: flex;
+    gap: 0.35rem;
+    margin-top: 0.7rem;
+  }
+  .btn-toggle {
+    flex: 1;
+    font-size: 0.6rem;
+    padding: 0.25rem 0.3rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--muted);
+    transition: all 0.15s;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .btn-toggle:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-toggle.s-active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+  .btn-toggle.g-active {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    color: white;
+  }
+
+  /* STEP 2 STYLES */
+  .reflection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+  .reflection-card {
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 1.4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .reflection-card.strength-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--accent);
+  }
+  .reflection-card.growth-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--accent2);
+  }
+  .r-card-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .strength-card .r-card-label { color: var(--accent); }
+  .growth-card .r-card-label { color: var(--accent2); }
+  .r-card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: 'Noto Serif TC', serif;
+    margin-bottom: 0.8rem;
+    color: var(--ink);
+  }
+  .r-card-q {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+  }
+  .r-textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.7rem;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    resize: vertical;
+    min-height: 90px;
+    color: var(--ink);
+    background: var(--paper);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .r-textarea:focus { border-color: var(--accent2); background: white; }
+
+  /* STEP 3 SUMMARY */
+  .summary-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  @media (max-width: 700px) {
+    .summary-layout { grid-template-columns: 1fr; }
+  }
+  .summary-col h3 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.1rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .summary-col.strength-col h3 { border-color: var(--accent); color: var(--accent); }
+  .summary-col.growth-col h3 { border-color: var(--accent2); color: var(--accent2); }
+
+  .summary-item {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.8rem;
+    border: 1px solid var(--border);
+  }
+  .summary-item-title {
+    font-weight: 600;
+    font-size: 0.92rem;
+    margin-bottom: 0.4rem;
+  }
+  .summary-item-note {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+  .summary-item-note.empty { font-style: italic; color: #bbb; }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--muted);
+  }
+  .empty-state .emoji { font-size: 2.5rem; margin-bottom: 1rem; }
+  .empty-state p { font-size: 0.9rem; line-height: 1.7; }
+
+  /* NAVIGATION */
+  .nav-btns {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .nav-btn {
+    padding: 0.7rem 2rem;
+    border-radius: 6px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+    border: 2px solid;
+  }
+  .nav-btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+  .nav-btn.primary:hover { background: #a8401e; border-color: #a8401e; }
+  .nav-btn.secondary {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--muted);
+  }
+  .nav-btn.secondary:hover { border-color: var(--muted); color: var(--ink); }
+
+  /* PRINT */
+  .print-btn {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border-radius: 6px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 2px solid;
+    transition: all 0.2s;
+  }
+  .print-btn:hover { opacity: 0.85; }
+
+  /* WARNING */
+  .warn-msg {
+    background: #fff8e6;
+    border: 1px solid #f0c040;
+    border-radius: 6px;
+    padding: 0.7rem 1rem;
+    font-size: 0.8rem;
+    color: #7a5c00;
+    margin-bottom: 1.5rem;
+    display: none;
+  }
+  .warn-msg.show { display: block; }
+
+  .legend {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-size: 0.75rem;
+    color: var(--muted);
+    align-items: center;
+  }
+  .legend-item { display: flex; align-items: center; gap: 0.4rem; }
+  .legend-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+  }
+
+  @media (max-width: 600px) {
+    .card-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+    .section { padding: 1.5rem 1rem 3rem; }
+    .step-tab { padding: 0.75rem 0.5rem; }
+    .step-tab .tab-title { font-size: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Personal Development Tool</div>
+  <h1>職能盤點</h1>
+  <p>三個步驟，認識自己的優勢與成長機會</p>
+</div>
+
+<div class="progress-bar">
+  <div class="step-tab active" onclick="goToStep(1)">
+    <div class="tab-num">Step 01</div>
+    <div class="tab-title">挑選優勢與成長</div>
+    <div class="tab-count" id="tab1-count">優勢 0 / 成長 0</div>
+  </div>
+  <div class="step-tab" onclick="goToStep(2)">
+    <div class="tab-num">Step 02</div>
+    <div class="tab-title">描述與說明</div>
+    <div class="tab-count" id="tab2-count">等待填寫</div>
+  </div>
+  <div class="step-tab" onclick="goToStep(3)">
+    <div class="tab-num">Step 03</div>
+    <div class="tab-title">個人總覽</div>
+    <div class="tab-count" id="tab3-count">尚未完成</div>
+  </div>
+</div>
+
+<!-- STEP 1 -->
+<div class="section active" id="step1">
+  <div class="section-header">
+    <div>
+      <h2>挑選你的優勢與成長機會</h2>
+      <p>點選每張圖卡，標記為「優勢」或「成長」。優勢請選 <strong>5 個</strong>，成長項目請選 <strong>5 個</strong>。</p>
+    </div>
+    <div>
+      <div class="count-badge" id="s-count-badge">優勢 0 個選中</div>
+      <div class="count-badge" id="g-count-badge" style="margin-top:0.4rem; background: var(--accent2);">成長 0 個選中</div>
+    </div>
+  </div>
+
+  <div class="legend" style="margin-bottom:1.5rem">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> 優勢（最多 5 個）</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div> 成長機會（最多 5 個）</div>
+  </div>
+
+  <div class="warn-msg" id="warn-strength">⚠️ 優勢已達 5 個，請先取消選取其他優勢再新增。</div>
+  <div class="warn-msg" id="warn-growth">⚠️ 成長機會已達 5 個，請先取消選取其他成長項目再新增。</div>
+
+  <div id="cards-container"></div>
+
+  <div class="nav-btns">
+    <button class="nav-btn primary" onclick="goToStep(2)">下一步：描述與說明 →</button>
+  </div>
+</div>
+
+<!-- STEP 2 -->
+<div class="section" id="step2">
+  <div class="section-header">
+    <div>
+      <h2>描述你的優勢與成長計畫</h2>
+      <p>針對每個選項，寫下你的想法。優勢請說明如何展現，成長項目請說明不擅長的原因與成長方向。</p>
+    </div>
+  </div>
+
+  <div id="step2-content"></div>
+
+  <div class="nav-btns">
+    <button class="nav-btn secondary" onclick="goToStep(1)">← 返回修改</button>
+    <button class="nav-btn primary" onclick="goToStep(3)">查看個人總覽 →</button>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="section" id="step3">
+  <div class="section-header">
+    <div>
+      <h2>你的職能盤點總覽</h2>
+      <p>以下是你的優勢特質與成長計畫。</p>
+    </div>
+    <button class="print-btn" onclick="window.print()">🖨 列印 / 儲存 PDF</button>
+  </div>
+
+  <div id="step3-content"></div>
+
+  <div class="nav-btns">
+    <button class="nav-btn secondary" onclick="goToStep(2)">← 返回修改</button>
+  </div>
+</div>
+
+<script>
+const DATA = [
+  {
+    category: "Action and Doing",
+    categoryZh: "行動與做事",
+    items: [
+      { en: "Achievement-oriented", zh: "成就導向" },
+      { en: "Goal-focused", zh: "專注目標／目標導向" },
+      { en: "Efficiency-driven", zh: "發揮效率／提升效率" },
+      { en: "Physical Activity", zh: "肢體活動" },
+      { en: "Responsibility Commitment", zh: "責任承諾" },
+      { en: "Extensive Collection", zh: "廣泛收集" },
+      { en: "Norms and Order", zh: "規範秩序" },
+      { en: "Aesthetic Creation", zh: "美感創作" },
+      { en: "Adaptability", zh: "靈活應變" },
+      { en: "Strategic Planning", zh: "統籌規劃" },
+      { en: "Pursuing Fairness", zh: "追求公平／尊重包容" },
+      { en: "Proactive", zh: "積極主動" },
+      { en: "Problem Solving", zh: "解決問題" },
+    ]
+  },
+  {
+    category: "Thinking and Mindset",
+    categoryZh: "思考與心態",
+    items: [
+      { en: "Self-awareness", zh: "自我察覺" },
+      { en: "Innovative Thinking", zh: "創新思維" },
+      { en: "Logical Reasoning", zh: "邏輯推理" },
+      { en: "Strategic Thinking", zh: "戰略思維／策略洞察" },
+      { en: "Conceptual Thinking", zh: "概念思考／系統思考" },
+      { en: "Love of Learning", zh: "熱愛學習／高效學習" },
+      { en: "Self-management", zh: "自我管理／自律節制" },
+      { en: "Self-belief", zh: "相信自己" },
+      { en: "Respect and Inclusion", zh: "尊重包容" },
+      { en: "Loyalty to Beliefs", zh: "忠於信念／誠信正直" },
+      { en: "Overcoming Adversity", zh: "克敵致勝" },
+      { en: "Reflecting on the Past", zh: "回溯過往／回顧復盤" },
+      { en: "Thoughtfulness", zh: "審慎周全" },
+      { en: "Imagining the Future", zh: "想像未來／描繪未來" },
+      { en: "Focus on Strengths", zh: "關注優勢" },
+      { en: "Optimism and Positivity", zh: "樂觀正向" },
+      { en: "Critical Thinking", zh: "批判思考／獨立思考" },
+    ]
+  },
+  {
+    category: "Interpersonal and Leadership",
+    categoryZh: "人際與領導",
+    items: [
+      { en: "Observation and Perception", zh: "察言觀色／社交敏銳" },
+      { en: "Empathy", zh: "感同身受" },
+      { en: "Conflict Resolution", zh: "協調衝突" },
+      { en: "Helping Others", zh: "協助他人／照顧他人" },
+      { en: "Influence and Impact", zh: "推動影響" },
+      { en: "Developing Others", zh: "培養他人" },
+      { en: "Team Awareness", zh: "團隊意識／團隊合作" },
+      { en: "Leadership and Command", zh: "領導統率" },
+      { en: "Communication Skills", zh: "表達技巧" },
+      { en: "Talent Recognition", zh: "善於識人" },
+      { en: "Deepening Relationships", zh: "深化關係" },
+      { en: "Building New Connections", zh: "結識新人" },
+    ]
+  }
+];
+
+const MAX_STRENGTH = 5;
+const MAX_GROWTH = 5;
+
+let strengths = new Set();
+let growths = new Set();
+let reflections = {}; // key: "s_zh" or "g_zh"
+
+function getKey(zh) { return zh.replace(/\//g, '_'); }
+
+function renderCards() {
+  const container = document.getElementById('cards-container');
+  container.innerHTML = '';
+  DATA.forEach(cat => {
+    const block = document.createElement('div');
+    block.className = 'category-block';
+    block.innerHTML = `<div class="category-label">${cat.category} · ${cat.categoryZh}</div>`;
+    const grid = document.createElement('div');
+    grid.className = 'card-grid';
+    cat.items.forEach(item => {
+      const key = getKey(item.zh);
+      const isS = strengths.has(key);
+      const isG = growths.has(key);
+      const card = document.createElement('div');
+      card.className = `comp-card${isS ? ' selected-strength' : ''}${isG ? ' selected-growth' : ''}`;
+      card.id = `card-${key}`;
+      card.innerHTML = `
+        <div class="card-icons">
+          <div class="card-dot dot-strength"></div>
+          <div class="card-dot dot-growth"></div>
+        </div>
+        <div class="card-name-cn">${item.zh}</div>
+        <div class="card-name-en">${item.en}</div>
+        <div class="card-actions">
+          <button class="btn-toggle ${isS ? 's-active' : ''}" onclick="toggleStrength('${key}', event)">⭐ 優勢</button>
+          <button class="btn-toggle ${isG ? 'g-active' : ''}" onclick="toggleGrowth('${key}', event)">🌱 成長</button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+    block.appendChild(grid);
+    container.appendChild(block);
+  });
+  updateCounts();
+}
+
+function toggleStrength(key, e) {
+  e.stopPropagation();
+  if (strengths.has(key)) {
+    strengths.delete(key);
+  } else {
+    if (strengths.size >= MAX_STRENGTH) {
+      showWarn('warn-strength');
+      return;
+    }
+    strengths.add(key);
+  }
+  refreshCard(key);
+  updateCounts();
+}
+
+function toggleGrowth(key, e) {
+  e.stopPropagation();
+  if (growths.has(key)) {
+    growths.delete(key);
+  } else {
+    if (growths.size >= MAX_GROWTH) {
+      showWarn('warn-growth');
+      return;
+    }
+    growths.add(key);
+  }
+  refreshCard(key);
+  updateCounts();
+}
+
+function refreshCard(key) {
+  const card = document.getElementById(`card-${key}`);
+  if (!card) return;
+  const isS = strengths.has(key);
+  const isG = growths.has(key);
+  card.className = `comp-card${isS ? ' selected-strength' : ''}${isG ? ' selected-growth' : ''}`;
+  const btns = card.querySelectorAll('.btn-toggle');
+  btns[0].className = `btn-toggle ${isS ? 's-active' : ''}`;
+  btns[1].className = `btn-toggle ${isG ? 'g-active' : ''}`;
+}
+
+function showWarn(id) {
+  const el = document.getElementById(id);
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+function updateCounts() {
+  const sc = strengths.size;
+  const gc = growths.size;
+  const sb = document.getElementById('s-count-badge');
+  const gb = document.getElementById('g-count-badge');
+  sb.textContent = `優勢 ${sc} 個選中`;
+  sb.className = `count-badge${sc === MAX_STRENGTH ? ' good' : sc > MAX_STRENGTH ? '' : ''}`;
+  gb.textContent = `成長 ${gc} 個選中`;
+  gb.className = `count-badge${gc === MAX_GROWTH ? ' good' : ''}`
+  gb.style.background = gc === MAX_GROWTH ? 'var(--accent2)' : gc > 0 ? 'var(--accent2)' : 'var(--accent2)';
+  document.getElementById('tab1-count').textContent = `優勢 ${sc} / 成長 ${gc}`;
+}
+
+function findItem(key) {
+  for (const cat of DATA) {
+    for (const item of cat.items) {
+      if (getKey(item.zh) === key) return item;
+    }
+  }
+  return null;
+}
+
+function renderStep2() {
+  const container = document.getElementById('step2-content');
+  container.innerHTML = '';
+
+  const allEmpty = strengths.size === 0 && growths.size === 0;
+  if (allEmpty) {
+    container.innerHTML = `<div class="empty-state"><div class="emoji">👆</div><p>請先回到 Step 1，<br>選擇你的優勢與成長項目。</p></div>`;
+    document.getElementById('tab2-count').textContent = '等待填寫';
+    return;
+  }
+
+  let filled = 0, total = strengths.size + growths.size;
+
+  if (strengths.size > 0) {
+    const h = document.createElement('h3');
+    h.style.cssText = 'font-family:"Noto Serif TC",serif;font-size:1rem;color:var(--accent);letter-spacing:.1em;margin-bottom:1rem;margin-top:.5rem';
+    h.textContent = `⭐ 我的優勢（${strengths.size} 個）`;
+    container.appendChild(h);
+    const grid = document.createElement('div');
+    grid.className = 'reflection-grid';
+    strengths.forEach(key => {
+      const item = findItem(key);
+      if (!item) return;
+      const rkey = `s_${key}`;
+      const card = document.createElement('div');
+      card.className = 'reflection-card strength-card';
+      card.innerHTML = `
+        <div class="r-card-label">優勢 · Strength</div>
+        <div class="r-card-title">${item.zh}</div>
+        <div class="r-card-q">你如何在生活或工作中展現這項優勢？可以舉具體的例子。</div>
+        <textarea class="r-textarea" placeholder="寫下你的想法…" oninput="saveReflection('${rkey}', this.value)">${reflections[rkey] || ''}</textarea>
+      `;
+      if (reflections[rkey]) filled++;
+      grid.appendChild(card);
+    });
+    container.appendChild(grid);
+  }
+
+  if (growths.size > 0) {
+    const h2 = document.createElement('h3');
+    h2.style.cssText = 'font-family:"Noto Serif TC",serif;font-size:1rem;color:var(--accent2);letter-spacing:.1em;margin-bottom:1rem;margin-top:2rem';
+    h2.textContent = `🌱 我的成長機會（${growths.size} 個）`;
+    container.appendChild(h2);
+    const grid2 = document.createElement('div');
+    grid2.className = 'reflection-grid';
+    growths.forEach(key => {
+      const item = findItem(key);
+      if (!item) return;
+      const rkey = `g_${key}`;
+      const card = document.createElement('div');
+      card.className = 'reflection-card growth-card';
+      card.innerHTML = `
+        <div class="r-card-label">成長機會 · Growth</div>
+        <div class="r-card-title">${item.zh}</div>
+        <div class="r-card-q">為什麼選擇這個成長項目？你希望如何提升這項能力？</div>
+        <textarea class="r-textarea" placeholder="寫下你的想法…" oninput="saveReflection('${rkey}', this.value)">${reflections[rkey] || ''}</textarea>
+      `;
+      if (reflections[rkey]) filled++;
+      grid2.appendChild(card);
+    });
+    container.appendChild(grid2);
+  }
+
+  document.getElementById('tab2-count').textContent = `已填 ${filled}/${total}`;
+}
+
+function saveReflection(key, val) {
+  reflections[key] = val;
+  let filled = 0;
+  const total = strengths.size + growths.size;
+  strengths.forEach(k => { if (reflections[`s_${k}`]) filled++; });
+  growths.forEach(k => { if (reflections[`g_${k}`]) filled++; });
+  document.getElementById('tab2-count').textContent = `已填 ${filled}/${total}`;
+}
+
+function renderStep3() {
+  const container = document.getElementById('step3-content');
+  if (strengths.size === 0 && growths.size === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="emoji">📋</div><p>請先完成 Step 1 與 Step 2，<br>才能查看你的職能盤點總覽。</p></div>`;
+    document.getElementById('tab3-count').textContent = '尚未完成';
+    return;
+  }
+
+  document.getElementById('tab3-count').textContent = `優勢 ${strengths.size} 成長 ${growths.size}`;
+
+  let html = '<div class="summary-layout">';
+
+  // Strengths
+  html += '<div class="summary-col strength-col">';
+  html += `<h3><span style="font-size:1.2rem">⭐</span> 我的優勢</h3>`;
+  if (strengths.size === 0) {
+    html += `<div style="color:var(--muted);font-size:.85rem">尚未選擇任何優勢</div>`;
+  } else {
+    strengths.forEach(key => {
+      const item = findItem(key);
+      if (!item) return;
+      const note = reflections[`s_${key}`] || '';
+      html += `<div class="summary-item">
+        <div class="summary-item-title">${item.zh}</div>
+        <div class="summary-item-note ${note ? '' : 'empty'}">${note || '（尚未填寫描述）'}</div>
+      </div>`;
+    });
+  }
+  html += '</div>';
+
+  // Growths
+  html += '<div class="summary-col growth-col">';
+  html += `<h3><span style="font-size:1.2rem">🌱</span> 我的成長計畫</h3>`;
+  if (growths.size === 0) {
+    html += `<div style="color:var(--muted);font-size:.85rem">尚未選擇任何成長項目</div>`;
+  } else {
+    growths.forEach(key => {
+      const item = findItem(key);
+      if (!item) return;
+      const note = reflections[`g_${key}`] || '';
+      html += `<div class="summary-item">
+        <div class="summary-item-title">${item.zh}</div>
+        <div class="summary-item-note ${note ? '' : 'empty'}">${note || '（尚未填寫描述）'}</div>
+      </div>`;
+    });
+  }
+  html += '</div></div>';
+
+  container.innerHTML = html;
+}
+
+function goToStep(n) {
+  document.querySelectorAll('.section').forEach((s,i) => {
+    s.classList.toggle('active', i+1 === n);
+  });
+  document.querySelectorAll('.step-tab').forEach((t,i) => {
+    t.classList.toggle('active', i+1 === n);
+  });
+  if (n === 2) renderStep2();
+  if (n === 3) renderStep3();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Init
+renderCards();
+</script>
+</body>
+</html>
