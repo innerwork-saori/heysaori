@@ -504,6 +504,17 @@
     padding: 0.8rem 1rem;
     margin-bottom: 1.8rem;
     max-width: 380px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .name-input-block.error {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(200,80,42,0.12);
+    animation: shake 0.3s ease;
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
   }
   .name-input-block label {
     font-size: 0.78rem;
@@ -511,6 +522,12 @@
     color: var(--muted);
     white-space: nowrap;
     letter-spacing: 0.05em;
+  }
+  .name-required-tag {
+    font-size: 0.62rem;
+    color: var(--accent);
+    font-weight: 700;
+    margin-left: -0.3rem;
   }
   .name-input-block input {
     flex: 1;
@@ -625,8 +642,8 @@
     </div>
   </div>
 
-  <div class="name-input-block">
-    <label>👤 你的姓名</label>
+  <div class="name-input-block" id="name-input-block">
+    <label>👤 你的姓名 <span class="name-required-tag">必填</span></label>
     <input type="text" id="user-name" placeholder="請輸入你的名字…" oninput="updateNameDisplay()" />
   </div>
 
@@ -1033,6 +1050,7 @@ function showToast(msg) {
 }
 
 function downloadMd() {
+  if (!requireName()) return;
   const name = getUserName();
   const date = new Date().toLocaleDateString('zh-TW', { year:'numeric', month:'long', day:'numeric' });
   let md = `# ${name ? name + ' 的' : ''}職能盤點結果\n\n`;
@@ -1090,7 +1108,21 @@ function downloadTxt() {
   showToast('✅ 已下載 .txt 文字檔！');
 }
 
+function requireName() {
+  const name = getUserName();
+  if (!name) {
+    const block = document.getElementById('name-input-block');
+    block.classList.add('error');
+    setTimeout(() => block.classList.remove('error'), 800);
+    showToast('⚠️ 請先在 Step 1 填寫你的姓名');
+    document.getElementById('user-name').focus();
+    return false;
+  }
+  return true;
+}
+
 function copyToClipboard() {
+  if (!requireName()) return;
   const txt = buildTextSummary();
   navigator.clipboard.writeText(txt).then(() => {
     showToast('✅ 已複製到剪貼簿！');
