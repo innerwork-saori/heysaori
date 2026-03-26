@@ -494,7 +494,44 @@
     color: var(--ink);
   }
   .export-btn.dl:hover { border-color: var(--ink); }
-  
+  .name-input-block {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1.8rem;
+    max-width: 380px;
+  }
+  .name-input-block label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    white-space: nowrap;
+    letter-spacing: 0.05em;
+  }
+  .name-input-block input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.9rem;
+    color: var(--ink);
+    background: transparent;
+  }
+  .name-input-block input::placeholder { color: #ccc; }
+  .name-input-block:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(200,80,42,0.08);
+  }
+
+  .export-btn.copy {
+    background: white;
+    border-color: var(--border);
+    color: var(--ink);
+  }
   .export-btn.copy:hover { border-color: var(--accent2); color: var(--accent2); }
 
   .toast {
@@ -586,6 +623,11 @@
       <div class="count-badge" id="s-count-badge">優勢 0 個選中</div>
       <div class="count-badge" id="g-count-badge" style="margin-top:0.4rem; background: var(--accent2);">成長 0 個選中</div>
     </div>
+  </div>
+
+  <div class="name-input-block">
+    <label>👤 你的姓名</label>
+    <input type="text" id="user-name" placeholder="請輸入你的名字…" oninput="updateNameDisplay()" />
   </div>
 
   <div class="legend" style="margin-bottom:1.5rem">
@@ -948,9 +990,22 @@ function renderStep3() {
   container.innerHTML = html;
 }
 
+function getUserName() {
+  return (document.getElementById('user-name')?.value || '').trim();
+}
+
+function updateNameDisplay() {
+  const name = getUserName();
+  const h2 = document.querySelector('#step3 .section-header h2');
+  if (h2) h2.textContent = name ? `${name} 的職能盤點總覽` : '你的職能盤點總覽';
+}
+
 function buildTextSummary() {
+  const name = getUserName();
   const date = new Date().toLocaleDateString('zh-TW', { year:'numeric', month:'long', day:'numeric' });
-  let txt = `職能盤點結果\n完成日期：${date}\n${'='.repeat(40)}\n\n`;
+  let txt = `職能盤點結果\n`;
+  if (name) txt += `姓名：${name}\n`;
+  txt += `完成日期：${date}\n${'='.repeat(40)}\n\n`;
   txt += `【我的優勢（${strengths.size} 個）】\n\n`;
   let si = 1;
   strengths.forEach(key => {
@@ -978,8 +1033,11 @@ function showToast(msg) {
 }
 
 function downloadMd() {
+  const name = getUserName();
   const date = new Date().toLocaleDateString('zh-TW', { year:'numeric', month:'long', day:'numeric' });
-  let md = `# 職能盤點結果\n\n> 完成日期：${date}\n\n---\n\n`;
+  let md = `# ${name ? name + ' 的' : ''}職能盤點結果\n\n`;
+  if (name) md += `> **姓名：** ${name}  \n`;
+  md += `> **完成日期：** ${date}\n\n---\n\n`;
 
   md += `## ⭐ 我的優勢\n\n`;
   if (strengths.size === 0) {
@@ -1016,7 +1074,7 @@ function downloadMd() {
   const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = '職能盤點結果.md';
+  a.download = `${name ? name + '_' : ''}職能盤點結果.md`;
   a.click();
   showToast('✅ 已下載 Markdown 檔案！');
 }
@@ -1038,6 +1096,8 @@ function copyToClipboard() {
     showToast('✅ 已複製到剪貼簿！');
   }).catch(() => { prompt('請手動複製：', txt); });
 }
+
+
 
 function goToStep(n) {
   document.querySelectorAll('.section').forEach((s,i) => {
@@ -1075,7 +1135,7 @@ renderCards();
       margin-bottom: 0.4rem;
     ">Saori</div>
     <div style="color: var(--accent3); font-size: 0.72rem; letter-spacing: 0.18em; margin-bottom: 1rem;">
-      軟體工程師・系統分析師・生涯諮詢師
+      軟體工程師・系統分析師・生涯資諮詢師
     </div>
     <div style="
       width: 32px;
