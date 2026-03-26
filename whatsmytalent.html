@@ -458,6 +458,67 @@
   }
   .print-btn:hover { opacity: 0.85; }
 
+  .export-bar {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    align-items: center;
+    background: var(--warm);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 2rem;
+  }
+  .export-bar span {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 500;
+    margin-right: 0.3rem;
+  }
+  .export-btn {
+    padding: 0.5rem 1.1rem;
+    border-radius: 6px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .export-btn.dl {
+    background: white;
+    border-color: var(--border);
+    color: var(--ink);
+  }
+  .export-btn.dl:hover { border-color: var(--ink); }
+
+  .export-btn.copy {
+    background: white;
+    border-color: var(--border);
+    color: var(--ink);
+  }
+  .export-btn.copy:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink);
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 999;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
   /* WARNING */
   .warn-msg {
     background: #fff8e6;
@@ -571,10 +632,17 @@
       <h2>你的職能盤點總覽</h2>
       <p>以下是你的優勢特質與成長計畫。</p>
     </div>
-    <button class="print-btn" onclick="window.print()">🖨 列印 / 儲存 PDF</button>
+  </div>
+
+  <div class="export-bar">
+    <span>💾 儲存方式：</span>
+    <button class="export-btn dl" onclick="downloadMd()">⬇ 下載 Markdown</button>
+    <button class="export-btn copy" onclick="copyToClipboard()">📋 複製文字</button>
+    <button class="export-btn dl" onclick="window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
   </div>
 
   <div id="step3-content"></div>
+  <div class="toast" id="toast"></div>
 
   <div class="nav-btns">
     <button class="nav-btn secondary" onclick="goToStep(2)">← 返回修改</button>
@@ -884,6 +952,99 @@ function renderStep3() {
 
   container.innerHTML = html;
 }
+
+function buildTextSummary() {
+  const date = new Date().toLocaleDateString('zh-TW', { year:'numeric', month:'long', day:'numeric' });
+  let txt = `職能盤點結果\n完成日期：${date}\n${'='.repeat(40)}\n\n`;
+  txt += `【我的優勢（${strengths.size} 個）】\n\n`;
+  let si = 1;
+  strengths.forEach(key => {
+    const item = findItem(key);
+    if (!item) return;
+    const note = reflections[`s_${key}`] || '（未填寫）';
+    txt += `${si++}. ${item.zh}\n   ${note}\n\n`;
+  });
+  txt += `\n【我的成長計畫（${growths.size} 個）】\n\n`;
+  let gi = 1;
+  growths.forEach(key => {
+    const item = findItem(key);
+    if (!item) return;
+    const note = reflections[`g_${key}`] || '（未填寫）';
+    txt += `${gi++}. ${item.zh}\n   ${note}\n\n`;
+  });
+  return txt;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function downloadMd() {
+  const date = new Date().toLocaleDateString('zh-TW', { year:'numeric', month:'long', day:'numeric' });
+  let md = `# 職能盤點結果\n\n> 完成日期：${date}\n\n---\n\n`;
+
+  md += `## ⭐ 我的優勢\n\n`;
+  if (strengths.size === 0) {
+    md += `_尚未選擇任何優勢_\n\n`;
+  } else {
+    let si = 1;
+    strengths.forEach(key => {
+      const item = findItem(key);
+      if (!item) return;
+      const note = reflections['s_' + key] || '';
+      md += `### ${si++}. ${item.zh}\n\n`;
+      if (item.en) md += `*${item.en}*\n\n`;
+      md += note ? `${note}\n\n` : `_（尚未填寫描述）_\n\n`;
+    });
+  }
+
+  md += `---\n\n## 🌱 我的成長計畫\n\n`;
+  if (growths.size === 0) {
+    md += `_尚未選擇任何成長項目_\n\n`;
+  } else {
+    let gi = 1;
+    growths.forEach(key => {
+      const item = findItem(key);
+      if (!item) return;
+      const note = reflections['g_' + key] || '';
+      md += `### ${gi++}. ${item.zh}\n\n`;
+      if (item.en) md += `*${item.en}*\n\n`;
+      md += note ? `${note}\n\n` : `_（尚未填寫描述）_\n\n`;
+    });
+  }
+
+  md += `---\n\n_由職能盤點工具產生_\n`;
+
+  const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '職能盤點結果.md';
+  a.click();
+  showToast('✅ 已下載 Markdown 檔案！');
+}
+
+
+function downloadTxt() {
+  const txt = buildTextSummary();
+  const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '職能盤點結果.txt';
+  a.click();
+  showToast('✅ 已下載 .txt 文字檔！');
+}
+
+function copyToClipboard() {
+  const txt = buildTextSummary();
+  navigator.clipboard.writeText(txt).then(() => {
+    showToast('✅ 已複製到剪貼簿！');
+  }).catch(() => { prompt('請手動複製：', txt); });
+}
+
+
 
 function goToStep(n) {
   document.querySelectorAll('.section').forEach((s,i) => {
