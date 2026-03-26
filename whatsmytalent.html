@@ -494,7 +494,12 @@
     color: var(--ink);
   }
   .export-btn.dl:hover { border-color: var(--ink); }
-
+  .export-btn.email {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    color: white;
+  }
+  .export-btn.email:hover { opacity: 0.85; }
   .export-btn.copy {
     background: white;
     border-color: var(--border);
@@ -638,6 +643,7 @@
     <span>💾 儲存方式：</span>
     <button class="export-btn dl" onclick="downloadMd()">⬇ 下載 Markdown</button>
     <button class="export-btn copy" onclick="copyToClipboard()">📋 複製文字</button>
+    <button class="export-btn email" onclick="sendViaClaudeGmail()">✉ Gmail 寄給自己</button>
     <button class="export-btn dl" onclick="window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
   </div>
 
@@ -1044,6 +1050,18 @@ function copyToClipboard() {
   }).catch(() => { prompt('請手動複製：', txt); });
 }
 
+function sendViaClaudeGmail() {
+  const txt = buildTextSummary();
+  const msg = `請幫我用 Gmail 把以下我的職能盤點結果寄給我自己，主旨為「我的職能盤點結果」，內文如下：\n\n` + txt;
+  if (window.sendPrompt) {
+    window.sendPrompt(msg);
+    showToast('✅ 已送出到 Claude 對話！');
+  } else {
+    navigator.clipboard.writeText(msg).then(() => {
+      showToast('✅ 已複製指令，請貼到 Claude 對話框！');
+    });
+  }
+}
 
 
 function goToStep(n) {
@@ -1061,5 +1079,54 @@ function goToStep(n) {
 // Init
 renderCards();
 </script>
+
+<footer style="
+  background: var(--ink);
+  color: rgba(250,247,242,0.55);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  margin-top: 4rem;
+  font-size: 0.78rem;
+  line-height: 2;
+  letter-spacing: 0.04em;
+">
+  <div style="max-width: 600px; margin: 0 auto;">
+    <div style="
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--paper);
+      letter-spacing: 0.12em;
+      margin-bottom: 0.4rem;
+    ">Saori</div>
+    <div style="color: var(--accent3); font-size: 0.72rem; letter-spacing: 0.18em; margin-bottom: 1rem;">
+      軟體工程師・系統分析師・生涯諮詢師
+    </div>
+    <div style="
+      width: 32px;
+      height: 1px;
+      background: rgba(250,247,242,0.2);
+      margin: 0.8rem auto;
+    "></div>
+    <div>
+      <a href="https://heysaori.com/" target="_blank" style="
+        color: rgba(250,247,242,0.75);
+        text-decoration: none;
+        border-bottom: 1px solid rgba(250,247,242,0.25);
+        padding-bottom: 1px;
+        transition: color 0.2s, border-color 0.2s;
+        font-family: 'Noto Serif TC', serif;
+        letter-spacing: 0.08em;
+      " onmouseover="this.style.color='var(--accent3)';this.style.borderColor='var(--accent3)'"
+         onmouseout="this.style.color='rgba(250,247,242,0.75)';this.style.borderColor='rgba(250,247,242,0.25)'">
+        人生探索手札 · heysaori.com
+      </a>
+    </div>
+    <div style="margin-top: 1.2rem; font-size: 0.68rem; color: rgba(250,247,242,0.3); letter-spacing: 0.06em;">
+      © Saori · 職能盤點工具
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>
