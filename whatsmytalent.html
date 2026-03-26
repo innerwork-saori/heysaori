@@ -494,17 +494,7 @@
     color: var(--ink);
   }
   .export-btn.dl:hover { border-color: var(--ink); }
-  .export-btn.email {
-    background: var(--accent2);
-    border-color: var(--accent2);
-    color: white;
-  }
-  .export-btn.email:hover { opacity: 0.85; }
-  .export-btn.copy {
-    background: white;
-    border-color: var(--border);
-    color: var(--ink);
-  }
+  
   .export-btn.copy:hover { border-color: var(--accent2); color: var(--accent2); }
 
   .toast {
@@ -643,7 +633,6 @@
     <span>💾 儲存方式：</span>
     <button class="export-btn dl" onclick="downloadMd()">⬇ 下載 Markdown</button>
     <button class="export-btn copy" onclick="copyToClipboard()">📋 複製文字</button>
-    <button class="export-btn email" onclick="sendViaClaudeGmail()">✉ Gmail 寄給自己</button>
     <button class="export-btn dl" onclick="window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
   </div>
 
@@ -1049,20 +1038,6 @@ function copyToClipboard() {
     showToast('✅ 已複製到剪貼簿！');
   }).catch(() => { prompt('請手動複製：', txt); });
 }
-
-function sendViaClaudeGmail() {
-  const txt = buildTextSummary();
-  const msg = `請幫我用 Gmail 把以下我的職能盤點結果寄給我自己，主旨為「我的職能盤點結果」，內文如下：\n\n` + txt;
-  if (window.sendPrompt) {
-    window.sendPrompt(msg);
-    showToast('✅ 已送出到 Claude 對話！');
-  } else {
-    navigator.clipboard.writeText(msg).then(() => {
-      showToast('✅ 已複製指令，請貼到 Claude 對話框！');
-    });
-  }
-}
-
 
 function goToStep(n) {
   document.querySelectorAll('.section').forEach((s,i) => {
