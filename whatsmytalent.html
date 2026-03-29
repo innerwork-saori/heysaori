@@ -142,6 +142,24 @@
   .job-field textarea { resize:vertical; min-height:68px; line-height:1.6; }
   .job-field.full { grid-column:1/-1; }
 
+  /* 已擁有能力 */
+  .owned-toggle { display:flex; align-items:center; gap:.5rem; margin-bottom:.9rem; cursor:pointer; width:fit-content; }
+  .owned-toggle input[type=checkbox] { display:none; }
+  .owned-check { width:18px; height:18px; border:1.5px solid var(--border); border-radius:4px; background:white; display:flex; align-items:center; justify-content:center; transition:all .15s; flex-shrink:0; }
+  .owned-toggle:hover .owned-check { border-color:var(--accent2); }
+  .owned-toggle input:checked ~ .owned-check { background:var(--accent2); border-color:var(--accent2); }
+  .owned-check-icon { display:none; color:white; font-size:.7rem; font-weight:900; line-height:1; }
+  .owned-toggle input:checked ~ .owned-check .owned-check-icon { display:block; }
+  .owned-label { font-size:.78rem; font-weight:600; color:var(--muted); transition:color .15s; }
+  .owned-toggle:has(input:checked) .owned-label { color:var(--accent2); }
+  .owned-badge { display:none; font-size:.62rem; font-weight:700; color:var(--accent2); background:rgba(74,124,111,.1); border-radius:20px; padding:.15rem .5rem; }
+  .owned-toggle:has(input:checked) .owned-badge { display:inline; }
+  .gap-fields { display:grid; grid-template-columns:1fr 1fr; gap:.7rem; transition:opacity .2s; }
+  @media(max-width:580px){ .gap-fields{grid-template-columns:1fr;} }
+  .gap-fields.hidden { display:none; }
+  .owned-current-label { display:block; font-size:.7rem; font-weight:700; color:var(--muted); letter-spacing:.05em; margin-bottom:.3rem; }
+  .job-card.is-owned::before { background:var(--accent2); }
+
   /* STEP 3 EXPLORE */
   .summary-layout { display:grid; grid-template-columns:1fr 1fr; gap:2rem; }
   @media(max-width:700px){ .summary-layout{grid-template-columns:1fr;} }
@@ -670,28 +688,57 @@ function renderJobStep2() {
   let filled=0;
   jSel.forEach(key=>{
     const item=findItem(key); if(!item) return;
-    if (!jData[key]) jData[key]={current:'',ideal:'',action:'',deadline:''};
+    if (!jData[key]) jData[key]={owned:false,current:'',ideal:'',action:'',deadline:''};
     const d=jData[key];
-    if (d.current||d.ideal||d.action) filled++;
-    c.insertAdjacentHTML('beforeend',`<div class="job-card">
+    if (d.current||d.ideal||d.action||d.owned) filled++;
+    const isOwned = d.owned;
+    c.insertAdjacentHTML('beforeend',`<div class="job-card${isOwned?' is-owned':''}" id="jcard-${key}">
       <div class="job-card-title">🎯 ${item.zh}</div>
-      <div class="job-fields">
-        <div class="job-field full"><label>📍 現況描述</label>
-          <textarea placeholder="目前在這個能力上的實際狀況是什麼？（例：常常花太多時間完成一件事）" oninput="saveJD('${key}','current',this.value)">${d.current}</textarea></div>
+      <label class="owned-toggle">
+        <input type="checkbox" id="owned-${key}" ${isOwned?'checked':''} onchange="toggleOwned('${key}',this.checked)" />
+        <div class="owned-check"><span class="owned-check-icon">✓</span></div>
+        <span class="owned-label">已擁有這項能力</span>
+        <span class="owned-badge">✓ 已具備</span>
+      </label>
+      <div class="job-field" style="margin-bottom:.7rem">
+        <label class="owned-current-label" id="clabel-${key}">${isOwned?'💬 說明你如何展現這項能力（選填）':'📍 現況描述'}</label>
+        <textarea id="current-${key}" style="width:100%;border:1px solid var(--border);border-radius:6px;padding:.55rem .7rem;font-family:'Noto Sans TC',sans-serif;font-size:.82rem;color:var(--ink);background:var(--paper);outline:none;resize:vertical;min-height:68px;line-height:1.6;transition:border-color .2s" placeholder="${isOwned?'例：我在過去專案中負責排程規劃，能準時完成90%以上的任務…':'目前在這個能力上的實際狀況是什麼？（例：常常花太多時間完成一件事）'}" oninput="saveJD('${key}','current',this.value)">${d.current}</textarea>
+      </div>
+      <div class="gap-fields${isOwned?' hidden':''}" id="gap-${key}">
         <div class="job-field full"><label>🌟 理想狀態</label>
           <textarea placeholder="達成後希望看到什麼改變？（例：準時交付工作，不需要加班趕進度）" oninput="saveJD('${key}','ideal',this.value)">${d.ideal}</textarea></div>
         <div class="job-field"><label>🚀 需要採取的行動</label>
           <textarea placeholder="具體要做什麼？（例：學習時間管理方法、導入每日計畫表）" oninput="saveJD('${key}','action',this.value)">${d.action}</textarea></div>
         <div class="job-field"><label>📅 預計完成時間</label>
           <input type="text" placeholder="例：2026/6/1 或 3個月內" value="${d.deadline}" oninput="saveJD('${key}','deadline',this.value)" /></div>
-      </div></div>`);
+      </div>
+    </div>`);
   });
   document.getElementById('tab2-count').textContent=`已填 ${filled}/${jSel.size}`;
 }
+
+function toggleOwned(key, checked) {
+  if (!jData[key]) jData[key]={owned:false,current:'',ideal:'',action:'',deadline:''};
+  jData[key].owned = checked;
+  // update card style
+  const card = document.getElementById(`jcard-${key}`);
+  if (card) card.className = `job-card${checked?' is-owned':''}`;
+  // toggle gap fields
+  const gap = document.getElementById(`gap-${key}`);
+  if (gap) gap.classList.toggle('hidden', checked);
+  // update current label & placeholder
+  const lbl = document.getElementById(`clabel-${key}`);
+  const ta  = document.getElementById(`current-${key}`);
+  if (lbl) lbl.textContent = checked ? '💬 說明你如何展現這項能力（選填）' : '📍 現況描述';
+  if (ta)  ta.placeholder  = checked ? '例：我在過去專案中負責排程規劃，能準時完成90%以上的任務…' : '目前在這個能力上的實際狀況是什麼？（例：常常花太多時間完成一件事）';
+  // update fill count
+  let f=0; jSel.forEach(k=>{const d=jData[k];if(d&&(d.current||d.ideal||d.action||d.owned))f++;});
+  document.getElementById('tab2-count').textContent=`已填 ${f}/${jSel.size}`;
+}
 function saveJD(key,field,val) {
-  if (!jData[key]) jData[key]={current:'',ideal:'',action:'',deadline:''};
+  if (!jData[key]) jData[key]={owned:false,current:'',ideal:'',action:'',deadline:''};
   jData[key][field]=val;
-  let f=0; jSel.forEach(k=>{const d=jData[k];if(d&&(d.current||d.ideal||d.action))f++;});
+  let f=0; jSel.forEach(k=>{const d=jData[k];if(d&&(d.current||d.ideal||d.action||d.owned))f++;});
   document.getElementById('tab2-count').textContent=`已填 ${f}/${jSel.size}`;
 }
 
@@ -704,20 +751,42 @@ function renderJobStep3() {
   if (jSel.size===0) { c.innerHTML=`<div class="empty-state"><div class="emoji">📋</div><p>請先完成 Step 1 與 Step 2。</p></div>`; document.getElementById('tab3-count').textContent='尚未完成'; return; }
   document.getElementById('tab3-count').textContent=`${jSel.size} 項能力`;
   c.innerHTML = jTitle?`<p style="font-size:.85rem;color:var(--muted);margin-bottom:1.5rem">目標職缺：<strong style="color:var(--accent4)">${jTitle}</strong></p>`:'';
-  let grid='<div class="job-summary-grid">', i=1;
-  jSel.forEach(key=>{
-    const item=findItem(key); if(!item) return;
-    const d=jData[key]||{};
-    grid+=`<div class="job-summary-card">
-      <div class="num">能力 ${String(i++).padStart(2,'0')} · #${item.no}</div>
-      <div class="skill">${item.zh}</div>
-      ${d.current?`<div class="job-summary-row"><span class="lbl">現況</span><span class="val">${d.current}</span></div>`:''}
-      ${d.ideal?`<div class="job-summary-row"><span class="lbl">理想</span><span class="val">${d.ideal}</span></div>`:''}
-      ${d.action?`<div class="job-summary-row"><span class="lbl">行動</span><span class="val">${d.action}</span></div>`:''}
-      ${d.deadline?`<div class="job-summary-row"><span class="lbl">期限</span><span class="val">${d.deadline}</span></div>`:''}
-    </div>`;
-  });
-  grid+='</div>'; c.insertAdjacentHTML('beforeend',grid);
+  // Split into owned vs gap
+  const ownedKeys=[], gapKeys=[];
+  jSel.forEach(key=>{ const d=jData[key]||{}; (d.owned?ownedKeys:gapKeys).push(key); });
+
+  if (ownedKeys.length>0) {
+    c.insertAdjacentHTML('beforeend',`<h3 style="font-family:'Noto Serif TC',serif;font-size:1rem;color:var(--accent2);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--accent2)">✅ 已具備的能力（${ownedKeys.length} 項）</h3>`);
+    let g1='<div class="job-summary-grid" style="margin-bottom:2rem">';
+    ownedKeys.forEach(key=>{
+      const item=findItem(key); if(!item) return;
+      const d=jData[key]||{};
+      g1+=`<div class="job-summary-card" style="border-left-color:var(--accent2)">
+        <div class="num" style="color:var(--accent2)">✓ 已具備 · #${item.no}</div>
+        <div class="skill">${item.zh}</div>
+        ${d.current?`<div class="job-summary-row"><span class="lbl">展現方式</span><span class="val">${d.current}</span></div>`:''}
+      </div>`;
+    });
+    g1+='</div>'; c.insertAdjacentHTML('beforeend',g1);
+  }
+
+  if (gapKeys.length>0) {
+    c.insertAdjacentHTML('beforeend',`<h3 style="font-family:'Noto Serif TC',serif;font-size:1rem;color:var(--accent4);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--accent4)">🚀 需要發展的能力（${gapKeys.length} 項）</h3>`);
+    let g2='<div class="job-summary-grid">', i2=1;
+    gapKeys.forEach(key=>{
+      const item=findItem(key); if(!item) return;
+      const d=jData[key]||{};
+      g2+=`<div class="job-summary-card">
+        <div class="num">落差 ${String(i2++).padStart(2,'0')} · #${item.no}</div>
+        <div class="skill">${item.zh}</div>
+        ${d.current?`<div class="job-summary-row"><span class="lbl">現況</span><span class="val">${d.current}</span></div>`:''}
+        ${d.ideal?`<div class="job-summary-row"><span class="lbl">理想</span><span class="val">${d.ideal}</span></div>`:''}
+        ${d.action?`<div class="job-summary-row"><span class="lbl">行動</span><span class="val">${d.action}</span></div>`:''}
+        ${d.deadline?`<div class="job-summary-row"><span class="lbl">期限</span><span class="val">${d.deadline}</span></div>`:''}
+      </div>`;
+    });
+    g2+='</div>'; c.insertAdjacentHTML('beforeend',g2);
+  }
 }
 
 /* ── EXPORT ── */
@@ -740,7 +809,17 @@ function buildMd(mode) {
     if (name) md+=`> **姓名：** ${name}  \n`;
     if (jt) md+=`> **目標職缺：** ${jt}  \n`;
     md+=`> **完成日期：** ${date}\n\n---\n\n`;
-    let idx=1; jSel.forEach(key=>{ const i=findItem(key); if(!i) return; const d=jData[key]||{}; md+=`## ${idx++}. ${i.zh}\n\n`; if(d.current) md+=`**📍 現況：** ${d.current}\n\n`; if(d.ideal) md+=`**🌟 理想狀態：** ${d.ideal}\n\n`; if(d.action) md+=`**🚀 行動計畫：** ${d.action}\n\n`; if(d.deadline) md+=`**📅 預計完成：** ${d.deadline}\n\n`; md+=`---\n\n`; });
+    const ownedKeys=[], gapKeys=[];
+    jSel.forEach(key=>{ const d=jData[key]||{}; (d.owned?ownedKeys:gapKeys).push(key); });
+    if (ownedKeys.length>0) {
+      md+=`## ✅ 已具備的能力\n\n`;
+      ownedKeys.forEach(key=>{ const i=findItem(key); if(!i) return; const d=jData[key]||{}; md+=`### ${i.zh}\n\n${d.current?`**展現方式：** ${d.current}\n\n`:'_（未填寫）_\n\n'}`; });
+      md+=`---\n\n`;
+    }
+    if (gapKeys.length>0) {
+      md+=`## 🚀 需要發展的能力\n\n`;
+      let idx=1; gapKeys.forEach(key=>{ const i=findItem(key); if(!i) return; const d=jData[key]||{}; md+=`### ${idx++}. ${i.zh}\n\n`; if(d.current) md+=`**📍 現況：** ${d.current}\n\n`; if(d.ideal) md+=`**🌟 理想狀態：** ${d.ideal}\n\n`; if(d.action) md+=`**🚀 行動計畫：** ${d.action}\n\n`; if(d.deadline) md+=`**📅 預計完成：** ${d.deadline}\n\n`; md+=`---\n\n`; });
+    }
     md+=`_由職能盤點工具產生 · heysaori.com_\n`;
     return { md, name, fname:`${name?name+'_':''}${jt?jt+'_':''}職缺能力分析.md` };
   }
