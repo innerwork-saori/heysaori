@@ -83,7 +83,7 @@
   .category-label { font-size:.68rem; font-weight:700; letter-spacing:.25em; text-transform:uppercase; color:var(--muted); margin-bottom:1rem; padding-left:.5rem; border-left:2px solid var(--accent3); }
   .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(148px,1fr)); gap:.65rem; }
 
-  .comp-card { background:white; border:1.5px solid var(--border); border-radius:8px; padding:.85rem .75rem .75rem; cursor:pointer; transition:all .2s; position:relative; user-select:none; overflow:visible; isolation:isolate; }
+  .comp-card { background:white; border:1.5px solid var(--border); border-radius:8px; padding:.85rem .75rem .75rem; cursor:pointer; transition:all .2s; position:relative; user-select:none; overflow:visible; }
   .comp-card::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:transparent; transition:background .2s; border-radius:8px 0 0 8px; }
   .comp-card:hover { border-color:var(--accent); transform:translateY(-1px); box-shadow:0 4px 12px rgba(200,80,42,.12); }
   .comp-card:hover::before { background:var(--accent); }
@@ -109,11 +109,10 @@
   .btn-toggle.j-active { background:var(--accent4); border-color:var(--accent4); color:white; }
 
   /* TOOLTIP */
-  .info-btn { width:16px; height:16px; border-radius:50%; border:1px solid var(--border); background:white; color:var(--muted); font-size:.55rem; font-weight:700; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; position:relative; font-style:italic; font-family:Georgia,serif; transition:all .15s; }
+  .info-btn { width:16px; height:16px; border-radius:50%; border:1px solid var(--border); background:white; color:var(--muted); font-size:.55rem; font-weight:700; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; font-style:italic; font-family:Georgia,serif; transition:all .15s; }
   .info-btn:hover { border-color:var(--accent3); color:var(--accent3); background:#fffbf0; }
-  .tooltip-box { display:none; position:fixed; z-index:9999; background:var(--ink); color:var(--paper); font-size:.72rem; line-height:1.65; padding:.75rem .9rem; border-radius:8px; width:230px; font-weight:400; box-shadow:0 6px 20px rgba(0,0,0,.25); pointer-events:none; font-style:normal; font-family:'Noto Sans TC',sans-serif; }
-  .tooltip-box::before { content:''; position:absolute; top:-5px; left:var(--arrow-left, 8px); width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:5px solid var(--ink); }
-  .info-btn.tip-open .tooltip-box { display:block; }
+  #g-tip { display:none; position:fixed; z-index:9999; background:var(--ink); color:var(--paper); font-size:.72rem; line-height:1.65; padding:.75rem .9rem; border-radius:8px; width:230px; font-weight:400; box-shadow:0 6px 20px rgba(0,0,0,.25); pointer-events:none; font-style:normal; font-family:'Noto Sans TC',sans-serif; }
+  #g-tip::before { content:''; position:absolute; top:-5px; left:var(--arrow-left,8px); width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:5px solid var(--ink); }
 
   /* STEP 2 EXPLORE */
   .reflection-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.2rem; }
@@ -402,6 +401,7 @@
   </div>
 </div>
 
+<div id="g-tip"></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -534,36 +534,41 @@ function requireName(iid, bid) {
 /* ── TOOLTIP ── */
 function infoBtn(zh) {
   if (!TIPS[zh]) return '';
-  return `<div class="info-btn" onclick="toggleTip(this,event)" onmouseenter="openTip(this)" onmouseleave="closeTip(this)">i<div class="tooltip-box">${TIPS[zh]}</div></div>`;
+  const escaped = TIPS[zh].replace(/"/g, '&quot;');
+  return `<div class="info-btn" data-tip="${escaped}" onclick="toggleTip(this,event)" onmouseenter="openTip(this)" onmouseleave="closeTip()">i</div>`;
 }
-function openTip(btn) {
-  btn.classList.add('tip-open');
-  const tip = btn.querySelector('.tooltip-box');
-  if (!tip) return;
+function positionTip(btn) {
+  const tip = document.getElementById('g-tip');
   const rect = btn.getBoundingClientRect();
   const tipW = 230, margin = 8;
-  tip.style.top = (rect.bottom + 6) + 'px';
   let left = rect.right - tipW;
   if (left < margin) left = margin;
   if (left + tipW > window.innerWidth - margin) left = window.innerWidth - tipW - margin;
-  tip.style.left = left + 'px';
   const arrowLeft = rect.left + rect.width / 2 - left;
+  tip.style.top = (rect.bottom + 6) + 'px';
+  tip.style.left = left + 'px';
   tip.style.setProperty('--arrow-left', Math.max(8, Math.min(arrowLeft, tipW - 16)) + 'px');
 }
-function closeTip(btn) {
-  btn.classList.remove('tip-open');
+function openTip(btn) {
+  const tip = document.getElementById('g-tip');
+  tip.innerHTML = btn.dataset.tip || '';
+  tip.style.display = 'block';
+  positionTip(btn);
+  btn.classList.add('tip-open');
+}
+function closeTip() {
+  document.getElementById('g-tip').style.display = 'none';
+  document.querySelectorAll('.info-btn.tip-open').forEach(b => b.classList.remove('tip-open'));
 }
 function toggleTip(btn, e) {
   e.stopPropagation();
-  const open = btn.classList.contains('tip-open');
-  document.querySelectorAll('.info-btn.tip-open').forEach(b => {
-    b.classList.remove('tip-open');
-    const t = b.querySelector('.tooltip-box');
-    if (t) { t.style.left = ''; t.style.top = ''; }
-  });
-  if (!open) openTip(btn);
+  if (btn.classList.contains('tip-open')) { closeTip(); } else { openTip(btn); }
 }
-document.addEventListener('click', () => document.querySelectorAll('.info-btn.tip-open').forEach(b=>b.classList.remove('tip-open')));
+document.addEventListener('click', closeTip);
+document.addEventListener('scroll', () => {
+  const open = document.querySelector('.info-btn.tip-open');
+  if (open) positionTip(open);
+}, { passive: true });
 
 /* ── CARD RENDER ── */
 function buildCard(item, mode) {
