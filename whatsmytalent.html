@@ -301,7 +301,7 @@
   <div class="warn-msg" id="warn-growth">⚠️ 成長機會已達 5 個，請先取消其他項目再新增。</div>
   <div id="explore-cards"></div>
   <div class="nav-btns">
-    <button class="nav-btn primary" onclick="goToStep(2)">下一步：描述與說明 →</button>
+    <button class="nav-btn primary" onclick="if(requireName('e-user-name','e-name-block'))goToStep(2)">下一步：描述與說明 →</button>
   </div>
 </div>
 
@@ -365,7 +365,7 @@
   </div>
   <div id="job-cards"></div>
   <div class="nav-btns">
-    <button class="nav-btn primary jm" onclick="goToStep(2)">下一步：填寫現況分析 →</button>
+    <button class="nav-btn primary jm" onclick="if(requireName('j-user-name','j-name-block'))goToStep(2)">下一步：填寫現況分析 →</button>
   </div>
 </div>
 
@@ -508,6 +508,11 @@ function backToModeSelect() {
 
 /* ── NAV ── */
 function goToStep(n) {
+  if (n > 1) {
+    const nid = currentMode === 'job' ? 'j-user-name' : 'e-user-name';
+    const bid = currentMode === 'job' ? 'j-name-block' : 'e-name-block';
+    if (!requireName(nid, bid)) return;
+  }
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.step-tab').forEach((t, i) => t.classList.toggle('active', i+1 === n));
   const p = currentMode === 'job' ? 'job' : 'explore';
