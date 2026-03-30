@@ -535,7 +535,11 @@ function requireName(iid, bid) {
 function infoBtn(zh) {
   if (!TIPS[zh]) return '';
   const escaped = TIPS[zh].replace(/"/g, '&quot;');
-  return `<div class="info-btn" data-tip="${escaped}" onclick="toggleTip(this,event)" onmouseenter="openTip(this)" onmouseleave="closeTip()">i</div>`;
+  return `<div class="info-btn" data-tip="${escaped}" onclick="toggleTip(this,event)" onmouseenter="hoverOpenTip(this)" onmouseleave="closeTip()">i</div>`;
+}
+function hoverOpenTip(btn) {
+  // only trigger on real hover (non-touch) devices
+  if (window.matchMedia('(hover:hover)').matches) openTip(btn);
 }
 function positionTip(btn) {
   const tip = document.getElementById('g-tip');
