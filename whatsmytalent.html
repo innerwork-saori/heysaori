@@ -352,8 +352,8 @@
     <label>👤 你的姓名 <span class="name-required-tag">必填</span></label>
     <input type="text" id="j-user-name" placeholder="請輸入你的名字…" />
   </div>
-  <div class="name-input-block" style="max-width:460px">
-    <label>🎯 目標職缺</label>
+  <div class="name-input-block" style="max-width:460px" id="j-job-block">
+    <label>🎯 目標職缺 <span class="name-required-tag">必填</span></label>
     <input type="text" id="j-job-title" placeholder="例：產品經理、UX 設計師、行銷企劃…" />
   </div>
   <div class="legend" style="margin-bottom:1.5rem">
@@ -362,7 +362,7 @@
   </div>
   <div id="job-cards"></div>
   <div class="nav-btns">
-    <button class="nav-btn primary jm" onclick="if(requireName('j-user-name','j-name-block'))goToStep(2)">下一步：填寫現況分析 →</button>
+    <button class="nav-btn primary jm" onclick="if(requireName('j-user-name','j-name-block')&&requireName('j-job-title','j-job-block'))goToStep(2)">下一步：填寫現況分析 →</button>
   </div>
 </div>
 
@@ -510,6 +510,7 @@ function goToStep(n) {
     const nid = currentMode === 'job' ? 'j-user-name' : 'e-user-name';
     const bid = currentMode === 'job' ? 'j-name-block' : 'e-name-block';
     if (!requireName(nid, bid)) return;
+    if (currentMode === 'job' && !requireName('j-job-title', 'j-job-block')) return;
   }
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.step-tab').forEach((t, i) => t.classList.toggle('active', i+1 === n));
@@ -523,11 +524,14 @@ function goToStep(n) {
 /* ── HELPERS ── */
 function gk(zh) { return zh.replace(/\//g,'_'); }
 function findItem(key) { for (const c of DATA) for (const i of c.items) if (gk(i.zh)===key) return i; return null; }
+function findCategory(key) { for (const c of DATA) for (const i of c.items) if (gk(i.zh)===key) return c; return null; }
+function categoryTag(key, colorVar) { const cat=findCategory(key); if(!cat) return ''; return `<span style="display:inline-block;font-size:.58rem;font-weight:700;letter-spacing:.08em;padding:.15rem .5rem;border-radius:10px;background:rgba(0,0,0,.05);color:${colorVar||'var(--muted)'};margin-bottom:.4rem;border:1px solid rgba(0,0,0,.08)">${cat.categoryZh}</span>`; }
 function showToast(m) { const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800); }
 function showWarn(id) { const e=document.getElementById(id); e.classList.add('show'); setTimeout(()=>e.classList.remove('show'),2500); }
 function requireName(iid, bid) {
   const v=(document.getElementById(iid)?.value||'').trim();
-  if (!v) { const b=document.getElementById(bid); b.classList.add('error'); setTimeout(()=>b.classList.remove('error'),800); showToast('⚠️ 請先填寫你的姓名'); document.getElementById(iid).focus(); return false; }
+  const msg = iid==='j-job-title' ? '⚠️ 請先填寫目標職缺' : '⚠️ 請先填寫你的姓名';
+  if (!v) { const b=document.getElementById(bid); b.classList.add('error'); setTimeout(()=>b.classList.remove('error'),800); showToast(msg); document.getElementById(iid).focus(); return false; }
   return true;
 }
 
@@ -665,6 +669,7 @@ function renderExploreStep2() {
       const rk=`s_${key}`; if(eR[rk]) filled++;
       g.insertAdjacentHTML('beforeend',`<div class="reflection-card strength-card">
         <div class="r-card-label">優勢 · Strength</div>
+        ${categoryTag(key,'var(--accent)')}
         <div class="r-card-title">${item.zh}</div>
         <div class="r-card-q">你如何在生活或工作中展現這項優勢？請舉具體例子。</div>
         <textarea class="r-textarea" placeholder="寫下你的想法…" oninput="saveER('${rk}',this.value)">${eR[rk]||''}</textarea>
@@ -679,6 +684,7 @@ function renderExploreStep2() {
       const rk=`g_${key}`; if(eR[rk]) filled++;
       g2.insertAdjacentHTML('beforeend',`<div class="reflection-card growth-card">
         <div class="r-card-label">成長機會 · Growth</div>
+        ${categoryTag(key,'var(--accent2)')}
         <div class="r-card-title">${item.zh}</div>
         <div class="r-card-q">為什麼想在這個領域成長？你希望如何提升這項能力？</div>
         <textarea class="r-textarea" placeholder="寫下你的想法…" oninput="saveER('${rk}',this.value)">${eR[rk]||''}</textarea>
@@ -704,13 +710,13 @@ function renderExploreStep3() {
   eS.forEach(key=>{
     const item=findItem(key); if(!item) return;
     const note=eR[`s_${key}`]||'';
-    html+=`<div class="summary-item"><div class="summary-item-title">${item.zh}</div><div class="summary-item-note${note?'':' empty'}">${note||'（尚未填寫描述）'}</div></div>`;
+    html+=`<div class="summary-item"><div style="margin-bottom:.3rem">${categoryTag(key,'var(--accent)')}</div><div class="summary-item-title">${item.zh}</div><div class="summary-item-note${note?'':' empty'}">${note||'（尚未填寫描述）'}</div></div>`;
   });
   html+='</div><div class="summary-col growth-col"><h3>🌱 我的成長計畫</h3>';
   eG.forEach(key=>{
     const item=findItem(key); if(!item) return;
     const note=eR[`g_${key}`]||'';
-    html+=`<div class="summary-item"><div class="summary-item-title">${item.zh}</div><div class="summary-item-note${note?'':' empty'}">${note||'（尚未填寫描述）'}</div></div>`;
+    html+=`<div class="summary-item"><div style="margin-bottom:.3rem">${categoryTag(key,'var(--accent2)')}</div><div class="summary-item-title">${item.zh}</div><div class="summary-item-note${note?'':' empty'}">${note||'（尚未填寫描述）'}</div></div>`;
   });
   html+='</div></div>'; c.innerHTML=html;
 }
@@ -728,6 +734,7 @@ function renderJobStep2() {
     const isOwned = d.owned;
     c.insertAdjacentHTML('beforeend',`<div class="job-card${isOwned?' is-owned':''}" id="jcard-${key}">
       <div class="job-card-title">🎯 ${item.zh}</div>
+      <div style="margin-bottom:.7rem">${categoryTag(key,'var(--accent4)')}</div>
       <label class="owned-toggle">
         <input type="checkbox" id="owned-${key}" ${isOwned?'checked':''} onchange="toggleOwned('${key}',this.checked)" />
         <div class="owned-check"><span class="owned-check-icon">✓</span></div>
@@ -797,6 +804,7 @@ function renderJobStep3() {
       const d=jData[key]||{};
       g1+=`<div class="job-summary-card" style="border-left-color:var(--accent2)">
         <div class="num" style="color:var(--accent2)">✓ 已具備 · #${item.no}</div>
+        <div style="margin:.2rem 0 .4rem">${categoryTag(key,'var(--accent2)')}</div>
         <div class="skill">${item.zh}</div>
         ${d.current?`<div class="job-summary-row"><span class="lbl">展現方式</span><span class="val">${d.current}</span></div>`:''}
       </div>`;
@@ -812,6 +820,7 @@ function renderJobStep3() {
       const d=jData[key]||{};
       g2+=`<div class="job-summary-card">
         <div class="num">落差 ${String(i2++).padStart(2,'0')} · #${item.no}</div>
+        <div style="margin:.2rem 0 .4rem">${categoryTag(key,'var(--accent4)')}</div>
         <div class="skill">${item.zh}</div>
         ${d.current?`<div class="job-summary-row"><span class="lbl">現況</span><span class="val">${d.current}</span></div>`:''}
         ${d.ideal?`<div class="job-summary-row"><span class="lbl">理想</span><span class="val">${d.ideal}</span></div>`:''}
@@ -831,9 +840,9 @@ function buildMd(mode) {
     let md=`# ${name?name+' 的':''}職能盤點結果\n\n`;
     if (name) md+=`> **姓名：** ${name}  \n`;
     md+=`> **完成日期：** ${date}\n\n---\n\n## ⭐ 我的優勢\n\n`;
-    let si=1; eS.forEach(key=>{ const i=findItem(key); if(!i) return; md+=`### ${si++}. ${i.zh}\n\n${eR['s_'+key]||'_（尚未填寫）_'}\n\n`; });
+    let si=1; eS.forEach(key=>{ const i=findItem(key); if(!i) return; const cat=findCategory(key); md+=`### ${si++}. ${i.zh}${cat?` _(${cat.categoryZh})_`:''}\n\n${eR['s_'+key]||'_（尚未填寫）_'}\n\n`; });
     md+=`---\n\n## 🌱 我的成長計畫\n\n`;
-    let gi=1; eG.forEach(key=>{ const i=findItem(key); if(!i) return; md+=`### ${gi++}. ${i.zh}\n\n${eR['g_'+key]||'_（尚未填寫）_'}\n\n`; });
+    let gi=1; eG.forEach(key=>{ const i=findItem(key); if(!i) return; const cat=findCategory(key); md+=`### ${gi++}. ${i.zh}${cat?` _(${cat.categoryZh})_`:''}\n\n${eR['g_'+key]||'_（尚未填寫）_'}\n\n`; });
     md+=`---\n\n_由職能盤點工具產生 · heysaori.com_\n`;
     return { md, name, fname:`${name?name+'_':''}職能盤點結果.md` };
   } else {
@@ -847,12 +856,12 @@ function buildMd(mode) {
     jSel.forEach(key=>{ const d=jData[key]||{}; (d.owned?ownedKeys:gapKeys).push(key); });
     if (ownedKeys.length>0) {
       md+=`## ✅ 已具備的能力\n\n`;
-      ownedKeys.forEach(key=>{ const i=findItem(key); if(!i) return; const d=jData[key]||{}; md+=`### ${i.zh}\n\n${d.current?`**展現方式：** ${d.current}\n\n`:'_（未填寫）_\n\n'}`; });
+      ownedKeys.forEach(key=>{ const i=findItem(key); if(!i) return; const cat=findCategory(key); const d=jData[key]||{}; md+=`### ${i.zh}${cat?` _(${cat.categoryZh})_`:''}\n\n${d.current?`**展現方式：** ${d.current}\n\n`:'_（未填寫）_\n\n'}`; });
       md+=`---\n\n`;
     }
     if (gapKeys.length>0) {
       md+=`## 🚀 需要發展的能力\n\n`;
-      let idx=1; gapKeys.forEach(key=>{ const i=findItem(key); if(!i) return; const d=jData[key]||{}; md+=`### ${idx++}. ${i.zh}\n\n`; if(d.current) md+=`**📍 現況：** ${d.current}\n\n`; if(d.ideal) md+=`**🌟 理想狀態：** ${d.ideal}\n\n`; if(d.action) md+=`**🚀 行動計畫：** ${d.action}\n\n`; if(d.deadline) md+=`**📅 預計完成：** ${d.deadline}\n\n`; md+=`---\n\n`; });
+      let idx=1; gapKeys.forEach(key=>{ const i=findItem(key); if(!i) return; const cat=findCategory(key); const d=jData[key]||{}; md+=`### ${idx++}. ${i.zh}${cat?` _(${cat.categoryZh})_`:''}\n\n`; if(d.current) md+=`**📍 現況：** ${d.current}\n\n`; if(d.ideal) md+=`**🌟 理想狀態：** ${d.ideal}\n\n`; if(d.action) md+=`**🚀 行動計畫：** ${d.action}\n\n`; if(d.deadline) md+=`**📅 預計完成：** ${d.deadline}\n\n`; md+=`---\n\n`; });
     }
     md+=`_由職能盤點工具產生 · heysaori.com_\n`;
     return { md, name, fname:`${name?name+'_':''}${jt?jt+'_':''}職缺能力分析.md` };
