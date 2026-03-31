@@ -330,6 +330,7 @@
     <button class="export-btn dl" onclick="downloadMd('explore')">⬇ 下載 Markdown</button>
     <button class="export-btn copy" onclick="copyText('explore')">📋 複製文字</button>
     <button class="export-btn dl" onclick="showSaoriHint();window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
+    <div style="width:100%;font-size:.78rem;color:var(--muted);padding-top:.5rem;border-top:1px solid var(--border)">💡 把檔案內容交給 <a href="https://lin.ee/YVBqq6u" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:underline">Saori</a>，做進一步的探索喔！</div>
   </div>
   <div id="explore-step3-content"></div>
   <div class="nav-btns">
@@ -394,6 +395,7 @@
     <button class="export-btn dl" onclick="downloadMd('job')">⬇ 下載 Markdown</button>
     <button class="export-btn copy" onclick="copyText('job')">📋 複製文字</button>
     <button class="export-btn dl" onclick="showSaoriHint();window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
+    <div style="width:100%;font-size:.78rem;color:var(--muted);padding-top:.5rem;border-top:1px solid var(--border)">💡 把檔案內容交給 <a href="https://lin.ee/YVBqq6u" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:underline">Saori</a>，做進一步的探索喔！</div>
   </div>
   <div id="job-step3-content"></div>
   <div class="nav-btns">
@@ -873,12 +875,7 @@ function buildMd(mode) {
   }
 }
 
-function showSaoriHint() {
-  const t = document.getElementById('toast');
-  t.innerHTML = '💡 把檔案內容交給 <a href="https://lin.ee/YVBqq6u" target="_blank" style="color:var(--accent3);text-decoration:underline">Saori</a>，做進一步的探索喔！';
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 4500);
-}
+function showSaoriHint() { /* hint is now inline in export-bar */ }
 function downloadMd(mode) {
   const nid=mode==='explore'?'e-user-name':'j-user-name', bid=mode==='explore'?'e-name-block':'j-name-block';
   if (!requireName(nid,bid)) return;
