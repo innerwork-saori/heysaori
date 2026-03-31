@@ -329,7 +329,7 @@
     <span>💾 儲存方式：</span>
     <button class="export-btn dl" onclick="downloadMd('explore')">⬇ 下載 Markdown</button>
     <button class="export-btn copy" onclick="copyText('explore')">📋 複製文字</button>
-    <button class="export-btn dl" onclick="window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
+    <button class="export-btn dl" onclick="showSaoriHint();window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
   </div>
   <div id="explore-step3-content"></div>
   <div class="nav-btns">
@@ -350,7 +350,7 @@
   </div>
   <div class="name-input-block" id="j-name-block">
     <label>👤 你的姓名 <span class="name-required-tag">必填</span></label>
-    <input type="text" id="j-user-name" placeholder="請輸入你的名字…" />
+    <input type="text" id="j-user-name" placeholder="請輸入你的名字…" oninput="updateJobName()" />
   </div>
   <div class="name-input-block" style="max-width:460px" id="j-job-block">
     <label>🎯 目標職缺 <span class="name-required-tag">必填</span></label>
@@ -393,7 +393,7 @@
     <span>💾 儲存方式：</span>
     <button class="export-btn dl" onclick="downloadMd('job')">⬇ 下載 Markdown</button>
     <button class="export-btn copy" onclick="copyText('job')">📋 複製文字</button>
-    <button class="export-btn dl" onclick="window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
+    <button class="export-btn dl" onclick="showSaoriHint();window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
   </div>
   <div id="job-step3-content"></div>
   <div class="nav-btns">
@@ -642,6 +642,11 @@ function updateEC() {
 function updateExploreName() {
   const n=(document.getElementById('e-user-name')?.value||'').trim();
   document.getElementById('e-summary-title').textContent = n?`${n} 的職能盤點總覽`:'你的職能盤點總覽';
+  const j=document.getElementById('j-user-name'); if(j&&j.value!==document.getElementById('e-user-name').value) j.value=document.getElementById('e-user-name').value;
+}
+function updateJobName() {
+  const v=document.getElementById('j-user-name')?.value||'';
+  const e=document.getElementById('e-user-name'); if(e&&e.value!==v) { e.value=v; updateExploreName(); }
 }
 
 /* ── JOB TOGGLE ── */
@@ -868,6 +873,12 @@ function buildMd(mode) {
   }
 }
 
+function showSaoriHint() {
+  const t = document.getElementById('toast');
+  t.innerHTML = '💡 把檔案內容交給 <a href="https://lin.ee/YVBqq6u" target="_blank" style="color:var(--accent3);text-decoration:underline">Saori</a>，做進一步的探索喔！';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 4500);
+}
 function downloadMd(mode) {
   const nid=mode==='explore'?'e-user-name':'j-user-name', bid=mode==='explore'?'e-name-block':'j-name-block';
   if (!requireName(nid,bid)) return;
@@ -875,13 +886,13 @@ function downloadMd(mode) {
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([md],{type:'text/markdown;charset=utf-8'}));
   a.download=fname; a.click();
-  showToast('✅ 已下載 Markdown 檔案！');
+  showSaoriHint();
 }
 function copyText(mode) {
   const nid=mode==='explore'?'e-user-name':'j-user-name', bid=mode==='explore'?'e-name-block':'j-name-block';
   if (!requireName(nid,bid)) return;
   const {md}=buildMd(mode);
-  navigator.clipboard.writeText(md).then(()=>showToast('✅ 已複製到剪貼簿！')).catch(()=>prompt('請手動複製：',md));
+  navigator.clipboard.writeText(md).then(()=>showSaoriHint()).catch(()=>{ prompt('無法自動複製，請全選後按 Ctrl+C（Mac 用 ⌘+C）複製：',md); showSaoriHint(); });
 }
 </script>
 
