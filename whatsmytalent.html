@@ -329,7 +329,7 @@
     <span>💾 儲存方式：</span>
     <button class="export-btn dl" onclick="downloadMd('explore')">⬇ 下載 Markdown</button>
     <button class="export-btn copy" onclick="copyText('explore')">📋 複製文字</button>
-    <button class="export-btn dl" onclick="showSaoriHint();window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
+    <button class="export-btn dl" onclick="window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
     <div style="width:100%;font-size:.78rem;color:var(--muted);padding-top:.5rem;border-top:1px solid var(--border)">💡 把檔案內容交給 <a href="https://lin.ee/YVBqq6u" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:underline">Saori</a>，做進一步的探索喔！</div>
   </div>
   <div id="explore-step3-content"></div>
@@ -394,7 +394,7 @@
     <span>💾 儲存方式：</span>
     <button class="export-btn dl" onclick="downloadMd('job')">⬇ 下載 Markdown</button>
     <button class="export-btn copy" onclick="copyText('job')">📋 複製文字</button>
-    <button class="export-btn dl" onclick="showSaoriHint();window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
+    <button class="export-btn dl" onclick="window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
     <div style="width:100%;font-size:.78rem;color:var(--muted);padding-top:.5rem;border-top:1px solid var(--border)">💡 把檔案內容交給 <a href="https://lin.ee/YVBqq6u" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:underline">Saori</a>，做進一步的探索喔！</div>
   </div>
   <div id="job-step3-content"></div>
@@ -883,13 +883,13 @@ function downloadMd(mode) {
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([md],{type:'text/markdown;charset=utf-8'}));
   a.download=fname; a.click();
-  showSaoriHint();
+  showToast('✅ 已下載 Markdown 檔案！');
 }
 function copyText(mode) {
   const nid=mode==='explore'?'e-user-name':'j-user-name', bid=mode==='explore'?'e-name-block':'j-name-block';
   if (!requireName(nid,bid)) return;
   const {md}=buildMd(mode);
-  navigator.clipboard.writeText(md).then(()=>showSaoriHint()).catch(()=>{ prompt('無法自動複製，請全選後按 Ctrl+C（Mac 用 ⌘+C）複製：',md); showSaoriHint(); });
+  navigator.clipboard.writeText(md).then(()=>showToast('✅ 已複製到剪貼簿！')).catch(()=>{ prompt('無法自動複製，請全選後按 Ctrl+C（Mac 用 ⌘+C）複製：',md); });
 }
 </script>
 
