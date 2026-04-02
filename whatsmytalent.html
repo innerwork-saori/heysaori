@@ -76,7 +76,6 @@
   .name-input-block input { flex:1; border:none; outline:none; font-family:'Noto Sans TC',sans-serif; font-size:.9rem; color:var(--ink); background:transparent; }
   .name-input-block input::placeholder { color:#ccc; }
   .name-input-block:focus-within { border-color:var(--accent); box-shadow:0 0 0 3px rgba(200,80,42,.08); }
-  .job-title-row { display:flex; gap:.8rem; margin-bottom:1.5rem; flex-wrap:wrap; }
 
   /* CARDS */
   .category-block { margin-bottom:2.5rem; }
@@ -108,11 +107,48 @@
   .btn-toggle.g-active { background:var(--accent2); border-color:var(--accent2); color:white; }
   .btn-toggle.j-active { background:var(--accent4); border-color:var(--accent4); color:white; }
 
-  /* TOOLTIP */
-  .info-btn { width:16px; height:16px; border-radius:50%; border:1px solid var(--border); background:white; color:var(--muted); font-size:.55rem; font-weight:700; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; font-style:italic; font-family:Georgia,serif; transition:all .15s; }
+  /* INFO BUTTON */
+  .info-btn { width:18px; height:18px; border-radius:50%; border:1.5px solid var(--border); background:white; color:var(--muted); font-size:.6rem; font-weight:700; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; font-style:italic; font-family:Georgia,serif; transition:all .15s; }
   .info-btn:hover { border-color:var(--accent3); color:var(--accent3); background:#fffbf0; }
-  #g-tip { display:none; position:fixed; z-index:9999; background:var(--ink); color:var(--paper); font-size:.72rem; line-height:1.65; padding:.75rem .9rem; border-radius:8px; width:230px; font-weight:400; box-shadow:0 6px 20px rgba(0,0,0,.25); pointer-events:none; font-style:normal; font-family:'Noto Sans TC',sans-serif; }
-  #g-tip::before { content:''; position:absolute; top:-5px; left:var(--arrow-left,8px); width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:5px solid var(--ink); }
+
+  /* CARD MODAL */
+  .card-modal-overlay { display:none; position:fixed; inset:0; background:rgba(26,20,16,.55); z-index:2000; align-items:center; justify-content:center; padding:1rem; backdrop-filter:blur(2px); }
+  .card-modal-overlay.open { display:flex; }
+  .card-modal { background:var(--paper); border-radius:16px; max-width:580px; width:100%; max-height:90vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,.3); position:relative; animation:modalIn .22s ease; }
+  @keyframes modalIn { from{transform:translateY(12px) scale(.97);opacity:0} to{transform:none;opacity:1} }
+  .card-modal-header { padding:1.4rem 1.4rem 1rem; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--paper); z-index:1; border-radius:16px 16px 0 0; }
+  .card-modal-num { font-size:.62rem; font-weight:700; letter-spacing:.18em; color:var(--muted); margin-bottom:.3rem; }
+  .card-modal-title { font-family:'Noto Serif TC',serif; font-size:1.4rem; font-weight:700; color:var(--ink); }
+  .card-modal-cat { font-size:.7rem; color:var(--accent3); font-weight:600; letter-spacing:.1em; margin-top:.3rem; }
+  .card-modal-close { position:absolute; top:1rem; right:1rem; width:28px; height:28px; border-radius:50%; border:1.5px solid var(--border); background:white; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:.8rem; color:var(--muted); transition:all .15s; }
+  .card-modal-close:hover { border-color:var(--ink); color:var(--ink); }
+  .card-modal-body { padding:1.2rem 1.4rem 1.6rem; }
+  .modal-section { margin-bottom:1.4rem; }
+  .modal-section-title { font-size:.65rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-bottom:.7rem; padding-bottom:.35rem; border-bottom:1px solid var(--border); }
+  .modal-traits { display:flex; flex-direction:column; gap:.35rem; }
+  .modal-trait { font-size:.84rem; color:var(--ink); line-height:1.55; display:flex; gap:.5rem; align-items:flex-start; }
+  .modal-trait::before { content:'·'; color:var(--accent3); font-size:1rem; flex-shrink:0; line-height:1.4; }
+  .shadow-pairs { display:flex; flex-direction:column; gap:.7rem; }
+  .shadow-pair { background:white; border-radius:8px; border:1px solid var(--border); overflow:hidden; }
+  .shadow-row { display:flex; gap:.7rem; padding:.5rem .8rem; align-items:flex-start; font-size:.8rem; }
+  .shadow-row.consequence { background:#fff8f6; border-bottom:1px solid var(--border); }
+  .shadow-row.adjustment { background:#f4faf8; }
+  .shadow-lbl { font-size:.62rem; font-weight:700; letter-spacing:.08em; padding:.18rem .5rem; border-radius:20px; white-space:nowrap; flex-shrink:0; margin-top:.1rem; }
+  .shadow-lbl.c { background:rgba(200,80,42,.1); color:var(--accent); }
+  .shadow-lbl.a { background:rgba(74,124,111,.12); color:var(--accent2); }
+  .shadow-text { color:var(--ink); line-height:1.5; }
+  .strength-grid { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; }
+  @media(max-width:420px){ .strength-grid{grid-template-columns:1fr;} }
+  .strength-item { background:white; border:1px solid var(--border); border-radius:8px; padding:.6rem .8rem; }
+  .strength-lbl { font-size:.6rem; font-weight:700; letter-spacing:.1em; color:var(--accent4); text-transform:uppercase; margin-bottom:.3rem; }
+  .strength-val { font-size:.82rem; color:var(--ink); line-height:1.5; }
+  .strength-item.full { grid-column:1/-1; }
+  .improve-list { display:flex; flex-direction:column; gap:.45rem; }
+  .improve-item { font-size:.82rem; color:var(--ink); line-height:1.55; display:flex; gap:.6rem; }
+  .improve-num { font-size:.65rem; font-weight:700; color:var(--accent2); background:rgba(74,124,111,.1); border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:.15rem; }
+  .modal-tip-section { background:var(--warm); border-radius:8px; padding:.8rem 1rem; margin-top:.5rem; border:1px solid var(--border); }
+  .modal-tip-label { font-size:.6rem; font-weight:700; letter-spacing:.12em; color:var(--accent3); margin-bottom:.4rem; }
+  .modal-tip-text { font-size:.8rem; color:var(--muted); line-height:1.7; }
 
   /* STEP 2 EXPLORE */
   .reflection-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.2rem; }
@@ -126,6 +162,25 @@
   .r-card-q { font-size:.76rem; color:var(--muted); margin-bottom:.5rem; line-height:1.5; }
   .r-textarea { width:100%; border:1px solid var(--border); border-radius:6px; padding:.65rem; font-family:'Noto Sans TC',sans-serif; font-size:.82rem; line-height:1.7; resize:vertical; min-height:80px; color:var(--ink); background:var(--paper); outline:none; transition:border-color .2s; }
   .r-textarea:focus { border-color:var(--accent2); background:white; }
+
+  /* INLINE CARD DETAIL IN STEP 2 */
+  .r-card-info { background:var(--warm); border-radius:8px; padding:1rem; margin-bottom:1rem; border:1px solid var(--border); }
+  .r-card-info-section { margin-bottom:.9rem; }
+  .r-card-info-section:last-child { margin-bottom:0; }
+  .r-info-title { font-size:.6rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:.5rem; }
+  .r-traits { display:flex; flex-direction:column; gap:.25rem; }
+  .r-trait { font-size:.78rem; color:var(--ink); line-height:1.5; display:flex; gap:.4rem; }
+  .r-trait::before { content:'·'; color:var(--accent3); font-size:1rem; flex-shrink:0; line-height:1.3; }
+  .r-shadow-mini { display:flex; flex-direction:column; gap:.5rem; }
+  .r-shadow-row { font-size:.76rem; color:var(--ink); display:flex; gap:.4rem; align-items:flex-start; line-height:1.5; }
+  .r-shadow-badge { font-size:.58rem; font-weight:700; padding:.1rem .4rem; border-radius:20px; white-space:nowrap; flex-shrink:0; margin-top:.15rem; }
+  .r-shadow-badge.c { background:rgba(200,80,42,.1); color:var(--accent); }
+  .r-shadow-badge.a { background:rgba(74,124,111,.1); color:var(--accent2); }
+  .r-strength-mini { font-size:.78rem; color:var(--ink); line-height:1.55; }
+  .r-strength-mini strong { color:var(--muted); font-size:.68rem; font-weight:700; letter-spacing:.08em; margin-right:.3rem; }
+  .r-improve-mini { display:flex; flex-direction:column; gap:.3rem; }
+  .r-improve-row { font-size:.78rem; color:var(--ink); line-height:1.5; display:flex; gap:.5rem; }
+  .r-improve-num { font-size:.62rem; font-weight:700; color:var(--accent2); background:rgba(74,124,111,.1); border-radius:50%; width:16px; height:16px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:.2rem; }
 
   /* STEP 2 JOB */
   .job-card { background:white; border:1.5px solid var(--border); border-radius:10px; padding:1.4rem; position:relative; overflow:hidden; margin-bottom:1rem; }
@@ -167,6 +222,8 @@
   .summary-item-title { font-weight:600; font-size:.88rem; margin-bottom:.35rem; }
   .summary-item-note { font-size:.76rem; color:var(--muted); line-height:1.6; white-space:pre-wrap; }
   .summary-item-note.empty { font-style:italic; color:#bbb; }
+  .summary-card-detail { background:var(--warm); border-radius:6px; padding:.7rem .9rem; margin-top:.6rem; border:1px solid var(--border); font-size:.75rem; color:var(--muted); line-height:1.65; }
+  .summary-card-detail strong { color:var(--ink); }
 
   /* STEP 3 JOB */
   .job-summary-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1rem; }
@@ -176,6 +233,7 @@
   .job-summary-row { font-size:.75rem; margin-bottom:.3rem; display:flex; gap:.5rem; }
   .job-summary-row .lbl { color:var(--muted); font-weight:600; white-space:nowrap; }
   .job-summary-row .val { color:var(--ink); line-height:1.5; }
+  .job-card-detail { background:var(--warm); border-radius:6px; padding:.6rem .8rem; margin-top:.7rem; border:1px solid var(--border); font-size:.74rem; color:var(--muted); line-height:1.65; }
 
   /* EXPORT */
   .export-bar { display:flex; gap:.8rem; flex-wrap:wrap; align-items:center; background:var(--warm); border:1px solid var(--border); border-radius:10px; padding:.9rem 1.1rem; margin-bottom:2rem; }
@@ -292,7 +350,7 @@
   <div class="legend" style="margin-bottom:1.5rem">
     <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> 優勢（最多 5 個）</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div> 成長機會（最多 5 個）</div>
-    <div class="legend-item" style="color:var(--accent3)">ℹ 圖卡右上角 <em>i</em> 可查看說明</div>
+    <div class="legend-item" style="color:var(--accent3)">ℹ 點擊圖卡右上角 <em>i</em> 查看完整說明</div>
   </div>
   <div class="warn-msg" id="warn-strength">⚠️ 優勢已達 5 個，請先取消其他優勢再新增。</div>
   <div class="warn-msg" id="warn-growth">⚠️ 成長機會已達 5 個，請先取消其他項目再新增。</div>
@@ -307,7 +365,7 @@
   <div class="section-header">
     <div>
       <h2>描述你的優勢與成長計畫</h2>
-      <p>針對每個選項寫下你的想法。優勢請說明如何展現，成長項目請說明原因與行動方向。</p>
+      <p>針對每個選項寫下你的想法。圖卡說明已展開供你參考，邊看邊發想！</p>
     </div>
   </div>
   <div id="explore-step2-content"></div>
@@ -359,7 +417,7 @@
   </div>
   <div class="legend" style="margin-bottom:1.5rem">
     <div class="legend-item"><div class="legend-dot" style="background:var(--accent4)"></div> 職缺所需能力</div>
-    <div class="legend-item" style="color:var(--accent3)">ℹ 圖卡右上角 <em>i</em> 可查看說明</div>
+    <div class="legend-item" style="color:var(--accent3)">ℹ 點擊圖卡右上角 <em>i</em> 查看完整說明</div>
   </div>
   <div id="job-cards"></div>
   <div class="nav-btns">
@@ -372,7 +430,7 @@
   <div class="section-header">
     <div>
       <h2>填寫每項能力的現況與行動計畫</h2>
-      <p>針對你選出的每項目標能力，描述目前狀況、理想目標與具體行動步驟。</p>
+      <p>針對你選出的每項目標能力，描述目前狀況、理想目標與具體行動步驟。圖卡說明已展開供你參考！</p>
     </div>
   </div>
   <div id="job-step2-content"></div>
@@ -403,43 +461,127 @@
   </div>
 </div>
 
-<div id="g-tip"></div>
+<!-- CARD MODAL -->
+<div class="card-modal-overlay" id="card-modal-overlay" onclick="closeModal(event)">
+  <div class="card-modal" id="card-modal">
+    <div class="card-modal-header">
+      <div class="card-modal-num" id="modal-num"></div>
+      <div class="card-modal-title" id="modal-title"></div>
+      <div class="card-modal-cat" id="modal-cat"></div>
+      <button class="card-modal-close" onclick="closeModalDirect()">✕</button>
+    </div>
+    <div class="card-modal-body" id="modal-body"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-/* ── TOOLTIPS ── */
+/* ── CARD DATA ── */
+const CARD_DATA = {
+  1: {"no": 1, "name": "追求品質", "category": "Action & Execution", "traits": ["自我要求高，用高標準做事", "對瑕疵不妥協，堅持做到好", "持續打磨細節", "樹立品質標竿，超越既有水準"], "shadow": [{"c": "進度延宕", "a": "設定「夠好的程度」，到點就交付"}, {"c": "團隊挫折", "a": "先肯定 80 分，再提 1-2 個最關鍵優化點"}], "strength": {"s": "品管、客戶服務、法務", "t": "打造高價值與影響力品牌", "g": "建立高標準信譽，贏得客戶信賴"}, "improve": ["設定標竿(Benchmark)，拆解關鍵要素", "事前對齊標準，和利害關係人確認「要好到什麼程度」"]},
+  2: {"no": 2, "name": "目標導向", "category": "Action & Execution", "traits": ["鎖定目標、聚焦最終成果", "每週檢視進度，必要時主動調整路線", "以成果為核心，排除非必要流程", "遇到干擾時會回到目標檢核：這件事有幫助嗎？"], "shadow": [{"c": "忽視秩序、破壞信任", "a": "堅守正直，在規範內行事"}, {"c": "團隊士氣低落，流動率高", "a": "兼顧關係，平衡管理"}], "strength": {"s": "業務、專案經理", "t": "季度業績衝刺、推動組織變革", "g": "協助團隊在混亂中聚焦，收斂方向"}, "improve": ["練習SMART原則，設定清晰目標", "建立檢核表：完成/延宕/阻礙/下一步"]},
+  3: {"no": 3, "name": "提升效率", "category": "Action & Execution", "traits": ["總能找到最快路徑，省時省力", "厭惡冗餘流程，主動尋求簡化", "會把重複工作變模板或自動化", "以更少投入，創造更多產出"], "shadow": [{"c": "產出品質不穩，後續修改更耗時", "a": "建立檢查清單，快但不能錯"}, {"c": "埋下潛在溝通與執行風險，引發後續問題", "a": "在規範和協作內加速"}], "strength": {"s": "流程改善、生產管理、營運", "t": "導入新系統、優化工作流", "g": "擴大範圍協助提升團隊效率"}, "improve": ["導入敏捷開發精神，小步快跑", "學習時間管理 (如番茄鐘) 與工具"]},
+  4: {"no": 4, "name": "擷取重點", "category": "Action & Execution", "traits": ["能快速抓取大量資訊中的核心", "會把資訊整理成 3-5 個關鍵點", "精準判斷重要度與緊急度", "善於筆記或重點整理"], "shadow": [{"c": "資訊傳遞失真，他人理解錯誤", "a": "總結後，多一步確認細節"}, {"c": "誤判情勢，做出錯誤決策", "a": "重新審慎核對完整資訊"}], "strength": {"s": "幕僚、顧問、高階主管特助", "t": "彙報、商業分析、策略/跨部門會議", "g": "會議最後 5 分鐘做「共識回述」"}, "improve": ["閱讀資訊後，強迫自己寫下幾句摘要", "練習艾森豪矩陣，區分輕重緩急"]},
+  5: {"no": 5, "name": "責任承諾", "category": "Action & Execution", "traits": ["答應的事會做到，無法達成會提前預警", "容易承擔權責不清的任務", "有錯會承擔，並提出補救方案", "交付前會自我檢查、主動回報進度，讓人好合作"], "shadow": [{"c": "答應許多事情卻做不到", "a": "承諾前誠實評估能力與時程"}, {"c": "效率變差甚至突然崩潰", "a": "學會求助，尋求支援"}], "strength": {"s": "任何工作、客戶服務", "t": "關鍵專案執行、危機處理", "g": "建立團隊當責文化的基石"}, "improve": ["練習「小承諾」並主動回報進度", "建立提醒系統 (行事曆/任務清單)，不遺漏事情"]},
+  6: {"no": 6, "name": "廣泛收集", "category": "Action & Execution", "traits": ["充滿好奇心，主動挖掘", "未來可能會用到", "擁有多元豐富的資訊來源或人脈網", "會想知道或擁有好東西（情報、人脈、知識、資源...）"], "shadow": [{"c": "抓不到重點，浪費時間", "a": "先定義問題，再精準收集"}, {"c": "無法產出洞察", "a": "練習輸出觀點或方案"}], "strength": {"s": "市場研究、策略規劃、研發", "t": "競品分析、趨勢預測、新市場開發", "g": "決策時，提供更宏觀的視角"}, "improve": ["練習針對某個主題收集資料", "培養對事物的好奇心和開放心態"]},
+  7: {"no": 7, "name": "規範秩序", "category": "Action & Execution", "traits": ["嚴格遵守流程規範", "遵守法規與資料保護", "落實版本控制與檔案命名", "會把流程寫成 SOP"], "shadow": [{"c": "僵化", "a": "為 SOP 設「彈性條款」，理解規範背後的目的，彈性應對"}, {"c": "增加不必要的內耗與文書作業", "a": "精簡到「最低可行文件」"}], "strength": {"s": "醫藥、金融、法務、製造、財會、稽核、品管、營運", "t": "建立制度、風險控管、SOP撰寫", "g": "規則的遵守與把關"}, "improve": ["從一條流程開始寫 SOP", "嘗試理解規範的重要性"]},
+  8: {"no": 8, "name": "資源應用", "category": "Action & Execution", "traits": ["清楚知道手邊有哪些人、時、錢、工具可用", "會借力使力 (外包、合作、授權)", "善於整合資源與工具，調度時程、錯開需求高峰", "會比較方案的投入/產出比，用最省力的方法達成目標"], "shadow": [{"c": "缺乏硬實力，難以獨當一面", "a": "資源是槓桿，核心能力才是根本"}, {"c": "外包控管", "a": "設定驗收條款"}], "strength": {"s": "專案經理、公關、新創", "t": "預算緊、時間趕的案子", "g": "資源盤點表常態化"}, "improve": ["盤點人脈地圖，並主動維護", "練習互惠，主動先提供價值"]},
+  9: {"no": 9, "name": "靈活應變", "category": "Action & Execution", "traits": ["擁抱變化，靈活運用工具或規則", "遇到突發狀況，能迅速調整心態並應對", "根據情況調整行為或方法，不守舊", "在模糊不清的狀態下能快速判斷情勢，當機立斷"], "shadow": [{"c": "頻繁變動，難以累積成果", "a": "公告「變更準則」"}, {"c": "留下許多管理債和營運債", "a": "事後保留時間完整解決問題"}], "strength": {"s": "新創、市場行銷、專案管理、客戶服務", "t": "危機處理、應對市場變化、活動現場", "g": "應對突發狀況"}, "improve": ["刻意讓自己跨出舒適圈，接觸新事物", "學會「最小可行調整」思維"]},
+  10: {"no": 10, "name": "統籌規劃", "category": "Action & Execution", "traits": ["化繁為簡，拆解複雜任務", "考量變數、找到資源配置的最佳做法", "擅長安排時程、資源與分工", "制定行動藍圖，設定里程碑與交付物"], "shadow": [{"c": "錯失時機，計畫趕不上變化", "a": "完成 80% 的計畫就去行動"}, {"c": "個人主導太多導致團隊被動", "a": "抓大放小，練習授權"}], "strength": {"s": "專案經理、活動策劃、幕僚", "t": "大型專案導入、年度計畫、活動籌辦", "g": "共用甘特圖或儀表板，讓複雜任務視覺化，對齊所有人認知"}, "improve": ["學習WBS工作分解結構", "練習使用專案管理工具"]},
+  11: {"no": 11, "name": "持續優化", "category": "Action & Execution", "traits": ["不滿足現狀，總在問能更好嗎？", "持續迭代改善", "對現有流程提出質疑，尋求升級", "把問題變成改進項目"], "shadow": [{"c": "團隊疲於奔命", "a": "逐步施行優化，檢驗成效再推進"}, {"c": "浪費資源", "a": "每次迭代前評估投入/回報，只做關鍵優化"}], "strength": {"s": "流程改善、營運管理、產品經理", "t": "數位與AI轉型、流程再造、成本控制", "g": "找到缺口或痛點提出改善建議"}, "improve": ["建立個人改善日誌，記錄優化", "訪問使用者(內/外部)，尋找痛點"]},
+  12: {"no": 12, "name": "積極主動", "category": "Action & Execution", "traits": ["主動把握、爭取或創造機會", "超越職責範圍，主動補位協作", "預見未來需求，先一步採取行動", "不會處於被動、依賴或等待他人"], "shadow": [{"c": "引起反感，破壞協作關係", "a": "事前評估界線與範疇"}, {"c": "攬事卻搞砸", "a": "先確認方向和評估自身狀況再承接"}], "strength": {"s": "業務開發、管理職、新專案啟動", "t": "新市場開拓、建立新制度、危機預防", "g": "成為團隊的發動機，感染他人"}, "improve": ["每週設定一個主動行動目標", "看到問題，帶著解決方案去回報"]},
+  13: {"no": 13, "name": "解決問題", "category": "Action & Execution", "traits": ["擅長釐清問題有關的影響因素", "面對複雜難題，能保持冷靜", "找出根本解 (Root Cause)", "預見潛在風險，建立處理機制"], "shadow": [{"c": "錯失解決問題的黃金時機", "a": "設分析停損點，推最小可行方案"}, {"c": "解方不接地氣，或推動受阻", "a": "納入利害關係人共同討論"}], "strength": {"s": "工程師、顧問、幕僚、客服主管", "t": "客訴處理、流程改善、危機應對", "g": "成為團隊的拆彈專家或偵探"}, "improve": ["學習 5 Whys 分析法", "練習問題重寫：把抱怨改成可解的題"]},
+  14: {"no": 14, "name": "冒險挑戰", "category": "Action & Execution", "traits": ["願意挑戰高難度目標，不懼失敗", "願意嘗試新市場、新事物、新方法", "能評估風險，在可控範圍內冒險", "視失敗為學習，快速復原"], "shadow": [{"c": "造成巨大損失或不可逆傷害", "a": "冒險不等於賭博，做好評估"}, {"c": "基礎不穩，挑戰註定失敗", "a": "先紮實基本功再談顛覆"}], "strength": {"s": "新創、業務開發、研發", "t": "新產品上市、開拓新市場、組織轉型、跨國拓點", "g": "激勵團隊，挑戰不可能的任務"}, "improve": ["主動爭取跳出舒適圈的任務", "從低風險小挑戰開始"]},
+  15: {"no": 15, "name": "毅力堅持", "category": "Action & Execution", "traits": ["長期任務能維持節奏，不暴衝", "面對挫折會調整策略而非放棄", "專注長期目標，不因短期困難動搖", "踏實穩定、默默專注"], "shadow": [{"c": "不斷投入沉沒成本", "a": "區分何時該堅持、何時該放棄"}, {"c": "身心耗竭", "a": "學習配速與休息"}], "strength": {"s": "長期研發、長線業務(toB市場)、創業", "t": "長期專案、重大變革、高壓環境", "g": "展現恆毅力，穩定團隊軍心"}, "improve": ["建立支持系統 (夥伴、教練)", "視覺化記錄進展，累積小小成就感"]},
+  16: {"no": 16, "name": "行動執行", "category": "Action & Execution", "traits": ["快速啟動，不拖泥帶水", "任務落地，即知即行", "專注當下，解決眼前具體障礙", "具備強大推進力"], "shadow": [{"c": "戰術勤奮掩蓋戰略懶惰", "a": "任務前和過程中確認目標"}, {"c": "資源浪費", "a": "建立前期規劃SOP"}], "strength": {"s": "業務、倉儲物流、生產線", "t": "活動現場執行、危機處理小組", "g": "消除拖延，帶動專案的執行節奏"}, "improve": ["每日工作先列出今日Top3", "將大任務拆解為「立刻可做」的 10 分鐘小任務"]},
+  17: {"no": 17, "name": "時間管理", "category": "Action & Execution", "traits": ["區分輕重緩急，專注要事", "視時間為寶貴資產，精打細算", "批次處理相似任務，降低切換成本", "短時間完成多項任務會很滿足"], "shadow": [{"c": "關係疏離", "a": "將溝通與關懷視為必要的時間投資"}, {"c": "明明有時間但是感性上已經不想去做", "a": "照顧自己的身心能量"}], "strength": {"s": "主管、專案管理、特助", "t": "多專案並行、遠距/跨時區協作", "g": "準確預估工時，提升承諾的可信度"}, "improve": ["學習艾森豪矩陣，斷捨離不重要瑣事", "記錄「時間日誌」，每週檢視時間花在哪裡"]},
+  18: {"no": 18, "name": "成就導向", "category": "Action & Execution", "traits": ["創造獨特或重大的成果", "享受成就達成的滿足感", "需要用客觀標準衡量進步", "閒不下來，自我驅動無需外在鞭策"], "shadow": [{"c": "忽略現有成果、缺乏成就感而焦慮", "a": "定義夠好的標準"}, {"c": "過勞、績效與創造力下降", "a": "培養健康休息"}], "strength": {"s": "業務、創業、開拓市場、打造產品", "t": "業務、產品上線衝刺、競賽", "g": "建立「成果看板＋里程碑審查」節奏"}, "improve": ["針對任務做「一頁式目標」：目標值、里程碑、風險、資源、驗收標準", "每週追蹤進度與阻礙"]},
+  19: {"no": 19, "name": "自我覺察", "category": "Thinking & Mindset", "traits": ["知道自己的優勢、劣勢與極限", "能覺知情緒、想法與感受", "在收到他人回饋時，能反思是否屬實", "清楚自己的價值觀"], "shadow": [{"c": "害怕犯錯，失去行動勇氣", "a": "設定反思時限，聚焦可控行動"}, {"c": "不適宜的自我揭露", "a": "練習情境判斷，在安全場合才深談"}], "strength": {"s": "領導者、教練、人資、創作型職業、人文社會與身心靈領域", "t": "善於反思", "g": "鼓勵自己和他人活出真實的自我"}, "improve": ["練習正念，調節感受", "撰寫日誌記錄思考和情緒"]},
+  20: {"no": 20, "name": "創新思維", "category": "Thinking & Mindset", "traits": ["挑戰既有框架，質疑理所當然", "會引用類比與跨域點子，能把問題換句話說找到新角度", "允許小實驗，對失敗友善", "保持高度好奇，探索未來可能"], "shadow": [{"c": "淪為空談，提案不被信任", "a": "同步納入可行性分析"}, {"c": "頻繁切換方向", "a": "先放入點子儲存庫，學會收斂"}], "strength": {"s": "行銷、廣告、產品開發", "t": "企業策略規劃、新事業開發", "g": "協助建立點子庫＋評估表"}, "improve": ["拓展知識邊界，進行跨域學習", "練習 What if 提問，顛覆假設"]},
+  21: {"no": 21, "name": "邏輯推理", "category": "Thinking & Mindset", "traits": ["擅長歸納演繹，辨識因果關係與模式", "能區分前提、證據、結論", "具備數據思維，能從中解讀意義", "能指出推論中的漏洞與偏誤"], "shadow": [{"c": "無法處理好人際關係", "a": "練習理解他人感受"}, {"c": "立場偏誤", "a": "多面向思考與處理資訊"}], "strength": {"s": "數據分析、市場調查、學術研究、工程師", "t": "策略分析、商業提案、風險評估、數據應用", "g": "數據佐證讓論述更有說服力"}, "improve": ["學習金字塔原理和 MECE 原則", "針對某個主題閱讀反方觀點並重寫結論"]},
+  22: {"no": 22, "name": "策略洞察", "category": "Thinking & Mindset", "traits": ["看得見趨勢、競品動向與結構性變化", "能把外部機會對上內部能力", "能在時機成熟時果斷轉向", "優秀的軍師幕僚"], "shadow": [{"c": "策略不接地氣，與第一線脫節", "a": "將策略轉譯為可執行的任務"}, {"c": "過度悲觀、迴避困難", "a": "小規模先做試驗"}], "strength": {"s": "高階主管、策略幕僚、產品負責人", "t": "年度計畫、市場分析、組織轉型", "g": "協助團隊理解為何而戰"}, "improve": ["閱讀產業報告，分析競品動態", "學習 SWOT 或五力分析框架"]},
+  23: {"no": 23, "name": "系統思考", "category": "Thinking & Mindset", "traits": ["看見全貌，而非單一片段", "把問題放在整體流程與關係網中看", "預見牽一髮動全身的連鎖反應", "不會本位主義，追求整體最優"], "shadow": [{"c": "不表達或錯失行動時機", "a": "在全面與速度間找尋平衡"}, {"c": "低估大幅變革的執行成本", "a": "從最小可行變革開始測試"}], "strength": {"s": "流程改善、組織發展、架構師", "t": "流程再造、組織架構調整", "g": "建立可規模化的制度"}, "improve": ["練習畫心智圖", "閱讀《第五項修練》"]},
+  24: {"no": 24, "name": "高效學習", "category": "Thinking & Mindset", "traits": ["快速抓取新知並轉化為行動", "願意花費時間心力提升自我", "願意向人請教、拆解高手做法", "享受學習過程，不排斥新事物"], "shadow": [{"c": "把學習作為一種逃避手段", "a": "先辨識此刻是需要更多知識還是安撫焦慮"}, {"c": "沒有耐心跟慢速者共事", "a": "不要急著行動而是先嘗試同步"}], "strength": {"s": "新創、顧問、研發、數位轉型", "t": "導入新技術、開拓新市場", "g": "成為團隊的知識引擎與開拓者"}, "improve": ["費曼學習法：教別人是學習最快的方式", "練習問對問題、主題式學習"]},
+  25: {"no": 25, "name": "自律節制", "category": "Thinking & Mindset", "traits": ["不需要他人監督", "在面對人際衝突或客戶抱怨時保持專業，不說出不恰當的內容", "能管理自身情緒，在高壓下穩定", "控制衝動、抵抗誘惑、節制慾望"], "shadow": [{"c": "身心出問題", "a": "練習身心覺察與照顧"}, {"c": "與其他人產生距離感", "a": "展現彈性放鬆的一面"}], "strength": {"s": "遠距工作、獨立貢獻者、管理職", "t": "多工處理、高壓專案、獨立作業", "g": "重大決策或專案的團隊定心丸"}, "improve": ["練習時間日誌，分析時間去向", "用三件最重要的事開啟一天"]},
+  26: {"no": 26, "name": "相信自己", "category": "Thinking & Mindset", "traits": ["能夠肯定自我價值", "相信自身判斷，敢於做出決策", "面對質疑，能堅定立場", "相信許多事情的結果是自己可以控制的"], "shadow": [{"c": "其他人都噤聲不再建言", "a": "練習表達脆弱"}, {"c": "準備不周導致失敗", "a": "考慮反方觀點、建立風險清單"}], "strength": {"s": "領導者、業務、公關、發言人", "t": "談判、提案簡報、危機處理", "g": "在關鍵時刻扛住，激勵團隊士氣"}, "improve": ["建立成功日誌，記錄小勝利", "採用正向自我對話"]},
+  27: {"no": 27, "name": "尊重包容", "category": "Thinking & Mindset", "traits": ["允許不同觀點被聽見", "允許他人表達異議和質疑的聲音", "會詢問而不是直接否定，面對衝突保持禮貌與界線", "擁抱多元觀點，創造協同價值"], "shadow": [{"c": "表面和諧但潛藏問題", "a": "真誠面對解決問題"}, {"c": "劣幣驅逐良幣或團隊混亂", "a": "寫下核心底線，不包容錯誤行為"}], "strength": {"s": "人資、管理職、跨國團隊管理", "t": "跨文化團隊建立、跨部門協作、DEI推動", "g": "提升團隊心理安全感，吸引並留住多元背景的優秀人才"}, "improve": ["刻意接觸不同溫層的人", "練習非暴力溝通 (NVC)"]},
+  28: {"no": 28, "name": "誠信正直", "category": "Thinking & Mindset", "traits": ["守法、守約、守底線", "在壓力下仍按原則做事", "對機密資訊妥善保護", "不說不實數據與誇大承諾"], "shadow": [{"c": "在協作中被孤立", "a": "區分原則與方法，方法彈性"}, {"c": "人際關係緊繃", "a": "先看對方的情境與動機"}], "strength": {"s": "任何會接觸到機密或隱私的工作（資安、法務、財會、技術研發或專利）", "t": "合約處理、稽核、管理高敏感資訊", "g": "提醒合規與倫理基準"}, "improve": ["寫下個人底線清單", "學習組織倫理案例"]},
+  29: {"no": 29, "name": "克敵制勝", "category": "Thinking & Mindset", "traits": ["想贏", "喜歡競爭和比賽，享受挑戰並超越對手", "經常比較自己和他人的差距", "能激勵團隊點燃戰鬥激情"], "shadow": [{"c": "忽視客戶", "a": "把使用者價值放首位"}, {"c": "失去他人信任", "a": "釐清正確對手，槍口一致對外"}], "strength": {"s": "業務、競賽團隊、市場開發", "t": "業績競賽、競品攻防、市場拓展", "g": "在逆境中，激發團隊的戰鬥力"}, "improve": ["研究對手三項優勢與弱點", "練習「先客戶、後對手」的思考順序"]},
+  30: {"no": 30, "name": "回顧復盤", "category": "Thinking & Mindset", "traits": ["重視回顧與檢視", "擅長分析成功與失敗的關鍵因素", "從錯誤中學習，避免重蹈覆轍", "透過過往經驗和智慧尋找解答"], "shadow": [{"c": "團隊離心", "a": "復盤對事不對人，也要找成功可複製因子"}, {"c": "問題重複發生", "a": "復盤的重點是下次怎麼做"}], "strength": {"s": "專案經理、領導者、教練", "t": "專案結案、SOP優化、團隊建立", "g": "建立復盤模板，讓經驗得以傳承"}, "improve": ["從 15 分鐘小復盤開始", "建立錯誤日誌，記錄學到的事"]},
+  31: {"no": 31, "name": "審慎周全", "category": "Thinking & Mindset", "traits": ["對法規、合約、成本細節敏感", "會未雨綢繆減少變數和風險", "交付前會反覆檢查，確保無誤", "決策前會多方求證，不貿然行動"], "shadow": [{"c": "錯失需要快速挑戰的機會", "a": "以數據重新評估風險，採取小風險嘗試"}, {"c": "錯失行動時機，方案過時", "a": "建立停損點，在有限資訊下行動"}], "strength": {"s": "財會、法務、稽核、採購、高階幕僚、資訊安全", "t": "風險控管、合約審查、重大決策", "g": "提供決策前後清單檢核"}, "improve": ["為每個專案列出前三大風險與對策", "建立檢查清單 (Checklist)"]},
+  32: {"no": 32, "name": "描繪未來", "category": "Thinking & Mindset", "traits": ["能把願景說得具體有畫面", "擅長說故事，感染他人", "看見未來的機會與可能性", "運用願景激發他人動力"], "shadow": [{"c": "失去信任", "a": "設定與願景連接的行動"}, {"c": "每天做夢", "a": "未來是從現在開始抵達的"}], "strength": {"s": "領導者、創辦人、策略長、變革推動者", "t": "組織變革、年度目標宣導、激勵團隊", "g": "為團隊注入希望和意義感"}, "improve": ["練習把願景轉成北極星指標", "多看趨勢報告，思考三年後的樣貌"]},
+  33: {"no": 33, "name": "發揮優勢", "category": "Thinking & Mindset", "traits": ["關注運用天賦而不是過度彌補弱點", "專注於做擅長的事，創造高價值", "能辨識自己的強項與能量來源", "幫助他人發掘並善用其優勢"], "shadow": [{"c": "短板成為致命傷拖垮優勢", "a": "設定短板最低標準與外部支援時間點"}, {"c": "無法應對新挑戰", "a": "每季接一項不擅長任務鍛鍊"}], "strength": {"s": "顧問、講師、技術專家、領導者", "t": "職涯規劃、團隊組建、任務分配", "g": "看見他人優勢"}, "improve": ["嘗試進行特質相關的測評", "回想巔峰時刻，分析成功要素", "主動請求發揮優勢的任務"]},
+  34: {"no": 34, "name": "樂觀正向", "category": "Thinking & Mindset", "traits": ["在困境中仍能看到可能性", "遇到挫折能快速恢復正能量", "朋友中的小太陽，帶來希望與動能", "不會糾結過多負面的部分"], "shadow": [{"c": "錯估局勢而失敗", "a": "加入最壞情境評估"}, {"c": "團隊假性正向，問題被掩蓋", "a": "允許負面回饋被看見與處理"}], "strength": {"s": "業務、客服、團隊領導者、公關", "t": "高壓環境、變革推動、激勵士氣", "g": "用勝利日誌與小慶祝創造正向氛圍"}, "improve": ["練習轉念", "將問題拆成可行小步驟"]},
+  35: {"no": 35, "name": "獨立思考", "category": "Thinking & Mindset", "traits": ["不盲從權威或多數", "用證據與原則做判斷", "會檢查自己的偏誤", "不會直接相信、照單全收"], "shadow": [{"c": "過多爭辯造成團隊內耗", "a": "提出觀點也要尊重決議"}, {"c": "溝通風格過於尖銳", "a": "挑戰觀點而非挑戰人，用提問代替指責"}], "strength": {"s": "顧問、策略、研發、法遵、內稽", "t": "決策會議、風險評估、創意發想", "g": "提出另一種觀點"}, "improve": ["練習反向思考，刻意唱反調", "閱讀不同立場的資訊"]},
+  36: {"no": 36, "name": "深度專注", "category": "Thinking & Mindset", "traits": ["能長時間專注，產出高品質成果", "擅長排除干擾，主動隔絕通知與噪音", "處理複雜問題時，能深入思考", "重視質而非量的工作"], "shadow": [{"c": "團隊不知進度、資訊不同步", "a": "安排協作溝通時間"}, {"c": "破壞合作關係", "a": "事前建立勿擾提醒"}], "strength": {"s": "工程師、創作者、研發、策略規劃", "t": "寫程式、做研究、寫企劃、解難題", "g": "協助團隊建立專注時間與空間"}, "improve": ["建立無干擾環境（關閉通知）", "練習單點任務，一次只做一件事"]},
+  37: {"no": 37, "name": "身心續航", "category": "Thinking & Mindset", "traits": ["知道自己的恢復方式，懂得補充能量", "了解自身壓力訊號，主動調節", "健康的睡眠、運動、飲食習慣", "懂得關機，充分休息"], "shadow": [{"c": "團隊需要時無法挺身而出、被視為抗壓性低", "a": "區分恢復和拖延"}, {"c": "苛責他人", "a": "尊重他人節奏，聚焦自我改善"}], "strength": {"s": "任何適合（高壓／高責任工作）", "t": "長期專案、高壓期、應對變革、出差密集、大量利害關係人溝通", "g": "帶動團隊文化建立健康 KPI"}, "improve": ["培養工作以外的愛好", "學習各種紓壓方式", "培養一個健康習慣"]},
+  38: {"no": 38, "name": "社交敏銳", "category": "People & Leadership", "traits": ["擅長閱讀空氣，懂得調整語氣、場合與出手時機", "精準辨識利害關係人的意圖、角色、動機與顧慮", "察覺組織中檯面下的權力動態", "能快速看懂關係網與「誰影響誰」"], "shadow": [{"c": "失去信任", "a": "改為利益透明＋立場清楚，說清楚彼此需要"}, {"c": "因為從眾而判斷錯誤", "a": "回到商業價值面判斷、或反思是否自己真心想要"}], "strength": {"s": "公關、業務、幕僚、管理職", "t": "談判協商、利害關係人管理、跨部門專案協調、重大提案拜會", "g": "建立利害關係人地圖與影響策略"}, "improve": ["分析組織圖，誰跟誰連結", "每次開會前寫「三問一底線」(對方要什麼/擔心什麼/能給什麼＋我的底線)"]},
+  39: {"no": 39, "name": "感同身受", "category": "People & Leadership", "traits": ["敏銳察覺他人情緒與潛在需求", "傾聽並理解他人未說出的觀點", "感知團隊氛圍，扮演關係潤滑劑", "主動給予關懷，建立心理安全感"], "shadow": [{"c": "延誤問題處理時機", "a": "同理後再回到事實與選項"}, {"c": "失去能量", "a": "建立情緒界線，建立心理復原方法"}], "strength": {"s": "人資、用戶體驗、客服", "t": "績效回饋、客訴處理、變革管理、衝突協調", "g": "精準解讀客戶 (內/外部) 真實需求"}, "improve": ["練習積極傾聽，複述並確認感受", "進行換位思考，模擬對方處境"]},
+  40: {"no": 40, "name": "協調衝突", "category": "People & Leadership", "traits": ["敏銳覺察，在衝突擴大前介入", "保持中立傾聽，同理各方觀點", "協助建立共識，修復團隊信任", "能安撫情緒，讓討論回歸事實"], "shadow": [{"c": "衝突暫時平息但未來會再爆發", "a": "鼓勵建設性衝突"}, {"c": "沒有做好該做的事", "a": "建立界線"}], "strength": {"s": "專案經理、人資、法務、主管", "t": "跨部門協商、勞資會議、客訴處理", "g": "處理團隊內耗，讓組織重新聚焦"}, "improve": ["學習非暴力溝通 (NVC)", "扮演會議主持人，學會找需求交集"]},
+  41: {"no": 41, "name": "客戶導向", "category": "People & Leadership", "traits": ["主動預測並滿足客戶需求", "視客戶成功為自己的責任", "總能多走一步，創造優質體驗", "會預先想到對方的困難並先準備"], "shadow": [{"c": "承諾無法兌現反而傷害信譽", "a": "清楚定義服務範圍"}, {"c": "造成營運虧損或資源錯配", "a": "在客戶滿意與公司利益間取得平衡"}], "strength": {"s": "客服、業務、用戶體驗", "t": "建立客戶服務流程、客訴處理", "g": "提升客戶 (內/外部) 滿意度與忠誠度"}, "improve": ["練習站在客戶角度走過一遍流程", "建立客戶回饋機制，主動收集"]},
+  42: {"no": 42, "name": "推動影響", "category": "People & Leadership", "traits": ["沒有權力也能讓人願意跟著做", "找到利害關係人共同推動", "讓他人接受或支持自己的主張", "有意識地透過言語或行為影響他人"], "shadow": [{"c": "信用破產、承諾無法兌現", "a": "同時考量可行性與長期信任"}, {"c": "合作破裂", "a": "平衡雙方需求"}], "strength": {"s": "領導者、業務、行銷、公關、變革推動者", "t": "簡報提案、跨部門協商、推動新政", "g": "爭取資源，讓重要專案得以啟動"}, "improve": ["學習黃金圈法則 (Why/How/What)", "分析利害關係人，找出關鍵決策者"]},
+  43: {"no": 43, "name": "培養他人", "category": "People & Leadership", "traits": ["樂於分享，以鼓勵與挑戰兼具的方式帶人", "擅長發現他人潛力，並給予舞台", "善於提問引導、給予回饋", "會設定學習目標與里程碑"], "shadow": [{"c": "過度指導讓人反感，壓抑主動性", "a": "引導而非複製，先確認性格特質與學習風格"}, {"c": "過度保護", "a": "逐步放手設計難度曲線，讓他人逐步獨立"}], "strength": {"s": "領導者、人資、導師、講師、教練", "t": "團隊建立、接班人計畫、新人培訓", "g": "提升團隊總戰力，解放主管時間"}, "improve": ["學習情境領導，因材施教", "練習GROW教練模型 (Goal, Reality, Options, Will)"]},
+  44: {"no": 44, "name": "團隊合作", "category": "People & Leadership", "traits": ["主動分享資訊與資源、避免各自為政", "願意補位，而非本位主義", "能為整體目標讓步與支援", "會照顧團隊節奏與氛圍"], "shadow": [{"c": "團隊表面和諧但績效低落", "a": "面對並解決問題"}, {"c": "個人成長有限", "a": "主動爭取發展機會"}], "strength": {"s": "任何工作 (尤其是專案、跨部門)", "t": "跨功能專案、敏捷開發、團隊建立", "g": "創造 1+1 > 2 的團隊綜效"}, "improve": ["建立共同語言與協作工具", "尊重他人貢獻與團隊決議"]},
+  45: {"no": 45, "name": "領導統率", "category": "People & Leadership", "traits": ["能夠帶領團隊", "激勵士氣，在逆境中穩定軍心", "能做取捨與決策，承擔最終責任", "說清方向與標準，會分配資源與權責"], "shadow": [{"c": "團隊工具人化，缺乏授權與接班", "a": "設定授權梯度與決策邊界"}, {"c": "團隊被動，壓抑自主性", "a": "領導是賦能，練習抓大放小"}], "strength": {"s": "組織主管、專案負責人、意見領袖", "t": "帶領團隊、組織變革、危機處理", "g": "建立有向心力的組織文化"}, "improve": ["學會「情境領導」四象限", "建立授權清單與追蹤節點", "固定與核心成員一對一"]},
+  46: {"no": 46, "name": "建立界線", "category": "People & Leadership", "traits": ["清楚定義職權與責任範圍", "面對不合理要求能禮貌拒絕", "避免不必要的外部干擾", "設定互動規則與回覆時段"], "shadow": [{"c": "被討厭，跨部門協作困難", "a": "先理解再畫線，同時解釋原因與影響"}, {"c": "錯失機會", "a": "持續檢視是否因慣性錯過好機會"}], "strength": {"s": "專案經理、主管、獨立工作者", "t": "專案範疇界定、資源保護、工作排序、專案變更控管、外部客製要求", "g": "確保團隊聚焦在高價值任務上"}, "improve": ["練習 Not-to-do list，定義不做什麼", "學習溫和但堅定的拒絕話術"]},
+  47: {"no": 47, "name": "善於識人", "category": "People & Leadership", "traits": ["從言行與情境線索判讀特質與動機", "把對的人放對位置", "對每個人的差異和獨特很敏銳", "能判斷成熟度與可授權範圍，辨識高潛人才"], "shadow": [{"c": "解讀錯誤", "a": "和對方核對確認、觀察"}, {"c": "降低效率或被認為用人唯親", "a": "建立基礎公平流程"}], "strength": {"s": "人資、高階主管、獵頭", "t": "面試招募、團隊組建、接班人計畫", "g": "能夠建立好團隊，降低磨合成本"}, "improve": ["學習 BEI (行為事件訪談) 提問", "回顧招募失誤，校準識人標準"]},
+  48: {"no": 48, "name": "深化關係", "category": "People & Leadership", "traits": ["人際關係重質不重量", "擅長一對一深度交流", "維持長期互信互惠的合作", "能在衝突後修復並升級關係"], "shadow": [{"c": "不解決問題、決策不公", "a": "區分公私，回到專業與績效"}, {"c": "發展受限、錯失機會", "a": "真實的關係不會因為情境改變"}], "strength": {"s": "業務、公關、人資、客戶成功", "t": "大客戶維護、利害關係人管理、社群經營", "g": "了解對方真實心聲"}, "improve": ["嘗試關懷他人", "定期主動關心，而非有事才找"]},
+  49: {"no": 49, "name": "結識新人", "category": "People & Leadership", "traits": ["樂於走出舒適圈，認識新朋友", "擅長在陌生場合，快速破冰", "建立廣泛的人脈網絡與資訊", "能連結不同人脈，創造新機會"], "shadow": [{"c": "關係量大質低，關鍵時刻無人相助", "a": "設定每次交流人數與時間"}, {"c": "停留在無效社交", "a": "創造自己的合作價值"}], "strength": {"s": "業務開發、公關、創投、獵頭", "t": "市場開發、募資、外部資源整合、展會/論壇", "g": "成為團隊的人際雷達與連結器"}, "improve": ["練習30秒自我介紹，清晰有力", "參加跨界活動"]},
+  50: {"no": 50, "name": "表達技巧", "category": "People & Leadership", "traits": ["擅長口語或文字，清晰傳達", "遣詞用字精準，能引發他人共鳴", "能用聽得懂的語言解釋複雜內容", "會依聽眾調整深度與用詞，看場合切換風格"], "shadow": [{"c": "信任下降", "a": "用數據與證據支撐觀點"}, {"c": "溝通單向缺乏傾聽", "a": "刻意停頓與提問"}], "strength": {"s": "講師、公關、行銷、作家、主持人", "t": "簡報提案、公開演說、文案撰寫", "g": "成為團隊發言人，對齊內外資訊"}, "improve": ["學習故事力，增加感染力", "錄音/錄影，客觀檢視表達盲點"]},
+  51: {"no": 51, "name": "談判協商", "category": "People & Leadership", "traits": ["清楚底線，並鎖定理想目標", "策略性提問，探詢對方更多情報", "靈活說服，創造雙贏價值方案", "堅持關鍵利益，策略性讓步成交"], "shadow": [{"c": "破壞團隊互信", "a": "區分該爭與該讓的情境"}, {"c": "犧牲長期關係、失去未來機會", "a": "導入長期主義思維"}], "strength": {"s": "採購、業務、法務、人資", "t": "商務合約、薪資談判、跨部門爭取資源", "g": "為團隊爭取合理的資源與時程"}, "improve": ["學習談判框架 (BATNA)", "練習殺價"]},
+  52: {"no": 52, "name": "美感創作", "category": "Skills & Application", "traits": ["審美強，對美的事物有見解", "專技戲劇、文學、舞蹈、影像、工藝或音樂等領域", "注重美感"], "shadow": [{"c": "成果偏離商業目標", "a": "先做可用性測試"}, {"c": "協作困難被視為難以配合", "a": "尊重需求方"}, {"c": "延誤時效，影響專案進程", "a": "設定停損點"}], "strength": {"s": "視覺設計、UI/UX、行銷、品牌企劃", "t": "品牌識別(CIS)、廣告素材、產品包裝", "g": "將美感注入SOP，優化體驗"}, "improve": ["大量閱覽頂尖作品，建立資料庫", "每週 1 次拆解模仿：臨摹優秀版面並說出規則"]},
+  53: {"no": 53, "name": "肢體活動", "category": "Skills & Application", "traits": ["具備協調性、耐力或力量", "能感知並準確控制自己的身體", "透過實作學習，而非理論", "精力充沛，能勝任高強度勞動"], "shadow": [{"c": "缺乏方法論，效率無法提升", "a": "動手也要動腦"}, {"c": "決策草率，造成工安或品質問題", "a": "行動前先做好評估"}], "strength": {"s": "運動員/教練、軍警、技師、表演藝術家", "t": "實作演練、體能勞務、活動搭建/展演團隊、倉儲理貨/物流", "g": "在動態環境中快速反應"}, "improve": ["導入刻意練習，分解動作細節", "尋求教練指導，客觀修正動作"]},
+  54: {"no": 54, "name": "動手實作", "category": "Skills & Application", "traits": ["享受從無到有把東西做出來", "擅長操作工具或精密儀器", "容易沉浸在實作過程中", "能快速拆解並修復事物"], "shadow": [{"c": "與團隊脫節，成品不符需求", "a": "實作前先對齊規格"}, {"c": "錯失升級機會，方法過時", "a": "接觸新知，實作驗證"}], "strength": {"s": "工程師、研發、廚師、醫護、手工藝", "t": "產品打樣、維修、實驗、教具/展件製作、Maker、木工", "g": "在動態環境中快速反應"}, "improve": ["學習拆解日常用品再組裝", "參加工作坊，嘗試動手實作"]},
+  55: {"no": 55, "name": "科技應用", "category": "Skills & Application", "traits": ["能挑選合適的數位／AI工具處理任務", "會評估成本、風險與效益（含資安）", "能將科技與實務需求結合", "具備 AI 協作思維，善用工具賦能"], "shadow": [{"c": "降低效率，增加學習成本", "a": "定期檢視工具應用複雜度"}, {"c": "無法傳承", "a": "建立 SOP 與教學，賦能團隊"}], "strength": {"s": "資訊、數位行銷、產品經理", "t": "數位轉型、AI協作導入、自動化；資料處理與報表、營運分析", "g": "成為團隊的科技／AI大使，解決痛點"}, "improve": ["嘗試新的數位工具", "從痛點切入自動化（如制式回覆）"]},
+  56: {"no": 56, "name": "永續思維", "category": "Skills & Application", "traits": ["對環境與生命具高度敏感", "關心生態系統", "投入農林漁牧、生態與自然科學", "具備永續思維，考量長期影響"], "shadow": [{"c": "方案不接地氣", "a": "將永續轉化為商業機會"}, {"c": "成為阻力，而非助力", "a": "尋找雙贏路徑，而非對立"}], "strength": {"s": "ESG永續管理、農業研究、環境工程", "t": "企業永續報告、供應鏈減碳、生態研究", "g": "協助組織實踐社會責任 (CSR)"}, "improve": ["練習田野調查，記錄細節", "學習 ESG 或 SDGs 相關知識"]},
+  57: {"no": 57, "name": "國際移動", "category": "Skills & Application", "traits": ["具備跨文化敏感度與適應力", "樂於在不同國家或城市工作", "不害怕跟外國人溝通", "能理解不同的文化脈絡"], "shadow": [{"c": "身分與歸屬感迷失、難以建立人際關係", "a": "跟原有的生活圈保持聯絡"}, {"c": "觀點與做法不接地氣", "a": "長期深入耕耘才能建立在地洞察"}], "strength": {"s": "外派人員、國際業務、跨國企業", "t": "開拓海外市場、跨國專案協作", "g": "成為在地與總部的溝通橋梁"}, "improve": ["先從短期出差試水溫，逐步拉長", "接觸國際媒體，培養全球觀點"]},
+  58: {"no": 58, "name": "商業思維", "category": "Skills & Application", "traits": ["圍繞商業目的，思考如何創造價值", "透過數據與策略，協助做出更佳決策", "決策時，能考量成本與效益", "以市場需求為導向，提供解決方案"], "shadow": [{"c": "缺乏使命感", "a": "建立營收以外的願景目標"}, {"c": "人際關係功利化", "a": "將人脈重新定義為連結、練習不帶目的的給予"}], "strength": {"s": "任何工作（管理、專案管理、業務）", "t": "預算編列、產品定價、策略規劃", "g": "評估新商業模式或專案的可行性"}, "improve": ["分析競品的商業模式，寫比較表", "練習用「成本效益」分析日常工作"]},
+  59: {"no": 59, "name": "照顧他人", "category": "Skills & Application", "traits": ["常能提供對方實體（或心理）的協助", "能敏銳覺察他人需求", "具備專業服務的實務技巧", "以尊重包容態度、給予直接幫助"], "shadow": [{"c": "對方退化", "a": "鼓勵對方做能力範圍內的事，賦能而非替代"}, {"c": "倦怠與角色混亂", "a": "明確服務範圍、值班/輪班與轉介門檻"}], "strength": {"s": "護理、長照、幼教、社工、專業服務工作者", "t": "客服或人員關懷", "g": "在高壓或危機環境下，安撫他人情緒與不安"}, "improve": ["練習觀察非語言訊息（表情/肢體）並核對需求", "學習基礎護理、急救或服務接待技能"]},
+  60: {"no": 60, "name": "財務管理", "category": "Skills & Application", "traits": ["數字觀念強，能解讀數字背後的意義", "確實掌握收支，可控管預算與成本", "定期檢視財務規劃，重視財務健康", "風險意識高，預防財務漏洞"], "shadow": [{"c": "因小失大錯失機會", "a": "區分費用 (Cost) 與投資 (Investment) 的差異"}, {"c": "犧牲長期資產／研發", "a": "設長期 KPI（品牌資產、留任、研發占比）"}], "strength": {"s": "會計／財務長／採購、創業家／事業部主管", "t": "年度預算、評估新專案的可行性與投資報酬率 (ROI)", "g": "優化資源配置，減少不必要的浪費"}, "improve": ["從個人記帳開始，練習分析現金流向", "培養「成本效益分析」習慣，購物或決策前先算帳"]},
+};
+
+/* Legacy short tips for the old TIPS key (used in modal footer) */
 const TIPS = {
-  '追求品質':           '核心關注：標準與完美。<br>致力達到100分，不妥協於「差不多」，在乎品質本身的高度。',
-  '發揮效率／提升效率':  '核心關注：投入產出比。<br>用最少的時間與資源完成任務，重視速度與成本效益。',
-  '持續優化':           '核心關注：迭代改進。<br>專注 PDCA 循環，昨天60分、今天70分，重點是過程持續變好。',
-  '邏輯推理':           '核心關注：因果與證據。<br>線性思考，關注數據與推論是否合理，善於判別真偽。',
-  '概念思考／系統思考':  '核心關注：關聯與迴路。<br>網狀思考，關注 A 如何影響 B，B 又如何反過來影響 A。',
-  '戰略思維／策略洞察':  '核心關注：方向與取捨。<br>未來思考，關注環境趨勢，決定要做什麼、不做什麼。',
-  '察言觀色／社交敏銳':  '核心關注：局勢與利益。<br>政治智商，關注權力結構、潛規則與關鍵利害關係人。',
-  '感同身受':           '核心關注：情緒與感受。<br>情緒智商，能接納並理解他人的情緒，讓對方感到被看見。',
-  '領導統率':           '核心關注：權責與賦能。<br>有正式職權，帶領團隊設定願景並執行，能為成敗負責。',
-  '推動影響':           '核心關注：說服與驅動。<br>在沒有直接權力的情況下，透過溝通、故事與利益交換讓他人願意跟進。',
-  '積極主動':           '核心關注：預防與發起。<br>事前思維，沒有人要求，自己已先想到並採取行動。',
-  '責任承諾':           '核心關注：承擔與結果。<br>事後思維，答應的事情盡力做到；即使做不到，也願意承擔後果。',
-  '自我察覺':           '核心關注：認知與偵測。<br>清楚知道自己當下的情緒、優勢、劣勢與偏見，是一切改變的起點。',
-  '自我管理／自律節制':  '核心關注：紀律與行為控制。<br>察覺後能用意志力或機制導正行為，不受情緒綁架，維持高效輸出。',
-  '身心續航':           '核心關注：能量與長期平衡。<br>不靠意志力硬撐，懂得充電與配速，確保明天仍能持續投入。',
-  '表達技巧':           '核心關注：清晰度。<br>重視邏輯結構與用詞精準，讓對方真正聽得懂，有效減少誤解。',
-  '談判協商':           '核心關注：交換與協議。<br>雙方存在利益衝突時，透過交換條件找出雙贏或雙方都能接受的妥協點。',
-  '結識新人':           '核心關注：廣度與破冰。<br>能在陌生場合迅速建立初步連結，打開人際關係的第一扇門。',
-  '深化關係':           '核心關注：深度與信任。<br>專注維護既有連結，建立長期信任，讓關係經得起時間考驗。',
-  '規範秩序':           '核心關注：合規。<br>遵守 SOP、法律與公司規定，確保行為不逾矩、不違規。',
-  '審慎周全':           '核心關注：避險。<br>關注潛在風險與例外狀況，預先準備 Plan B，以「不出錯」為優先。',
-  '專注目標／目標導向':  '核心關注：終點線。<br>重視完成度與執行紀律，確保 KPI 準時準確達成。',
-  '克敵致勝':           '核心關注：對手與排名。<br>跟別人比，關注相對優勢，不只要達標，還要勝過競爭者。',
-  '成就導向':           '核心關注：卓越與極限。<br>跟自己比，喜歡挑戰高難度，驅動力來自內在滿足，不甘於剛剛好。',
-  '國際移動':           '重點在於了解跨文化溝通、語言能力、國際觀等等。',
+  '追求品質': '核心關注：標準與完美。致力達到100分，不妥協於「差不多」，在乎品質本身的高度。',
+  '發揮效率／提升效率': '核心關注：投入產出比。用最少的時間與資源完成任務，重視速度與成本效益。',
+  '提升效率': '核心關注：投入產出比。用最少的時間與資源完成任務，重視速度與成本效益。',
+  '持續優化': '核心關注：迭代改進。專注 PDCA 循環，昨天60分、今天70分，重點是過程持續變好。',
+  '邏輯推理': '核心關注：因果與證據。線性思考，關注數據與推論是否合理，善於判別真偽。',
+  '概念思考／系統思考': '核心關注：關聯與迴路。網狀思考，關注 A 如何影響 B，B 又如何反過來影響 A。',
+  '系統思考': '核心關注：關聯與迴路。網狀思考，關注 A 如何影響 B，B 又如何反過來影響 A。',
+  '戰略思維／策略洞察': '核心關注：方向與取捨。未來思考，關注環境趨勢，決定要做什麼、不做什麼。',
+  '策略洞察': '核心關注：方向與取捨。未來思考，關注環境趨勢，決定要做什麼、不做什麼。',
+  '察言觀色／社交敏銳': '核心關注：局勢與利益。政治智商，關注權力結構、潛規則與關鍵利害關係人。',
+  '社交敏銳': '核心關注：局勢與利益。政治智商，關注權力結構、潛規則與關鍵利害關係人。',
+  '感同身受': '核心關注：情緒與感受。情緒智商，能接納並理解他人的情緒，讓對方感到被看見。',
+  '領導統率': '核心關注：權責與賦能。有正式職權，帶領團隊設定願景並執行，能為成敗負責。',
+  '推動影響': '核心關注：說服與驅動。在沒有直接權力的情況下，透過溝通、故事與利益交換讓他人願意跟進。',
+  '積極主動': '核心關注：預防與發起。事前思維，沒有人要求，自己已先想到並採取行動。',
+  '責任承諾': '核心關注：承擔與結果。事後思維，答應的事情盡力做到；即使做不到，也願意承擔後果。',
+  '自我察覺': '核心關注：認知與偵測。清楚知道自己當下的情緒、優勢、劣勢與偏見，是一切改變的起點。',
+  '自我覺察': '核心關注：認知與偵測。清楚知道自己當下的情緒、優勢、劣勢與偏見，是一切改變的起點。',
+  '自我管理／自律節制': '核心關注：紀律與行為控制。察覺後能用意志力或機制導正行為，不受情緒綁架，維持高效輸出。',
+  '自律節制': '核心關注：紀律與行為控制。察覺後能用意志力或機制導正行為，不受情緒綁架，維持高效輸出。',
+  '身心續航': '核心關注：能量與長期平衡。不靠意志力硬撐，懂得充電與配速，確保明天仍能持續投入。',
+  '表達技巧': '核心關注：清晰度。重視邏輯結構與用詞精準，讓對方真正聽得懂，有效減少誤解。',
+  '談判協商': '核心關注：交換與協議。雙方存在利益衝突時，透過交換條件找出雙贏或雙方都能接受的妥協點。',
+  '結識新人': '核心關注：廣度與破冰。能在陌生場合迅速建立初步連結，打開人際關係的第一扇門。',
+  '深化關係': '核心關注：深度與信任。專注維護既有連結，建立長期信任，讓關係經得起時間考驗。',
+  '規範秩序': '核心關注：合規。遵守 SOP、法律與公司規定，確保行為不逾矩、不違規。',
+  '審慎周全': '核心關注：避險。關注潛在風險與例外狀況，預先準備 Plan B，以「不出錯」為優先。',
+  '專注目標／目標導向': '核心關注：終點線。重視完成度與執行紀律，確保 KPI 準時準確達成。',
+  '目標導向': '核心關注：終點線。重視完成度與執行紀律，確保 KPI 準時準確達成。',
+  '克敵致勝': '核心關注：對手與排名。跟別人比，關注相對優勢，不只要達標，還要勝過競爭者。',
+  '克敵制勝': '核心關注：對手與排名。跟別人比，關注相對優勢，不只要達標，還要勝過競爭者。',
+  '成就導向': '核心關注：卓越與極限。跟自己比，喜歡挑戰高難度，驅動力來自內在滿足，不甘於剛剛好。',
+  '國際移動': '重點在於了解跨文化溝通、語言能力、國際觀等等。',
 };
 
 /* ── DATA ── */
 const DATA = [
   { category:"Action & Execution", categoryZh:"行動與做事", items:[
-    {no:1,zh:"追求品質"},{no:2,zh:"專注目標／目標導向"},{no:3,zh:"發揮效率／提升效率"},
+    {no:1,zh:"追求品質"},{no:2,zh:"目標導向"},{no:3,zh:"提升效率"},
     {no:4,zh:"擷取重點"},{no:5,zh:"責任承諾"},{no:6,zh:"廣泛收集"},
     {no:7,zh:"規範秩序"},{no:8,zh:"資源應用"},{no:9,zh:"靈活應變"},
     {no:10,zh:"統籌規劃"},{no:11,zh:"持續優化"},{no:12,zh:"積極主動"},
@@ -447,22 +589,22 @@ const DATA = [
     {no:16,zh:"行動執行"},{no:17,zh:"時間管理"},{no:18,zh:"成就導向"},
   ]},
   { category:"Thinking and Mindset", categoryZh:"思考與心態", items:[
-    {no:19,zh:"自我察覺"},{no:20,zh:"創新思維"},{no:21,zh:"邏輯推理"},
-    {no:22,zh:"戰略思維／策略洞察"},{no:23,zh:"概念思考／系統思考"},{no:24,zh:"熱愛學習／高效學習"},
-    {no:25,zh:"自我管理／自律節制"},{no:26,zh:"相信自己"},{no:27,zh:"尊重包容"},
-    {no:28,zh:"忠於信念／誠信正直"},{no:29,zh:"克敵致勝"},{no:30,zh:"回溯過往／回顧復盤"},
-    {no:31,zh:"審慎周全"},{no:32,zh:"想像未來／描繪未來"},{no:33,zh:"發揮優勢"},
-    {no:34,zh:"樂觀正向"},{no:35,zh:"批判思考／獨立思考"},{no:36,zh:"深度專注"},
+    {no:19,zh:"自我覺察"},{no:20,zh:"創新思維"},{no:21,zh:"邏輯推理"},
+    {no:22,zh:"策略洞察"},{no:23,zh:"系統思考"},{no:24,zh:"高效學習"},
+    {no:25,zh:"自律節制"},{no:26,zh:"相信自己"},{no:27,zh:"尊重包容"},
+    {no:28,zh:"誠信正直"},{no:29,zh:"克敵制勝"},{no:30,zh:"回顧復盤"},
+    {no:31,zh:"審慎周全"},{no:32,zh:"描繪未來"},{no:33,zh:"發揮優勢"},
+    {no:34,zh:"樂觀正向"},{no:35,zh:"獨立思考"},{no:36,zh:"深度專注"},
     {no:37,zh:"身心續航"},
   ]},
   { category:"People & Leadership", categoryZh:"人際與領導", items:[
-    {no:38,zh:"察言觀色／社交敏銳"},{no:39,zh:"感同身受"},{no:40,zh:"協調衝突"},
+    {no:38,zh:"社交敏銳"},{no:39,zh:"感同身受"},{no:40,zh:"協調衝突"},
     {no:41,zh:"客戶導向"},{no:42,zh:"推動影響"},{no:43,zh:"培養他人"},
-    {no:44,zh:"團隊意識／團隊合作"},{no:45,zh:"領導統率"},{no:46,zh:"建立界線"},
+    {no:44,zh:"團隊合作"},{no:45,zh:"領導統率"},{no:46,zh:"建立界線"},
     {no:47,zh:"善於識人"},{no:48,zh:"深化關係"},{no:49,zh:"結識新人"},
     {no:50,zh:"表達技巧"},{no:51,zh:"談判協商"},
   ]},
-  { category:"Skill & Application", categoryZh:"能力與應用", items:[
+  { category:"Skills & Application", categoryZh:"能力與應用", items:[
     {no:52,zh:"美感創作"},{no:53,zh:"肢體活動"},{no:54,zh:"動手實作"},
     {no:55,zh:"科技應用"},{no:56,zh:"永續思維"},{no:57,zh:"國際移動"},
     {no:58,zh:"商業思維"},{no:59,zh:"照顧他人"},{no:60,zh:"財務管理"},
@@ -473,6 +615,108 @@ const DATA = [
 let currentMode = null;
 const eS = new Set(), eG = new Set(), eR = {};
 const jSel = new Set(), jData = {};
+
+/* ── MODAL ── */
+function openCardModal(no, e) {
+  if (e) e.stopPropagation();
+  const d = CARD_DATA[no];
+  if (!d) return;
+  document.getElementById('modal-num').textContent = `#${String(no).padStart(2,'0')}`;
+  document.getElementById('modal-title').textContent = d.name;
+  document.getElementById('modal-cat').textContent = d.category;
+  
+  let html = '';
+  // Traits
+  html += `<div class="modal-section"><div class="modal-section-title">✦ 特質</div><div class="modal-traits">${d.traits.map(t=>`<div class="modal-trait">${t}</div>`).join('')}</div></div>`;
+  // Shadow
+  if (d.shadow && d.shadow.length) {
+    html += `<div class="modal-section"><div class="modal-section-title">⚠ 如何管理陰影？</div><div class="shadow-pairs">`;
+    d.shadow.forEach(p => {
+      html += `<div class="shadow-pair"><div class="shadow-row consequence"><span class="shadow-lbl c">後果</span><span class="shadow-text">${p.c}</span></div><div class="shadow-row adjustment"><span class="shadow-lbl a">調整</span><span class="shadow-text">${p.a}</span></div></div>`;
+    });
+    html += `</div></div>`;
+  }
+  // Strength
+  if (d.strength && (d.strength.s || d.strength.t || d.strength.g)) {
+    html += `<div class="modal-section"><div class="modal-section-title">🌟 如何發揮優勢？</div><div class="strength-grid">`;
+    if (d.strength.s) html += `<div class="strength-item"><div class="strength-lbl">適合領域</div><div class="strength-val">${d.strength.s}</div></div>`;
+    if (d.strength.t) html += `<div class="strength-item"><div class="strength-lbl">適合任務</div><div class="strength-val">${d.strength.t}</div></div>`;
+    if (d.strength.g) html += `<div class="strength-item full"><div class="strength-lbl">通用建議</div><div class="strength-val">${d.strength.g}</div></div>`;
+    html += `</div></div>`;
+  }
+  // Improve
+  if (d.improve && d.improve.length) {
+    html += `<div class="modal-section"><div class="modal-section-title">📈 缺乏如何提升？</div><div class="improve-list">`;
+    d.improve.forEach((imp, i) => {
+      html += `<div class="improve-item"><span class="improve-num">${i+1}</span><span>${imp}</span></div>`;
+    });
+    html += `</div></div>`;
+  }
+  // Legacy tip
+  const tip = TIPS[d.name];
+  if (tip) {
+    html += `<div class="modal-tip-section"><div class="modal-tip-label">💡 核心定義</div><div class="modal-tip-text">${tip}</div></div>`;
+  }
+
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('card-modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('card-modal-overlay')) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById('card-modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalDirect(); });
+
+/* ── INLINE CARD DETAIL (for Step 2) ── */
+function buildInlineCardDetail(no) {
+  const d = CARD_DATA[no];
+  if (!d) return '';
+  let html = `<div class="r-card-info">`;
+  // Traits
+  html += `<div class="r-card-info-section"><div class="r-info-title">✦ 特質</div><div class="r-traits">`;
+  d.traits.forEach(t => { html += `<div class="r-trait">${t}</div>`; });
+  html += `</div></div>`;
+  // Shadow
+  if (d.shadow && d.shadow.length) {
+    html += `<div class="r-card-info-section"><div class="r-info-title">⚠ 如何管理陰影？</div><div class="r-shadow-mini">`;
+    d.shadow.forEach(p => {
+      html += `<div class="r-shadow-row"><span class="r-shadow-badge c">後果</span>${p.c}</div>`;
+      html += `<div class="r-shadow-row"><span class="r-shadow-badge a">調整</span>${p.a}</div>`;
+    });
+    html += `</div></div>`;
+  }
+  // Strength
+  if (d.strength) {
+    const parts = [];
+    if (d.strength.s) parts.push(`<strong>適合：</strong>${d.strength.s}`);
+    if (d.strength.t) parts.push(`<strong>任務：</strong>${d.strength.t}`);
+    if (d.strength.g) parts.push(`<strong>通用：</strong>${d.strength.g}`);
+    if (parts.length) {
+      html += `<div class="r-card-info-section"><div class="r-info-title">🌟 如何發揮優勢？</div>`;
+      parts.forEach(p => { html += `<div class="r-strength-mini" style="margin-bottom:.3rem">${p}</div>`; });
+      html += `</div>`;
+    }
+  }
+  // Improve
+  if (d.improve && d.improve.length) {
+    html += `<div class="r-card-info-section"><div class="r-info-title">📈 缺乏如何提升？</div><div class="r-improve-mini">`;
+    d.improve.forEach((imp, i) => {
+      html += `<div class="r-improve-row"><span class="r-improve-num">${i+1}</span>${imp}</div>`;
+    });
+    html += `</div></div>`;
+  }
+  // Tip
+  const tip = TIPS[d.name];
+  if (tip) {
+    html += `<div style="margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--muted);line-height:1.65"><strong style="color:var(--accent3)">💡 核心定義：</strong>${tip}</div>`;
+  }
+  html += `</div>`;
+  return html;
+}
 
 /* ── MODE ── */
 function startMode(mode) {
@@ -526,6 +770,7 @@ function goToStep(n) {
 /* ── HELPERS ── */
 function gk(zh) { return zh.replace(/\//g,'_'); }
 function findItem(key) { for (const c of DATA) for (const i of c.items) if (gk(i.zh)===key) return i; return null; }
+function findByNo(no) { for (const c of DATA) for (const i of c.items) if (i.no===no) return i; return null; }
 function findCategory(key) { for (const c of DATA) for (const i of c.items) if (gk(i.zh)===key) return c; return null; }
 function categoryTag(key, colorVar) { const cat=findCategory(key); if(!cat) return ''; return `<span style="display:inline-block;font-size:.58rem;font-weight:700;letter-spacing:.08em;padding:.15rem .5rem;border-radius:10px;background:rgba(0,0,0,.05);color:${colorVar||'var(--muted)'};margin-bottom:.4rem;border:1px solid rgba(0,0,0,.08)">${cat.categoryZh}</span>`; }
 function showToast(m) { const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800); }
@@ -537,58 +782,15 @@ function requireName(iid, bid) {
   return true;
 }
 
-/* ── TOOLTIP ── */
-function infoBtn(zh) {
-  if (!TIPS[zh]) return '';
-  const escaped = TIPS[zh].replace(/"/g, '&quot;');
-  return `<div class="info-btn" data-tip="${escaped}" onclick="toggleTip(this,event)" onmouseenter="hoverOpenTip(this)" onmouseleave="closeTip()">i</div>`;
-}
-function hoverOpenTip(btn) {
-  // only trigger on real hover (non-touch) devices
-  if (window.matchMedia('(hover:hover)').matches) openTip(btn);
-}
-function positionTip(btn) {
-  const tip = document.getElementById('g-tip');
-  const rect = btn.getBoundingClientRect();
-  const tipW = 230, margin = 8;
-  let left = rect.right - tipW;
-  if (left < margin) left = margin;
-  if (left + tipW > window.innerWidth - margin) left = window.innerWidth - tipW - margin;
-  const arrowLeft = rect.left + rect.width / 2 - left;
-  tip.style.top = (rect.bottom + 6) + 'px';
-  tip.style.left = left + 'px';
-  tip.style.setProperty('--arrow-left', Math.max(8, Math.min(arrowLeft, tipW - 16)) + 'px');
-}
-function openTip(btn) {
-  const tip = document.getElementById('g-tip');
-  tip.innerHTML = btn.dataset.tip || '';
-  tip.style.display = 'block';
-  positionTip(btn);
-  btn.classList.add('tip-open');
-}
-function closeTip() {
-  document.getElementById('g-tip').style.display = 'none';
-  document.querySelectorAll('.info-btn.tip-open').forEach(b => b.classList.remove('tip-open'));
-}
-function toggleTip(btn, e) {
-  e.stopPropagation();
-  if (btn.classList.contains('tip-open')) { closeTip(); } else { openTip(btn); }
-}
-document.addEventListener('click', closeTip);
-document.addEventListener('scroll', () => {
-  const open = document.querySelector('.info-btn.tip-open');
-  if (open) positionTip(open);
-}, { passive: true });
-
 /* ── CARD RENDER ── */
 function buildCard(item, mode) {
   const key = gk(item.zh);
   const numStr = String(item.no).padStart(2,'0');
-  const tip = infoBtn(item.zh);
+  const infoBtn = `<button class="info-btn" onclick="openCardModal(${item.no},event)" title="查看完整說明">i</button>`;
   if (mode === 'explore') {
     const isS=eS.has(key), isG=eG.has(key);
     return `<div class="comp-card${isS?' selected-strength':''}${isG?' selected-growth':''}" id="ec-${key}">
-      <div class="card-top-row"><span class="card-name-num">${numStr}</span>${tip}</div>
+      <div class="card-top-row"><span class="card-name-num">${numStr}</span>${infoBtn}</div>
       <div class="card-name-cn">${item.zh}</div>
       <div class="card-actions">
         <button class="btn-toggle${isS?' s-active':''}" onclick="toggleES('${key}',event)">⭐ 優勢</button>
@@ -597,7 +799,7 @@ function buildCard(item, mode) {
   } else {
     const isJ=jSel.has(key);
     return `<div class="comp-card${isJ?' selected-job':''}" id="jc-${key}">
-      <div class="card-top-row"><span class="card-name-num">${numStr}</span>${tip}</div>
+      <div class="card-top-row"><span class="card-name-num">${numStr}</span>${infoBtn}</div>
       <div class="card-name-cn">${item.zh}</div>
       <div class="card-actions">
         <button class="btn-toggle${isJ?' j-active':''}" onclick="toggleJob('${key}',event)">🎯 需要</button>
@@ -644,7 +846,6 @@ function updateEC() {
 function updateExploreName() {
   const n=(document.getElementById('e-user-name')?.value||'').trim();
   document.getElementById('e-summary-title').textContent = n?`${n} 的職能盤點總覽`:'你的職能盤點總覽';
-  const j=document.getElementById('j-user-name'); if(j&&j.value!==document.getElementById('e-user-name').value) j.value=document.getElementById('e-user-name').value;
 }
 function updateJobName() {
   const v=document.getElementById('j-user-name')?.value||'';
@@ -674,11 +875,13 @@ function renderExploreStep2() {
     eS.forEach(key=>{
       const item=findItem(key); if(!item) return;
       const rk=`s_${key}`; if(eR[rk]) filled++;
+      const inlineDetail = buildInlineCardDetail(item.no);
       g.insertAdjacentHTML('beforeend',`<div class="reflection-card strength-card">
         <div class="r-card-label">優勢 · Strength</div>
         ${categoryTag(key,'var(--accent)')}
         <div class="r-card-title">${item.zh}</div>
-        <div class="r-card-q">你如何在生活或工作中展現這項優勢？請舉具體例子。</div>
+        ${inlineDetail}
+        <div class="r-card-q">💬 你如何在生活或工作中展現這項優勢？請舉具體例子。</div>
         <textarea class="r-textarea" placeholder="寫下你的想法…" oninput="saveER('${rk}',this.value)">${eR[rk]||''}</textarea>
       </div>`);
     }); c.appendChild(g);
@@ -689,11 +892,13 @@ function renderExploreStep2() {
     eG.forEach(key=>{
       const item=findItem(key); if(!item) return;
       const rk=`g_${key}`; if(eR[rk]) filled++;
+      const inlineDetail = buildInlineCardDetail(item.no);
       g2.insertAdjacentHTML('beforeend',`<div class="reflection-card growth-card">
         <div class="r-card-label">成長機會 · Growth</div>
         ${categoryTag(key,'var(--accent2)')}
         <div class="r-card-title">${item.zh}</div>
-        <div class="r-card-q">為什麼想在這個領域成長？你希望如何提升這項能力？</div>
+        ${inlineDetail}
+        <div class="r-card-q">💬 為什麼想在這個領域成長？你希望如何提升這項能力？</div>
         <textarea class="r-textarea" placeholder="寫下你的想法…" oninput="saveER('${rk}',this.value)">${eR[rk]||''}</textarea>
       </div>`);
     }); c.appendChild(g2);
@@ -709,6 +914,29 @@ function saveER(key,val) {
 }
 
 /* ── EXPLORE STEP 3 ── */
+function buildCardDetailMd(no) {
+  const d = CARD_DATA[no];
+  if (!d) return '';
+  let md = '';
+  md += `\n**特質：** ${d.traits.join('、')}\n`;
+  if (d.shadow && d.shadow.length) {
+    md += `\n**如何管理陰影：**\n`;
+    d.shadow.forEach(p => { md += `- 後果：${p.c} → 調整：${p.a}\n`; });
+  }
+  if (d.strength) {
+    if (d.strength.s) md += `\n**適合領域：** ${d.strength.s}\n`;
+    if (d.strength.t) md += `**適合任務：** ${d.strength.t}\n`;
+    if (d.strength.g) md += `**通用建議：** ${d.strength.g}\n`;
+  }
+  if (d.improve && d.improve.length) {
+    md += `\n**缺乏如何提升：**\n`;
+    d.improve.forEach((imp, i) => { md += `${i+1}. ${imp}\n`; });
+  }
+  const tip = TIPS[d.name];
+  if (tip) md += `\n**核心定義：** ${tip}\n`;
+  return md;
+}
+
 function renderExploreStep3() {
   const c=document.getElementById('explore-step3-content');
   if (eS.size===0&&eG.size===0) { c.innerHTML=`<div class="empty-state"><div class="emoji">📋</div><p>請先完成 Step 1 與 Step 2，才能查看總覽。</p></div>`; document.getElementById('tab3-count').textContent='尚未完成'; return; }
@@ -717,13 +945,23 @@ function renderExploreStep3() {
   eS.forEach(key=>{
     const item=findItem(key); if(!item) return;
     const note=eR[`s_${key}`]||'';
-    html+=`<div class="summary-item"><div style="margin-bottom:.3rem">${categoryTag(key,'var(--accent)')}</div><div class="summary-item-title">${item.zh}</div><div class="summary-item-note${note?'':' empty'}">${note||'（尚未填寫描述）'}</div></div>`;
+    const d = CARD_DATA[item.no];
+    const detailHtml = d ? `<div class="summary-card-detail">
+      <strong>特質：</strong>${d.traits.join('、')}<br>
+      ${d.strength && d.strength.g ? `<strong>通用建議：</strong>${d.strength.g}` : ''}
+    </div>` : '';
+    html+=`<div class="summary-item"><div style="margin-bottom:.3rem">${categoryTag(key,'var(--accent)')}</div><div class="summary-item-title">${item.zh}</div><div class="summary-item-note${note?'':' empty'}">${note||'（尚未填寫描述）'}</div>${detailHtml}</div>`;
   });
   html+='</div><div class="summary-col growth-col"><h3>🌱 我的成長計畫</h3>';
   eG.forEach(key=>{
     const item=findItem(key); if(!item) return;
     const note=eR[`g_${key}`]||'';
-    html+=`<div class="summary-item"><div style="margin-bottom:.3rem">${categoryTag(key,'var(--accent2)')}</div><div class="summary-item-title">${item.zh}</div><div class="summary-item-note${note?'':' empty'}">${note||'（尚未填寫描述）'}</div></div>`;
+    const d = CARD_DATA[item.no];
+    const detailHtml = d ? `<div class="summary-card-detail">
+      <strong>特質：</strong>${d.traits.join('、')}<br>
+      ${d.improve && d.improve.length ? `<strong>提升方法：</strong>${d.improve.join('；')}` : ''}
+    </div>` : '';
+    html+=`<div class="summary-item"><div style="margin-bottom:.3rem">${categoryTag(key,'var(--accent2)')}</div><div class="summary-item-title">${item.zh}</div><div class="summary-item-note${note?'':' empty'}">${note||'（尚未填寫描述）'}</div>${detailHtml}</div>`;
   });
   html+='</div></div>'; c.innerHTML=html;
 }
@@ -739,9 +977,11 @@ function renderJobStep2() {
     const d=jData[key];
     if (d.current||d.ideal||d.action||d.owned) filled++;
     const isOwned = d.owned;
+    const inlineDetail = buildInlineCardDetail(item.no);
     c.insertAdjacentHTML('beforeend',`<div class="job-card${isOwned?' is-owned':''}" id="jcard-${key}">
       <div class="job-card-title">🎯 ${item.zh}</div>
       <div style="margin-bottom:.7rem">${categoryTag(key,'var(--accent4)')}</div>
+      ${inlineDetail}
       <label class="owned-toggle">
         <input type="checkbox" id="owned-${key}" ${isOwned?'checked':''} onchange="toggleOwned('${key}',this.checked)" />
         <div class="owned-check"><span class="owned-check-icon">✓</span></div>
@@ -768,18 +1008,14 @@ function renderJobStep2() {
 function toggleOwned(key, checked) {
   if (!jData[key]) jData[key]={owned:false,current:'',ideal:'',action:'',deadline:''};
   jData[key].owned = checked;
-  // update card style
   const card = document.getElementById(`jcard-${key}`);
   if (card) card.className = `job-card${checked?' is-owned':''}`;
-  // toggle gap fields
   const gap = document.getElementById(`gap-${key}`);
   if (gap) gap.classList.toggle('hidden', checked);
-  // update current label & placeholder
   const lbl = document.getElementById(`clabel-${key}`);
   const ta  = document.getElementById(`current-${key}`);
   if (lbl) lbl.textContent = checked ? '💬 說明你如何展現這項能力（選填）' : '📍 現況描述';
   if (ta)  ta.placeholder  = checked ? '例：我在過去專案中負責排程規劃，能準時完成90%以上的任務…' : '目前在這個能力上的實際狀況是什麼？（例：常常花太多時間完成一件事）';
-  // update fill count
   let f=0; jSel.forEach(k=>{const d=jData[k];if(d&&(d.current||d.ideal||d.action||d.owned))f++;});
   document.getElementById('tab2-count').textContent=`已填 ${f}/${jSel.size}`;
 }
@@ -799,7 +1035,6 @@ function renderJobStep3() {
   if (jSel.size===0) { c.innerHTML=`<div class="empty-state"><div class="emoji">📋</div><p>請先完成 Step 1 與 Step 2。</p></div>`; document.getElementById('tab3-count').textContent='尚未完成'; return; }
   document.getElementById('tab3-count').textContent=`${jSel.size} 項能力`;
   c.innerHTML = jTitle?`<p style="font-size:.85rem;color:var(--muted);margin-bottom:1.5rem">目標職缺：<strong style="color:var(--accent4)">${jTitle}</strong></p>`:'';
-  // Split into owned vs gap
   const ownedKeys=[], gapKeys=[];
   jSel.forEach(key=>{ const d=jData[key]||{}; (d.owned?ownedKeys:gapKeys).push(key); });
 
@@ -809,11 +1044,14 @@ function renderJobStep3() {
     ownedKeys.forEach(key=>{
       const item=findItem(key); if(!item) return;
       const d=jData[key]||{};
+      const cd = CARD_DATA[item.no];
+      const detailHtml = cd ? `<div class="job-card-detail"><strong>特質：</strong>${cd.traits.join('、')}</div>` : '';
       g1+=`<div class="job-summary-card" style="border-left-color:var(--accent2)">
         <div class="num" style="color:var(--accent2)">✓ 已具備 · #${item.no}</div>
         <div style="margin:.2rem 0 .4rem">${categoryTag(key,'var(--accent2)')}</div>
         <div class="skill">${item.zh}</div>
         ${d.current?`<div class="job-summary-row"><span class="lbl">展現方式</span><span class="val">${d.current}</span></div>`:''}
+        ${detailHtml}
       </div>`;
     });
     g1+='</div>'; c.insertAdjacentHTML('beforeend',g1);
@@ -825,6 +1063,11 @@ function renderJobStep3() {
     gapKeys.forEach(key=>{
       const item=findItem(key); if(!item) return;
       const d=jData[key]||{};
+      const cd = CARD_DATA[item.no];
+      const detailHtml = cd ? `<div class="job-card-detail">
+        <strong>特質：</strong>${cd.traits.join('、')}<br>
+        ${cd.improve && cd.improve.length ? `<strong>提升方法：</strong>${cd.improve.join('；')}` : ''}
+      </div>` : '';
       g2+=`<div class="job-summary-card">
         <div class="num">落差 ${String(i2++).padStart(2,'0')} · #${item.no}</div>
         <div style="margin:.2rem 0 .4rem">${categoryTag(key,'var(--accent4)')}</div>
@@ -833,6 +1076,7 @@ function renderJobStep3() {
         ${d.ideal?`<div class="job-summary-row"><span class="lbl">理想</span><span class="val">${d.ideal}</span></div>`:''}
         ${d.action?`<div class="job-summary-row"><span class="lbl">行動</span><span class="val">${d.action}</span></div>`:''}
         ${d.deadline?`<div class="job-summary-row"><span class="lbl">期限</span><span class="val">${d.deadline}</span></div>`:''}
+        ${detailHtml}
       </div>`;
     });
     g2+='</div>'; c.insertAdjacentHTML('beforeend',g2);
@@ -847,9 +1091,23 @@ function buildMd(mode) {
     let md=`# ${name?name+' 的':''}職能盤點結果\n\n`;
     if (name) md+=`> **姓名：** ${name}  \n`;
     md+=`> **完成日期：** ${date}\n\n---\n\n## ⭐ 我的優勢\n\n`;
-    let si=1; eS.forEach(key=>{ const i=findItem(key); if(!i) return; const cat=findCategory(key); md+=`### ${si++}. ${i.zh}${cat?` _(${cat.categoryZh})_`:''}\n\n${eR['s_'+key]||'_（尚未填寫）_'}\n\n`; });
+    let si=1; eS.forEach(key=>{
+      const i=findItem(key); if(!i) return;
+      const cat=findCategory(key);
+      md+=`### ${si++}. ${i.zh}${cat?` _(${cat.categoryZh})_`:''}\n\n`;
+      md+=`**我的描述：** ${eR['s_'+key]||'_（尚未填寫）_'}\n\n`;
+      md+=buildCardDetailMd(i.no);
+      md+=`\n`;
+    });
     md+=`---\n\n## 🌱 我的成長計畫\n\n`;
-    let gi=1; eG.forEach(key=>{ const i=findItem(key); if(!i) return; const cat=findCategory(key); md+=`### ${gi++}. ${i.zh}${cat?` _(${cat.categoryZh})_`:''}\n\n${eR['g_'+key]||'_（尚未填寫）_'}\n\n`; });
+    let gi=1; eG.forEach(key=>{
+      const i=findItem(key); if(!i) return;
+      const cat=findCategory(key);
+      md+=`### ${gi++}. ${i.zh}${cat?` _(${cat.categoryZh})_`:''}\n\n`;
+      md+=`**我的描述：** ${eR['g_'+key]||'_（尚未填寫）_'}\n\n`;
+      md+=buildCardDetailMd(i.no);
+      md+=`\n`;
+    });
     md+=`---\n\n_由職能盤點工具產生 · heysaori.com_\n`;
     return { md, name, fname:`${name?name+'_':''}職能盤點結果.md` };
   } else {
@@ -863,19 +1121,35 @@ function buildMd(mode) {
     jSel.forEach(key=>{ const d=jData[key]||{}; (d.owned?ownedKeys:gapKeys).push(key); });
     if (ownedKeys.length>0) {
       md+=`## ✅ 已具備的能力\n\n`;
-      ownedKeys.forEach(key=>{ const i=findItem(key); if(!i) return; const cat=findCategory(key); const d=jData[key]||{}; md+=`### ${i.zh}${cat?` _(${cat.categoryZh})_`:''}\n\n${d.current?`**展現方式：** ${d.current}\n\n`:'_（未填寫）_\n\n'}`; });
+      ownedKeys.forEach(key=>{
+        const i=findItem(key); if(!i) return;
+        const cat=findCategory(key); const d=jData[key]||{};
+        md+=`### ${i.zh}${cat?` _(${cat.categoryZh})_`:''}\n\n`;
+        md+=`${d.current?`**展現方式：** ${d.current}\n\n`:'_（未填寫）_\n\n'}`;
+        md+=buildCardDetailMd(i.no);
+        md+=`\n`;
+      });
       md+=`---\n\n`;
     }
     if (gapKeys.length>0) {
       md+=`## 🚀 需要發展的能力\n\n`;
-      let idx=1; gapKeys.forEach(key=>{ const i=findItem(key); if(!i) return; const cat=findCategory(key); const d=jData[key]||{}; md+=`### ${idx++}. ${i.zh}${cat?` _(${cat.categoryZh})_`:''}\n\n`; if(d.current) md+=`**📍 現況：** ${d.current}\n\n`; if(d.ideal) md+=`**🌟 理想狀態：** ${d.ideal}\n\n`; if(d.action) md+=`**🚀 行動計畫：** ${d.action}\n\n`; if(d.deadline) md+=`**📅 預計完成：** ${d.deadline}\n\n`; md+=`---\n\n`; });
+      let idx=1; gapKeys.forEach(key=>{
+        const i=findItem(key); if(!i) return;
+        const cat=findCategory(key); const d=jData[key]||{};
+        md+=`### ${idx++}. ${i.zh}${cat?` _(${cat.categoryZh})_`:''}\n\n`;
+        if(d.current) md+=`**📍 現況：** ${d.current}\n\n`;
+        if(d.ideal) md+=`**🌟 理想狀態：** ${d.ideal}\n\n`;
+        if(d.action) md+=`**🚀 行動計畫：** ${d.action}\n\n`;
+        if(d.deadline) md+=`**📅 預計完成：** ${d.deadline}\n\n`;
+        md+=buildCardDetailMd(i.no);
+        md+=`\n---\n\n`;
+      });
     }
     md+=`_由職能盤點工具產生 · heysaori.com_\n`;
     return { md, name, fname:`${name?name+'_':''}${jt?jt+'_':''}職缺能力分析.md` };
   }
 }
 
-function showSaoriHint() { /* hint is now inline in export-bar */ }
 function downloadMd(mode) {
   const nid=mode==='explore'?'e-user-name':'j-user-name', bid=mode==='explore'?'e-name-block':'j-name-block';
   if (!requireName(nid,bid)) return;
