@@ -248,25 +248,26 @@
     }
 
     .profile-emblem {
-      width: 80px; height: 80px;
+      width: 88px; height: 88px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent1), var(--accent2));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Noto Serif TC', serif;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--paper);
       margin-bottom: 1.5rem;
       position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .profile-emblem img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
     }
     .profile-emblem::after {
       content: '';
       position: absolute;
       inset: -4px;
       border-radius: 50%;
-      border: 1px solid rgba(196,149,106,0.35);
+      border: 1.5px solid rgba(196,149,106,0.45);
+      pointer-events: none;
     }
 
     .sidebar-name {
@@ -684,7 +685,7 @@
       <span class="role-tag">多重潛能者</span>
     </div>
     <div class="hero-cta">
-      <a href="https://heysaori.com/letscounseling/" class="btn-primary">立即預約諮詢</a>
+      <a href="#cta" class="btn-primary">立即預約諮詢</a>
     </div>
   </div>
 
@@ -700,7 +701,9 @@
   <div class="about-wrap">
 
     <aside class="about-sidebar">
-      <div class="profile-emblem">S</div>
+      <div class="profile-emblem">
+        <img src="https://heysaori.com/wp-content/uploads/2025/12/photo_2025-12-07_21-22-15.webp" alt="Saori 謝孟娟">
+      </div>
       <div class="sidebar-name">謝孟娟</div>
       <div class="sidebar-sub">
         Saori Hsieh<br>
@@ -722,7 +725,7 @@
       <div class="sidebar-tags">
         <span class="tag-chip">資訊開發副理</span>
         <span class="tag-chip">職涯設計顧問</span>
-        <span class="tag-chip">生涯諮詢師 (CNC/CDA)</span>
+        <span class="tag-chip">CNC 諮詢師</span>
       </div>
     </aside>
 
@@ -796,7 +799,7 @@
         <ul class="expertise-list">
           <li>協助釐清職業價值觀、優勢與興趣</li>
           <li>規劃職涯轉換與發展路徑</li>
-          <li>個人品牌建立</li>
+          <li>個人品牌建立與呈現</li>
         </ul>
       </div>
       <div class="expertise-card">
@@ -832,15 +835,13 @@
     <div>
       <div class="exp-group-label">professional experience</div>
       <ul class="exp-list">
-        <li>知名跨國珠寶零售集團 系統分析師</li>
         <li>知名外商餐飲集團 · 資訊開發部門副理</li>
         <li>台灣前五大資訊軟體公司 · 軟體工程師</li>
         <li>台灣旅行社龍頭 · 軟體工程師</li>
         <li>新創工程師轉職學習平台 · 職涯設計顧問</li>
         <li>烘焙坊品牌 · 營運人</li>
         <li>CNC 職涯導航諮詢師</li>
-        <li>職游特約諮詢師</li>
-        <li>遠距抱抱生涯諮詢師</li>
+        <li>職遊特約諮詢師</li>
       </ul>
     </div>
     <div>
@@ -876,7 +877,7 @@
     <p class="cta-sub">
       準備好透過「蘇式提問」<br>找到屬於您的人生方向了嗎？
     </p>
-    <a href="https://heysaori.com/letscounseling/" target="_blank" class="btn-cta">立即預約諮詢</a>
+    <a href="https://heysaori.com/" target="_blank" class="btn-cta">立即預約諮詢</a>
   </div>
 </section>
 
