@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 法師等級鑑定 ─ 魔法大陸</title>
+  <style>
+    :root {
+      --gold: #c9a84c;
+      --gold-light: #f0d080;
+      --gold-dark: #8b6914;
+      --text-light: #e8d5a0;
+      --text-dim: #7a6535;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      min-height: 100%;
+      background: #080604;
+      color: var(--text-light);
+      font-family: 'Georgia', 'Times New Roman', serif;
+    }
+    body {
+      background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(139,25,25,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(91,75,181,0.06) 0%, transparent 60%),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23c9a84c' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #080604; }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 3px; }
+
+    #app { min-height: 100vh; display: flex; flex-direction: column; }
+    .screen { display: none; flex-direction: column; flex: 1; }
+    .screen.active { display: flex; }
+
+    .panel {
+      background: linear-gradient(135deg, #1a1408 0%, #12100a 50%, #1a1408 100%);
+      border: 1px solid var(--gold-dark);
+      box-shadow: 0 0 0 1px rgba(201,168,76,0.07), inset 0 1px 0 rgba(201,168,76,0.07), 0 8px 32px rgba(0,0,0,0.9);
+    }
+
+    /* Header */
+    .page-header { text-align: center; padding: 28px 16px 12px; }
+    .hdr-rule { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 8px; }
+    .hdr-line  { height:1px; width:80px; background: linear-gradient(90deg,transparent,#8b6914); }
+    .hdr-line.r{ background: linear-gradient(90deg,#8b6914,transparent); }
+    .hdr-lbl { color:var(--gold); font-size:10px; letter-spacing:.25em; }
+    .main-title {
+      font-size: clamp(1.8rem,5vw,2.8rem); font-weight:900; letter-spacing:.08em; line-height:1.15;
+      background: linear-gradient(180deg,#f0d080 0%,#c9a84c 50%,#8b6914 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: glow 3s ease-in-out infinite;
+    }
+    .hdr-gems { display:flex; align-items:center; justify-content:center; gap:12px; margin-top:6px; }
+    .hdr-gem-l { height:1px; width:40px; background:linear-gradient(90deg,transparent,#8b6914); }
+    .hdr-gem-r { height:1px; width:40px; background:linear-gradient(90deg,#8b6914,transparent); }
+
+    /* Divider */
+    .divider { height:1px; background:linear-gradient(90deg,transparent,#8b6914,#c9a84c,#8b6914,transparent); margin:16px 0; position:relative; }
+    .divider::before { content:'✦'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:#12100a; color:var(--gold); padding:0 8px; font-size:10px; }
+
+    /* Gem */
+    .gem { width:8px; height:8px; background:var(--gold); transform:rotate(45deg); display:inline-block; box-shadow:0 0 6px var(--gold); flex-shrink:0; }
+    .gem.sm { width:5px; height:5px; }
+    .gem.green  { background:#2ecc71; box-shadow:0 0 6px #2ecc71; }
+    .gem.orange { background:#e67e22; box-shadow:0 0 6px #e67e22; }
+
+    .sec-lbl { font-size:.68rem; letter-spacing:.18em; color:var(--gold); text-transform:uppercase; }
+
+    /* Buttons */
+    .btn {
+      font-family:'Georgia',serif; background:linear-gradient(180deg,#2a1f0a,#1a1408);
+      border:1px solid var(--gold-dark); color:var(--text-light); cursor:pointer;
+      transition:all .2s; letter-spacing:.06em; font-size:.85rem;
+    }
+    .btn:hover { border-color:var(--gold); color:var(--gold-light); box-shadow:0 0 14px rgba(201,168,76,.3); }
+    .btn:active { transform:scale(.98); }
+    .btn-gold { background:linear-gradient(180deg,#3a2a0e,#1a1408); border-color:var(--gold); color:var(--gold-light); font-weight:700; letter-spacing:.12em; }
+    .btn-gold:hover { background:linear-gradient(180deg,#4a3518,#2a1f0a); box-shadow:0 0 22px rgba(201,168,76,.5); }
+    .btn-gold:disabled { opacity:.3; cursor:not-allowed; border-color:var(--gold-dark); }
+    .btn-red { border-color:#8b1a1a; color:#e09090; }
+    .btn-red:hover { border-color:#c0392b; box-shadow:0 0 12px rgba(192,57,43,.4); }
+
+    input[type="text"] {
+      background:#0d0b07; border:1px solid var(--gold-dark); color:var(--text-light);
+      font-family:'Georgia',serif; outline:none; transition:border-color .2s, box-shadow .2s; font-size:1rem;
+    }
+    input[type="text"]:focus { border-color:var(--gold); box-shadow:0 0 12px rgba(201,168,76,.2); }
+    input[type="text"]::placeholder { color:var(--text-dim); }
+
+    /* Progress */
+    .prog-bar { display:flex; gap:4px; margin-bottom:8px; }
+    .prog-seg { height:4px; flex:1; background:#1a1408; border:1px solid #2a1f0a; border-radius:1px; transition:all .3s; }
+    .prog-seg.done { background:var(--gold-dark); border-color:var(--gold); }
+    .prog-seg.cur  { background:linear-gradient(90deg,var(--gold-dark),var(--gold)); border-color:var(--gold-light); box-shadow:0 0 8px var(--gold); }
+
+    /* Options */
+    .opt-card {
+      background:linear-gradient(135deg,#1a1408,#12100a); border:1px solid var(--gold-dark);
+      color:var(--text-light); cursor:pointer; text-align:left; width:100%;
+      padding:12px 16px 12px 20px; font-family:'Georgia',serif; font-size:.88rem;
+      line-height:1.65; letter-spacing:.02em; transition:all .2s; position:relative; overflow:hidden;
+      border-radius:1px; margin-bottom:8px;
+    }
+    .opt-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--gold-dark); transition:all .2s; }
+    .opt-card:hover { border-color:var(--gold); color:var(--gold-light); box-shadow:0 0 16px rgba(201,168,76,.2); background:#221a08; }
+    .opt-card:hover::before { background:var(--gold); box-shadow:0 0 8px var(--gold); }
+    .opt-card:active { transform:scale(.99); }
+    .opt-ltr { color:var(--gold); font-size:.72rem; margin-right:10px; }
+
+    /* Select cards */
+    .sel-card { background:#0d0b07; border:1px solid #2a1f0a; cursor:pointer; padding:10px 14px; width:100%; text-align:left; font-family:'Georgia',serif; transition:all .2s; border-radius:1px; margin-bottom:6px; }
+    .sel-card:hover { border-color:var(--gold-dark); background:#14110a; }
+    .sel-card.sel-skill { background:rgba(46,204,113,.08); border-color:#2ecc71; box-shadow:0 0 10px rgba(46,204,113,.15); }
+    .sel-card.sel-gear  { background:rgba(230,126,34,.08); border-color:#e67e22; box-shadow:0 0 10px rgba(230,126,34,.15); }
+    .sel-name { font-size:.83rem; color:var(--text-light); transition:color .2s; }
+    .sel-card.sel-skill .sel-name { color:#7de8a7; font-weight:700; }
+    .sel-card.sel-gear  .sel-name { color:#f0a060; font-weight:700; }
+    .sel-desc { font-size:.7rem; color:var(--text-dim); margin-top:2px; }
+
+    /* Badges */
+    .badge { display:inline-block; font-size:.68rem; padding:2px 8px; border-radius:1px; margin:2px; }
+    .b-skill { background:rgba(46,204,113,.12); border:1px solid #1a6b3a; color:#7de8a7; }
+    .b-gear  { background:rgba(230,126,34,.12); border:1px solid #8b4a10; color:#f0a060; }
+
+    /* Rank badge */
+    .rank-badge {
+      display:inline-block; background:linear-gradient(135deg,#3a2a0e,#1a1408);
+      border:1px solid var(--gold); color:var(--gold-light);
+      padding:6px 22px; font-size:1.4rem; letter-spacing:.08em; font-weight:700;
+      box-shadow:0 0 20px rgba(201,168,76,.25), inset 0 1px 0 rgba(201,168,76,.15);
+      animation:bglow 3s ease-in-out infinite; border-radius:1px; margin-bottom:6px;
+    }
+
+    /* Result grid */
+    .res-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+
+    /* Roadmap */
+    .road-row { display:flex; align-items:stretch; gap:0; }
+    .road-node { flex:1; border:1px solid #2a1f0a; background:#0d0b07; padding:10px; opacity:.4; border-radius:1px; }
+    .road-node.past    { border-color:#1a6b3a; background:rgba(26,107,58,.1); opacity:.7; }
+    .road-node.current { border-color:var(--gold); background:rgba(201,168,76,.08); opacity:1; box-shadow:0 0 18px rgba(201,168,76,.25); }
+    .road-arrow { color:#2a1f0a; font-size:1.2rem; padding:0 2px; align-self:center; }
+    .road-arrow.lit { color:var(--gold); }
+    .road-tag { font-size:.6rem; background:rgba(201,168,76,.08); border:1px solid #2a1f0a; color:var(--text-dim); padding:1px 5px; display:inline-block; margin:1px; border-radius:1px; }
+
+    /* Modal */
+    .modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,.85); backdrop-filter:blur(4px); z-index:50; align-items:center; justify-content:center; padding:16px; }
+    .modal-bg.open { display:flex; }
+    .modal-box { width:100%; max-width:380px; border-radius:1px; overflow:hidden; }
+
+    /* Footer */
+    .footer { border-top:1px solid var(--gold-dark); background:linear-gradient(0deg,#0d0b07,transparent); text-align:center; padding:24px 16px; margin-top:28px; }
+    .footer-orn { display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:12px; }
+    .ft-ll { height:1px; width:60px; background:linear-gradient(90deg,transparent,var(--gold-dark)); }
+    .ft-lr { height:1px; width:60px; background:linear-gradient(90deg,var(--gold-dark),transparent); }
+    .ft-name { color:var(--gold); font-size:1rem; font-weight:700; letter-spacing:.12em; margin-bottom:6px; }
+    .ft-tags { color:var(--text-dim); font-size:.72rem; letter-spacing:.05em; line-height:1.9; }
+    .ft-link { color:#8b6914; font-size:.7rem; letter-spacing:.08em; text-decoration:none; transition:color .2s; }
+    .ft-link:hover { color:var(--gold); }
+
+    /* Animations */
+    @keyframes glow  { 0%,100%{filter:brightness(1)} 50%{filter:brightness(1.2) drop-shadow(0 0 8px rgba(240,208,128,.4))} }
+    @keyframes bglow { 0%,100%{box-shadow:0 0 10px rgba(201,168,76,.2)} 50%{box-shadow:0 0 28px rgba(201,168,76,.5),0 0 50px rgba(201,168,76,.15)} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    .fadein { animation:fadeUp .4s ease forwards; }
+
+    .content { max-width:920px; margin:0 auto; padding:0 16px 16px; flex:1; }
+    .wrap-gap { display:flex; flex-wrap:wrap; gap:4px; }
+    .flex-c { display:flex; align-items:center; }
+    .gap8 { gap:8px; }
+
+    @media (max-width:600px) {
+      .road-row { flex-direction:column; }
+      .road-arrow { display:none; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+<!-- ═══ INTRO ═══ -->
+<div class="screen active" id="s-intro">
+  <div class="page-header">
+    <div class="hdr-rule"><div class="hdr-line"></div><span class="hdr-lbl">ARCANE CONTINENT</span><div class="hdr-line r"></div></div>
+    <div class="main-title">AI 法師等級鑑定</div>
+    <div class="hdr-gems"><div class="hdr-gem-l"></div><span style="font-size:9px;color:var(--gold);letter-spacing:.3em">✦ ✦ ✦</span><div class="hdr-gem-r"></div></div>
+  </div>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:16px">
+    <div class="panel fadein" style="width:100%;max-width:400px;padding:32px 28px;border-radius:1px">
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="font-size:3.5rem;margin-bottom:10px;filter:drop-shadow(0 0 12px rgba(201,168,76,.5))">🧙‍♂️</div>
+        <p style="color:var(--text-dim);font-size:.8rem;letter-spacing:.06em;line-height:1.8">回答 7 個考驗，盤點你的魔法技能<br>解鎖專屬的法師階級稱號</p>
+      </div>
+      <div class="divider"></div>
+      <div style="margin-bottom:16px">
+        <div style="color:var(--text-dim);text-align:center;margin-bottom:8px;font-size:.7rem;letter-spacing:.15em">— 輸入你的法師名號 —</div>
+        <input type="text" id="nameInput" placeholder="名字或暱稱" style="width:100%;padding:10px 14px;text-align:center;border-radius:1px" onkeydown="if(event.key==='Enter')startGame()">
+      </div>
+      <button class="btn btn-gold" style="width:100%;padding:12px;border-radius:1px" onclick="startGame()">✦ 開始鑑定 ✦</button>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="footer-orn"><div class="ft-ll"></div><div class="gem"></div><div class="ft-lr"></div></div>
+    <div class="ft-name">Saori</div>
+    <div class="ft-tags">初階 AI 法師 · 軟體工程師 · 系統分析師 · 生涯諮詢師</div>
+    <div style="margin-top:8px"><a href="https://heysaori.com/" target="_blank" rel="noopener" class="ft-link">人生探索手札 · heysaori.com</a></div>
+  </footer>
+</div>
+
+<!-- ═══ QUESTION ═══ -->
+<div class="screen" id="s-question">
+  <div class="page-header">
+    <div class="hdr-rule"><div class="hdr-line"></div><span class="hdr-lbl">ARCANE CONTINENT</span><div class="hdr-line r"></div></div>
+    <div class="main-title">AI 法師等級鑑定</div>
+    <div class="hdr-gems"><div class="hdr-gem-l"></div><span style="font-size:9px;color:var(--gold);letter-spacing:.3em">✦ ✦ ✦</span><div class="hdr-gem-r"></div></div>
+  </div>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:16px">
+    <div class="panel fadein" style="width:100%;max-width:580px;padding:24px;border-radius:1px">
+      <div class="prog-bar" id="progress"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <span style="color:var(--text-dim);font-size:.7rem;letter-spacing:.08em" id="q-user-lbl"></span>
+        <span style="color:var(--text-dim);font-size:.7rem" id="q-counter"></span>
+      </div>
+      <div class="divider"></div>
+      <p id="q-text" style="font-size:clamp(.95rem,3vw,1.1rem);line-height:1.8;margin-bottom:20px;color:var(--text-light);letter-spacing:.03em"></p>
+      <div id="q-opts"></div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="footer-orn"><div class="ft-ll"></div><div class="gem"></div><div class="ft-lr"></div></div>
+    <div class="ft-name">Saori</div>
+    <div class="ft-tags">初階 AI 法師 · 軟體工程師 · 系統分析師 · 生涯諮詢師</div>
+    <div style="margin-top:8px"><a href="https://heysaori.com/" target="_blank" rel="noopener" class="ft-link">人生探索手札 · heysaori.com</a></div>
+  </footer>
+</div>
+
+<!-- ═══ INVENTORY ═══ -->
+<div class="screen" id="s-inventory">
+  <div class="page-header">
+    <div class="hdr-rule"><div class="hdr-line"></div><span class="hdr-lbl">ARCANE CONTINENT</span><div class="hdr-line r"></div></div>
+    <div class="main-title">AI 法師等級鑑定</div>
+    <div class="hdr-gems"><div class="hdr-gem-l"></div><span style="font-size:9px;color:var(--gold);letter-spacing:.3em">✦ ✦ ✦</span><div class="hdr-gem-r"></div></div>
+  </div>
+  <div style="flex:1;display:flex;align-items:flex-start;justify-content:center;padding:16px">
+    <div class="panel fadein" style="width:100%;max-width:580px;padding:24px;border-radius:1px">
+      <div style="text-align:center;margin-bottom:16px">
+        <div style="color:var(--text-dim);font-size:.65rem;letter-spacing:.2em;margin-bottom:4px">FINAL STEP</div>
+        <div style="color:var(--gold);font-size:1.1rem;letter-spacing:.08em;font-weight:700">盤點技能與裝備</div>
+        <p style="color:var(--text-dim);font-size:.72rem;margin-top:6px;line-height:1.6">點選你目前已掌握的項目（可複選，也可跳過）</p>
+      </div>
+      <div class="divider"></div>
+      <div style="margin-bottom:20px">
+        <div class="flex-c gap8" style="margin-bottom:8px"><div class="gem green"></div><span class="sec-lbl">魔法技能</span></div>
+        <div id="skill-list"></div>
+      </div>
+      <div style="margin-bottom:16px">
+        <div class="flex-c gap8" style="margin-bottom:8px"><div class="gem orange"></div><span class="sec-lbl">魔法裝備</span></div>
+        <div id="gear-list"></div>
+      </div>
+      <div id="inv-sum" style="display:none;background:#0d0b07;border:1px solid #2a1f0a;padding:10px 14px;margin-bottom:16px;border-radius:1px">
+        <div style="color:var(--text-dim);font-size:.65rem;letter-spacing:.1em;margin-bottom:8px">已選擇</div>
+        <div class="wrap-gap" id="inv-sum-items"></div>
+      </div>
+      <button class="btn btn-gold" style="width:100%;padding:12px;border-radius:1px;margin-bottom:8px" onclick="goResult()">✦ 查看鑑定結果 ✦</button>
+      <button class="btn" style="width:100%;padding:8px;border-radius:1px;color:var(--text-dim)" onclick="goResult()">跳過，直接看結果</button>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="footer-orn"><div class="ft-ll"></div><div class="gem"></div><div class="ft-lr"></div></div>
+    <div class="ft-name">Saori</div>
+    <div class="ft-tags">初階 AI 法師 · 軟體工程師 · 系統分析師 · 生涯諮詢師</div>
+    <div style="margin-top:8px"><a href="https://heysaori.com/" target="_blank" rel="noopener" class="ft-link">人生探索手札 · heysaori.com</a></div>
+  </footer>
+</div>
+
+<!-- ═══ RESULT ═══ -->
+<div class="screen" id="s-result">
+  <div class="page-header">
+    <div class="hdr-rule"><div class="hdr-line"></div><span class="hdr-lbl">ARCANE CONTINENT</span><div class="hdr-line r"></div></div>
+    <div class="main-title">AI 法師等級鑑定</div>
+    <div class="hdr-gems"><div class="hdr-gem-l"></div><span style="font-size:9px;color:var(--gold);letter-spacing:.3em">✦ ✦ ✦</span><div class="hdr-gem-r"></div></div>
+  </div>
+  <div class="content">
+    <div class="res-grid" style="margin-bottom:16px">
+      <!-- Rank -->
+      <div class="panel fadein" style="padding:22px;border-radius:1px">
+        <div style="color:var(--text-dim);font-size:.65rem;letter-spacing:.2em;margin-bottom:8px">YOUR RANK</div>
+        <div style="color:var(--gold);font-size:.9rem;letter-spacing:.05em;margin-bottom:4px" id="r-user"></div>
+        <div class="rank-badge" id="r-rank"></div>
+        <p style="color:var(--text-dim);font-size:.65rem;margin-bottom:4px">鑑定時間：<span id="r-time"></span></p>
+        <p style="font-size:.78rem;line-height:1.7;color:#b0a080;margin-bottom:16px">根據你的作答結果，這是你目前的 AI 法師等級。</p>
+        <div class="divider"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-red" style="flex:1;padding:8px 10px;border-radius:1px;min-width:90px;font-size:.78rem" onclick="restart()">🔄 重新鑑定</button>
+          <button class="btn btn-gold" style="flex:1;padding:8px 10px;border-radius:1px;min-width:90px;font-size:.78rem" onclick="openShare()">📜 分享成果</button>
+        </div>
+      </div>
+      <!-- Inventory result -->
+      <div class="panel fadein" style="padding:22px;border-radius:1px;animation-delay:.1s">
+        <div class="flex-c gap8" style="margin-bottom:12px"><div class="gem green"></div><span class="sec-lbl">盤點成果</span></div>
+        <div id="r-inv"></div>
+      </div>
+      <!-- Upgrade -->
+      <div class="panel fadein" style="padding:22px;border-radius:1px;animation-delay:.2s">
+        <div class="flex-c gap8" style="margin-bottom:12px"><div class="gem"></div><span class="sec-lbl">升階建議</span></div>
+        <div style="color:var(--text-dim);font-size:.72rem;margin-bottom:12px">下一階 → <span style="color:var(--gold);font-weight:700" id="r-next"></span></div>
+        <div class="divider"></div>
+        <p style="color:var(--gold);font-size:.72rem;letter-spacing:.1em;margin-bottom:8px">建議成長技能</p>
+        <ul id="r-skills" style="list-style:none;margin-bottom:14px"></ul>
+        <p style="color:var(--gold);font-size:.72rem;letter-spacing:.1em;margin-bottom:8px">建議補齊裝備</p>
+        <ul id="r-gear" style="list-style:none"></ul>
+      </div>
+    </div>
+    <!-- Roadmap -->
+    <div class="panel" style="border-radius:1px;padding:20px;margin-bottom:0">
+      <div style="text-align:center;margin-bottom:16px"><span class="sec-lbl">⚔ AI 法師成長路線圖</span></div>
+      <div class="road-row" id="roadmap"></div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="footer-orn"><div class="ft-ll"></div><div class="gem"></div><div class="ft-lr"></div></div>
+    <div class="ft-name">Saori</div>
+    <div class="ft-tags">初階 AI 法師 · 軟體工程師 · 系統分析師 · 生涯諮詢師</div>
+    <div style="margin-top:8px"><a href="https://heysaori.com/" target="_blank" rel="noopener" class="ft-link">人生探索手札 · heysaori.com</a></div>
+  </footer>
+</div>
+
+</div><!-- #app -->
+
+<!-- ═══ SHARE MODAL ═══ -->
+<div class="modal-bg" id="modal" onclick="closeShare()">
+  <div class="panel modal-box fadein" onclick="event.stopPropagation()">
+    <div style="padding:28px 24px;background:linear-gradient(160deg,#1a1408,#0d0b07 50%,#12100a)">
+      <div style="text-align:center;margin-bottom:16px">
+        <div style="font-size:2.5rem;filter:drop-shadow(0 0 10px rgba(201,168,76,.5))">🧙‍♂️</div>
+        <div style="color:var(--text-dim);font-size:.62rem;letter-spacing:.22em;margin:8px 0 4px">AI 法師等級鑑定</div>
+        <div style="font-size:.85rem;color:#b0a080;margin-bottom:6px" id="sh-user"></div>
+        <div class="rank-badge" id="sh-rank" style="font-size:1.1rem"></div>
+        <div style="color:var(--text-dim);font-size:.62rem;margin-top:4px" id="sh-time"></div>
+      </div>
+      <div class="divider"></div>
+      <div id="sh-sk-wrap" style="margin-bottom:12px">
+        <p style="color:var(--text-dim);font-size:.62rem;letter-spacing:.12em;margin-bottom:8px">⚡ 已掌握技能</p>
+        <div class="wrap-gap" id="sh-sk"></div>
+      </div>
+      <div id="sh-ge-wrap" style="margin-bottom:12px">
+        <p style="color:var(--text-dim);font-size:.62rem;letter-spacing:.12em;margin-bottom:8px">⚔ 已備齊裝備</p>
+        <div class="wrap-gap" id="sh-ge"></div>
+      </div>
+      <div style="margin-bottom:12px">
+        <p style="color:var(--text-dim);font-size:.62rem;letter-spacing:.12em;margin-bottom:4px">🎯 下一個目標</p>
+        <p style="color:var(--gold);font-size:.85rem;font-weight:700" id="sh-next"></p>
+        <p style="color:var(--text-dim);font-size:.7rem;margin-top:3px" id="sh-nextsk"></p>
+      </div>
+      <div class="divider"></div>
+      <div style="text-align:center">
+        <p style="color:var(--text-dim);font-size:.7rem;line-height:1.6">你也來測測看你的 AI 法師等級吧 🔮</p>
+        <p style="color:var(--gold);font-size:.65rem;margin-top:6px;letter-spacing:.08em">Saori · heysaori.com</p>
+      </div>
+    </div>
+    <div style="padding:12px 20px;background:#0d0b07;border-top:1px solid #2a1f0a">
+      <button class="btn" style="width:100%;padding:10px;border-radius:1px;letter-spacing:.1em" onclick="closeShare()">— 關閉 —</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {q:'你使用 AI 工具的頻率？',opts:['幾乎沒用過','偶爾用一下','幾乎每天使用','AI 已完全融入日常工作流程']},
+  {q:'你下提示詞（Prompt）的方式？',opts:['直接輸入問題，沒有特別設計','會稍微調整措辭','會給角色、背景、格式等指令','有一套自己的提示詞模板庫']},
+  {q:'當 AI 給出答案，你會怎麼處理？',opts:['直接使用','大概看一下再用','會查證關鍵資訊','系統性驗證，能辨識幻覺與偏差']},
+  {q:'你使用過幾種不同的 AI 模型或工具？',opts:['只用過一種（如 ChatGPT）','用過 2–3 種','用過 4 種以上並比較差異','會依任務選擇最適合的模型']},
+  {q:'你有沒有用 AI 解決過實際工作或生活問題？',opts:['還沒有','有試過但效果普通','有，解決了具體問題','有，並且持續產出可重複使用的成果']},
+  {q:'你對 AI 自動化或串接工具的熟悉程度？',opts:['不了解','聽過但沒實作','做過簡單自動化（如 Zapier、Make）','能串接 API 或部署給他人使用']},
+  {q:'你如何看待 AI 在你專業領域的應用？',opts:['還不確定 AI 能幫什麼','知道一些應用場景','已在工作中落地應用','能設計 AI 輔助的工作流程並教導他人']},
+];
+const ranks=['初階 AI 法師','中階 AI 法師','高階 AI 法師','大法師','賢者'];
+const icons=['🧙','🔮','⚡','👑','🌟'];
+const skills=[
+  {name:'提示詞咒文學',desc:'能設計有角色、格式、限制的結構化 Prompt'},
+  {name:'知識召喚術',desc:'用 AI 快速查找、整理、摘要各類資訊'},
+  {name:'自動化陣法',desc:'串接工具或 API，讓重複任務自動執行'},
+  {name:'幻覺辨識術',desc:'能察覺 AI 的錯誤輸出並交叉驗證事實'},
+  {name:'商業解題術',desc:'將 AI 應用在實際工作問題並產出成果'},
+  {name:'人機協作術',desc:'設計人與 AI 分工的工作流程並教導他人'},
+];
+const equips=[
+  {name:'ChatGPT 法杖',desc:'日常對話、寫作、腦力激盪的主力工具'},
+  {name:'Claude 秘典',desc:'長文分析、文件摘要、細膩推理的利器'},
+  {name:'Perplexity 水晶球',desc:'即時聯網搜尋，附來源引用的查詢神器'},
+  {name:'Notion 卷軸',desc:'結合 AI 整理筆記、知識庫與專案管理'},
+  {name:'Python 鍊金台',desc:'用程式碼操控 AI API，打造自訂應用'},
+];
+const roadmap={
+  '初階 AI 法師':{next:'中階 AI 法師',skills:['提示詞咒文學','幻覺辨識術'],gear:['Claude 秘典','Perplexity 水晶球']},
+  '中階 AI 法師':{next:'高階 AI 法師',skills:['商業解題術','人機協作術'],gear:['Notion 卷軸']},
+  '高階 AI 法師':{next:'大法師',skills:['自動化陣法','人機協作術'],gear:['Python 鍊金台']},
+  '大法師':{next:'賢者',skills:['策略思維','教學引導'],gear:['智慧冠冕']},
+  '賢者':{next:'持續精進',skills:['緊跟 AI 新模型','帶領社群探索'],gear:[]},
+};
+
+let st={step:0,score:0,userName:'',mySkills:[],myGear:[]};
+const certTime=new Date().toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+
+function startGame(){
+  const n=document.getElementById('nameInput').value.trim();
+  if(!n)return;
+  st={step:0,score:0,userName:n,mySkills:[],myGear:[]};
+  renderQ();show('s-question');
+}
+
+function renderQ(){
+  const q=questions[st.step];
+  document.getElementById('progress').innerHTML=questions.map((_,i)=>`<div class="prog-seg${i<st.step?' done':i===st.step?' cur':''}"></div>`).join('');
+  document.getElementById('q-user-lbl').textContent=st.userName+' 的鑑定';
+  document.getElementById('q-counter').textContent=`${st.step+1} / ${questions.length}`;
+  document.getElementById('q-text').textContent=q.q;
+  const o=document.getElementById('q-opts');o.innerHTML='';
+  q.opts.forEach((op,i)=>{
+    const b=document.createElement('button');
+    b.className='opt-card';
+    b.innerHTML=`<span class="opt-ltr">${'ABCD'[i]}</span>${op}`;
+    b.onclick=()=>{st.score+=i;st.step++;if(st.step<questions.length){renderQ();}else{renderInv();show('s-inventory');}};
+    o.appendChild(b);
+  });
+}
+
+function renderInv(){
+  const sl=document.getElementById('skill-list');sl.innerHTML='';
+  skills.forEach(s=>{const d=document.createElement('button');d.className='sel-card';d.id='sk-'+s.name;d.innerHTML=`<div class="sel-name">${s.name}</div><div class="sel-desc">${s.desc}</div>`;d.onclick=()=>toggleSk(s.name);sl.appendChild(d);});
+  const gl=document.getElementById('gear-list');gl.innerHTML='';
+  equips.forEach(e=>{const d=document.createElement('button');d.className='sel-card';d.id='ge-'+e.name;d.innerHTML=`<div class="sel-name">${e.name}</div><div class="sel-desc">${e.desc}</div>`;d.onclick=()=>toggleGe(e.name);gl.appendChild(d);});
+}
+function toggleSk(n){const i=st.mySkills.indexOf(n);if(i>=0)st.mySkills.splice(i,1);else st.mySkills.push(n);const el=document.getElementById('sk-'+n);el.classList.toggle('sel-skill',st.mySkills.includes(n));el.querySelector('.sel-name').textContent=(st.mySkills.includes(n)?'✓ ':'')+n;updInvSum();}
+function toggleGe(n){const i=st.myGear.indexOf(n);if(i>=0)st.myGear.splice(i,1);else st.myGear.push(n);const el=document.getElementById('ge-'+n);el.classList.toggle('sel-gear',st.myGear.includes(n));el.querySelector('.sel-name').textContent=(st.myGear.includes(n)?'✓ ':'')+n;updInvSum();}
+function updInvSum(){const w=document.getElementById('inv-sum'),items=document.getElementById('inv-sum-items'),has=st.mySkills.length+st.myGear.length>0;w.style.display=has?'block':'none';items.innerHTML=st.mySkills.map(s=>`<span class="badge b-skill">⚡ ${s}</span>`).join('')+st.myGear.map(g=>`<span class="badge b-gear">⚔ ${g}</span>`).join('');}
+
+function getRankIdx(){const t=[5,10,15,19,22];return t.findIndex(x=>st.score<x);}
+
+function goResult(){
+  const idx=getRankIdx(),rank=ranks[idx],icon=icons[idx],plan=roadmap[rank];
+  document.getElementById('r-user').textContent=st.userName;
+  document.getElementById('r-rank').textContent=icon+' '+rank;
+  document.getElementById('r-time').textContent=certTime;
+  // inv
+  const inv=document.getElementById('r-inv');
+  if(!st.mySkills.length&&!st.myGear.length){inv.innerHTML='<p style="color:var(--text-dim);font-size:.8rem;line-height:1.7">你跳過了盤點步驟。</p>';}
+  else{let h='';if(st.mySkills.length)h+=`<p style="color:var(--text-dim);font-size:.68rem;letter-spacing:.1em;margin-bottom:8px">⚡ 已掌握技能 (${st.mySkills.length})</p><div class="wrap-gap" style="margin-bottom:12px">${st.mySkills.map(s=>`<span class="badge b-skill">${s}</span>`).join('')}</div>`;if(st.myGear.length)h+=`<p style="color:var(--text-dim);font-size:.68rem;letter-spacing:.1em;margin-bottom:8px">⚔ 已備齊裝備 (${st.myGear.length})</p><div class="wrap-gap">${st.myGear.map(g=>`<span class="badge b-gear">${g}</span>`).join('')}</div>`;inv.innerHTML=h;}
+  // plan
+  document.getElementById('r-next').textContent=plan.next;
+  const gSm='<div class="gem sm green" style="display:inline-block;margin-right:8px"></div>';
+  const oSm='<div class="gem sm orange" style="display:inline-block;margin-right:8px"></div>';
+  document.getElementById('r-skills').innerHTML=plan.skills.length?plan.skills.map(s=>`<li style="display:flex;align-items:center;margin-bottom:5px;font-size:.8rem;color:#b0a080">${gSm}${s}</li>`).join(''):`<li style="color:var(--text-dim);font-size:.78rem;line-height:1.6">AI 持續演進，賢者也要與時俱進 🔮</li>`;
+  document.getElementById('r-gear').innerHTML=plan.gear.length?plan.gear.map(g=>`<li style="display:flex;align-items:center;margin-bottom:5px;font-size:.8rem;color:#b0a080">${oSm}${g}</li>`).join(''):`<li style="color:var(--text-dim);font-size:.78rem;line-height:1.6">善用手邊工具，持續探索新裝備</li>`;
+  // roadmap
+  const rm=document.getElementById('roadmap');rm.innerHTML='';
+  ranks.forEach((r,i)=>{
+    const isCur=r===rank,isPast=i<idx,info=roadmap[r];
+    const n=document.createElement('div');
+    n.className='road-node'+(isCur?' current':isPast?' past':'');
+    n.innerHTML=`<div style="font-size:.6rem;color:${isCur?'#c9a84c':isPast?'#2ecc71':'#3a2a1a'};letter-spacing:.06em;margin-bottom:4px">${isPast?'✅ 已達成':isCur?'📍 你在這裡':'🔒 未解鎖'}</div><div style="font-weight:700;font-size:.72rem;color:${isCur?'#c9a84c':isPast?'#2ecc71':'#3a2a1a'};margin-bottom:6px">${icons[i]} ${r}</div><div>${info.skills.slice(0,2).map(s=>`<span class="road-tag">${s}</span>`).join('')}</div>`;
+    rm.appendChild(n);
+    if(i<ranks.length-1){const a=document.createElement('div');a.className='road-arrow'+(idx>i?' lit':'');a.textContent='›';rm.appendChild(a);}
+  });
+  show('s-result');
+}
+
+function openShare(){
+  const idx=getRankIdx(),rank=ranks[idx],plan=roadmap[rank];
+  document.getElementById('sh-user').textContent=st.userName;
+  document.getElementById('sh-rank').textContent=icons[idx]+' '+rank;
+  document.getElementById('sh-time').textContent=certTime;
+  document.getElementById('sh-next').textContent=plan.next;
+  document.getElementById('sh-nextsk').textContent=plan.skills.length?'待解鎖：'+plan.skills.join('、'):'';
+  document.getElementById('sh-sk-wrap').style.display=st.mySkills.length?'block':'none';
+  document.getElementById('sh-ge-wrap').style.display=st.myGear.length?'block':'none';
+  document.getElementById('sh-sk').innerHTML=st.mySkills.map(s=>`<span class="badge b-skill">${s}</span>`).join('');
+  document.getElementById('sh-ge').innerHTML=st.myGear.map(g=>`<span class="badge b-gear">${g}</span>`).join('');
+  document.getElementById('modal').classList.add('open');
+}
+function closeShare(){document.getElementById('modal').classList.remove('open');}
+
+function restart(){st={step:0,score:0,userName:'',mySkills:[],myGear:[]};document.getElementById('nameInput').value='';show('s-intro');}
+</script>
+</body>
+</html>
