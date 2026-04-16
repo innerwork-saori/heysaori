@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一頁式個人品牌網站工作坊｜職涯諮詢師專屬</title>
+    <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">  <!-- 放這裡 ✓ -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans TC',sans-serif;background:#fff;color:#1a1a1a;line-height:1.6}
+a{color:inherit;text-decoration:none}
+
+/* NAV */
+nav{position:sticky;top:0;background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);border-bottom:1px solid #eee;z-index:100;padding:0 2rem}
+.nav-inner{max-width:860px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;height:56px}
+.nav-logo{font-size:15px;font-weight:700;color:#1D9E75}
+.nav-cta{background:#1D9E75;color:#fff;font-size:13px;font-weight:500;padding:8px 20px;border-radius:8px;cursor:pointer;border:none}
+
+/* LAYOUT */
+.container{max-width:860px;margin:0 auto;padding:0 2rem}
+
+/* HERO */
+.hero{padding:5rem 2rem 4rem;text-align:center;background:linear-gradient(180deg,#F0FBF7 0%,#fff 100%)}
+.hero .container{max-width:640px}
+.badge{display:inline-block;background:#E1F5EE;color:#0F6E56;font-size:12px;font-weight:500;padding:5px 16px;border-radius:20px;margin-bottom:1.4rem}
+.hero h1{font-size:32px;font-weight:700;color:#111;line-height:1.35;margin-bottom:1.1rem}
+.hero h1 span{color:#1D9E75}
+.hero p{font-size:16px;color:#555;line-height:1.75;margin-bottom:2rem;max-width:480px;margin-left:auto;margin-right:auto}
+.cta-btn{display:inline-block;background:#1D9E75;color:#fff;font-size:15px;font-weight:500;padding:14px 36px;border-radius:10px;cursor:pointer;border:none;box-shadow:0 4px 14px rgba(29,158,117,0.25);transition:transform 0.15s,box-shadow 0.15s}
+.cta-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(29,158,117,0.3)}
+.cta-sub{font-size:12px;color:#999;margin-top:0.7rem}
+.meta-row{display:flex;justify-content:center;gap:2rem;margin-top:2.2rem;flex-wrap:wrap}
+.meta-item{font-size:13px;color:#666;display:flex;align-items:center;gap:6px}
+.meta-dot{width:7px;height:7px;border-radius:50%;background:#1D9E75;flex-shrink:0}
+
+/* SECTIONS */
+.section{padding:4rem 2rem}
+.section.gray{background:#F8FAFB}
+.section-label{font-size:11px;font-weight:500;color:#1D9E75;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem}
+.section h2{font-size:22px;font-weight:700;color:#111;margin-bottom:0.7rem}
+.section .sub{font-size:15px;color:#555;line-height:1.7;margin-bottom:2rem}
+
+/* PROBLEM */
+.problem-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:640px){.problem-cards{grid-template-columns:1fr}}
+.problem-card{background:#fff;border:1px solid #eee;border-radius:12px;padding:1.4rem}
+.problem-card strong{display:block;font-size:14px;font-weight:700;color:#111;margin-bottom:6px}
+.problem-card p{font-size:13px;color:#666;line-height:1.65}
+
+/* OUTCOMES */
+.outcome-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:480px){.outcome-grid{grid-template-columns:1fr}}
+.outcome-item{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid #eee;border-radius:12px;padding:1.1rem}
+.outcome-check{width:22px;height:22px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.outcome-check svg{width:11px;height:11px}
+.outcome-text{font-size:14px;color:#333;line-height:1.55}
+
+/* FLOW */
+.flow{display:flex;flex-direction:column;gap:0;border:1px solid #eee;border-radius:14px;overflow:hidden}
+.flow-step{display:flex;gap:16px;align-items:flex-start;padding:1.1rem 1.4rem;border-bottom:1px solid #eee;background:#fff}
+.flow-step:last-child{border-bottom:none}
+.flow-step:nth-child(even){background:#FAFAFA}
+.flow-num{width:30px;height:30px;border-radius:50%;background:#1D9E75;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.flow-num.break{background:#ddd;color:#888}
+.flow-content{flex:1}
+.flow-content strong{display:block;font-size:14px;font-weight:700;color:#111;margin-bottom:2px}
+.flow-content span{font-size:13px;color:#777;line-height:1.5}
+.flow-time{font-size:12px;color:#1D9E75;font-weight:500;white-space:nowrap;padding-top:5px}
+
+/* TOOLS */
+.tools-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:560px){.tools-row{grid-template-columns:1fr}}
+.tool-card{background:#fff;border:1px solid #eee;border-radius:12px;padding:1.3rem}
+.tool-icon{font-size:24px;margin-bottom:0.5rem}
+.tool-card strong{display:block;font-size:15px;font-weight:700;color:#111;margin-bottom:4px}
+.tool-card span{font-size:13px;color:#666;line-height:1.55}
+.tool-free{display:inline-block;background:#E1F5EE;color:#0F6E56;font-size:11px;font-weight:500;padding:2px 8px;border-radius:6px;margin-top:8px}
+
+/* FAQ */
+.faq-list{border:1px solid #eee;border-radius:14px;overflow:hidden}
+.faq-item{border-bottom:1px solid #eee;background:#fff}
+.faq-item:last-child{border-bottom:none}
+.faq-q{width:100%;text-align:left;font-size:14px;font-weight:500;color:#111;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:1.1rem 1.4rem;cursor:pointer;background:none;border:none;font-family:inherit}
+.faq-q:hover{background:#FAFAFA}
+.faq-arrow{font-size:18px;color:#aaa;transition:transform 0.2s;flex-shrink:0;line-height:1}
+.faq-item.open .faq-arrow{transform:rotate(45deg);color:#1D9E75}
+.faq-a{font-size:13px;color:#555;line-height:1.7;padding:0 1.4rem 1.1rem;display:none}
+.faq-item.open .faq-a{display:block}
+
+/* FOOTER CTA */
+.footer-cta{background:linear-gradient(135deg,#0F6E56,#1D9E75);padding:4rem 2rem;text-align:center}
+.footer-cta h3{font-size:22px;font-weight:700;color:#fff;margin-bottom:0.7rem}
+.footer-cta p{font-size:15px;color:rgba(255,255,255,0.8);margin-bottom:1.8rem;line-height:1.7}
+.footer-cta .cta-btn{background:#fff;color:#0F6E56}
+.footer-cta .cta-btn:hover{box-shadow:0 6px 18px rgba(0,0,0,0.15)}
+.footer-cta .cta-sub{color:rgba(255,255,255,0.6)}
+
+footer{padding:1.5rem 2rem;text-align:center;font-size:12px;color:#aaa;border-top:1px solid #eee}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">🌐 一頁網站工作坊</div>
+    <button class="nav-cta" onclick="document.querySelector('.footer-cta').scrollIntoView({behavior:'smooth'})">立即報名</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="badge">一日工作坊 · 限額 12 人</div>
+    <h1>三小時後，你有一個<br><span>真實上線的網站</span>，可以傳給客戶</h1>
+    <p>專為自接案職涯諮詢師設計。不用學程式，不用摸 WordPress，用 AI 幫你做一個漂亮的個人品牌網頁。</p>
+    <button class="cta-btn" onclick="document.querySelector('.footer-cta').scrollIntoView({behavior:'smooth'})">我想報名 →</button>
+    <div class="cta-sub">全程免費工具 · 上課當天完成 · 永久保留網址</div>
+    <div class="meta-row">
+      <div class="meta-item"><div class="meta-dot"></div>工作坊時長 3 小時</div>
+      <div class="meta-item"><div class="meta-dot"></div>限額 12 人</div>
+      <div class="meta-item"><div class="meta-dot"></div>自備筆電即可</div>
+      <div class="meta-item"><div class="meta-dot"></div>完全免費工具</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="section gray">
+  <div class="container">
+    <div class="section-label">你是否也這樣？</div>
+    <h2>那些讓你遲遲沒有網站的原因</h2>
+    <div class="problem-cards">
+      <div class="problem-card">
+        <strong>「不知道從哪裡開始」</strong>
+        <p>聽過 WordPress、Wix、Squarespace，每個都試了一下，每個都要花時間學，最後什麼都沒做完。</p>
+      </div>
+      <div class="problem-card">
+        <strong>「不知道網站要放什麼」</strong>
+        <p>開了編輯頁面之後，盯著空白的頁面不知道怎麼寫，乾脆先關掉，下次再說。</p>
+      </div>
+      <div class="problem-card">
+        <strong>「覺得自己還沒準備好」</strong>
+        <p>覺得等想清楚再說——但這個「等」一等就是好幾個月，客戶問起來還是沒有網址可以給。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTCOMES -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">課程結束後你將擁有</div>
+    <h2>帶著這四樣東西離開</h2>
+    <div class="outcome-grid">
+      <div class="outcome-item">
+        <div class="outcome-check"><svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5l2.5 2.5L9 3" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="outcome-text">一個已上線的個人品牌網站，有真實的 .io 網址</div>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-check"><svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5l2.5 2.5L9 3" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="outcome-text">透過整理過程，對自己的服務有一些新的想法</div>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-check"><svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5l2.5 2.5L9 3" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="outcome-text">一套可重複使用的 AI Prompt，之後想改隨時改</div>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-check"><svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5l2.5 2.5L9 3" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="outcome-text">一頁式網站的架構概念，未來自己就能繼續更新</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLOW -->
+<section class="section gray">
+  <div class="container">
+    <div class="section-label">課程流程</div>
+    <h2>三小時，八個步驟</h2>
+    <p class="sub">從「什麼都沒有」到「網站上線」，每一步都有人帶著你做。</p>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-content"><strong>開場暖身</strong><span>看看今天要做什麼，展示成果範例</span></div>
+        <div class="flow-time">20 分鐘</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-content"><strong>整理你的內容</strong><span>填一張表，想清楚你是誰、幫誰、怎麼幫</span></div>
+        <div class="flow-time">25 分鐘</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-content"><strong>網站架構說明</strong><span>一頁網站的六個關鍵區塊</span></div>
+        <div class="flow-time">15 分鐘</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num break">—</div>
+        <div class="flow-content"><strong style="color:#999">中場休息</strong><span></span></div>
+        <div class="flow-time" style="color:#bbb">15 分鐘</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">5</div>
+        <div class="flow-content"><strong>用 Claude 生成網站</strong><span>貼上 Prompt，AI 幫你寫出完整程式碼</span></div>
+        <div class="flow-time">30 分鐘</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">6</div>
+        <div class="flow-content"><strong>調整優化</strong><span>改顏色、改文字、加個人照片</span></div>
+        <div class="flow-time">30 分鐘</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">7</div>
+        <div class="flow-content"><strong>上傳到 GitHub，網站上線</strong><span>完整操作，過程中有助教協助</span></div>
+        <div class="flow-time">25 分鐘</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">8</div>
+        <div class="flow-content"><strong>成果展示 + Q&A</strong><span>每人秀自己的網址，分享今天的收穫</span></div>
+        <div class="flow-time">20 分鐘</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">用到的工具</div>
+    <h2>全部免費，不需要信用卡</h2>
+    <p class="sub">你只需要一台筆電和瀏覽器，其他什麼都不用準備。</p>
+    <div class="tools-row">
+      <div class="tool-card">
+        <div class="tool-icon">🤖</div>
+        <strong>Claude</strong>
+        <span>AI 助理，幫你把想法變成漂亮的網頁程式碼，你不需要看懂它</span>
+        <div><span class="tool-free">免費</span></div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">🐙</div>
+        <strong>GitHub Pages</strong>
+        <span>免費託管你的網站檔案，提供真實網址，網站永遠不會消失</span>
+        <div><span class="tool-free">免費</span></div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">💻</div>
+        <strong>你的筆電</strong>
+        <span>只需要瀏覽器，不用安裝任何軟體，Windows 或 Mac 都可以</span>
+        <div><span class="tool-free">自備</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section gray">
+  <div class="container">
+    <div class="section-label">常見問題</div>
+    <h2>你可能想問的</h2>
+    <p class="sub"></p>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">我完全不懂程式，可以參加嗎？<span class="faq-arrow">+</span></button>
+        <div class="faq-a">完全可以。這堂課的設計邏輯就是「你不需要懂程式」——你只需要知道自己要說什麼，程式碼由 Claude 負責。</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">做出來的網站以後可以自己更新嗎？<span class="faq-arrow">+</span></button>
+        <div class="faq-a">可以。修改方法很簡單：把想改的內容告訴 Claude，它會輸出修改後的檔案，你再上傳到 GitHub 覆蓋舊檔案就好。課程結束後我們也會給你完整的操作步驟。</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">網站可以用自己的網域名稱嗎？<span class="faq-arrow">+</span></button>
+        <div class="faq-a">可以，購買網域每年約 400–500 元，設定方式很簡單。這個部分不在課程範圍內，但課後我們會提供指引。</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">GitHub 聽起來是給工程師用的，我會操作嗎？<span class="faq-arrow">+</span></button>
+        <div class="faq-a">上傳網站只需要用到 GitHub 最基本的功能，整個流程就像上傳檔案到 Google Drive 一樣簡單。課程中會一步一步帶著你做。</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">課程當天一定要做完嗎？<span class="faq-arrow">+</span></button>
+        <div class="faq-a">我們的目標是讓你當天就有上線的網站。即使有些細節沒調整好，只要網站上線了，之後都可以慢慢修改。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<section class="footer-cta">
+  <h3>三小時後，你有一個網站可以傳給客戶</h3>
+  <p>限額 12 人，確保每位學員都能在課程中完成網站上線。</p>
+  <button class="cta-btn">立即報名 →</button>
+  <div class="cta-sub">有任何問題，歡迎先來訊詢問</div>
+</section>
+
+<!--footer>
+  © 2025 一頁網站工作坊．專為自接案職涯諮詢師設計
+</footer-->
+
+<footer>
+  <div class="inner">
+    <div class="footer-name">Saori</div>
+    <div class="footer-role">軟體工程師・系統分析師・生涯諮詢師</div>
+    <div class="footer-rule"></div>
+    <div>
+      <a href="https://heysaori.com/" target="_blank" class="footer-link">
+        人生探索手札 · heysaori.com
+      </a>
+    </div>
+    <div class="footer-copy">© Saori · 職能盤點工具</div>
+  </div>
+</footer>
+
+
+<script>
+function toggleFaq(btn){
+  const item = btn.closest('.faq-item');
+  item.classList.toggle('open');
+}
+</script>
+</body>
+</html>
