@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>網站 Prompt 產生器 · Saori</title>
+  <link rel="shortcut icon" href="/heysaori/favicon.ico?v=1" type="image/x-icon">  <!-- 放這裡 ✓ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Zen+Maru+Gothic:wght@400;700&family=Shippori+Mincho:wght@400;700&family=Kiwi+Maru:wght@400;700&family=Kosugi+Maru&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1c1a17;
+  --ink-soft: #2e2b26;
+  --paper: #faf7f2;
+  --paper-warm: #f5f0e8;
+  --paper-mid: #ede7da;
+  --accent1: #8b6f47;
+  --accent2: #c4956a;
+  --accent3: #d4a96a;
+  --accent-rose: #b87c6e;
+  --text-main: #2e2b26;
+  --text-mid: #5c5549;
+  --text-soft: #8c8278;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--text-main);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 300;
+  line-height: 1.8;
+  overflow-x: hidden;
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  padding: 6rem 2rem 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--ink);
+  text-align: center;
+}
+
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 65% 40%, rgba(196,149,106,0.11) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 70% at 20% 80%, rgba(122,140,114,0.07) 0%, transparent 55%),
+    linear-gradient(160deg, #1c1a17 0%, #252018 50%, #1e1b14 100%);
+}
+
+.hero-lines {
+  position: absolute; inset: 0; pointer-events: none;
+}
+.hero-lines svg { width: 100%; height: 100%; }
+
+.hero-inner {
+  position: relative; z-index: 2;
+  max-width: 600px;
+}
+
+.hero-label {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--accent3);
+  letter-spacing: 0.24em;
+  margin-bottom: 1.6rem;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.2s ease forwards;
+}
+
+.hero-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 600;
+  color: var(--paper);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.4s ease forwards;
+}
+
+.hero-divider {
+  width: 48px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent3), transparent);
+  margin: 0 auto 1.4rem;
+  opacity: 0;
+  animation: fadeIn 0.9s 0.65s ease forwards;
+}
+
+.hero-desc {
+  font-size: 0.83rem;
+  color: rgba(250,247,242,0.45);
+  letter-spacing: 0.06em;
+  line-height: 2;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.8s ease forwards;
+}
+
+/* ── MAIN CONTENT ── */
+.main-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 5rem 2rem 4rem;
+}
+
+/* ── SECTION HEADER ── */
+.section-label {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 0.8rem;
+  letter-spacing: 0.28em;
+  color: var(--accent2);
+  margin-bottom: 0.4rem;
+}
+.section-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(1.3rem, 3vw, 1.65rem);
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+.section-rule {
+  width: 40px; height: 2px;
+  background: var(--accent2);
+  margin-bottom: 2.4rem;
+}
+
+/* ── FORM BLOCKS ── */
+.form-block {
+  margin-bottom: 3.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem 2rem;
+}
+.full { grid-column: 1 / -1; }
+
+/* Field */
+.field { display: flex; flex-direction: column; }
+
+label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--text-soft);
+  margin-bottom: 7px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+label .req {
+  color: var(--accent-rose);
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px 13px;
+  border: 1px solid var(--paper-mid);
+  border-radius: 2px;
+  background: var(--paper-warm);
+  color: var(--text-main);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 300;
+  transition: border-color 0.2s, background 0.2s;
+  appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent2);
+  background: #fff;
+}
+input::placeholder, textarea::placeholder {
+  color: var(--text-soft);
+  opacity: 0.5;
+}
+textarea { min-height: 90px; resize: vertical; }
+
+select[multiple] {
+  padding: 0;
+  background: var(--paper-warm);
+}
+select[multiple] option {
+  padding: 9px 13px;
+  border-bottom: 1px solid var(--paper-mid);
+}
+select[multiple] option:checked {
+  background: rgba(196,149,106,0.12);
+  color: var(--accent1);
+}
+
+/* Font preview */
+.font-preview-box {
+  margin-top: 8px;
+  padding: 10px 13px;
+  border: 1px dashed var(--paper-mid);
+  border-radius: 2px;
+  font-size: 0.88rem;
+  color: var(--text-soft);
+  background: transparent;
+  letter-spacing: 0.04em;
+  min-height: 42px;
+}
+
+/* ── DIVIDER LINE ── */
+.form-sep {
+  border: none;
+  border-top: 1px solid var(--paper-mid);
+  margin: 2.8rem 0;
+}
+
+/* ── ACTION ROW ── */
+.actions {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 0.75rem 2rem;
+  border: 1px solid var(--accent3);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--accent1);
+  font-family: 'Noto Serif TC', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+button:hover { background: var(--accent3); color: var(--ink); }
+button.primary {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+button.primary:hover { background: var(--ink-soft); }
+
+/* ── OUTPUT BLOCK ── */
+.output-wrap {
+  margin-top: 3rem;
+}
+.output-label {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 0.78rem;
+  letter-spacing: 0.24em;
+  color: var(--accent2);
+  margin-bottom: 0.8rem;
+}
+
+pre {
+  white-space: pre-wrap;
+  background: var(--ink);
+  color: rgba(250,247,242,0.8);
+  padding: 2rem 1.8rem;
+  border-radius: 2px;
+  font-size: 0.82rem;
+  line-height: 2;
+  letter-spacing: 0.02em;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 300;
+}
+
+/* ── TOAST ── */
+#toast {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%) scale(0.85);
+  background: var(--ink-soft);
+  color: var(--paper);
+  padding: 20px 40px;
+  border-radius: 2px;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+  z-index: 9999;
+}
+#toast.show {
+  opacity: 1;
+  transform: translate(-50%,-50%) scale(1);
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--ink);
+  color: rgba(250,247,242,0.55);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  border-top: 1px solid rgba(250,247,242,0.06);
+  font-size: 0.78rem;
+  line-height: 2;
+  letter-spacing: 0.04em;
+}
+footer .inner { max-width: 600px; margin: 0 auto; }
+.footer-name {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--paper);
+  letter-spacing: 0.12em;
+  margin-bottom: 0.4rem;
+}
+.footer-role {
+  color: var(--accent3);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  margin-bottom: 1rem;
+}
+.footer-rule {
+  width: 32px; height: 1px;
+  background: rgba(250,247,242,0.2);
+  margin: 0.8rem auto;
+}
+.footer-link {
+  color: rgba(250,247,242,0.75);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(250,247,242,0.25);
+  padding-bottom: 1px;
+  transition: color 0.2s, border-color 0.2s;
+  font-family: 'Noto Serif TC', serif;
+  letter-spacing: 0.08em;
+}
+.footer-link:hover { color: var(--accent3); border-color: var(--accent3); }
+.footer-copy {
+  margin-top: 1.2rem;
+  font-size: 0.68rem;
+  color: rgba(250,247,242,0.3);
+  letter-spacing: 0.06em;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 620px) {
+  .grid { grid-template-columns: 1fr; }
+  .main-wrap { padding: 3rem 1.2rem 3rem; }
+  .actions { flex-direction: column; align-items: flex-start; }
+  button { width: 100%; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div id="toast">✓ 已複製至剪貼簿</div>
+
+<!-- ── HERO ── -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines" aria-hidden="true">
+    <svg viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="120" x2="320" y2="0" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <line x1="1200" y1="280" x2="900" y2="400" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <circle cx="1050" cy="80" r="150" fill="none" stroke="rgba(250,247,242,0.04)" stroke-width="1"/>
+      <circle cx="120" cy="340" r="90" fill="none" stroke="rgba(196,149,106,0.05)" stroke-width="1"/>
+      <rect x="40" y="40" width="120" height="120" fill="none" stroke="rgba(250,247,242,0.03)" stroke-width="1" transform="rotate(12,100,100)"/>
+    </svg>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-label">website prompt generator</div>
+    <h1 class="hero-title">一頁式網站<br>Prompt 產生器</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">填入你的品牌資訊，自動生成可交給 AI 設計網站的完整 Prompt</p>
+  </div>
+</header>
+
+<!-- ── MAIN ── -->
+<main class="main-wrap">
+
+  <!-- 關於你 -->
+  <div class="form-block">
+    <div class="section-label">about you</div>
+    <h2 class="section-title">關於你</h2>
+    <div class="section-rule"></div>
+    <div class="grid">
+      <div class="field">
+        <label>姓名 <span class="req">必填</span></label>
+        <input id="name" placeholder="例：謝孟娟">
+      </div>
+      <div class="field">
+        <label>職稱 ／ 定位 <span class="req">必填</span></label>
+        <input id="title" placeholder="例：職涯諮詢師">
+      </div>
+      <div class="field full">
+        <label>我的背景（2–3 句話）</label>
+        <textarea id="bg" placeholder="簡短介紹你的經歷、專長與信念……"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <hr class="form-sep">
+
+  <!-- 目標客戶與服務 -->
+  <div class="form-block">
+    <div class="section-label">service & audience</div>
+    <h2 class="section-title">目標客戶與服務</h2>
+    <div class="section-rule"></div>
+    <div class="grid">
+      <div class="field">
+        <label>目標客戶 <span class="req">必填</span></label>
+        <input id="client" placeholder="例：想轉職的工程師">
+      </div>
+      <div class="field">
+        <label>客戶痛點</label>
+        <input id="pain" placeholder="例：不知道方向、資歷難以呈現">
+      </div>
+      <div class="field">
+        <label>我提供的服務</label>
+        <input id="service" placeholder="例：一對一職涯諮詢、履歷健檢">
+      </div>
+      <div class="field">
+        <label>我的特色 ／ 方法</label>
+        <input id="method" placeholder="例：蘇格拉底式提問、正念引導">
+      </div>
+      <div class="field full">
+        <label>客戶能獲得</label>
+        <input id="gain" placeholder="例：清晰的職涯方向與具體行動計畫">
+      </div>
+    </div>
+  </div>
+
+  <hr class="form-sep">
+
+  <!-- 信任感建立 -->
+  <div class="form-block">
+    <div class="section-label">social proof</div>
+    <h2 class="section-title">信任感建立</h2>
+    <div class="section-rule"></div>
+    <div class="grid">
+      <div class="field full">
+        <label>客戶推薦 ／ 心得分享</label>
+        <textarea id="trust" placeholder="如尚無推薦，填「暫無」即可，AI 將提示位置留空">暫無</textarea>
+      </div>
+    </div>
+  </div>
+
+  <hr class="form-sep">
+
+  <!-- 聯絡方式 -->
+  <div class="form-block">
+    <div class="section-label">contact</div>
+    <h2 class="section-title">聯絡方式</h2>
+    <div class="section-rule"></div>
+    <div class="grid">
+      <div class="field">
+        <label>Email <span class="req">必填</span></label>
+        <input id="email" placeholder="hello@example.com">
+      </div>
+      <div class="field">
+        <label>其他聯絡方式</label>
+        <input id="other" placeholder="例：LINE ID、Instagram">
+      </div>
+    </div>
+  </div>
+
+  <hr class="form-sep">
+
+  <!-- 設計偏好 -->
+  <div class="form-block">
+    <div class="section-label">design preference</div>
+    <h2 class="section-title">設計偏好</h2>
+    <div class="section-rule"></div>
+    <div class="grid">
+      <div class="field">
+        <label>風格（可多選）</label>
+        <select id="style" multiple size="5">
+          <option>簡約</option>
+          <option>專業</option>
+          <option>溫暖</option>
+          <option>高級感</option>
+          <option>活潑</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>配色</label>
+        <select id="color" onchange="toggleCustomColor()">
+          <option>柔和藍綠色調</option>
+          <option>暖橙色調</option>
+          <option>莫蘭迪中性色</option>
+          <option>黑白極簡</option>
+          <option>自訂配色（請填下方）</option>
+        </select>
+        <div id="customColorWrap" style="display:none;margin-top:8px;">
+          <label style="margin-bottom:4px;">自訂配色 <span style="color:var(--accent-rose)">*必填</span></label>
+          <input id="customColor" placeholder="例：奶茶米色 + 深棕色字體">
+        </div>
+      </div>
+      <div class="field">
+        <label>字型</label>
+        <select id="font" onchange="previewFont()">
+          <option>Noto Sans TC（清晰通用）</option>
+          <option>Zen Maru Gothic（圓潤親和）</option>
+          <option>Shippori Mincho（質感明體）</option>
+          <option>Kiwi Maru（可愛溫暖）</option>
+          <option>Kosugi Maru（簡潔圓體）</option>
+        </select>
+        <div id="fontPreview" class="font-preview-box">字型預覽：品牌感從文字開始</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <button class="primary" onclick="gen()">產生 Prompt</button>
+    <button onclick="copyText()">複製</button>
+  </div>
+
+  <!-- Output -->
+  <div class="output-wrap" id="outputWrap" style="display:none;">
+    <div class="output-label">generated prompt</div>
+    <pre id="out"></pre>
+  </div>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="inner">
+    <div class="footer-name">Saori</div>
+    <div class="footer-role">軟體工程師・系統分析師・生涯諮詢師</div>
+    <div class="footer-rule"></div>
+    <div><a href="https://heysaori.com/" target="_blank" class="footer-link">人生探索手札 · heysaori.com</a></div>
+    <div class="footer-copy">© Saori · 網站 Prompt 產生器</div>
+  </div>
+</footer>
+
+<script>
+function vals(id) { return document.getElementById(id).value.trim(); }
+function smart(id) { const v = vals(id); return v || '（請反問我問題協助我釐清之後再開始生成網頁）'; }
+function emptyCount() {
+  return ['name','title','client','pain','service','method','gain','bg','trust','email','other'].filter(i => !vals(i)).length;
+}
+function multi(id) {
+  return [...document.getElementById(id).selectedOptions].map(o => o.value).join('、') || '專業';
+}
+function previewFont() {
+  const raw = vals('font');
+  const f = raw.split('（')[0].trim();
+  const el = document.getElementById('fontPreview');
+  const serif = ['Shippori Mincho'];
+  el.style.fontFamily = serif.includes(f) ? `'${f}', serif` : `'${f}', sans-serif`;
+}
+function pickedColor() {
+  return vals('color').includes('自訂') ? (vals('customColor') || '（請描述你喜歡的配色）') : vals('color');
+}
+function toggleCustomColor() {
+  const isCustom = vals('color').includes('自訂');
+  document.getElementById('customColorWrap').style.display = isCustom ? 'block' : 'none';
+}
+
+function showOutput(text) {
+  const out = document.getElementById('out');
+  const wrap = document.getElementById('outputWrap');
+  out.textContent = text;
+  wrap.style.display = 'block';
+  setTimeout(() => wrap.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+}
+
+function gen() {
+  const req = ['email','name','title','client'];
+  for (const r of req) {
+    if (!vals(r)) {
+      showOutput('這幾位主角不能缺席喔：姓名、Email、職稱、目標客戶，請先填寫 ✨');
+      return;
+    }
+  }
+  if (!vals('pain') && !vals('service')) {
+    showOutput('至少告訴我一件事：客戶痛點 或 你提供的服務，二選一即可 😎');
+    return;
+  }
+  if (!vals('method') && !vals('gain')) {
+    showOutput('還差一點點！請填「我的特色」或「客戶能獲得」其中一項，我比較好發揮 🚀');
+    return;
+  }
+  if (emptyCount() > 7) {
+    showOutput('欸呀～資訊太少啦！再多給我一些線索，我才能幫你變出厲害的網站內容喔');
+    return;
+  }
+  if (vals('color').includes('自訂') && !vals('customColor')) {
+    showOutput('選了自訂配色，請填寫你喜歡的配色描述 🎨');
+    document.getElementById('customColor').focus();
+    return;
+  }
+
+  const t =
+`你是一位專業的網頁設計師。請幫我設計一個一頁式個人品牌網站的完整 HTML 檔案。
+
+【關於我】
+
+- 姓名：${smart('name')}
+- 職稱／定位：${smart('title')}
+
+【目標客戶與服務】
+
+- 目標客戶：${smart('client')}
+- 客戶痛點：${smart('pain')}
+- 我提供的服務：${smart('service')}
+- 我的特色／方法：${smart('method')}
+- 客戶能獲得：${smart('gain')}
+
+【我的背景】
+
+- ${smart('bg')}
+
+【客戶推薦（若有）】
+
+- ${smart('trust')}
+
+【聯絡方式】
+
+- Email：${smart('email')}
+${vals('other') ? `- 其他：${vals('other')}` : ''}
+
+【設計要求】
+
+- 風格：${multi('style')}、專業、溫暖、值得信賴
+- 配色：${pickedColor()}，背景白色
+- 字型：${vals('font') || 'Noto Sans TC'}，請使用 Google Fonts，標題用粗體
+- 版面：包含以下六個區塊：Hero、About、Service、Process、Trust、Contact
+
+請輸出一個完整的單一 HTML 檔案，CSS 和 JavaScript 都嵌入在同一個檔案內。
+頁面要能在手機上正常顯示（RWD）。`;
+
+  showOutput(t);
+}
+
+function copyText() {
+  const out = document.getElementById('out');
+  if (!out.textContent.trim()) return;
+  navigator.clipboard.writeText(out.textContent).then(() => {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2200);
+  });
+}
+
+/* ── Persistence ── */
+const FIELDS = ['name','title','client','pain','service','method','gain','bg','trust','email','other','color','customColor','font'];
+
+function saveAll() {
+  FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) localStorage.setItem('ppg_' + id, el.value);
+  });
+  const style = document.getElementById('style');
+  if (style) {
+    const sel = [...style.options].map(o => o.selected ? '1' : '0').join(',');
+    localStorage.setItem('ppg_style', sel);
+  }
+}
+
+function loadAll() {
+  FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    const v = localStorage.getItem('ppg_' + id);
+    if (el && v !== null) el.value = v;
+  });
+  const style = document.getElementById('style');
+  const sel = localStorage.getItem('ppg_style');
+  if (style && sel) {
+    sel.split(',').forEach((v, i) => {
+      if (style.options[i]) style.options[i].selected = v === '1';
+    });
+  }
+  previewFont();
+}
+
+loadAll();
+
+document.querySelectorAll('input, textarea, select').forEach(el => {
+  el.addEventListener('input', () => {
+    document.getElementById('outputWrap').style.display = 'none';
+    saveAll();
+  });
+  el.addEventListener('change', () => {
+    document.getElementById('outputWrap').style.display = 'none';
+    saveAll();
+  });
+});
+</script>
+</body>
+</html>
