@@ -448,7 +448,7 @@ footer .inner { max-width: 600px; margin: 0 auto; }
       </div>
       <div class="field full">
         <label>客戶能獲得</label>
-        <input id="gain" placeholder="例：清晰的職涯方向與具體行動計畫">
+        <textarea id="gain" placeholder="例：清晰的職涯方向與具體行動計畫"></textarea>
       </div>
     </div>
   </div>
@@ -590,6 +590,15 @@ footer .inner { max-width: 600px; margin: 0 auto; }
     <textarea id="out" spellcheck="false" style="width:100%;min-height:650px;resize:vertical;background:var(--ink);color:rgba(250,247,242,0.85);padding:1.5rem;border:none;border-radius:2px;font-family:monospace;font-size:0.82rem;line-height:1.9;letter-spacing:0.02em;white-space:pre-wrap;"></textarea>
     <div class="actions" style="margin-top:1rem;">
       <button id="copyBtn2" onclick="copyText()">複製</button>
+    </div>
+    <div style="margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid var(--paper-mid);">
+      <div style="font-size:0.72rem;color:var(--text-soft);letter-spacing:0.12em;margin-bottom:0.7rem;">複製後貼到 AI ↗</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+        <a href="https://claude.ai" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border:1px solid var(--paper-mid);border-radius:2px;font-size:0.75rem;color:var(--text-mid);text-decoration:none;letter-spacing:0.06em;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--paper-mid)';this.style.color='var(--text-mid)'">Claude</a>
+        <a href="https://chatgpt.com" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border:1px solid var(--paper-mid);border-radius:2px;font-size:0.75rem;color:var(--text-mid);text-decoration:none;letter-spacing:0.06em;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--paper-mid)';this.style.color='var(--text-mid)'">ChatGPT</a>
+        <a href="https://gemini.google.com" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border:1px solid var(--paper-mid);border-radius:2px;font-size:0.75rem;color:var(--text-mid);text-decoration:none;letter-spacing:0.06em;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--paper-mid)';this.style.color='var(--text-mid)'">Gemini</a>
+        <a href="https://www.perplexity.ai" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border:1px solid var(--paper-mid);border-radius:2px;font-size:0.75rem;color:var(--text-mid);text-decoration:none;letter-spacing:0.06em;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--paper-mid)';this.style.color='var(--text-mid)'">Perplexity</a>
+      </div>
     </div>
   </div>
 
