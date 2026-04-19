@@ -147,6 +147,9 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 1.4rem 2rem;
 }
+.grid-design {
+  grid-template-columns: 2fr 1fr;
+}
 .full { grid-column: 1 / -1; }
 
 /* Field */
@@ -491,7 +494,7 @@ footer .inner { max-width: 600px; margin: 0 auto; }
     <div class="section-label">design preference</div>
     <h2 class="section-title">設計偏好</h2>
     <div class="section-rule"></div>
-    <div class="grid">
+    <div class="grid grid-design">
       <div class="field">
         <label>風格（按住 shift 不放，滑鼠點選即可多選）</label>
         <select id="style" multiple size="5">
@@ -544,7 +547,7 @@ footer .inner { max-width: 600px; margin: 0 auto; }
         </select>
         <div id="customColorWrap" style="display:none;margin-top:8px;">
           <label style="margin-bottom:4px;">自訂配色 <span style="color:var(--accent-rose)">*必填</span></label>
-          <input id="customColor" placeholder="例：奶茶米色 + 深棕色字體">
+          <textarea id="customColor" placeholder="例：奶茶米色 + 深棕色字體"></textarea>   
         </div>
         <details style="margin-top:8px;">
           <summary style="font-size:0.72rem;color:var(--accent2);cursor:pointer;letter-spacing:0.08em;list-style:none;display:inline-flex;align-items:center;gap:4px;">
