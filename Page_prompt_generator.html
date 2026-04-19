@@ -539,7 +539,10 @@ footer .inner { max-width: 600px; margin: 0 auto; }
   <!-- Output -->
   <div class="output-wrap" id="outputWrap" style="display:none;">
     <div class="output-label">generated prompt</div>
-    <pre id="out"></pre>
+    <textarea id="out" spellcheck="false" style="width:100%;min-height:650px;resize:vertical;background:var(--ink);color:rgba(250,247,242,0.85);padding:1.5rem;border:none;border-radius:2px;font-family:monospace;font-size:0.82rem;line-height:1.9;letter-spacing:0.02em;white-space:pre-wrap;"></textarea>
+    <div class="actions" style="margin-top:1rem;">
+      <button id="copyBtn2" onclick="copyText()">複製</button>
+    </div>
   </div>
 
 </main>
@@ -582,7 +585,7 @@ function toggleCustomColor() {
 function showOutput(text) {
   const out = document.getElementById('out');
   const wrap = document.getElementById('outputWrap');
-  out.textContent = text;
+  out.value = text;
   wrap.style.display = 'block';
   setTimeout(() => wrap.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
 }
@@ -657,8 +660,8 @@ ${vals('other') ? `- 其他：${vals('other')}` : ''}
 
 function copyText() {
   const out = document.getElementById('out');
-  if (!out.textContent.trim()) return;
-  navigator.clipboard.writeText(out.textContent).then(() => {
+  if (!out.value.trim()) return;
+  navigator.clipboard.writeText(out.value).then(() => {
     const toast = document.getElementById('toast');
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 2200);
@@ -699,14 +702,9 @@ function loadAll() {
 loadAll();
 
 document.querySelectorAll('input, textarea, select').forEach(el => {
-  el.addEventListener('input', () => {
-    document.getElementById('outputWrap').style.display = 'none';
-    saveAll();
-  });
-  el.addEventListener('change', () => {
-    document.getElementById('outputWrap').style.display = 'none';
-    saveAll();
-  });
+  if (el.id === 'out') return;
+  el.addEventListener('input', () => { document.getElementById('out').value = ''; document.getElementById('outputWrap').style.display = 'none'; saveAll(); });
+  el.addEventListener('change', () => { document.getElementById('out').value = ''; document.getElementById('outputWrap').style.display = 'none'; saveAll(); });
 });
 </script>
 </body>
