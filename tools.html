@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 工具集 · Saori 謝孟娟</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="shortcut icon" href="/heysaori/favicon.ico?v=1" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1c1a17;
+      --ink-soft: #2e2b26;
+      --paper: #faf7f2;
+      --paper-warm: #f5f0e8;
+      --paper-mid: #ede7da;
+      --accent1: #8b6f47;
+      --accent2: #c4956a;
+      --accent3: #d4a96a;
+      --accent-sage: #7a8c72;
+      --text-main: #2e2b26;
+      --text-mid: #5c5549;
+      --text-soft: #8c8278;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--text-main);
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 2rem;
+      background: rgba(28,26,23,0.92);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(250,247,242,0.06);
+    }
+    .nav-back {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      color: rgba(250,247,242,0.5);
+      text-decoration: none;
+      letter-spacing: 0.12em;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-back:hover { color: var(--accent3); }
+    .nav-back::before { content: '←'; font-style: normal; }
+    .nav-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.8rem;
+      color: rgba(250,247,242,0.35);
+      letter-spacing: 0.18em;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--ink);
+      padding: 9rem 2rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 80%, rgba(196,149,106,0.1) 0%, transparent 65%),
+        linear-gradient(160deg, #1c1a17 0%, #252018 60%, #1e1b14 100%);
+    }
+    .hero-lines {
+      position: absolute; inset: 0; pointer-events: none;
+    }
+    .hero-lines svg { width: 100%; height: 100%; }
+
+    .hero-inner {
+      position: relative; z-index: 2;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+    .hero-label {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.88rem;
+      color: var(--accent3);
+      letter-spacing: 0.25em;
+      margin-bottom: 1.4rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.2s ease forwards;
+    }
+    .hero-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 600;
+      color: var(--paper);
+      letter-spacing: 0.08em;
+      line-height: 1.25;
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s ease forwards;
+    }
+    .hero-divider {
+      width: 40px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent3), transparent);
+      margin: 0 auto 1.4rem;
+      opacity: 0;
+      animation: fadeIn 0.9s 0.6s ease forwards;
+    }
+    .hero-desc {
+      font-size: 0.85rem;
+      color: rgba(250,247,242,0.45);
+      letter-spacing: 0.06em;
+      line-height: 2;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.75s ease forwards;
+    }
+
+    /* ── TOOLS GRID ── */
+    .tools-section {
+      padding: 5rem 2rem 7rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 1.5px;
+      background: rgba(0,0,0,0.07);
+      border: 1px solid rgba(0,0,0,0.07);
+    }
+
+    .tool-card {
+      background: var(--paper);
+      padding: 2.4rem 2.2rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s, transform 0.3s;
+      text-decoration: none;
+      display: block;
+      color: inherit;
+    }
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent3), var(--accent2));
+      transition: width 0.4s ease;
+    }
+    .tool-card:hover {
+      background: var(--paper-warm);
+      transform: translateY(-2px);
+    }
+    .tool-card:hover::before {
+      width: 100%;
+    }
+
+    .tool-category {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      color: var(--accent2);
+      margin-bottom: 0.6rem;
+    }
+    .tool-name {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-main);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.8rem;
+      line-height: 1.4;
+    }
+    .tool-desc {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      line-height: 1.9;
+      margin-bottom: 1.4rem;
+    }
+    .tool-arrow {
+      font-size: 0.75rem;
+      color: var(--accent3);
+      letter-spacing: 0.18em;
+      font-family: 'EB Garamond', serif;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: gap 0.2s;
+    }
+    .tool-card:hover .tool-arrow {
+      gap: 0.7rem;
+    }
+
+    .tool-tag {
+      display: inline-block;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      padding: 0.2rem 0.6rem;
+      background: var(--paper-mid);
+      color: var(--text-soft);
+      border-radius: 2px;
+      margin-bottom: 1rem;
+    }
+    .tool-tag.highlight {
+      background: rgba(196,149,106,0.15);
+      color: var(--accent1);
+    }
+
+    /* ── BACK CTA ── */
+    .back-cta {
+      text-align: center;
+      padding: 4rem 2rem 6rem;
+      background: var(--ink);
+    }
+    .back-cta-label {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      letter-spacing: 0.25em;
+      color: rgba(250,247,242,0.3);
+      margin-bottom: 1.2rem;
+    }
+    .back-cta-text {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1rem;
+      color: rgba(250,247,242,0.7);
+      letter-spacing: 0.06em;
+      margin-bottom: 1.8rem;
+    }
+    .btn-back {
+      display: inline-block;
+      padding: 0.85rem 2.2rem;
+      background: transparent;
+      border: 1px solid rgba(250,247,242,0.25);
+      color: rgba(250,247,242,0.6);
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      text-decoration: none;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .btn-back:hover {
+      border-color: var(--accent3);
+      color: var(--accent3);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: rgba(250,247,242,0.55);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(250,247,242,0.06);
+      font-size: 0.78rem;
+      line-height: 2;
+      letter-spacing: 0.04em;
+    }
+    footer .inner { max-width: 600px; margin: 0 auto; }
+    .footer-copy {
+      font-size: 0.68rem;
+      color: rgba(250,247,242,0.3);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 680px) {
+      .tools-grid { grid-template-columns: 1fr; }
+      .nav-title { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ NAV ══════════ -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">回首頁</a>
+  <div class="nav-title">AI 工具集</div>
+</nav>
+
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines" aria-hidden="true">
+    <svg viewBox="0 0 1440 400" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="100" x2="300" y2="0" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <line x1="1440" y1="300" x2="1200" y2="400" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <circle cx="1300" cy="80" r="140" fill="none" stroke="rgba(250,247,242,0.03)" stroke-width="1"/>
+      <circle cx="100" cy="320" r="90" fill="none" stroke="rgba(196,149,106,0.05)" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-label">by Saori · AI experiments</div>
+    <h1 class="hero-title">AI 工具實驗室</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">職涯探索 × AI 輔助思考<br>這裡放著我做的幾個小工具，歡迎自由取用</p>
+  </div>
+</section>
+
+
+<!-- ══════════ TOOLS GRID ══════════ -->
+<div class="tools-section">
+  <div class="tools-grid">
+
+    <a href="Page_prompt_generator.html" class="tool-card">
+      <div class="tool-category">prompt engineering</div>
+      <div class="tool-name">網站 Prompt 產生器</div>
+      <div class="tool-tag">網頁設計</div>
+      <div class="tool-desc">
+        輸入你的需求，自動生成結構完整的網站開發 Prompt，讓 AI 幫你產出更精準的網頁設計與程式碼。
+      </div>
+      <div class="tool-arrow">前往使用 →</div>
+    </a>
+
+    <a href="Tool_prompt_generator.html" class="tool-card">
+      <div class="tool-category">prompt engineering</div>
+      <div class="tool-name">工具 Prompt 產生器</div>
+      <div class="tool-tag">工具開發</div>
+      <div class="tool-desc">
+        描述你想打造的工具功能，生成可以直接使用的高品質 Prompt，加速你的 AI 工具開發流程。
+      </div>
+      <div class="tool-arrow">前往使用 →</div>
+    </a>
+
+    <a href="aiWebWorkshop.html" class="tool-card">
+      <div class="tool-category">workshop</div>
+      <div class="tool-name">一頁式個人品牌網站工作坊<br><span style="font-weight:400;font-size:0.85rem;">職涯諮詢師專屬</span></div>
+      <div class="tool-tag highlight">工作坊</div>
+      <div class="tool-desc">
+        專為職涯諮詢師設計的 AI 建站工作坊，一步步引導你打造屬於自己的個人品牌官網，不需要寫程式。
+      </div>
+      <div class="tool-arrow">前往使用 →</div>
+    </a>
+
+    <a href="ai_mage_rpg_lineage.html" class="tool-card">
+      <div class="tool-category">interactive · gamification</div>
+      <div class="tool-name">AI 法師等級鑑定<br><span style="font-weight:400;font-size:0.85rem;">魔法大陸</span></div>
+      <div class="tool-tag highlight">互動遊戲</div>
+      <div class="tool-desc">
+        用 RPG 角色扮演的方式測驗你的 AI 使用能力，在魔法大陸中找到你的法師等級，寓教於樂。
+      </div>
+      <div class="tool-arrow">前往使用 →</div>
+    </a>
+
+  </div>
+</div>
+
+
+<!-- ══════════ BACK CTA ══════════ -->
+<div class="back-cta">
+  <div class="back-cta-label">想更了解我？</div>
+  <div class="back-cta-text">回到個人品牌首頁，探索更多關於 Saori 的職涯諮詢服務</div>
+  <a href="index.html" class="btn-back">← 回到首頁</a>
+</div>
+
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="inner">
+    <div class="footer-copy">© Saori · 謝孟娟 · heysaori.com</div>
+  </div>
+</footer>
+
+</body>
+</html>
