@@ -634,6 +634,41 @@
       letter-spacing: 0.06em;
     }
 
+    /* ── TOOLS TEASER ── */
+    .tools-teaser {
+      background: var(--ink-soft);
+      padding: 5rem 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(250,247,242,0.06);
+    }
+    .tools-teaser-inner {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .tools-teaser-desc {
+      font-size: 0.85rem;
+      color: rgba(250,247,242,0.45);
+      letter-spacing: 0.06em;
+      line-height: 2;
+      margin-bottom: 2rem;
+    }
+    .btn-tools {
+      display: inline-block;
+      padding: 0.85rem 2.2rem;
+      background: transparent;
+      border: 1px solid var(--accent3);
+      color: var(--accent3);
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s;
+    }
+    .btn-tools:hover {
+      background: var(--accent3);
+      color: var(--ink);
+    }
+
     /* ── ANIMATIONS ── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
@@ -882,6 +917,17 @@
   </div>
 </section>
 
+
+<!-- ══════════ TOOLS TEASER ══════════ -->
+<div class="tools-teaser">
+  <div class="tools-teaser-inner">
+    <div class="section-label" style="color:var(--accent3);">ai tools</div>
+    <h2 class="section-title" style="color:var(--paper);margin-bottom:0.4rem;">AI 工具實驗室</h2>
+    <div class="section-rule" style="background:var(--accent3);margin-bottom:1.2rem;"></div>
+    <p class="tools-teaser-desc">彙整了幾個幫助思考、學習與創作的 AI 小工具，歡迎自由取用。</p>
+    <a href="tools.html" class="btn-tools">探索工具集 →</a>
+  </div>
+</div>
 
 <!-- ══════════ FOOTER ══════════ -->
 <footer>
