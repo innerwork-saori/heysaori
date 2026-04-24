@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>工具 Prompt 產生器 · Saori</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Zen+Maru+Gothic:wght@400;700&family=Shippori+Mincho:wght@400;700&family=Kiwi+Maru:wght@400;700&family=Kosugi+Maru&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1c1a17;
+  --ink-soft: #2e2b26;
+  --paper: #faf7f2;
+  --paper-warm: #f5f0e8;
+  --paper-mid: #ede7da;
+  --accent1: #8b6f47;
+  --accent2: #c4956a;
+  --accent3: #d4a96a;
+  --accent-rose: #b87c6e;
+  --text-main: #2e2b26;
+  --text-mid: #5c5549;
+  --text-soft: #8c8278;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--text-main);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 300;
+  line-height: 1.8;
+  overflow-x: hidden;
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  padding: 6rem 2rem 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--ink);
+  text-align: center;
+}
+
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 65% 40%, rgba(196,149,106,0.11) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 70% at 20% 80%, rgba(122,140,114,0.07) 0%, transparent 55%),
+    linear-gradient(160deg, #1c1a17 0%, #252018 50%, #1e1b14 100%);
+}
+
+.hero-lines {
+  position: absolute; inset: 0; pointer-events: none;
+}
+.hero-lines svg { width: 100%; height: 100%; }
+
+.hero-inner {
+  position: relative; z-index: 2;
+  max-width: 600px;
+}
+
+.hero-label {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--accent3);
+  letter-spacing: 0.24em;
+  margin-bottom: 1.6rem;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.2s ease forwards;
+}
+
+.hero-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 600;
+  color: var(--paper);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.4s ease forwards;
+}
+
+.hero-divider {
+  width: 48px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent3), transparent);
+  margin: 0 auto 1.4rem;
+  opacity: 0;
+  animation: fadeIn 0.9s 0.65s ease forwards;
+}
+
+.hero-desc {
+  font-size: 0.83rem;
+  color: rgba(250,247,242,0.45);
+  letter-spacing: 0.06em;
+  line-height: 2;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.8s ease forwards;
+}
+
+/* ── MAIN CONTENT ── */
+.main-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 5rem 2rem 4rem;
+}
+
+/* ── INTRO NOTE ── */
+.intro-note {
+  background: var(--paper-warm);
+  border-left: 3px solid var(--accent2);
+  padding: 1.2rem 1.5rem;
+  border-radius: 0 2px 2px 0;
+  margin-bottom: 3.5rem;
+  font-size: 0.82rem;
+  color: var(--text-mid);
+  line-height: 2;
+  letter-spacing: 0.04em;
+}
+.intro-note strong {
+  color: var(--accent1);
+  font-weight: 500;
+}
+
+/* ── SECTION HEADER ── */
+.section-label {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 0.8rem;
+  letter-spacing: 0.28em;
+  color: var(--accent2);
+  margin-bottom: 0.4rem;
+}
+.section-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(1.3rem, 3vw, 1.65rem);
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+.section-rule {
+  width: 40px; height: 2px;
+  background: var(--accent2);
+  margin-bottom: 2.4rem;
+}
+.section-desc {
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+  margin-bottom: 1.8rem;
+  margin-top: -1.6rem;
+}
+
+/* ── FORM BLOCKS ── */
+.form-block {
+  margin-bottom: 3.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem 2rem;
+}
+.full { grid-column: 1 / -1; }
+
+/* Field */
+.field { display: flex; flex-direction: column; }
+
+label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--text-soft);
+  margin-bottom: 7px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+label .req {
+  color: var(--accent-rose);
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+}
+
+.field-hint {
+  font-size: 0.72rem;
+  color: var(--text-soft);
+  margin-top: 5px;
+  line-height: 1.7;
+  letter-spacing: 0.03em;
+  opacity: 0.8;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px 13px;
+  border: 1px solid var(--paper-mid);
+  border-radius: 2px;
+  background: var(--paper-warm);
+  color: var(--text-main);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 300;
+  transition: border-color 0.2s, background 0.2s;
+  appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent2);
+  background: #fff;
+}
+input::placeholder, textarea::placeholder {
+  color: var(--text-soft);
+  opacity: 0.5;
+}
+textarea { min-height: 90px; resize: vertical; }
+
+/* ── TOOL TYPE PILLS ── */
+.tool-type-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+.tool-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--paper-mid);
+  border-radius: 2px;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  color: var(--text-mid);
+  background: var(--paper-warm);
+  transition: all 0.2s;
+  user-select: none;
+}
+.tool-pill:hover { border-color: var(--accent2); color: var(--accent1); }
+.tool-pill.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+/* ── DIVIDER LINE ── */
+.form-sep {
+  border: none;
+  border-top: 1px solid var(--paper-mid);
+  margin: 2.8rem 0;
+}
+
+/* ── ACTION ROW ── */
+.actions {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 0.75rem 2rem;
+  border: 1px solid var(--accent3);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--accent1);
+  font-family: 'Noto Serif TC', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+button:hover { background: var(--accent3); color: var(--ink); }
+button.primary {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+button.primary:hover { background: var(--ink-soft); }
+
+/* ── OUTPUT BLOCK ── */
+.output-wrap {
+  margin-top: 3rem;
+}
+.output-label {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 0.78rem;
+  letter-spacing: 0.24em;
+  color: var(--accent2);
+  margin-bottom: 0.8rem;
+}
+
+/* ── TOAST ── */
+#toast {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%) scale(0.85);
+  background: var(--ink-soft);
+  color: var(--paper);
+  padding: 20px 40px;
+  border-radius: 2px;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+  z-index: 9999;
+}
+#toast.show {
+  opacity: 1;
+  transform: translate(-50%,-50%) scale(1);
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--ink);
+  color: rgba(250,247,242,0.55);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  border-top: 1px solid rgba(250,247,242,0.06);
+  font-size: 0.78rem;
+  line-height: 2;
+  letter-spacing: 0.04em;
+}
+footer .inner { max-width: 600px; margin: 0 auto; }
+.footer-name {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--paper);
+  letter-spacing: 0.12em;
+  margin-bottom: 0.4rem;
+}
+.footer-role {
+  color: var(--accent3);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  margin-bottom: 1rem;
+}
+.footer-rule {
+  width: 32px; height: 1px;
+  background: rgba(250,247,242,0.2);
+  margin: 0.8rem auto;
+}
+.footer-link {
+  color: rgba(250,247,242,0.75);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(250,247,242,0.25);
+  padding-bottom: 1px;
+  transition: color 0.2s, border-color 0.2s;
+  font-family: 'Noto Serif TC', serif;
+  letter-spacing: 0.08em;
+}
+.footer-link:hover { color: var(--accent3); border-color: var(--accent3); }
+.footer-copy {
+  margin-top: 1.2rem;
+  font-size: 0.68rem;
+  color: rgba(250,247,242,0.3);
+  letter-spacing: 0.06em;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* details/summary */
+details summary {
+  font-size: 0.72rem;
+  color: var(--accent2);
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+}
+details summary::-webkit-details-marker { display: none; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 620px) {
+  .grid { grid-template-columns: 1fr; }
+  .main-wrap { padding: 3rem 1.2rem 3rem; }
+  .actions { flex-direction: column; align-items: flex-start; }
+  button { width: 100%; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div id="toast">✓ 已複製至剪貼簿</div>
+
+<!-- ── HERO ── -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines" aria-hidden="true">
+    <svg viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="120" x2="320" y2="0" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <line x1="1200" y1="280" x2="900" y2="400" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <circle cx="1050" cy="80" r="150" fill="none" stroke="rgba(250,247,242,0.04)" stroke-width="1"/>
+      <circle cx="120" cy="340" r="90" fill="none" stroke="rgba(196,149,106,0.05)" stroke-width="1"/>
+      <rect x="40" y="40" width="120" height="120" fill="none" stroke="rgba(250,247,242,0.03)" stroke-width="1" transform="rotate(12,100,100)"/>
+    </svg>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-label">tool prompt generator</div>
+    <h1 class="hero-title">工具開發<br>Prompt 產生器</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">不需要寫程式經驗，填完這張表，就能拿到一份清楚的 Prompt<br>交給 AI 幫你把工具做出來</p>
+  </div>
+</header>
+
+<!-- ── MAIN ── -->
+<main class="main-wrap">
+
+  <!-- 說明 -->
+  <div class="intro-note">
+    💡 <strong>給不懂程式的你：</strong>這份表單會引導你把「想做一個什麼工具」說清楚。<br>
+    你不需要懂技術，只要像跟人說話一樣，把工具的目的、使用方式、限制說明白，<br>
+    AI 就能幫你做出來。每個欄位都有說明與範例，不確定時可以先填看看。
+  </div>
+
+  <!-- ① 目標 -->
+  <div class="form-block">
+    <div class="section-label">01 · goal</div>
+    <h2 class="section-title">工具目標</h2>
+    <div class="section-rule"></div>
+    <p class="section-desc">先想清楚「這工具是給誰用、解決什麼問題」，這是最重要的一步。<br>說清楚了，後面 AI 才知道方向。</p>
+    <div class="grid">
+      <div class="field">
+        <label>工具類型 <span class="req">必填</span></label>
+        <div class="tool-type-group" id="toolTypePills">
+          <span class="tool-pill" onclick="togglePill(this,'網頁工具')">🌐 網頁工具</span>
+          <span class="tool-pill" onclick="togglePill(this,'Chrome 外掛')">🔌 Chrome 外掛</span>
+          <span class="tool-pill" onclick="togglePill(this,'Line Bot')">💬 Line Bot</span>
+          <span class="tool-pill" onclick="togglePill(this,'試算表自動化')">📊 試算表自動化</span>
+          <span class="tool-pill" onclick="togglePill(this,'桌面應用程式')">🖥 桌面應用程式</span>
+          <span class="tool-pill" onclick="togglePill(this,'其他')">✏️ 其他</span>
+        </div>
+        <input id="toolTypeOther" placeholder="若選「其他」，請在這裡說明" style="margin-top:8px;">
+        <div class="field-hint">不確定選哪個？選「網頁工具」最容易讓 AI 做出來。</div>
+      </div>
+      <div class="field">
+        <label>工具名稱（或暫定名稱）<span class="req">必填</span></label>
+        <input id="toolName" placeholder="例：客戶報價試算器、會議摘要產生器">
+        <div class="field-hint">還沒想好也可以先填描述性的名字，例如「幫我計算運費的工具」。</div>
+      </div>
+      <div class="field full">
+        <label>這工具幫誰、解決什麼問題？<span class="req">必填</span></label>
+        <textarea id="goalWho" placeholder="例：幫我（一個接案設計師）快速計算每張報價單的金額與稅費，不用再開 Excel 手動算。"></textarea>
+        <div class="field-hint">「幫誰」可以是你自己、你的客戶、你的同事。問題說得越具體越好。</div>
+      </div>
+      <div class="field full">
+        <label>現在你是怎麼處理這件事的？（現況痛點）</label>
+        <textarea id="goalPain" placeholder="例：每次都要打開 Excel，複製上次的格式，手動輸入，很容易算錯，還要重新確認稅率……"></textarea>
+        <div class="field-hint">說明現在的做法哪裡麻煩、容易出錯，幫助 AI 理解你真正想改善什麼。</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="form-sep">
+
+  <!-- ② Input -->
+  <div class="form-block">
+    <div class="section-label">02 · input</div>
+    <h2 class="section-title">使用者輸入什麼？</h2>
+    <div class="section-rule"></div>
+    <p class="section-desc">「Input」就是使用者在工具裡要填的東西，或是工具需要的原始資料。<br>想像一下，你打開這個工具，第一步要輸入什麼？</p>
+    <div class="grid">
+      <div class="field full">
+        <label>使用者需要輸入哪些欄位？<span class="req">必填</span></label>
+        <textarea id="inputFields" placeholder="例：
+- 商品名稱（文字）
+- 單價（數字，例如 1200）
+- 數量（數字，例如 3）
+- 是否含稅（是 / 否）"></textarea>
+        <div class="field-hint">每個欄位一行，說明是文字、數字、選項、還是日期。不確定可以先列出你覺得需要的，不用太完整。</div>
+      </div>
+      <div class="field full">
+        <label>有沒有具體的填寫範例？</label>
+        <textarea id="inputExample" placeholder="例：
+商品名稱：品牌 Logo 設計
+單價：8000
+數量：1
+是否含稅：否"></textarea>
+        <div class="field-hint">提供一個真實的例子，幫助 AI 更準確理解每個欄位的樣子。</div>
+      </div>
+      <div class="field">
+        <label>欄位有沒有合法值的限制？</label>
+        <textarea id="inputValidation" placeholder="例：
+- 單價必須是正整數
+- 數量最少 1，最多 999
+- 是否含稅只能選「是」或「否」" style="min-height:110px;"></textarea>
+        <div class="field-hint">比如：「年齡只能填數字」、「日期格式要 YYYY/MM/DD」，沒有限制就不用填。</div>
+      </div>
+      <div class="field">
+        <label>如果使用者沒有填某個欄位，怎麼處理？</label>
+        <textarea id="inputMissing" placeholder="例：
+- 商品名稱空白：顯示錯誤「請填寫商品名稱」
+- 數量空白：自動帶入 1
+- 是否含稅空白：預設為「否」" style="min-height:110px;"></textarea>
+        <div class="field-hint">每個空白欄位的處理方式可能不同，有些要報錯、有些可以給預設值。</div>
+      </div>
+      <div class="field full">
+        <label>資料從哪裡來？（輸入來源）</label>
+        <textarea id="inputSource" placeholder="例：使用者直接在網頁表單手動輸入。
+或：從上傳的 Excel 檔案讀取。
+或：從網頁上複製貼上文字。" style="min-height:70px;"></textarea>
+        <div class="field-hint">大部分情況是「使用者在畫面上輸入」。如果是要讀取檔案或其他來源，請說明。</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="form-sep">
+
+  <!-- ③ Output -->
+  <div class="form-block">
+    <div class="section-label">03 · output</div>
+    <h2 class="section-title">工具輸出什麼？</h2>
+    <div class="section-rule"></div>
+    <p class="section-desc">「Output」就是工具處理完之後，使用者會看到什麼結果。<br>想像一下，按下送出之後，畫面上會出現什麼？</p>
+    <div class="grid">
+      <div class="field full">
+        <label>輸出結果長什麼樣子？<span class="req">必填</span></label>
+        <textarea id="outputFormat" placeholder="例：
+在頁面下方顯示一個結果區塊，包含：
+- 小計金額：8,000 元
+- 稅金（5%）：400 元
+- 總計：8,400 元
+
+並有一個「複製結果」按鈕。"></textarea>
+        <div class="field-hint">盡量描述你「希望看到的畫面」，例如是表格、文字、還是可以下載的檔案？</div>
+      </div>
+      <div class="field full">
+        <label>有沒有結果的具體範例？</label>
+        <textarea id="outputExample" placeholder="例：
+=== 報價結果 ===
+商品：品牌 Logo 設計 × 1
+小計：8,000 元
+稅金：0 元（未稅）
+總計：8,000 元"></textarea>
+        <div class="field-hint">像這樣把你理想的輸出直接寫出來，AI 就能照著做。</div>
+      </div>
+      <div class="field">
+        <label>精準度或格式要求</label>
+        <textarea id="outputPrecision" placeholder="例：
+- 金額要加千分位逗號（8,000）
+- 小數點到整數位即可（不要出現 8000.00）
+- 幣別固定顯示「元」" style="min-height:100px;"></textarea>
+        <div class="field-hint">有特別的數字格式、日期格式、文字樣式，請在這裡說明。</div>
+      </div>
+      <div class="field">
+        <label>如果計算失敗或出錯，要怎麼回應？</label>
+        <textarea id="outputError" placeholder="例：
+- 輸入了文字但欄位要數字：顯示「請輸入數字金額」
+- 計算結果為負數：顯示「金額有誤，請重新檢查」" style="min-height:100px;"></textarea>
+        <div class="field-hint">錯誤訊息要讓不懂技術的人也能看得懂，所以用白話說清楚。</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="form-sep">
+
+  <!-- ④ Rules -->
+  <div class="form-block">
+    <div class="section-label">04 · rules</div>
+    <h2 class="section-title">規則與限制</h2>
+    <div class="section-rule"></div>
+    <p class="section-desc">這個區塊是放「商業邏輯」或「不能做的事」。<br>想想你的工具有沒有什麼固定算法、規定，或特別要注意的事。</p>
+    <div class="grid">
+      <div class="field full">
+        <label>有哪些固定的計算規則或商業邏輯？</label>
+        <textarea id="rulesBiz" placeholder="例：
+- 稅率固定為 5%（不可讓使用者修改）
+- 數量超過 10 件，單價打 9 折
+- 國際訂單要另加運費 300 元
+- 每張報價單最多 20 項商品"></textarea>
+        <div class="field-hint">任何「固定算法」或「規定」都可以寫在這裡，例如折扣規則、費率、上限等。</div>
+      </div>
+      <div class="field full">
+        <label>工具不能做什麼、不能顯示什麼？</label>
+        <textarea id="rulesNot" placeholder="例：
+- 不能讓使用者修改稅率
+- 不能儲存任何個人資料
+- 結果不能直接發送 Email（只能手動複製）
+- 不顯示小數點後的金額"></textarea>
+        <div class="field-hint">有沒有哪些功能「看起來合理，但你不想要」？先說清楚，AI 才不會自作主張。</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="form-sep">
+
+  <!-- ⑤ Edge Cases -->
+  <div class="form-block">
+    <div class="section-label">05 · edge cases</div>
+    <h2 class="section-title">異常情況怎麼處理？</h2>
+    <div class="section-rule"></div>
+    <p class="section-desc">「Edge case」是指少見但可能發生的特殊情況。<br>這些如果沒想清楚，工具做出來可能會在奇怪的地方出錯。</p>
+    <div class="grid">
+      <div class="field">
+        <label>使用者什麼都沒填，直接送出怎麼辦？</label>
+        <textarea id="edgeEmpty" placeholder="例：
+顯示提示訊息「請先填寫商品名稱與單價」，
+並把空白的欄位標示為紅色，不執行計算。" style="min-height:100px;"></textarea>
+        <div class="field-hint">大部分工具都需要處理這個情況，說明你希望怎麼提示使用者。</div>
+      </div>
+      <div class="field">
+        <label>輸入了奇怪的值怎麼辦？（例如負數、超大數字、中文）</label>
+        <textarea id="edgeInvalid" placeholder="例：
+- 單價填了「abc」：提示「請輸入數字」
+- 數量填了 -5：提示「數量不能為負數」
+- 數量填了 99999：提示「數量上限為 999」" style="min-height:100px;"></textarea>
+        <div class="field-hint">這些「不正常的輸入」如果沒有定義，工具可能會當掉或算出奇怪的結果。</div>
+      </div>
+      <div class="field">
+        <label>有沒有可能出現「資料衝突」的狀況？</label>
+        <textarea id="edgeConflict" placeholder="例：
+- 同時選了「含稅」又填了「稅率 0%」→ 以稅率欄位為主
+- 同時選了「海外訂單」又填了「台灣地址」→ 顯示提醒讓使用者確認" style="min-height:100px;"></textarea>
+        <div class="field-hint">如果你的工具有多個欄位互相關聯，可能會有衝突。不確定的話可以跳過。</div>
+      </div>
+      <div class="field">
+        <label>有沒有模糊情境、難以判斷的情況？</label>
+        <textarea id="edgeAmbiguous" placeholder="例：
+- 使用者在「商品名稱」欄位輸入了表情符號：正常顯示，不需阻擋
+- 貼上的文字包含換行：自動移除換行，合併成一行" style="min-height:100px;"></textarea>
+        <div class="field-hint">你預期使用者可能會做些奇怪的事嗎？提前說清楚，AI 就能提前處理。</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="form-sep">
+
+  <!-- ⑥ Acceptance Criteria -->
+  <div class="form-block">
+    <div class="section-label">06 · acceptance criteria</div>
+    <h2 class="section-title">怎樣算做完、做對？</h2>
+    <div class="section-rule"></div>
+    <p class="section-desc">這是讓 AI 知道「你的驗收標準」。<br>想像工具做好了，你會怎麼測試它？哪些情況下你會說「這樣對了」？</p>
+    <div class="grid">
+      <div class="field full">
+        <label>「做對了」的情境是什麼？<span class="req">必填</span></label>
+        <textarea id="acCorrect" placeholder="例：
+✓ 輸入商品名稱「Logo 設計」、單價 8000、數量 1、未稅，
+  按下計算，顯示：小計 8,000 元、稅金 0 元、總計 8,000 元
+
+✓ 輸入數量 15 件，系統自動套用 9 折，顯示折扣後金額
+
+✓ 點擊「複製結果」，成功複製到剪貼簿"></textarea>
+        <div class="field-hint">像這樣描述「我這樣操作、應該看到這個結果」，越具體越好。可以多寫幾個情境。</div>
+      </div>
+      <div class="field full">
+        <label>「做錯了」的情境是什麼？</label>
+        <textarea id="acWrong" placeholder="例：
+✗ 輸入非數字金額，沒有顯示錯誤訊息就直接計算
+✗ 稅率可以被使用者手動修改
+✗ 計算結果出現小數點（例如 8400.0 元）
+✗ 空白送出後沒有任何提示"></textarea>
+        <div class="field-hint">哪些情況下你會說「這不對」？說清楚，AI 才不會把 bug 當作功能交給你。</div>
+      </div>
+      <div class="field">
+        <label>有沒有視覺或體驗上的要求？</label>
+        <textarea id="acUX" placeholder="例：
+- 手機上也要能正常使用
+- 計算結果要明顯顯示，不要藏在頁面底部
+- 按鈕要夠大，手指點得到" style="min-height:100px;"></textarea>
+        <div class="field-hint">有時候功能對了但體驗不好，這裡可以提出你的期待。</div>
+      </div>
+      <div class="field">
+        <label>有沒有其他補充說明或參考？</label>
+        <textarea id="acExtra" placeholder="例：
+- 參考這個網站的計算邏輯：https://...
+- 風格希望簡單乾淨，不要太花
+- 先做最基本的版本就好，不需要登入功能" style="min-height:100px;"></textarea>
+        <div class="field-hint">任何你覺得重要但上面沒提到的都可以補充在這裡。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <button class="primary" onclick="gen()">產生 Prompt</button>
+    <button onclick="clearAll()">清除重填</button>
+  </div>
+
+  <!-- Output -->
+  <div class="output-wrap" id="outputWrap" style="display:none;">
+    <div class="output-label">generated prompt</div>
+    <textarea id="out" spellcheck="false" style="width:100%;min-height:700px;resize:vertical;background:var(--ink);color:rgba(250,247,242,0.85);padding:1.5rem;border:none;border-radius:2px;font-family:monospace;font-size:0.82rem;line-height:1.9;letter-spacing:0.02em;white-space:pre-wrap;"></textarea>
+    <div class="actions" style="margin-top:1rem;">
+      <button onclick="copyText()">複製 Prompt</button>
+    </div>
+    <div style="margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid var(--paper-mid);">
+      <div style="font-size:0.72rem;color:var(--text-soft);letter-spacing:0.12em;margin-bottom:0.7rem;">複製後貼到 AI ↗</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+        <a href="https://claude.ai" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border:1px solid var(--paper-mid);border-radius:2px;font-size:0.75rem;color:var(--text-mid);text-decoration:none;letter-spacing:0.06em;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--paper-mid)';this.style.color='var(--text-mid)'">Claude</a>
+        <a href="https://chatgpt.com" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border:1px solid var(--paper-mid);border-radius:2px;font-size:0.75rem;color:var(--text-mid);text-decoration:none;letter-spacing:0.06em;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--paper-mid)';this.style.color='var(--text-mid)'">ChatGPT</a>
+        <a href="https://gemini.google.com" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border:1px solid var(--paper-mid);border-radius:2px;font-size:0.75rem;color:var(--text-mid);text-decoration:none;letter-spacing:0.06em;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--paper-mid)';this.style.color='var(--text-mid)'">Gemini</a>
+        <a href="https://www.perplexity.ai" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border:1px solid var(--paper-mid);border-radius:2px;font-size:0.75rem;color:var(--text-mid);text-decoration:none;letter-spacing:0.06em;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--paper-mid)';this.style.color='var(--text-mid)'">Perplexity</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="inner">
+    <div class="footer-name">Saori</div>
+    <div class="footer-role">軟體工程師・系統分析師・生涯諮詢師</div>
+    <div class="footer-rule"></div>
+    <div><a href="https://heysaori.com/" target="_blank" class="footer-link">人生探索手札 · heysaori.com</a></div>
+    <div class="footer-copy">© Saori · 工具 Prompt 產生器</div>
+  </div>
+</footer>
+
+<script>
+/* ── Pill toggle ── */
+function togglePill(el, val) {
+  el.classList.toggle('active');
+  saveAll();
+  resetOutput();
+}
+
+function getActivePills() {
+  return [...document.querySelectorAll('#toolTypePills .tool-pill.active')]
+    .map(p => p.textContent.trim())
+    .join('、');
+}
+
+/* ── Helpers ── */
+function vals(id) { return (document.getElementById(id)?.value || '').trim(); }
+function smart(id, fallback) {
+  const v = vals(id);
+  return v || (fallback || '（請反問我問題協助我釐清）');
+}
+function opt(id) {
+  const v = vals(id);
+  return v ? v : null;
+}
+
+function resetOutput() {
+  document.getElementById('out').value = '';
+  document.getElementById('outputWrap').style.display = 'none';
+}
+
+/* ── Validation ── */
+function gen() {
+  const toolType = getActivePills() || vals('toolTypeOther');
+  if (!toolType) {
+    showOutput('請先選擇工具類型（網頁工具、Chrome 外掛……）再繼續 ✨');
+    return;
+  }
+  if (!vals('toolName')) {
+    showOutput('請填寫工具名稱，哪怕是暫定的描述性名字也可以 ✨');
+    return;
+  }
+  if (!vals('goalWho')) {
+    showOutput('「這工具幫誰、解決什麼問題」是最重要的一欄，請先填寫 🙏');
+    return;
+  }
+  if (!vals('inputFields')) {
+    showOutput('請描述使用者需要輸入哪些欄位，才能讓 AI 知道工具的互動方式 📝');
+    return;
+  }
+  if (!vals('outputFormat')) {
+    showOutput('請說明工具輸出的結果長什麼樣子，AI 才能做出你想要的畫面 🎯');
+    return;
+  }
+  if (!vals('acCorrect')) {
+    showOutput('請至少填一個「這樣做對了」的情境，這樣 AI 才知道目標是什麼 ✅');
+    return;
+  }
+
+  const toolTypeFull = [getActivePills(), vals('toolTypeOther')].filter(Boolean).join('（') + (vals('toolTypeOther') ? '）' : '');
+
+  const sections = [];
+
+  sections.push(`你是一位專業的軟體工程師與 UI 設計師。`);
+  sections.push(`請幫我開發以下工具，並輸出完整可直接使用的程式碼。`);
+  sections.push(`如果有任何不清楚的地方，請先向我提問，確認後再開始開發。`);
+
+  sections.push(`\n${'='.repeat(60)}`);
+  sections.push(`【工具基本資訊】`);
+  sections.push(`${'='.repeat(60)}`);
+  sections.push(`工具類型：${toolTypeFull}`);
+  sections.push(`工具名稱：${smart('toolName')}`);
+
+  sections.push(`\n【目標與問題】`);
+  sections.push(`幫誰、解決什麼問題：\n${smart('goalWho')}`);
+  if (opt('goalPain')) sections.push(`現況痛點：\n${opt('goalPain')}`);
+
+  sections.push(`\n${'='.repeat(60)}`);
+  sections.push(`【INPUT — 使用者輸入】`);
+  sections.push(`${'='.repeat(60)}`);
+  sections.push(`輸入欄位：\n${smart('inputFields')}`);
+  if (opt('inputExample')) sections.push(`填寫範例：\n${opt('inputExample')}`);
+  if (opt('inputValidation')) sections.push(`欄位合法值限制：\n${opt('inputValidation')}`);
+  if (opt('inputMissing')) sections.push(`欄位缺漏時的處理：\n${opt('inputMissing')}`);
+  if (opt('inputSource')) sections.push(`資料來源：\n${opt('inputSource')}`);
+  else sections.push(`資料來源：使用者在畫面上手動輸入`);
+
+  sections.push(`\n${'='.repeat(60)}`);
+  sections.push(`【OUTPUT — 輸出結果】`);
+  sections.push(`${'='.repeat(60)}`);
+  sections.push(`輸出格式與畫面：\n${smart('outputFormat')}`);
+  if (opt('outputExample')) sections.push(`結果範例：\n${opt('outputExample')}`);
+  if (opt('outputPrecision')) sections.push(`精準度與格式要求：\n${opt('outputPrecision')}`);
+  if (opt('outputError')) sections.push(`錯誤或失敗時的回應：\n${opt('outputError')}`);
+
+  sections.push(`\n${'='.repeat(60)}`);
+  sections.push(`【RULES — 商業規則與限制】`);
+  sections.push(`${'='.repeat(60)}`);
+  if (opt('rulesBiz')) sections.push(`固定規則與計算邏輯：\n${opt('rulesBiz')}`);
+  else sections.push(`固定規則與計算邏輯：（無特別規定，請依常識判斷）`);
+  if (opt('rulesNot')) sections.push(`不能做的事：\n${opt('rulesNot')}`);
+
+  sections.push(`\n${'='.repeat(60)}`);
+  sections.push(`【EDGE CASES — 異常情況處理】`);
+  sections.push(`${'='.repeat(60)}`);
+  if (opt('edgeEmpty')) sections.push(`空白送出：\n${opt('edgeEmpty')}`);
+  else sections.push(`空白送出：顯示友善提示訊息，標示必填欄位，不執行計算`);
+  if (opt('edgeInvalid')) sections.push(`異常值：\n${opt('edgeInvalid')}`);
+  else sections.push(`異常值：顯示清楚的錯誤提示，告知使用者正確輸入方式`);
+  if (opt('edgeConflict')) sections.push(`資料衝突：\n${opt('edgeConflict')}`);
+  if (opt('edgeAmbiguous')) sections.push(`模糊情境：\n${opt('edgeAmbiguous')}`);
+
+  sections.push(`\n${'='.repeat(60)}`);
+  sections.push(`【ACCEPTANCE CRITERIA — 驗收標準】`);
+  sections.push(`${'='.repeat(60)}`);
+  sections.push(`做對了的情境：\n${smart('acCorrect')}`);
+  if (opt('acWrong')) sections.push(`做錯了的情境（不能出現）：\n${opt('acWrong')}`);
+  if (opt('acUX')) sections.push(`視覺與體驗要求：\n${opt('acUX')}`);
+  if (opt('acExtra')) sections.push(`其他補充：\n${opt('acExtra')}`);
+
+  sections.push(`\n${'='.repeat(60)}`);
+  sections.push(`【開發要求】`);
+  sections.push(`${'='.repeat(60)}`);
+
+  const isChrome = getActivePills().includes('Chrome');
+  const isWeb = getActivePills().includes('網頁') || !getActivePills();
+
+  if (isChrome) {
+    sections.push(`- 請輸出完整的 Chrome Extension 結構（manifest.json、popup.html、popup.js 等）`);
+    sections.push(`- 使用 Manifest V3`);
+    sections.push(`- 每個檔案請單獨輸出，並說明各檔案的用途與存放位置`);
+  } else {
+    sections.push(`- 請輸出完整的單一 HTML 檔案，CSS 與 JavaScript 全部內嵌`);
+    sections.push(`- 不需要後端伺服器，純前端即可運作`);
+  }
+
+  sections.push(`- 畫面要乾淨易用，適合非技術背景的使用者操作`);
+  sections.push(`- 頁面要能在手機與電腦上正常顯示（RWD）`);
+  sections.push(`- 所有錯誤訊息請使用繁體中文，語氣友善`);
+  sections.push(`- 程式碼請加入適當的中文註解，方便未來修改`);
+
+  const finalPrompt = sections.join('\n');
+  showOutput(finalPrompt);
+}
+
+function showOutput(text) {
+  const out = document.getElementById('out');
+  const wrap = document.getElementById('outputWrap');
+  out.value = text;
+  wrap.style.display = 'block';
+  setTimeout(() => wrap.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+}
+
+function copyText() {
+  const out = document.getElementById('out');
+  if (!out.value.trim()) return;
+  navigator.clipboard.writeText(out.value).then(() => {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2200);
+  });
+}
+
+function clearAll() {
+  if (!confirm('確定要清除所有填寫內容嗎？')) return;
+  FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.querySelectorAll('.tool-pill').forEach(p => p.classList.remove('active'));
+  localStorage.clear();
+  resetOutput();
+}
+
+/* ── Persistence ── */
+const FIELDS = [
+  'toolName','toolTypeOther',
+  'goalWho','goalPain',
+  'inputFields','inputExample','inputValidation','inputMissing','inputSource',
+  'outputFormat','outputExample','outputPrecision','outputError',
+  'rulesBiz','rulesNot',
+  'edgeEmpty','edgeInvalid','edgeConflict','edgeAmbiguous',
+  'acCorrect','acWrong','acUX','acExtra'
+];
+
+function saveAll() {
+  FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) localStorage.setItem('tpg_' + id, el.value);
+  });
+  // save pills
+  const activePills = [...document.querySelectorAll('#toolTypePills .tool-pill')]
+    .map(p => p.classList.contains('active') ? '1' : '0').join(',');
+  localStorage.setItem('tpg_pills', activePills);
+}
+
+function loadAll() {
+  FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    const v = localStorage.getItem('tpg_' + id);
+    if (el && v !== null) el.value = v;
+  });
+  const pills = document.querySelectorAll('#toolTypePills .tool-pill');
+  const saved = localStorage.getItem('tpg_pills');
+  if (saved) {
+    saved.split(',').forEach((v, i) => {
+      if (pills[i] && v === '1') pills[i].classList.add('active');
+    });
+  }
+}
+
+loadAll();
+
+document.querySelectorAll('input, textarea').forEach(el => {
+  if (el.id === 'out') return;
+  el.addEventListener('input', () => { resetOutput(); saveAll(); });
+});
+</script>
+</body>
+</html>
