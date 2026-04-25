@@ -424,6 +424,58 @@ details summary {
 }
 details summary::-webkit-details-marker { display: none; }
 
+/* ── SAVE FLOAT BTN ── */
+.save-fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 1px solid rgba(250,247,242,0.15);
+  color: var(--paper);
+  font-size: 1.2rem;
+  line-height: 1;
+  font-family: sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  transition: background 0.2s, transform 0.15s;
+  z-index: 1000;
+  padding: 0;
+}
+.save-fab:hover {
+  background: var(--accent1);
+  transform: scale(1.08);
+  border-color: transparent;
+  color: white;
+}
+.save-fab:active { transform: scale(0.95); }
+.save-fab-tooltip {
+  position: fixed;
+  bottom: 2rem;
+  right: 5.2rem;
+  background: var(--ink-soft);
+  color: var(--paper);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.75rem;
+  border-radius: 2px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(6px);
+  transition: opacity 0.2s, transform 0.2s;
+  white-space: nowrap;
+  z-index: 1000;
+}
+.save-fab:hover + .save-fab-tooltip {
+  opacity: 1;
+  transform: translateX(0);
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 620px) {
   .grid { grid-template-columns: 1fr; }
@@ -1135,6 +1187,14 @@ function loadAll() {
   }
 }
 
+function manualSave() {
+  saveAll();
+  const toast = document.getElementById('toast');
+  toast.textContent = '💾 已暫存';
+  toast.classList.add('show');
+  setTimeout(() => { toast.classList.remove('show'); toast.textContent = '✓ 已複製至剪貼簿'; }, 1800);
+}
+
 loadAll();
 
 document.querySelectorAll('input, textarea').forEach(el => {
@@ -1145,5 +1205,14 @@ document.querySelectorAll('input, textarea').forEach(el => {
 // persist design multi-select on change
 document.getElementById('designStyle')?.addEventListener('change', () => { resetOutput(); saveAll(); });
 </script>
+<button class="save-fab" onclick="manualSave()" title="暫存">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+    <polyline points="17 21 17 13 7 13 7 21"/>
+    <polyline points="7 3 7 8 15 8"/>
+  </svg>
+</button>
+<span class="save-fab-tooltip">暫存進度</span>
+
 </body>
 </html>
