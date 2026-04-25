@@ -384,6 +384,32 @@ footer .inner { max-width: 600px; margin: 0 auto; }
   to   { opacity: 1; }
 }
 
+/* ── FONT PREVIEW ── */
+.font-preview-box {
+  margin-top: 10px;
+  padding: 10px 13px;
+  border: 1px dashed var(--paper-mid);
+  border-radius: 2px;
+  font-size: 1rem;
+  color: var(--text-mid);
+  background: var(--paper-warm);
+  letter-spacing: 0.06em;
+  line-height: 1.8;
+  transition: font-family 0.2s;
+}
+
+/* ── STYLE SELECT ── */
+select[multiple] {
+  padding: 6px 8px;
+  min-height: 130px;
+  appearance: auto;
+  line-height: 2;
+}
+select[multiple] option {
+  padding: 3px 6px;
+  border-radius: 1px;
+}
+
 /* details/summary */
 details summary {
   font-size: 0.72rem;
@@ -653,9 +679,96 @@ details summary::-webkit-details-marker { display: none; }
 
   <hr class="form-sep">
 
-  <!-- ⑥ Acceptance Criteria -->
+  <!-- ⑥ Design Preference -->
   <div class="form-block">
-    <div class="section-label">06 · acceptance criteria</div>
+    <div class="section-label">06 · design preference</div>
+    <h2 class="section-title">設計偏好</h2>
+    <div class="section-rule"></div>
+    <p class="section-desc">告訴 AI 你希望工具長什麼感覺，它就能幫你做出更符合期待的視覺風格。<br>不確定的話可以跳過，AI 會依常識給你一個乾淨的預設樣式。</p>
+    <div class="grid">
+      <div class="field">
+        <label>風格（可多選，按住 Shift 點選）</label>
+        <select id="designStyle" multiple size="5">
+          <option>極簡清新風</option>
+          <option>專業科技風</option>
+          <option>雜誌編輯風</option>
+          <option>插畫親切風</option>
+          <option>大膽前衛風</option>
+          <option>復古懷舊風</option>
+          <option>年輕潮流風</option>
+          <option>高級精品風</option>
+          <option>活潑多彩風</option>
+        </select>
+        <details style="margin-top:8px;">
+          <summary>▸ 風格參考說明</summary>
+          <div style="margin-top:8px;border:1px solid var(--paper-mid);border-radius:2px;overflow:hidden;font-size:0.75rem;">
+            <table style="width:100%;border-collapse:collapse;">
+              <thead>
+                <tr style="background:var(--paper-warm);">
+                  <th style="padding:6px 10px;text-align:left;color:var(--text-mid);font-weight:500;letter-spacing:0.06em;border-bottom:1px solid var(--paper-mid);">風格</th>
+                  <th style="padding:6px 10px;text-align:left;color:var(--text-mid);font-weight:500;letter-spacing:0.06em;border-bottom:1px solid var(--paper-mid);">感覺</th>
+                  <th style="padding:6px 10px;text-align:left;color:var(--text-mid);font-weight:500;letter-spacing:0.06em;border-bottom:1px solid var(--paper-mid);">常見特徵</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-main);">極簡清新風</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-mid);">乾淨、留白多、耐看</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-soft);">白底、簡單排版、少量強調色</td></tr>
+                <tr style="background:var(--paper-warm);"><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-main);">專業科技風</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-mid);">理性、俐落、像新創官網</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-soft);">深色或中性色、卡片區塊、清楚 CTA</td></tr>
+                <tr><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-main);">雜誌編輯風</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-mid);">有質感、重排版</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-soft);">大標題、強字體對比、留白節奏明顯</td></tr>
+                <tr style="background:var(--paper-warm);"><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-main);">插畫親切風</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-mid);">輕鬆、親切、有品牌個性</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-soft);">插畫主視覺、柔和配色、活潑</td></tr>
+                <tr><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-main);">大膽前衛風</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-mid);">強烈、吸睛、有設計感</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-soft);">粗字體、強對比、故意不那麼工整</td></tr>
+                <tr style="background:var(--paper-warm);"><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-main);">復古懷舊風</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-mid);">溫暖、有年代感</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-soft);">復古配色、襯線字、舊感材質裝飾</td></tr>
+                <tr><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-main);">年輕潮流風</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-mid);">年輕、亮眼、偏流行感</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-soft);">金屬感、亮色、高反差、未來感元素</td></tr>
+                <tr style="background:var(--paper-warm);"><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-main);">高級精品風</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-mid);">高級、精緻、質感導向</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-soft);">大圖、細緻字體、節制配色、重視氣氛</td></tr>
+                <tr><td style="padding:5px 10px;color:var(--text-main);">活潑多彩風</td><td style="padding:5px 10px;color:var(--text-mid);">友善、熱鬧、適合活動或教育</td><td style="padding:5px 10px;color:var(--text-soft);">多色系、圓角、明亮插圖或圖塊</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+      <div class="field">
+        <label>配色</label>
+        <select id="designColor" onchange="toggleCustomColor()">
+          <option value="">（不指定，讓 AI 決定）</option>
+          <option>柔和藍綠色調</option>
+          <option>暖橙色調</option>
+          <option>莫蘭迪中性色</option>
+          <option>黑白極簡</option>
+          <option>自訂配色（請填下方）</option>
+        </select>
+        <div id="customColorWrap" style="display:none;margin-top:8px;">
+          <textarea id="designCustomColor" placeholder="例：奶茶米色 + 深棕色字體" style="min-height:60px;"></textarea>
+        </div>
+        <details style="margin-top:8px;">
+          <summary>▸ 配色靈感參考</summary>
+          <div style="margin-top:8px;font-size:0.75rem;line-height:2;color:var(--text-mid);">
+            <div style="margin-bottom:0.4rem;font-weight:500;color:var(--text-soft);letter-spacing:0.08em;">配色工具</div>
+            <div>· <a href="https://coolors.co/" target="_blank" style="color:var(--accent1);text-decoration:none;border-bottom:1px solid var(--paper-mid);">Coolors</a> — 快速產生配色組合</div>
+            <div>· <a href="https://www.happyhues.co/palettes/15" target="_blank" style="color:var(--accent1);text-decoration:none;border-bottom:1px solid var(--paper-mid);">Happy Hues</a> — 看配色實際套在頁面上的效果</div>
+            <div style="margin-top:0.6rem;margin-bottom:0.4rem;font-weight:500;color:var(--text-soft);letter-spacing:0.08em;">找色碼</div>
+            <div>· <a href="https://www.toodoo.com/db/color.html" target="_blank" style="color:var(--accent1);text-decoration:none;border-bottom:1px solid var(--paper-mid);">色碼表 (Toodoo)</a></div>
+            <div>· <a href="https://www.wibibi.com/info.php?tid=372" target="_blank" style="color:var(--accent1);text-decoration:none;border-bottom:1px solid var(--paper-mid);">色碼表 (Wibibi)</a></div>
+          </div>
+        </details>
+      </div>
+      <div class="field full">
+        <label>字型</label>
+        <select id="designFont" onchange="previewFont()">
+          <option value="'Noto Sans TC', sans-serif">Noto Sans TC（清晰通用）</option>
+          <option value="'Zen Maru Gothic', sans-serif">Zen Maru Gothic（圓潤親和）</option>
+          <option value="'Shippori Mincho', serif">Shippori Mincho（質感明體）</option>
+          <option value="'Kiwi Maru', serif">Kiwi Maru（可愛溫暖）</option>
+          <option value="'Kosugi Maru', sans-serif">Kosugi Maru（簡潔圓體）</option>
+        </select>
+        <div id="fontPreview" class="font-preview-box">字型預覽：品牌感從文字開始</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="form-sep">
+
+  <!-- ⑦ Acceptance Criteria -->
+  <div class="form-block">
+    <div class="section-label">07 · acceptance criteria</div>
     <h2 class="section-title">怎樣算做完、做對？</h2>
     <div class="section-rule"></div>
     <p class="section-desc">這是讓 AI 知道「你的驗收標準」。<br>想像工具做好了，你會怎麼測試它？哪些情況下你會說「這樣對了」？</p>
@@ -737,6 +850,27 @@ details summary::-webkit-details-marker { display: none; }
 </footer>
 
 <script>
+/* ── Design helpers ── */
+function toggleCustomColor() {
+  const sel = document.getElementById('designColor');
+  const wrap = document.getElementById('customColorWrap');
+  wrap.style.display = sel.value === '自訂配色（請填下方）' ? 'block' : 'none';
+  resetOutput(); saveAll();
+}
+
+function previewFont() {
+  const sel = document.getElementById('designFont');
+  const preview = document.getElementById('fontPreview');
+  preview.style.fontFamily = sel.value;
+  resetOutput(); saveAll();
+}
+
+function getSelectedStyles() {
+  const sel = document.getElementById('designStyle');
+  if (!sel) return '';
+  return [...sel.selectedOptions].map(o => o.value).join('、');
+}
+
 /* ── Pill toggle ── */
 function togglePill(el, val) {
   el.classList.toggle('active');
@@ -848,6 +982,21 @@ function gen() {
   if (opt('edgeAmbiguous')) sections.push(`模糊情境：\n${opt('edgeAmbiguous')}`);
 
   sections.push(`\n${'='.repeat(60)}`);
+  sections.push(`【DESIGN — 設計偏好】`);
+  sections.push(`${'='.repeat(60)}`);
+  const styleVal = getSelectedStyles();
+  const colorSel = document.getElementById('designColor');
+  const colorVal = colorSel?.value === '自訂配色（請填下方）'
+    ? (vals('designCustomColor') || '自訂配色（未填寫）')
+    : (colorSel?.value || '');
+  const fontSel = document.getElementById('designFont');
+  const fontLabel = fontSel?.options[fontSel.selectedIndex]?.text || '';
+  if (styleVal) sections.push(`風格偏好：${styleVal}`);
+  else sections.push(`風格偏好：（不指定，請給一個乾淨易用的預設樣式）`);
+  if (colorVal) sections.push(`配色：${colorVal}`);
+  if (fontLabel) sections.push(`字型：${fontLabel}`);
+
+  sections.push(`\n${'='.repeat(60)}`);
   sections.push(`【ACCEPTANCE CRITERIA — 驗收標準】`);
   sections.push(`${'='.repeat(60)}`);
   sections.push(`做對了的情境：\n${smart('acCorrect')}`);
@@ -905,6 +1054,16 @@ function clearAll() {
     if (el) el.value = '';
   });
   document.querySelectorAll('.tool-pill').forEach(p => p.classList.remove('active'));
+  // reset design selects
+  const styleSel = document.getElementById('designStyle');
+  if (styleSel) [...styleSel.options].forEach(o => o.selected = false);
+  const colorSel = document.getElementById('designColor');
+  if (colorSel) { colorSel.value = ''; toggleCustomColor(); }
+  const fontSel = document.getElementById('designFont');
+  if (fontSel) {
+    fontSel.selectedIndex = 0;
+    previewFont();
+  }
   localStorage.clear();
   resetOutput();
 }
@@ -917,6 +1076,7 @@ const FIELDS = [
   'outputFormat','outputExample','outputPrecision','outputError',
   'rulesBiz','rulesNot',
   'edgeEmpty','edgeInvalid','edgeConflict','edgeAmbiguous',
+  'designCustomColor',
   'acCorrect','acWrong','acUX','acExtra'
 ];
 
@@ -925,10 +1085,20 @@ function saveAll() {
     const el = document.getElementById(id);
     if (el) localStorage.setItem('tpg_' + id, el.value);
   });
-  // save pills
+  // save tool type pills
   const activePills = [...document.querySelectorAll('#toolTypePills .tool-pill')]
     .map(p => p.classList.contains('active') ? '1' : '0').join(',');
   localStorage.setItem('tpg_pills', activePills);
+  // save design selects
+  const styleSel = document.getElementById('designStyle');
+  if (styleSel) {
+    const selected = [...styleSel.selectedOptions].map(o => o.value);
+    localStorage.setItem('tpg_designStyle', JSON.stringify(selected));
+  }
+  const colorSel = document.getElementById('designColor');
+  if (colorSel) localStorage.setItem('tpg_designColor', colorSel.value);
+  const fontSel = document.getElementById('designFont');
+  if (fontSel) localStorage.setItem('tpg_designFont', fontSel.value);
 }
 
 function loadAll() {
@@ -944,6 +1114,25 @@ function loadAll() {
       if (pills[i] && v === '1') pills[i].classList.add('active');
     });
   }
+  // load design selects
+  const savedStyles = localStorage.getItem('tpg_designStyle');
+  if (savedStyles) {
+    const arr = JSON.parse(savedStyles);
+    const styleSel = document.getElementById('designStyle');
+    if (styleSel) [...styleSel.options].forEach(o => { o.selected = arr.includes(o.value); });
+  }
+  const savedColor = localStorage.getItem('tpg_designColor');
+  const colorSel = document.getElementById('designColor');
+  if (colorSel && savedColor !== null) {
+    colorSel.value = savedColor;
+    toggleCustomColor();
+  }
+  const savedFont = localStorage.getItem('tpg_designFont');
+  const fontSel = document.getElementById('designFont');
+  if (fontSel && savedFont) {
+    fontSel.value = savedFont;
+    previewFont();
+  }
 }
 
 loadAll();
@@ -952,6 +1141,9 @@ document.querySelectorAll('input, textarea').forEach(el => {
   if (el.id === 'out') return;
   el.addEventListener('input', () => { resetOutput(); saveAll(); });
 });
+
+// persist design multi-select on change
+document.getElementById('designStyle')?.addEventListener('change', () => { resetOutput(); saveAll(); });
 </script>
 </body>
 </html>
