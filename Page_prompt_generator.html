@@ -221,6 +221,71 @@ select[multiple] option:checked {
   min-height: 42px;
 }
 
+/* ── OR-GROUP 二擇一提示 ── */
+.or-group-hint { display: none; } /* 改為 card 標題顯示，舊 hint 隱藏 */
+
+.or-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--accent-rose);
+  border: 1px solid var(--accent-rose);
+  border-radius: 2px;
+  padding: 1px 5px;
+  margin-left: 4px;
+  opacity: 0.75;
+  line-height: 1.6;
+}
+
+/* ── OR-PAIR CARD ── */
+.or-pair {
+  grid-column: 1 / -1;
+  border: 1.5px dashed rgba(184,124,110,0.35);
+  border-radius: 4px;
+  padding: 1.1rem 1.2rem 1.1rem;
+  background: rgba(184,124,110,0.035);
+  position: relative;
+}
+.or-pair-label {
+  position: absolute;
+  top: -0.62em;
+  left: 1rem;
+  background: var(--paper);
+  padding: 0 0.5rem;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--accent-rose);
+  opacity: 0.85;
+  white-space: nowrap;
+}
+.or-pair-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+.or-pair-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: rgba(184,124,110,0.5);
+  user-select: none;
+  padding: 0 0.2rem;
+}
+
+@media (max-width: 620px) {
+  .or-pair-inner { grid-template-columns: 1fr; }
+  .or-pair-divider { display: none; }
+}
+
 /* ── DIVIDER LINE ── */
 .form-sep {
   border: none;
@@ -434,21 +499,39 @@ footer .inner { max-width: 600px; margin: 0 auto; }
         <label>目標客戶 <span class="req">必填</span></label>
         <input id="client" placeholder="例：想轉職的工程師">
       </div>
-      <div class="field">
-        <label>客戶痛點</label>
-        <input id="pain" placeholder="例：不知道方向、資歷難以呈現">
+      <!-- 空白佔位，維持 grid 對齊 -->
+      <div></div>
+
+      <!-- 第一組二擇一 -->
+      <div class="or-pair">
+        <div class="or-pair-label">以下二擇一必填</div>
+        <div class="or-pair-inner">
+          <div class="field">
+            <label>客戶痛點</label>
+            <input id="pain" placeholder="例：不知道方向、資歷難以呈現">
+          </div>
+          <div class="or-pair-divider">OR</div>
+          <div class="field">
+            <label>我提供的服務</label>
+            <input id="service" placeholder="例：一對一職涯諮詢、履歷健檢">
+          </div>
+        </div>
       </div>
-      <div class="field">
-        <label>我提供的服務</label>
-        <input id="service" placeholder="例：一對一職涯諮詢、履歷健檢">
-      </div>
-      <div class="field">
-        <label>我的特色 ／ 方法</label>
-        <input id="method" placeholder="例：蘇格拉底式提問、正念引導">
-      </div>
-      <div class="field full">
-        <label>客戶能獲得</label>
-        <textarea id="gain" placeholder="例：清晰的職涯方向與具體行動計畫"></textarea>
+
+      <!-- 第二組二擇一 -->
+      <div class="or-pair">
+        <div class="or-pair-label">以下二擇一必填</div>
+        <div class="or-pair-inner">
+          <div class="field">
+            <label>我的特色 ／ 方法</label>
+            <input id="method" placeholder="例：蘇格拉底式提問、正念引導">
+          </div>
+          <div class="or-pair-divider">OR</div>
+          <div class="field">
+            <label>客戶能獲得</label>
+            <textarea id="gain" placeholder="例：清晰的職涯方向與具體行動計畫"></textarea>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -539,6 +622,7 @@ footer .inner { max-width: 600px; margin: 0 auto; }
       <div class="field">
         <label>配色</label>
         <select id="color" onchange="toggleCustomColor()">
+          <option value="">（不指定，讓 AI 決定）</option>
           <option>柔和藍綠色調</option>
           <option>暖橙色調</option>
           <option>莫蘭迪中性色</option>
@@ -632,7 +716,9 @@ function previewFont() {
   el.style.fontFamily = serif.includes(f) ? `'${f}', serif` : `'${f}', sans-serif`;
 }
 function pickedColor() {
-  return vals('color').includes('自訂') ? (vals('customColor') || '（請描述你喜歡的配色）') : vals('color');
+  const v = vals('color');
+  if (!v) return '';
+  return v.includes('自訂') ? (vals('customColor') || '（請描述你喜歡的配色）') : v;
 }
 function toggleCustomColor() {
   const isCustom = vals('color').includes('自訂');
@@ -699,7 +785,7 @@ ${vals('other') ? `- 其他：${vals('other')}` : ''}
 
 【設計要求】
 - 風格：${multi('style')}、專業、溫暖、值得信賴
-- 配色：${pickedColor()}
+- 配色：${pickedColor() || '（不指定，請依風格自行搭配）'}
 - 字型：${vals('font') || 'Noto Sans TC'}，請使用 Google Fonts，標題用粗體
 - 版面：包含以下六個區塊：Hero、About、Service、Process、Trust、Contact
 
