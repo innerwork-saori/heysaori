@@ -618,7 +618,7 @@ footer .inner { max-width: 600px; margin: 0 auto; }
     <div class="grid grid-design">
       <div class="field">
         <label data-i18n="labelStyle">風格（按住 shift 不放，滑鼠點選即可多選）</label>
-        <select id="style" multiple size="5">
+        <select id="style" multiple size="5" onchange="toggleCustomStyle()">
           <!-- options injected by setLang() -->
         </select>
         <details id="styleDetails" style="margin-top:8px;">
@@ -629,6 +629,10 @@ footer .inner { max-width: 600px; margin: 0 auto; }
             <!-- injected by setLang() -->
           </div>
         </details>
+        <div id="customStyleWrap" style="display:none;margin-top:8px;">
+          <label style="margin-bottom:4px;" data-i18n="labelCustomStyle">自訂風格描述 <span style="color:var(--accent-rose)">*必填</span></label>
+          <textarea id="customStyle" data-i18n-ph="phCustomStyle" placeholder="例：日系和風、帶有手寫感的溫柔插畫風、科幻感深色系……"></textarea>
+        </div>
       </div>
       <div class="field">
         <label data-i18n="labelColor">配色</label>
@@ -786,7 +790,11 @@ const i18n = {
       { label: '年輕潮流風', vibe: '年輕、亮眼、偏流行感',       traits: '金屬感、亮色、高反差、未來感元素' },
       { label: '高級精品風', vibe: '高級、精緻、質感導向',       traits: '大圖、細緻字體、節制配色、重視氣氛' },
       { label: '活潑多彩風', vibe: '友善、熱鬧、適合活動或教育', traits: '多色系、圓角、明亮插圖或圖塊' },
+      { label: '自訂風格（請填下方）', special: 'custom' },
     ],
+    labelCustomStyle: '自訂風格描述 <span style="color:var(--accent-rose)">*必填</span>',
+    phCustomStyle: '例：日系和風、帶有手寫感的溫柔插畫風、科幻感深色系……',
+    errCustomStyle: '選了自訂風格，請填寫你的風格描述 ✏️',
     styleTableHead: ['風格', '感覺', '常見特徵'],
     colorDetailsHtml: `
       <div style="margin-bottom:0.4rem;font-weight:500;color:var(--text-soft);letter-spacing:0.08em;">配色工具</div>
@@ -887,8 +895,12 @@ const i18n = {
       { label: 'Trendy & Youthful', vibe: 'Fresh, vibrant, pop-culture feel', traits: 'Metallic accents, bright colors, futuristic elements' },
       { label: 'Luxury',           vibe: 'Premium, refined, atmosphere-first', traits: 'Full-bleed imagery, delicate type, restrained palette' },
       { label: 'Colorful & Playful', vibe: 'Welcoming, lively, great for events or education', traits: 'Multi-color, rounded corners, bright illustrations' },
+      { label: 'Custom Style (fill in below)', special: 'custom' },
     ],
     styleTableHead: ['Style', 'Vibe', 'Common Traits'],
+    labelCustomStyle: 'Custom Style Description <span style="color:var(--accent-rose)">*required</span>',
+    phCustomStyle: 'e.g. Japanese minimalism, soft hand-drawn illustration, dark sci-fi aesthetic…',
+    errCustomStyle: 'You selected Custom Style — please describe your preferred style ✏️',
     colorDetailsHtml: `
       <div style="margin-bottom:0.4rem;font-weight:500;color:var(--text-soft);letter-spacing:0.08em;">Color Tools</div>
       <div>· <a href="https://coolors.co/" target="_blank" style="color:var(--accent1);text-decoration:none;border-bottom:1px solid var(--paper-mid);">Coolors</a> — Generate palette combinations instantly</div>
@@ -959,9 +971,11 @@ function setLang(lang) {
       const el = document.createElement('option');
       el.value = opt.label;
       el.textContent = opt.label;
-      el.dataset.styleKey = opt.label; // use label as stable key within same lang
+      el.dataset.styleKey = opt.label;
+      if (opt.special) el.dataset.special = opt.special;
       styleSel.appendChild(el);
     });
+    toggleCustomStyle(); // sync visibility after rebuild
   }
 
   // Rebuild style reference table
@@ -969,9 +983,9 @@ function setLang(lang) {
   if (styleBody) {
     const L = i18n[lang];
     const [h1, h2, h3] = L.styleTableHead;
-    const rows = L.styleOptions.map((opt, i) => {
+    const rows = L.styleOptions.filter(opt => !opt.special).map((opt, i, arr) => {
       const bg = i % 2 === 1 ? ' style="background:var(--paper-warm);"' : '';
-      const last = i === L.styleOptions.length - 1;
+      const last = i === arr.length - 1;
       const border = last ? '' : 'border-bottom:1px solid var(--paper-mid);';
       return `<tr${bg}><td style="padding:5px 10px;${border}color:var(--text-main);">${opt.label}</td><td style="padding:5px 10px;${border}color:var(--text-mid);">${opt.vibe}</td><td style="padding:5px 10px;${border}color:var(--text-soft);">${opt.traits}</td></tr>`;
     }).join('');
@@ -1044,8 +1058,14 @@ function pickedColor() {
   return v.includes('自訂') ? (vals('customColor') || '（請描述你喜歡的配色）') : v;
 }
 function toggleCustomColor() {
-  const isCustom = vals('color').includes('自訂');
+  const isCustom = vals('color').includes('自訂') || vals('color').toLowerCase().includes('custom');
   document.getElementById('customColorWrap').style.display = isCustom ? 'block' : 'none';
+}
+
+function toggleCustomStyle() {
+  const styleSel = document.getElementById('style');
+  const hasCustom = [...styleSel.selectedOptions].some(opt => opt.dataset.special === 'custom');
+  document.getElementById('customStyleWrap').style.display = hasCustom ? 'block' : 'none';
 }
 
 function showOutput(text) {
@@ -1094,6 +1114,15 @@ function gen() {
     return;
   }
 
+  // Validate custom style
+  const styleSelEl = document.getElementById('style');
+  const hasCustomStyle = [...styleSelEl.selectedOptions].some(opt => opt.dataset.special === 'custom');
+  if (hasCustomStyle && !vals('customStyle')) {
+    showOutput(L.errCustomStyle);
+    document.getElementById('customStyle').focus();
+    return;
+  }
+
   const smartVal = (id) => { const v = vals(id); return v || L.smartFallback; };
 
   const getFontName = () => {
@@ -1130,7 +1159,15 @@ ${L.promptContact}
 ${vals('other') ? `- ${currentLang === 'zh' ? '其他' : 'Other'}：${vals('other')}` : ''}
 
 ${L.promptDesign}
-- ${currentLang === 'zh' ? '風格' : 'Style'}：${multi('style')}、${L.styleDefault}
+- ${currentLang === 'zh' ? '風格' : 'Style'}：${(() => {
+    const sel = document.getElementById('style');
+    const opts = [...sel.selectedOptions];
+    const hasCustom = opts.some(o => o.dataset.special === 'custom');
+    const named = opts.filter(o => !o.dataset.special).map(o => o.value);
+    const parts = [...named, ...(hasCustom && vals('customStyle') ? [vals('customStyle')] : [])];
+    const sep = currentLang === 'zh' ? '、' : ', ';
+    return (parts.join(sep) || (currentLang === 'zh' ? '專業' : 'Professional')) + sep + L.styleDefault;
+  })()}
 - ${currentLang === 'zh' ? '配色' : 'Color Palette'}：${pickedColor() || L.colorDefault}
 - ${currentLang === 'zh' ? '字型' : 'Font'}：${getFontName() ? `${getFontName()}${L.fontNote}` : (currentLang === 'zh' ? '（不指定，請依風格自行搭配）' : '(No preference — let AI decide based on style)')}
 ${L.layoutNote}
@@ -1151,7 +1188,7 @@ function copyText() {
 }
 
 /* ── Persistence ── */
-const FIELDS = ['name','title','client','pain','service','method','gain','bg','trust','email','other','color','customColor','font','customFont'];
+const FIELDS = ['name','title','client','pain','service','method','gain','bg','trust','email','other','color','customColor','font','customFont','customStyle'];
 
 function saveAll() {
   FIELDS.forEach(id => {
