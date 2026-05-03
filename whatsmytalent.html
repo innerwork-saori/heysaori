@@ -266,6 +266,11 @@
   .empty-state p { font-size:.88rem; line-height:1.7; }
   .toast { position:fixed; bottom:2rem; left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:white; padding:.7rem 1.5rem; border-radius:30px; font-size:.85rem; opacity:0; transition:all .3s; z-index:999; pointer-events:none; }
   .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  .loading-overlay { display:none; position:fixed; inset:0; background:rgba(26,20,16,.6); z-index:9000; align-items:center; justify-content:center; backdrop-filter:blur(3px); flex-direction:column; gap:1.2rem; }
+  .loading-overlay.show { display:flex; }
+  .loading-spinner { width:44px; height:44px; border:3px solid rgba(250,247,242,.2); border-top-color:var(--accent3); border-radius:50%; animation:spin .8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .loading-text { color:var(--paper); font-size:.9rem; letter-spacing:.05em; }
 
   @media(max-width:900px){
     .card-grid { grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); }
@@ -389,7 +394,17 @@
     <button class="export-btn dl" onclick="downloadMd('explore')">⬇ 下載 Markdown</button>
     <button class="export-btn copy" onclick="copyText('explore')">📋 複製文字</button>
     <button class="export-btn dl" onclick="window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
-    <div style="width:100%;font-size:.78rem;color:var(--muted);padding-top:.5rem;border-top:1px solid var(--border)">💡 把檔案內容交給 <a href="https://lin.ee/YVBqq6u" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:underline">Saori</a>，做進一步的探索喔！</div>
+    <div style="width:100%;border-top:1px solid var(--border);padding-top:.8rem;margin-top:.3rem;display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;">
+      <span style="font-size:.78rem;color:var(--muted);font-weight:600;">📧 產生報表並寄送：</span>
+      <input type="email" id="e-report-email" placeholder="請輸入你的 Email…"
+        style="flex:1;min-width:200px;border:1.5px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'Noto Sans TC',sans-serif;font-size:.82rem;color:var(--ink);outline:none;transition:border-color .2s;"
+        onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" />
+      <button class="export-btn" id="e-send-btn" onclick="sendReport('explore')"
+        style="background:var(--accent);border-color:var(--accent);color:white;padding:.45rem 1.2rem;">
+        ✉️ 產生 PDF 並寄送
+      </button>
+    </div>
+    <div style="width:100%;font-size:.78rem;color:var(--muted);padding-top:.3rem;">💡 把檔案內容交給 <a href="https://lin.ee/YVBqq6u" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:underline">Saori</a>，做進一步的探索喔！</div>
   </div>
   <div id="explore-step3-content"></div>
   <div class="nav-btns">
@@ -454,7 +469,17 @@
     <button class="export-btn dl" onclick="downloadMd('job')">⬇ 下載 Markdown</button>
     <button class="export-btn copy" onclick="copyText('job')">📋 複製文字</button>
     <button class="export-btn dl" onclick="window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
-    <div style="width:100%;font-size:.78rem;color:var(--muted);padding-top:.5rem;border-top:1px solid var(--border)">💡 把檔案內容交給 <a href="https://lin.ee/YVBqq6u" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:underline">Saori</a>，做進一步的探索喔！</div>
+    <div style="width:100%;border-top:1px solid var(--border);padding-top:.8rem;margin-top:.3rem;display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;">
+      <span style="font-size:.78rem;color:var(--muted);font-weight:600;">📧 產生報表並寄送：</span>
+      <input type="email" id="j-report-email" placeholder="請輸入你的 Email…"
+        style="flex:1;min-width:200px;border:1.5px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'Noto Sans TC',sans-serif;font-size:.82rem;color:var(--ink);outline:none;transition:border-color .2s;"
+        onfocus="this.style.borderColor='var(--accent4)'" onblur="this.style.borderColor='var(--border)'" />
+      <button class="export-btn" id="j-send-btn" onclick="sendReport('job')"
+        style="background:var(--accent4);border-color:var(--accent4);color:white;padding:.45rem 1.2rem;">
+        ✉️ 產生 PDF 並寄送
+      </button>
+    </div>
+    <div style="width:100%;font-size:.78rem;color:var(--muted);padding-top:.3rem;">💡 把檔案內容交給 <a href="https://lin.ee/YVBqq6u" target="_blank" style="color:var(--accent4);font-weight:600;text-decoration:underline">Saori</a>，做進一步的探索喔！</div>
   </div>
   <div id="job-step3-content"></div>
   <div class="nav-btns">
@@ -473,6 +498,11 @@
     </div>
     <div class="card-modal-body" id="modal-body"></div>
   </div>
+</div>
+
+<div class="loading-overlay" id="loading-overlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">產生報表中，請稍候…</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -1165,6 +1195,191 @@ function copyText(mode) {
   if (!requireName(nid,bid)) return;
   const {md}=buildMd(mode);
   navigator.clipboard.writeText(md).then(()=>showToast('✅ 已複製到剪貼簿！')).catch(()=>{ prompt('無法自動複製，請全選後按 Ctrl+C（Mac 用 ⌘+C）複製：',md); });
+}
+
+/* ── SEND REPORT ── */
+const GAS_URL = "https://script.google.com/macros/s/AKfycbywssGRT8jt7Eau39sUlttVIlmYE5kuJI1s5_EgBHTajvSSk3mqYclizyIsULqYOUlKFA/exec";
+
+function buildReportHTML(mode) {
+  const date = new Date().toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' });
+  const isExplore = mode === 'explore';
+  const name = (document.getElementById(isExplore ? 'e-user-name' : 'j-user-name')?.value || '').trim();
+  const jTitle = isExplore ? '' : (document.getElementById('j-job-title')?.value || '').trim();
+
+  let sections = '';
+
+  if (isExplore) {
+    let strengthRows = '';
+    eS.forEach(key => {
+      const item = findItem(key); if (!item) return;
+      const d = CARD_DATA[item.no]; if (!d) return;
+      const note = eR['s_' + key] || '（尚未填寫）';
+      strengthRows += `
+        <div style="background:white;border-radius:8px;padding:1rem 1.2rem;margin-bottom:.8rem;border:1px solid #d8cfc0;border-left:4px solid #c8502a;">
+          <div style="font-size:.7rem;color:#c8502a;font-weight:700;letter-spacing:.1em;margin-bottom:.3rem;">優勢 · #${item.no}</div>
+          <div style="font-size:1rem;font-weight:700;margin-bottom:.3rem;">${item.zh}</div>
+          <div style="font-size:.68rem;color:#8a7f72;background:#f0ebe0;display:inline-block;padding:.15rem .5rem;border-radius:20px;margin-bottom:.5rem;">${d.category} · ${findCategory(key)?.categoryZh || ''}</div>
+          <div style="font-size:.82rem;color:#1a1410;line-height:1.7;background:#f0ebe0;border-radius:6px;padding:.6rem .8rem;margin-bottom:.5rem;">${note}</div>
+          <div style="font-size:.75rem;color:#8a7f72;line-height:1.6;"><strong>特質：</strong>${d.traits.join('、')}</div>
+          ${d.strength && d.strength.g ? `<div style="font-size:.75rem;color:#8a7f72;margin-top:.3rem;"><strong>通用建議：</strong>${d.strength.g}</div>` : ''}
+        </div>`;
+    });
+
+    let growthRows = '';
+    eG.forEach(key => {
+      const item = findItem(key); if (!item) return;
+      const d = CARD_DATA[item.no]; if (!d) return;
+      const note = eR['g_' + key] || '（尚未填寫）';
+      growthRows += `
+        <div style="background:white;border-radius:8px;padding:1rem 1.2rem;margin-bottom:.8rem;border:1px solid #d8cfc0;border-left:4px solid #4a7c6f;">
+          <div style="font-size:.7rem;color:#4a7c6f;font-weight:700;letter-spacing:.1em;margin-bottom:.3rem;">成長機會 · #${item.no}</div>
+          <div style="font-size:1rem;font-weight:700;margin-bottom:.3rem;">${item.zh}</div>
+          <div style="font-size:.68rem;color:#8a7f72;background:#f0ebe0;display:inline-block;padding:.15rem .5rem;border-radius:20px;margin-bottom:.5rem;">${d.category} · ${findCategory(key)?.categoryZh || ''}</div>
+          <div style="font-size:.82rem;color:#1a1410;line-height:1.7;background:#f0ebe0;border-radius:6px;padding:.6rem .8rem;margin-bottom:.5rem;">${note}</div>
+          <div style="font-size:.75rem;color:#8a7f72;line-height:1.6;"><strong>特質：</strong>${d.traits.join('、')}</div>
+          ${d.improve && d.improve.length ? `<div style="font-size:.75rem;color:#8a7f72;margin-top:.3rem;"><strong>提升方法：</strong>${d.improve.join('；')}</div>` : ''}
+        </div>`;
+    });
+
+    sections = `
+      <h2 style="font-size:1.1rem;color:#c8502a;border-bottom:2px solid #c8502a;padding-bottom:.5rem;margin:1.5rem 0 1rem;">⭐ 我的優勢</h2>
+      ${strengthRows || '<p style="color:#8a7f72;font-size:.85rem;">尚未選擇</p>'}
+      <h2 style="font-size:1.1rem;color:#4a7c6f;border-bottom:2px solid #4a7c6f;padding-bottom:.5rem;margin:2rem 0 1rem;">🌱 我的成長計畫</h2>
+      ${growthRows || '<p style="color:#8a7f72;font-size:.85rem;">尚未選擇</p>'}`;
+  } else {
+    const ownedKeys = [], gapKeys = [];
+    jSel.forEach(key => { const d = jData[key] || {}; (d.owned ? ownedKeys : gapKeys).push(key); });
+
+    let ownedRows = '';
+    ownedKeys.forEach(key => {
+      const item = findItem(key); if (!item) return;
+      const d = jData[key] || {};
+      const cd = CARD_DATA[item.no];
+      ownedRows += `
+        <div style="background:white;border-radius:8px;padding:1rem 1.2rem;margin-bottom:.8rem;border:1px solid #d8cfc0;border-left:4px solid #4a7c6f;">
+          <div style="font-size:.7rem;color:#4a7c6f;font-weight:700;margin-bottom:.3rem;">✓ 已具備 · #${item.no}</div>
+          <div style="font-size:1rem;font-weight:700;margin-bottom:.3rem;">${item.zh}</div>
+          <div style="font-size:.68rem;color:#8a7f72;background:#f0ebe0;display:inline-block;padding:.15rem .5rem;border-radius:20px;margin-bottom:.5rem;">${cd ? cd.category : ''} · ${findCategory(key)?.categoryZh || ''}</div>
+          ${d.current ? `<div style="font-size:.82rem;color:#1a1410;line-height:1.7;background:#f0ebe0;border-radius:6px;padding:.6rem .8rem;margin-bottom:.5rem;"><strong>展現方式：</strong>${d.current}</div>` : ''}
+          ${cd ? `<div style="font-size:.75rem;color:#8a7f72;"><strong>特質：</strong>${cd.traits.join('、')}</div>` : ''}
+        </div>`;
+    });
+
+    let gapRows = '';
+    let idx = 1;
+    gapKeys.forEach(key => {
+      const item = findItem(key); if (!item) return;
+      const d = jData[key] || {};
+      const cd = CARD_DATA[item.no];
+      gapRows += `
+        <div style="background:white;border-radius:8px;padding:1rem 1.2rem;margin-bottom:.8rem;border:1px solid #d8cfc0;border-left:4px solid #5a6ea0;">
+          <div style="font-size:.7rem;color:#5a6ea0;font-weight:700;margin-bottom:.3rem;">落差 ${String(idx++).padStart(2,'0')} · #${item.no}</div>
+          <div style="font-size:1rem;font-weight:700;margin-bottom:.3rem;">${item.zh}</div>
+          <div style="font-size:.68rem;color:#8a7f72;background:#f0ebe0;display:inline-block;padding:.15rem .5rem;border-radius:20px;margin-bottom:.5rem;">${cd ? cd.category : ''} · ${findCategory(key)?.categoryZh || ''}</div>
+          ${d.current ? `<div style="font-size:.82rem;color:#8a7f72;margin-bottom:.3rem;"><strong>現況：</strong>${d.current}</div>` : ''}
+          ${d.ideal ? `<div style="font-size:.82rem;color:#8a7f72;margin-bottom:.3rem;"><strong>理想狀態：</strong>${d.ideal}</div>` : ''}
+          ${d.action ? `<div style="font-size:.82rem;color:#8a7f72;margin-bottom:.3rem;"><strong>行動計畫：</strong>${d.action}</div>` : ''}
+          ${d.deadline ? `<div style="font-size:.82rem;color:#8a7f72;margin-bottom:.3rem;"><strong>預計完成：</strong>${d.deadline}</div>` : ''}
+          ${cd ? `<div style="font-size:.75rem;color:#8a7f72;margin-top:.4rem;"><strong>特質：</strong>${cd.traits.join('、')}</div>` : ''}
+          ${cd && cd.improve && cd.improve.length ? `<div style="font-size:.75rem;color:#8a7f72;margin-top:.3rem;"><strong>提升方法：</strong>${cd.improve.join('；')}</div>` : ''}
+        </div>`;
+    });
+
+    sections = `
+      ${jTitle ? `<p style="font-size:.9rem;color:#8a7f72;margin-bottom:1.5rem;">目標職缺：<strong style="color:#5a6ea0;">${jTitle}</strong></p>` : ''}
+      ${ownedRows ? `<h2 style="font-size:1.1rem;color:#4a7c6f;border-bottom:2px solid #4a7c6f;padding-bottom:.5rem;margin:1.5rem 0 1rem;">✅ 已具備的能力（${ownedKeys.length} 項）</h2>${ownedRows}` : ''}
+      ${gapRows ? `<h2 style="font-size:1.1rem;color:#5a6ea0;border-bottom:2px solid #5a6ea0;padding-bottom:.5rem;margin:2rem 0 1rem;">🚀 需要發展的能力（${gapKeys.length} 項）</h2>${gapRows}` : ''}`;
+  }
+
+  const title = isExplore
+    ? `${name ? name + ' 的' : ''}職能盤點報告`
+    : `${name ? name + ' 的' : ''}職缺能力落差分析`;
+
+  return `<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+  body { font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; background: #faf7f2; color: #1a1410; margin: 0; padding: 0; }
+  .page { max-width: 800px; margin: 0 auto; padding: 2rem; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div style="background:#1a1410;color:#faf7f2;padding:2rem 2.5rem;border-radius:12px;margin-bottom:2rem;text-align:center;">
+    <div style="font-size:.65rem;letter-spacing:.35em;color:#d4a84b;margin-bottom:.6rem;text-transform:uppercase;">Personal Development Tool</div>
+    <h1 style="font-family:'Noto Serif TC',serif;font-size:1.8rem;margin:0 0 .6rem;letter-spacing:.1em;">${title}</h1>
+    <div style="font-size:.8rem;color:rgba(250,247,242,.55);">完成日期：${date}</div>
+    ${name ? `<div style="font-size:.85rem;color:rgba(250,247,242,.75);margin-top:.3rem;">姓名：${name}</div>` : ''}
+  </div>
+  ${sections}
+  <div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #d8cfc0;text-align:center;font-size:.72rem;color:#8a7f72;">
+    由職能盤點工具產生 · <a href="https://heysaori.com/" style="color:#c8502a;">heysaori.com</a>
+  </div>
+</div>
+</body>
+</html>`;
+}
+
+async function sendReport(mode) {
+  const isExplore = mode === 'explore';
+  const nameId = isExplore ? 'e-user-name' : 'j-user-name';
+  const nameBlockId = isExplore ? 'e-name-block' : 'j-name-block';
+  const emailId = isExplore ? 'e-report-email' : 'j-report-email';
+  const btnId = isExplore ? 'e-send-btn' : 'j-send-btn';
+
+  if (!requireName(nameId, nameBlockId)) return;
+
+  const email = document.getElementById(emailId)?.value?.trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    const input = document.getElementById(emailId);
+    if (input) {
+      input.style.borderColor = 'var(--accent)';
+      input.style.boxShadow = '0 0 0 3px rgba(200,80,42,.12)';
+      setTimeout(() => { input.style.borderColor = 'var(--border)'; input.style.boxShadow = ''; }, 2000);
+    }
+    showToast('⚠️ 請輸入有效的 Email 地址');
+    return;
+  }
+
+  const name = (document.getElementById(nameId)?.value || '').trim();
+  const btn = document.getElementById(btnId);
+  const overlay = document.getElementById('loading-overlay');
+
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ 產生中…'; }
+  if (overlay) overlay.classList.add('show');
+
+  try {
+    const htmlContent = buildReportHTML(mode);
+
+    const response = await fetch(GAS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        recipientEmail: email,
+        reportName: name || '使用者',
+        htmlContent: htmlContent,
+        mode: mode
+      })
+    });
+
+    const result = await response.json();
+
+    if (overlay) overlay.classList.remove('show');
+
+    if (result.success) {
+      showToast(`✅ 報告已寄送到 ${email}！`);
+      if (btn) { btn.textContent = '✅ 已寄送！'; }
+    } else {
+      showToast('❌ 寄送失敗：' + (result.error || '請稍後再試'));
+      if (btn) { btn.disabled = false; btn.textContent = '✉️ 產生 PDF 並寄送'; }
+    }
+  } catch (err) {
+    if (overlay) overlay.classList.remove('show');
+    showToast('❌ 連線失敗，請稍後再試');
+    if (btn) { btn.disabled = false; btn.textContent = '✉️ 產生 PDF 並寄送'; }
+  }
 }
 </script>
 
