@@ -1,0 +1,1327 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>價值觀探索</title>
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410; --paper: #faf7f2; --warm: #f0ebe0;
+    --accent: #c8502a; --accent2: #4a7c6f; --accent3: #d4a84b; --accent4: #5a6ea0;
+    --muted: #8a7f72; --border: #d8cfc0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans TC', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; overflow-x: hidden; }
+  .header { background: var(--ink); color: var(--paper); padding: 2.5rem 2rem 2rem; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content:''; position:absolute; inset:0; background:repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(255,255,255,.02) 20px,rgba(255,255,255,.02) 21px); }
+  .header-eyebrow { font-family:'Noto Serif TC',serif; font-weight:300; font-size:.75rem; letter-spacing:.3em; color:var(--accent3); text-transform:uppercase; margin-bottom:.6rem; }
+  .header h1 { font-family:'Noto Serif TC',serif; font-size:clamp(1.8rem,5vw,3rem); font-weight:700; letter-spacing:.1em; }
+  .header p { margin-top:.6rem; font-weight:300; color:rgba(250,247,242,.6); font-size:.85rem; }
+  .mode-screen { max-width:720px; margin:3rem auto; padding:0 1.5rem 4rem; }
+  .mode-screen h2 { font-family:'Noto Serif TC',serif; font-size:1.3rem; text-align:center; margin-bottom:.5rem; }
+  .mode-screen .sub { text-align:center; color:var(--muted); font-size:.85rem; margin-bottom:2.5rem; line-height:1.7; }
+  .mode-cards { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; }
+  @media(max-width:560px){ .mode-cards{grid-template-columns:1fr;} }
+  .mode-card { background:white; border:2px solid var(--border); border-radius:14px; padding:2rem 1.5rem; cursor:pointer; transition:all .25s; text-align:center; }
+  .mode-card:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,.1); }
+  .mode-card.full:hover { border-color:var(--accent); }
+  .mode-card.work:hover { border-color:var(--accent4); }
+  .mode-icon { font-size:2.5rem; margin-bottom:1rem; }
+  .mode-title { font-family:'Noto Serif TC',serif; font-size:1.1rem; font-weight:700; margin-bottom:.5rem; }
+  .mode-card.full .mode-title { color:var(--accent); }
+  .mode-card.work .mode-title { color:var(--accent4); }
+  .mode-desc { font-size:.8rem; color:var(--muted); line-height:1.7; }
+  .mode-steps { margin-top:1rem; display:flex; flex-direction:column; gap:.3rem; }
+  .mode-step { font-size:.72rem; color:var(--muted); background:var(--warm); border-radius:4px; padding:.25rem .5rem; }
+  .progress-bar { display:none; justify-content:center; background:var(--warm); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,.06); flex-wrap:wrap; }
+  .progress-bar.visible { display:flex; }
+  .mode-badge { position:absolute; left:1rem; top:50%; transform:translateY(-50%); font-size:.63rem; font-weight:700; letter-spacing:.08em; padding:.2rem .6rem; border-radius:20px; cursor:pointer; white-space:nowrap; }
+  .mode-badge.full { background:rgba(200,80,42,.12); color:var(--accent); }
+  .mode-badge.work { background:rgba(90,110,160,.12); color:var(--accent4); }
+  .step-tab { flex:1; max-width:220px; padding:.9rem 1rem; text-align:center; cursor:pointer; border-bottom:3px solid transparent; transition:all .3s; }
+  .step-tab:hover { background:rgba(200,80,42,.05); }
+  .step-tab.active { border-bottom-color:var(--accent); background:white; }
+  .mode-work .step-tab.active { border-bottom-color:var(--accent4); }
+  .tab-num { font-size:.6rem; letter-spacing:.15em; color:var(--muted); text-transform:uppercase; font-weight:700; }
+  .step-tab.active .tab-num { color:var(--accent); }
+  .mode-work .step-tab.active .tab-num { color:var(--accent4); }
+  .tab-title { font-size:.8rem; font-weight:500; margin-top:.15rem; }
+  .tab-count { font-size:.65rem; color:var(--muted); margin-top:.1rem; }
+  .step-tab.active .tab-count { color:var(--accent); font-weight:600; }
+  .mode-work .step-tab.active .tab-count { color:var(--accent4); }
+  .section { display:none; max-width:1100px; margin:0 auto; padding:2.5rem 1.5rem 4rem; }
+  .section.active { display:block; }
+  .section-header { margin-bottom:2rem; display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:1rem; padding-bottom:1rem; border-bottom:1px solid var(--border); }
+  .section-header h2 { font-family:'Noto Serif TC',serif; font-size:1.3rem; font-weight:600; }
+  .section-header p { font-size:.83rem; color:var(--muted); margin-top:.3rem; line-height:1.6; }
+  .count-badge { background:var(--accent); color:white; padding:.3rem .8rem; border-radius:20px; font-size:.75rem; font-weight:600; white-space:nowrap; min-width:110px; text-align:center; }
+  .count-badge.good { background:var(--accent2); }
+  .count-badge.work-c { background:var(--accent4); }
+  .name-input-block { display:flex; align-items:center; gap:.8rem; background:white; border:1.5px solid var(--border); border-radius:8px; padding:.8rem 1rem; margin-bottom:1.5rem; max-width:380px; transition:border-color .2s,box-shadow .2s; }
+  .name-input-block.error { border-color:var(--accent); box-shadow:0 0 0 3px rgba(200,80,42,.12); animation:shake .3s ease; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+  .name-input-block label { font-size:.78rem; font-weight:600; color:var(--muted); white-space:nowrap; }
+  .name-required-tag { font-size:.62rem; color:var(--accent); font-weight:700; margin-left:2px; }
+  .name-input-block input { flex:1; border:none; outline:none; font-family:'Noto Sans TC',sans-serif; font-size:.9rem; color:var(--ink); background:transparent; }
+  .name-input-block input::placeholder { color:#ccc; }
+  .name-input-block:focus-within { border-color:var(--accent); box-shadow:0 0 0 3px rgba(200,80,42,.08); }
+  .category-block { margin-bottom:2.5rem; }
+  .category-label { font-size:.68rem; font-weight:700; letter-spacing:.25em; text-transform:uppercase; color:var(--muted); margin-bottom:1rem; padding-left:.5rem; border-left:2px solid var(--accent3); }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(148px,1fr)); gap:.65rem; }
+  .val-card { background:white; border:1.5px solid var(--border); border-radius:8px; padding:.85rem .75rem .75rem; transition:all .2s; position:relative; user-select:none; overflow:visible; }
+  .val-card::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:transparent; transition:background .2s; border-radius:8px 0 0 8px; }
+  .val-card.important { background:#fff8f6; border-color:var(--accent); box-shadow:0 2px 10px rgba(200,80,42,.15); }
+  .val-card.important::before { background:var(--accent); }
+  .val-card.unimportant { background:#f7f7f7; border-color:var(--border); opacity:.65; }
+  .val-card.unimportant::before { background:var(--muted); }
+  .card-top-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:.2rem; }
+  .card-sn { font-size:.6rem; font-weight:700; color:var(--border); }
+  .val-card.important .card-sn { color:rgba(200,80,42,.3); }
+  .card-name { font-size:.88rem; font-weight:600; color:var(--ink); line-height:1.4; margin-top:.25rem; }
+  .card-cat-badge { display:inline-block; font-size:.58rem; font-weight:700; letter-spacing:.06em; padding:.15rem .45rem; border-radius:10px; background:rgba(0,0,0,.05); color:var(--muted); margin-top:.35rem; border:1px solid rgba(0,0,0,.07); }
+  .val-card.important .card-cat-badge { background:rgba(200,80,42,.08); color:var(--accent); border-color:rgba(200,80,42,.15); }
+  .card-actions { display:flex; gap:.3rem; margin-top:.65rem; }
+  .btn-imp { flex:1; font-size:.58rem; padding:.22rem .2rem; border:1px solid var(--border); border-radius:4px; background:white; cursor:pointer; font-family:inherit; color:var(--muted); transition:all .15s; font-weight:500; }
+  .btn-imp:hover { border-color:var(--accent); color:var(--accent); }
+  .btn-imp.imp-active { background:var(--accent); border-color:var(--accent); color:white; }
+  .btn-unimp { flex:1; font-size:.58rem; padding:.22rem .2rem; border:1px solid var(--border); border-radius:4px; background:white; cursor:pointer; font-family:inherit; color:var(--muted); transition:all .15s; font-weight:500; }
+  .btn-unimp:hover { border-color:var(--muted); color:var(--ink); }
+  .btn-unimp.unimp-active { background:var(--muted); border-color:var(--muted); color:white; }
+  .bulk-btns { display:flex; gap:.6rem; margin-bottom:1.2rem; flex-wrap:wrap; }
+  .bulk-btn { font-size:.75rem; padding:.35rem .9rem; border-radius:6px; border:1.5px solid var(--border); background:white; cursor:pointer; font-family:inherit; color:var(--muted); transition:all .15s; font-weight:500; }
+  .bulk-btn:hover { border-color:var(--accent); color:var(--accent); }
+  .step2-sel-card { background:white; border:1.5px solid var(--border); border-radius:8px; padding:.75rem 1rem; cursor:pointer; transition:all .2s; display:flex; align-items:center; gap:.7rem; }
+  .step2-sel-card.selected { background:#fff8f6; border-color:var(--accent); }
+  .step2-sel-card .check-box { width:18px; height:18px; border-radius:4px; border:1.5px solid var(--border); background:white; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .15s; }
+  .step2-sel-card.selected .check-box { background:var(--accent); border-color:var(--accent); color:white; font-size:.7rem; font-weight:900; }
+  .step2-sel-card .card-info { flex:1; }
+  .step2-sel-card .card-info .name { font-size:.88rem; font-weight:600; }
+  .step2-sel-card .card-info .cat { font-size:.65rem; color:var(--muted); margin-top:.15rem; }
+  .step2-sel-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:.6rem; margin-bottom:2rem; }
+  .drag-list { display:flex; flex-direction:column; gap:.5rem; max-width:600px; }
+  .drag-item { background:white; border:1.5px solid var(--border); border-radius:8px; padding:.75rem 1rem; display:flex; align-items:center; gap:.8rem; cursor:grab; transition:all .2s; user-select:none; }
+  .drag-item:active { cursor:grabbing; }
+  .drag-item.dragging { opacity:.5; border-style:dashed; }
+  .drag-item.drag-over { border-color:var(--accent); background:#fff8f6; transform:scale(1.01); }
+  .drag-rank { font-size:.75rem; font-weight:700; color:white; background:var(--accent); width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .drag-rank.top10 { background:var(--accent); }
+  .drag-rank.below10 { background:var(--muted); }
+  .drag-handle { color:var(--border); font-size:1rem; flex-shrink:0; }
+  .drag-name { font-size:.88rem; font-weight:600; flex:1; }
+  .drag-cat { font-size:.65rem; color:var(--muted); }
+  .top10-divider { border:none; border-top:2px dashed var(--accent3); margin:.5rem 0; position:relative; }
+  .top10-divider::after { content:'以下不計入 Top 10'; position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--paper); padding:0 .8rem; font-size:.65rem; color:var(--accent3); font-weight:700; white-space:nowrap; }
+  .reason-card { background:white; border:1.5px solid var(--border); border-radius:10px; padding:1.4rem; margin-bottom:1.2rem; position:relative; overflow:hidden; }
+  .reason-card::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--accent); }
+  .reason-rank { font-size:.65rem; font-weight:700; letter-spacing:.15em; color:var(--accent); margin-bottom:.3rem; }
+  .reason-name { font-family:'Noto Serif TC',serif; font-size:1.05rem; font-weight:700; margin-bottom:.3rem; }
+  .reason-cat { font-size:.65rem; color:var(--muted); margin-bottom:.8rem; }
+  .reason-qs { background:var(--warm); border-radius:6px; padding:.7rem .9rem; margin-bottom:.8rem; border:1px solid var(--border); }
+  .reason-q { font-size:.75rem; color:var(--muted); line-height:1.6; display:flex; gap:.4rem; }
+  .reason-q::before { content:'·'; color:var(--accent3); font-size:1rem; flex-shrink:0; line-height:1.3; }
+  .r-textarea { width:100%; border:1px solid var(--border); border-radius:6px; padding:.65rem; font-family:'Noto Sans TC',sans-serif; font-size:.82rem; line-height:1.7; resize:vertical; min-height:90px; color:var(--ink); background:var(--paper); outline:none; transition:border-color .2s; }
+  .r-textarea:focus { border-color:var(--accent2); background:white; }
+  .r-textarea.error { border-color:var(--accent); }
+  .sat-card { background:white; border:1.5px solid var(--border); border-radius:10px; padding:1.4rem; margin-bottom:1.2rem; position:relative; overflow:hidden; }
+  .sat-card::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--accent3); }
+  .sat-rank { font-size:.65rem; font-weight:700; letter-spacing:.15em; color:var(--accent3); margin-bottom:.3rem; }
+  .sat-name { font-family:'Noto Serif TC',serif; font-size:1.05rem; font-weight:700; margin-bottom:.8rem; }
+  .sat-label { font-size:.8rem; color:var(--muted); margin-bottom:.8rem; }
+  .sat-slider-wrap { position:relative; }
+  .sat-value-display { font-size:2rem; font-weight:700; text-align:center; margin-bottom:.5rem; transition:color .3s; }
+  .sat-value-display.unset { color:var(--border); font-size:1.2rem; }
+  .sat-slider { -webkit-appearance:none; appearance:none; width:100%; height:6px; border-radius:3px; outline:none; cursor:pointer; background:var(--border); }
+  .sat-slider::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:20px; height:20px; border-radius:50%; background:var(--accent); cursor:pointer; border:2px solid white; box-shadow:0 1px 4px rgba(0,0,0,.2); transition:background .3s; }
+  .sat-slider::-moz-range-thumb { width:20px; height:20px; border-radius:50%; background:var(--accent); cursor:pointer; border:2px solid white; box-shadow:0 1px 4px rgba(0,0,0,.2); }
+  .sat-labels { display:flex; justify-content:space-between; font-size:.68rem; color:var(--muted); margin-top:.4rem; }
+  .result-section { margin-bottom:2.5rem; }
+  .result-section h3 { font-family:'Noto Serif TC',serif; font-size:1.1rem; font-weight:600; margin-bottom:1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border); }
+  .result-table { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .result-table th { background:var(--warm); padding:.6rem .8rem; text-align:left; font-size:.7rem; font-weight:700; letter-spacing:.08em; color:var(--muted); border-bottom:1px solid var(--border); }
+  .result-table td { padding:.7rem .8rem; border-bottom:1px solid var(--warm); vertical-align:top; }
+  .result-table tr:last-child td { border-bottom:none; }
+  .sat-bar-wrap { background:var(--warm); border-radius:4px; height:8px; width:100%; min-width:80px; overflow:hidden; }
+  .sat-bar { height:100%; border-radius:4px; transition:width .3s; }
+  .sat-bar.low { background:var(--accent); }
+  .sat-bar.mid { background:var(--accent3); }
+  .sat-bar.high { background:var(--accent2); }
+  .insight-card { background:white; border:1px solid var(--border); border-radius:8px; padding:1rem 1.2rem; margin-bottom:.8rem; }
+  .insight-label { font-size:.65rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:.3rem; }
+  .insight-value { font-size:.9rem; font-weight:600; color:var(--ink); }
+  .insight-sub { font-size:.78rem; color:var(--muted); margin-top:.2rem; }
+  .gap-alert { background:#fff8e6; border:1px solid #f0c040; border-radius:8px; padding:1rem 1.2rem; margin-bottom:.8rem; }
+  .gap-alert-title { font-size:.75rem; font-weight:700; color:#7a5c00; margin-bottom:.5rem; }
+  .gap-alert-item { font-size:.82rem; color:#7a5c00; display:flex; gap:.5rem; align-items:flex-start; margin-bottom:.3rem; }
+  .gap-alert-item::before { content:'⚠'; flex-shrink:0; }
+  .chart-bar-row { display:flex; align-items:center; gap:.8rem; margin-bottom:.6rem; }
+  .chart-bar-label { font-size:.78rem; font-weight:500; width:160px; flex-shrink:0; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .chart-bar-track { flex:1; background:var(--warm); border-radius:4px; height:20px; overflow:hidden; }
+  .chart-bar-fill { height:100%; border-radius:4px; display:flex; align-items:center; padding-left:.5rem; font-size:.68rem; font-weight:700; color:white; transition:width .5s; }
+  .chart-bar-score { font-size:.75rem; font-weight:700; width:28px; flex-shrink:0; }
+  .cat-badge { display:inline-block; font-size:.72rem; font-weight:600; padding:.25rem .7rem; border-radius:20px; background:var(--warm); border:1px solid var(--border); color:var(--muted); margin:.2rem; }
+  .export-bar { display:flex; gap:.8rem; flex-wrap:wrap; align-items:center; background:var(--warm); border:1px solid var(--border); border-radius:10px; padding:.9rem 1.1rem; margin-bottom:2rem; }
+  .export-bar span { font-size:.78rem; color:var(--muted); font-weight:500; }
+  .export-btn { padding:.45rem 1rem; border-radius:6px; font-family:'Noto Sans TC',sans-serif; font-size:.78rem; font-weight:600; cursor:pointer; border:1.5px solid; transition:all .2s; }
+  .export-btn.dl { background:white; border-color:var(--border); color:var(--ink); }
+  .export-btn.dl:hover { border-color:var(--ink); }
+  .export-btn.copy { background:white; border-color:var(--border); color:var(--ink); }
+  .export-btn.copy:hover { border-color:var(--accent2); color:var(--accent2); }
+  .nav-btns { display:flex; justify-content:flex-end; gap:1rem; margin-top:2.5rem; padding-top:1.5rem; border-top:1px solid var(--border); }
+  .nav-btn { padding:.65rem 1.8rem; border-radius:6px; font-family:'Noto Sans TC',sans-serif; font-size:.83rem; font-weight:600; cursor:pointer; letter-spacing:.05em; transition:all .2s; border:2px solid; }
+  .nav-btn.primary { background:var(--accent); border-color:var(--accent); color:white; }
+  .nav-btn.primary:hover { background:#a8401e; border-color:#a8401e; }
+  .nav-btn.primary.wm { background:var(--accent4); border-color:var(--accent4); }
+  .nav-btn.primary.wm:hover { background:#485888; border-color:#485888; }
+  .nav-btn.secondary { background:transparent; border-color:var(--border); color:var(--muted); }
+  .nav-btn.secondary:hover { border-color:var(--muted); color:var(--ink); }
+  .warn-msg { background:#fff8e6; border:1px solid #f0c040; border-radius:6px; padding:.65rem 1rem; font-size:.78rem; color:#7a5c00; margin-bottom:1.5rem; display:none; }
+  .warn-msg.show { display:block; }
+  .empty-state { text-align:center; padding:3rem 2rem; color:var(--muted); }
+  .empty-state .emoji { font-size:2.5rem; margin-bottom:1rem; }
+  .empty-state p { font-size:.88rem; line-height:1.7; }
+  .toast { position:fixed; bottom:2rem; left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:white; padding:.7rem 1.5rem; border-radius:30px; font-size:.85rem; opacity:0; transition:all .3s; z-index:999; pointer-events:none; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  .loading-overlay { display:none; position:fixed; inset:0; background:rgba(26,20,16,.6); z-index:9000; align-items:center; justify-content:center; backdrop-filter:blur(3px); flex-direction:column; gap:1.2rem; }
+  .loading-overlay.show { display:flex; }
+  .loading-spinner { width:44px; height:44px; border:3px solid rgba(250,247,242,.2); border-top-color:var(--accent3); border-radius:50%; animation:spin .8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .loading-text { color:var(--paper); font-size:.9rem; letter-spacing:.05em; }
+  .restore-banner { background:#fff8e6; border:1px solid #f0c040; border-radius:8px; padding:.9rem 1.2rem; margin:1.5rem auto; max-width:720px; display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .restore-banner p { font-size:.82rem; color:#7a5c00; flex:1; }
+  .restore-btn { font-size:.78rem; padding:.35rem .9rem; border-radius:6px; border:1.5px solid #f0c040; background:white; cursor:pointer; font-family:inherit; color:#7a5c00; font-weight:600; transition:all .15s; }
+  .restore-btn:hover { background:#f0c040; color:white; }
+  .restore-btn.dismiss { border-color:var(--border); color:var(--muted); }
+  @media(max-width:900px){
+    .card-grid { grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); }
+    .section { padding:1.5rem 1rem 3rem; }
+    .step-tab { padding:.7rem .5rem; }
+    .tab-title { font-size:.73rem; }
+    .mode-badge { position:static; transform:none; width:100%; text-align:center; border-radius:0; padding:.45rem 1rem; border-bottom:1px solid var(--border); font-size:.65rem; order:-1; }
+    .chart-bar-label { width:100px; font-size:.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Personal Development Tool</div>
+  <h1>價值觀探索</h1>
+  <p>找到你真正在乎的事，活出有意義的人生</p>
+</div>
+
+<!-- RESTORE BANNER -->
+<div id="restore-banner" class="restore-banner" style="display:none">
+  <p>🔖 偵測到上次未完成的探索，是否要繼續？</p>
+  <button class="restore-btn" onclick="restoreState()">繼續上次進度</button>
+  <button class="restore-btn dismiss" onclick="dismissRestore()">重新開始</button>
+</div>
+
+<!-- MODE SELECTION -->
+<div id="mode-screen" class="mode-screen">
+  <h2>請選擇你的探索模式</h2>
+  <p class="sub">依據你的目標選擇適合的模式，<br>每種模式有不同的引導步驟。</p>
+  <div class="mode-cards">
+    <div class="mode-card full" onclick="startMode('full')">
+      <div class="mode-icon">🌿</div>
+      <div class="mode-title">人生價值觀探索</div>
+      <div class="mode-desc">從 70 張價值觀卡片中，找出你最在乎的事，深入了解自己的人生優先順序。</div>
+      <div class="mode-steps">
+        <div class="mode-step">① 分類 70 張卡片：重要 / 不重要</div>
+        <div class="mode-step">② 篩選並排序你的 Top 10</div>
+        <div class="mode-step">③ 說明每個價值觀的原因</div>
+        <div class="mode-step">④ 評估目前的滿意度</div>
+      </div>
+    </div>
+    <div class="mode-card work" onclick="startMode('work')">
+      <div class="mode-icon">💼</div>
+      <div class="mode-title">工作價值觀探索</div>
+      <div class="mode-desc">聚焦在工作與職涯領域，從 30 張工作價值觀卡片中，找出你最重視的工作意義。</div>
+      <div class="mode-steps">
+        <div class="mode-step">① 分類 30 張工作卡片：重要 / 不重要</div>
+        <div class="mode-step">② 篩選並排序你的 Top 10</div>
+        <div class="mode-step">③ 說明每個價值觀的原因</div>
+        <div class="mode-step">④ 評估目前的滿意度</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar" id="progress-bar">
+  <div class="mode-badge" id="mode-badge" onclick="backToModeSelect()">← 切換模式</div>
+  <div class="step-tab active" id="tab1" onclick="goToStep(1)">
+    <div class="tab-num">Step 01</div>
+    <div class="tab-title">分類</div>
+    <div class="tab-count" id="tab1-count">重要 0 張</div>
+  </div>
+  <div class="step-tab" id="tab2" onclick="goToStep(2)">
+    <div class="tab-num">Step 02</div>
+    <div class="tab-title">篩選排序</div>
+    <div class="tab-count" id="tab2-count">等待篩選</div>
+  </div>
+  <div class="step-tab" id="tab3" onclick="goToStep(3)">
+    <div class="tab-num">Step 03</div>
+    <div class="tab-title">原因說明</div>
+    <div class="tab-count" id="tab3-count">等待填寫</div>
+  </div>
+  <div class="step-tab" id="tab4" onclick="goToStep(4)">
+    <div class="tab-num">Step 04</div>
+    <div class="tab-title">滿意度評分</div>
+    <div class="tab-count" id="tab4-count">等待評分</div>
+  </div>
+</div>
+
+<!-- STEP 1: 分類 -->
+<div class="section" id="step1">
+  <div class="section-header">
+    <div>
+      <h2>重要 / 不重要分類</h2>
+      <p>瀏覽所有價值觀卡片，標記哪些對你重要、哪些不重要。<br>至少需要標記 <strong>10 張重要</strong>才能繼續。</p>
+    </div>
+    <div class="count-badge" id="imp-badge">重要 0 張</div>
+  </div>
+  <div class="name-input-block" id="name-block">
+    <label>👤 你的姓名 <span class="name-required-tag">必填</span></label>
+    <input type="text" id="user-name" placeholder="請輸入你的名字…" oninput="saveState()" />
+  </div>
+  <div class="bulk-btns">
+    <button class="bulk-btn" onclick="bulkMark('important')">⭐ 全部標為重要</button>
+    <button class="bulk-btn" onclick="bulkMark('unimportant')">✕ 全部標為不重要</button>
+    <button class="bulk-btn" onclick="bulkMark('reset')">↺ 全部清除</button>
+  </div>
+  <div class="warn-msg" id="warn-min10">⚠️ 請至少標記 10 張「重要」的卡片才能繼續。</div>
+  <div id="step1-cards"></div>
+  <div class="nav-btns">
+    <button class="nav-btn primary" onclick="goToStep2()">下一步：篩選排序 →</button>
+  </div>
+</div>
+
+<!-- STEP 2: 篩選排序 -->
+<div class="section" id="step2">
+  <div class="section-header">
+    <div>
+      <h2>篩選與排序</h2>
+      <p>從你標記的重要卡片中，選出最重要的 10–20 張，再拖曳排序找出你的 Top 10。</p>
+    </div>
+    <div class="count-badge" id="sel-badge">已選 0 / 20</div>
+  </div>
+  <div style="margin-bottom:2rem">
+    <h3 style="font-family:'Noto Serif TC',serif;font-size:1rem;margin-bottom:.8rem;color:var(--accent)">Step 2-1：選出最重要的卡片（10–20 張）</h3>
+    <div class="warn-msg" id="warn-sel">⚠️ 請至少選擇 10 張卡片才能繼續。</div>
+    <div class="warn-msg" id="warn-sel-max">⚠️ 最多只能選擇 20 張卡片。</div>
+    <div id="step2-sel-grid" class="step2-sel-grid"></div>
+  </div>
+  <div id="step2-sort-section" style="display:none">
+    <h3 style="font-family:'Noto Serif TC',serif;font-size:1rem;margin-bottom:.5rem;color:var(--accent)">Step 2-2：拖曳排序，找出你的 Top 10</h3>
+    <p style="font-size:.8rem;color:var(--muted);margin-bottom:1rem">拖曳卡片調整順序，排名第 1 的在最上方。只有前 10 名會進入後續步驟。</p>
+    <div class="drag-list" id="drag-list"></div>
+  </div>
+  <div class="nav-btns">
+    <button class="nav-btn secondary" onclick="goToStep(1)">← 返回修改</button>
+    <button class="nav-btn primary" onclick="goToStep3()">下一步：原因說明 →</button>
+  </div>
+</div>
+
+<!-- STEP 3: 原因說明 -->
+<div class="section" id="step3">
+  <div class="section-header">
+    <div>
+      <h2>原因說明</h2>
+      <p>針對你的 Top 10 價值觀，寫下它對你重要的原因。每個至少填寫 10 個字。</p>
+    </div>
+    <div class="count-badge" id="reason-badge">已填 0 / 10</div>
+  </div>
+  <div class="warn-msg" id="warn-reason">⚠️ 請為每個價值觀填寫至少 10 個字的說明。</div>
+  <div id="step3-cards"></div>
+  <div class="nav-btns">
+    <button class="nav-btn secondary" onclick="goToStep(2)">← 返回修改</button>
+    <button class="nav-btn primary" onclick="goToStep4()">下一步：滿意度評分 →</button>
+  </div>
+</div>
+
+<!-- STEP 4: 滿意度評分 -->
+<div class="section" id="step4">
+  <div class="section-header">
+    <div>
+      <h2>滿意度評分</h2>
+      <p>針對你的 Top 10 價值觀，評估目前生活中被滿足的程度。每項都需要評分才能繼續。</p>
+    </div>
+    <div class="count-badge" id="sat-badge">已評 0 / 10</div>
+  </div>
+  <div class="warn-msg" id="warn-sat">⚠️ 請為每個價值觀完成評分（移動滑桿）。</div>
+  <div id="step4-cards"></div>
+  <div class="nav-btns">
+    <button class="nav-btn secondary" onclick="goToStep(3)">← 返回修改</button>
+    <button class="nav-btn primary" onclick="goToResult()">查看結果 →</button>
+  </div>
+</div>
+
+<!-- RESULT PAGE -->
+<div class="section" id="result">
+  <div class="section-header">
+    <div>
+      <h2 id="result-title">你的價值觀探索結果</h2>
+      <p id="result-meta"></p>
+    </div>
+  </div>
+  <div class="export-bar">
+    <span>💾 儲存方式：</span>
+    <button class="export-btn dl" onclick="downloadMd()">⬇ 下載 Markdown</button>
+    <button class="export-btn copy" onclick="copyText()">📋 複製文字</button>
+    <button class="export-btn dl" onclick="window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
+    <div style="width:100%;border-top:1px solid var(--border);padding-top:.8rem;margin-top:.3rem;display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;">
+      <span style="font-size:.78rem;color:var(--muted);font-weight:600;">📧 產生報表並寄送：</span>
+      <input type="email" id="report-email" placeholder="請輸入你的 Email…"
+        style="flex:1;min-width:200px;border:1.5px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'Noto Sans TC',sans-serif;font-size:.82rem;color:var(--ink);outline:none;transition:border-color .2s;"
+        onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" />
+      <button class="export-btn" id="send-btn" onclick="sendReport()"
+        style="background:var(--accent);border-color:var(--accent);color:white;padding:.45rem 1.2rem;">
+        ✉️ 產生 PDF 並寄送
+      </button>
+    </div>
+    <div style="width:100%;font-size:.78rem;color:var(--muted);padding-top:.3rem;">💡 把結果交給 <a href="https://lin.ee/YVBqq6u" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:underline">Saori</a>，做進一步的探索喔！</div>
+  </div>
+  <div id="result-content"></div>
+  <div class="nav-btns">
+    <button class="nav-btn secondary" onclick="goToStep(4)">← 返回修改</button>
+    <button class="nav-btn primary" onclick="backToModeSelect()">重新探索</button>
+  </div>
+</div>
+
+<div class="loading-overlay" id="loading-overlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">產生報表中，請稍候…</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── CARD DATA ───────────────────────────────────────────────────────────────
+const ALL_CARDS = [
+  {id:'1',sn:1,name:'享受生活與美食',cat:'自我與生活'},
+  {id:'2',sn:2,name:'有趣的人事物',cat:'自我與生活'},
+  {id:'3',sn:3,name:'忠於自我',cat:'自我與生活'},
+  {id:'4',sn:4,name:'自由自在不受拘束',cat:'自我與生活'},
+  {id:'5',sn:5,name:'內在的平靜',cat:'自我與生活'},
+  {id:'6',sn:6,name:'對生命、人性或人生的洞察智慧',cat:'自我與生活'},
+  {id:'7',sn:7,name:'保持潔淨身體、心靈或環境',cat:'自我與生活'},
+  {id:'8',sn:8,name:'健康的身體與心靈',cat:'自我與生活'},
+  {id:'9',sn:9,name:'保有隱私不受人打擾',cat:'自我與生活'},
+  {id:'10',sn:10,name:'追求真理與知性',cat:'自我與生活'},
+  {id:'11',sn:11,name:'自我肯定 喜歡自己',cat:'自我與生活'},
+  {id:'12',sn:12,name:'自我表達與呈現',cat:'自我與生活'},
+  {id:'13',sn:13,name:'舒適的環境',cat:'自我與生活'},
+  {id:'14',sn:14,name:'信仰、宗教或靈性的生活',cat:'自我與生活'},
+  {id:'15',sn:15,name:'平凡的生活',cat:'自我與生活'},
+  {id:'16',sn:16,name:'能親近大自然',cat:'自我與生活'},
+  {id:'17',sn:17,name:'規律的生活',cat:'自我與生活'},
+  {id:'18',sn:18,name:'有獨處的空間',cat:'自我與生活'},
+  {id:'19',sn:19,name:'低調 不張揚',cat:'自我與生活'},
+  {id:'20',sn:20,name:'忠誠',cat:'美德'},
+  {id:'21',sn:21,name:'國家主權 民族意識',cat:'美德'},
+  {id:'22',sn:22,name:'不欺騙 不說謊',cat:'美德'},
+  {id:'23',sn:23,name:'不要傷害別人',cat:'美德'},
+  {id:'24',sn:24,name:'知恩圖報',cat:'美德'},
+  {id:'25',sn:25,name:'真誠一致',cat:'美德'},
+  {id:'26',sn:26,name:'全人類的福祉',cat:'美德'},
+  {id:'27',sn:27,name:'尊重傳統延續歷史',cat:'美德'},
+  {id:'28',sn:28,name:'公平正義',cat:'美德'},
+  {id:'29',sn:29,name:'保護環境或動植物',cat:'美德'},
+  {id:'30',sn:30,name:'社會公益 關懷弱勢',cat:'美德'},
+  {id:'31',sn:31,name:'交友廣闊',cat:'人際關係'},
+  {id:'32',sn:32,name:'愛與被愛',cat:'人際關係'},
+  {id:'33',sn:33,name:'歸屬與認同屬於某個身份或團體',cat:'人際關係'},
+  {id:'34',sn:34,name:'能彼此尊重',cat:'人際關係'},
+  {id:'35',sn:35,name:'獲得父母認同',cat:'人際關係'},
+  {id:'36',sn:36,name:'有一個安穩的家',cat:'人際關係'},
+  {id:'37',sn:37,name:'深刻友誼',cat:'人際關係'},
+  {id:'38',sn:38,name:'人際和諧',cat:'人際關係'},
+  {id:'39',sn:39,name:'有小孩',cat:'人際關係'},
+  {id:'40',sn:40,name:'能好好照顧家人',cat:'人際關係'},
+  {id:'41',sn:41,name:'有伙伴一起打拼',cat:'工作'},
+  {id:'42',sn:42,name:'解決他人的問題幫助他人成長',cat:'工作'},
+  {id:'43',sn:43,name:'對他人社會有影響力',cat:'工作'},
+  {id:'44',sn:44,name:'負責 勇於承擔責任',cat:'工作'},
+  {id:'45',sn:45,name:'資產與金錢',cat:'工作'},
+  {id:'46',sn:46,name:'晉升的機會與速度',cat:'工作'},
+  {id:'47',sn:47,name:'擁有自己的事業',cat:'工作'},
+  {id:'48',sn:48,name:'權威身份 擁有特定地位職權',cat:'工作'},
+  {id:'49',sn:49,name:'社會認可 受人尊重肯定',cat:'工作'},
+  {id:'50',sn:50,name:'有效率 有效能',cat:'工作'},
+  {id:'51',sn:51,name:'領導團隊',cat:'工作'},
+  {id:'52',sn:52,name:'務實 重視可行性',cat:'工作'},
+  {id:'53',sn:53,name:'能被看見 有舞台能發光',cat:'工作'},
+  {id:'54',sn:54,name:'清楚的流程與規範',cat:'工作'},
+  {id:'55',sn:55,name:'隨遇而安 順勢而為',cat:'工作'},
+  {id:'56',sn:56,name:'工作穩定性',cat:'工作'},
+  {id:'57',sn:57,name:'工作生活平衡',cat:'工作'},
+  {id:'58',sn:58,name:'發揮自己的天賦能力',cat:'工作'},
+  {id:'59',sn:59,name:'追求美感或藝術',cat:'工作'},
+  {id:'60',sn:60,name:'專業',cat:'工作'},
+  {id:'61',sn:61,name:'創新與創造',cat:'工作'},
+  {id:'62',sn:62,name:'追求工作品質',cat:'工作'},
+  {id:'63',sn:63,name:'獨立自主',cat:'工作'},
+  {id:'64',sn:64,name:'邏輯清晰',cat:'工作'},
+  {id:'65',sn:65,name:'能持續自我成長',cat:'工作'},
+  {id:'66',sn:66,name:'安全感 工作上或心理面可預測或可掌控',cat:'工作'},
+  {id:'67',sn:67,name:'冒險挑戰',cat:'工作'},
+  {id:'68',sn:68,name:'有明確的目標或方向',cat:'工作'},
+  {id:'69',sn:69,name:'有成就感',cat:'工作'},
+  {id:'70',sn:70,name:'有秩序與穩定的環境',cat:'工作'}
+];
+
+const WORK_IDS = ['41','42','43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69','70'];
+
+const CAT_COLORS = {
+  '自我與生活': '#4a7c6f',
+  '美德': '#5a6ea0',
+  '人際關係': '#c8502a',
+  '工作': '#d4a84b'
+};
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+const STATE_KEY = 'lifevalue_state_v2';
+let state = {
+  mode: null,
+  step: 0,
+  userName: '',
+  cards: [],          // [{id, status:'important'|'unimportant'|'none'}]
+  selected: [],       // [id] up to 20
+  ranked: [],         // [id] ordered, top 10 are the top10
+  reasons: {},        // {id: string}
+  satisfaction: {},   // {id: number 1-10}
+  createdAt: null
+};
+
+function saveState() {
+  state.userName = document.getElementById('user-name')?.value || state.userName;
+  try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch(e){}
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STATE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e){}
+  return null;
+}
+
+function clearState() {
+  localStorage.removeItem(STATE_KEY);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = loadState();
+  if (saved && saved.mode && saved.step > 0) {
+    document.getElementById('restore-banner').style.display = 'flex';
+  }
+});
+
+function restoreState() {
+  const saved = loadState();
+  if (!saved) return;
+  state = saved;
+  document.getElementById('restore-banner').style.display = 'none';
+  applyMode(state.mode);
+  if (state.step === 5) {
+    // restore result page
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('result').classList.add('active');
+    renderResult();
+    window.scrollTo(0,0);
+  } else {
+    goToStep(state.step);
+  }
+}
+
+function dismissRestore() {
+  clearState();
+  document.getElementById('restore-banner').style.display = 'none';
+}
+
+// ─── MODE ─────────────────────────────────────────────────────────────────────
+function startMode(mode) {
+  clearState();
+  state = {
+    mode, step: 1, userName: '',
+    cards: [], selected: [], ranked: [],
+    reasons: {}, satisfaction: {}, createdAt: null
+  };
+  const pool = mode === 'work'
+    ? ALL_CARDS.filter(c => WORK_IDS.includes(c.id))
+    : ALL_CARDS;
+  state.cards = pool.map(c => ({ id: c.id, status: 'none' }));
+  saveState();
+  applyMode(mode);
+  goToStep(1);
+}
+
+function applyMode(mode) {
+  document.getElementById('mode-screen').style.display = 'none';
+  const pb = document.getElementById('progress-bar');
+  pb.classList.add('visible');
+  const badge = document.getElementById('mode-badge');
+  if (mode === 'work') {
+    badge.textContent = '💼 工作模式';
+    badge.className = 'mode-badge work';
+    pb.classList.add('mode-work');
+    document.querySelectorAll('.nav-btn.primary').forEach(b => b.classList.add('wm'));
+    document.querySelectorAll('.count-badge').forEach(b => b.classList.add('work-c'));
+  } else {
+    badge.textContent = '🌿 人生模式';
+    badge.className = 'mode-badge full';
+    pb.classList.remove('mode-work');
+    document.querySelectorAll('.nav-btn.primary').forEach(b => b.classList.remove('wm'));
+    document.querySelectorAll('.count-badge').forEach(b => b.classList.remove('work-c'));
+  }
+}
+
+function backToModeSelect() {
+  if (!confirm('確定要返回模式選擇？目前進度將會清除。')) return;
+  clearState();
+  state = { mode:null, step:0, userName:'', cards:[], selected:[], ranked:[], reasons:{}, satisfaction:{}, createdAt:null };
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('progress-bar').classList.remove('visible');
+  document.getElementById('mode-screen').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+// ─── STEP NAVIGATION ──────────────────────────────────────────────────────────
+function goToStep(n) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach((t,i) => {
+    t.classList.toggle('active', i+1 === n);
+  });
+  const ids = ['step1','step2','step3','step4','result'];
+  const target = n <= 4 ? ids[n-1] : 'result';
+  document.getElementById(target).classList.add('active');
+  state.step = n;
+  saveState();
+  window.scrollTo(0,0);
+
+  if (n === 1) renderStep1();
+  if (n === 2) renderStep2();
+  if (n === 3) renderStep3();
+  if (n === 4) renderStep4();
+}
+
+// ─── STEP 1 ───────────────────────────────────────────────────────────────────
+function getCard(id) { return ALL_CARDS.find(c => c.id === id); }
+function getCardState(id) { return state.cards.find(c => c.id === id); }
+
+function renderStep1() {
+  const nameEl = document.getElementById('user-name');
+  if (nameEl) nameEl.value = state.userName || '';
+
+  const pool = state.cards.map(c => getCard(c.id));
+  const cats = [...new Set(pool.map(c => c.cat))];
+  const container = document.getElementById('step1-cards');
+  container.innerHTML = '';
+
+  cats.forEach(cat => {
+    const cards = pool.filter(c => c.cat === cat);
+    const block = document.createElement('div');
+    block.className = 'category-block';
+    block.innerHTML = `<div class="category-label" style="border-color:${CAT_COLORS[cat]||'var(--accent3)'}">${cat}</div>
+      <div class="card-grid" id="cat-grid-${cat.replace(/\s/g,'_')}"></div>`;
+    container.appendChild(block);
+    const grid = block.querySelector('.card-grid');
+    cards.forEach(card => {
+      grid.appendChild(buildValCard(card));
+    });
+  });
+  updateImpBadge();
+}
+
+function buildValCard(card) {
+  const cs = getCardState(card.id);
+  const status = cs ? cs.status : 'none';
+  const div = document.createElement('div');
+  div.className = 'val-card' + (status==='important'?' important':status==='unimportant'?' unimportant':'');
+  div.id = 'vcard-' + card.id;
+  div.innerHTML = `
+    <div class="card-top-row">
+      <span class="card-sn">SN ${card.sn}</span>
+    </div>
+    <div class="card-name">${card.name}</div>
+    <div class="card-cat-badge" style="background:${CAT_COLORS[card.cat]||'var(--accent3)'}22;color:${CAT_COLORS[card.cat]||'var(--accent3)'};border-color:${CAT_COLORS[card.cat]||'var(--accent3)'}44">${card.cat}</div>
+    <div class="card-actions">
+      <button class="btn-imp${status==='important'?' imp-active':''}" onclick="markCard('${card.id}','important')">⭐ 重要</button>
+      <button class="btn-unimp${status==='unimportant'?' unimp-active':''}" onclick="markCard('${card.id}','unimportant')">✕ 不重要</button>
+    </div>`;
+  return div;
+}
+
+function markCard(id, status) {
+  const cs = getCardState(id);
+  if (!cs) return;
+  cs.status = cs.status === status ? 'none' : status;
+  const card = getCard(id);
+  const el = document.getElementById('vcard-' + id);
+  if (el) {
+    el.className = 'val-card' + (cs.status==='important'?' important':cs.status==='unimportant'?' unimportant':'');
+    el.querySelector('.btn-imp').className = 'btn-imp' + (cs.status==='important'?' imp-active':'');
+    el.querySelector('.btn-unimp').className = 'btn-unimp' + (cs.status==='unimportant'?' unimp-active':'');
+  }
+  updateImpBadge();
+  saveState();
+}
+
+function updateImpBadge() {
+  const n = state.cards.filter(c => c.status==='important').length;
+  const badge = document.getElementById('imp-badge');
+  const tab = document.getElementById('tab1-count');
+  badge.textContent = `重要 ${n} 張`;
+  badge.className = 'count-badge' + (n>=10?' good':'') + (state.mode==='work'?' work-c':'');
+  if (tab) tab.textContent = `重要 ${n} 張`;
+}
+
+function bulkMark(action) {
+  state.cards.forEach(c => {
+    if (action === 'reset') c.status = 'none';
+    else c.status = action;
+  });
+  renderStep1();
+  saveState();
+}
+
+function goToStep2() {
+  const name = document.getElementById('user-name')?.value?.trim();
+  const nameBlock = document.getElementById('name-block');
+  if (!name) {
+    nameBlock.classList.add('error');
+    nameBlock.scrollIntoView({behavior:'smooth', block:'center'});
+    setTimeout(() => nameBlock.classList.remove('error'), 1500);
+    showToast('請先填寫你的姓名');
+    return;
+  }
+  state.userName = name;
+  const impCount = state.cards.filter(c => c.status==='important').length;
+  if (impCount < 10) {
+    document.getElementById('warn-min10').classList.add('show');
+    showToast('請至少標記 10 張重要卡片');
+    return;
+  }
+  document.getElementById('warn-min10').classList.remove('show');
+  // sync selected: remove any that are no longer important
+  state.selected = state.selected.filter(id => {
+    const cs = getCardState(id);
+    return cs && cs.status === 'important';
+  });
+  saveState();
+  goToStep(2);
+}
+
+// ─── STEP 2 ───────────────────────────────────────────────────────────────────
+function renderStep2() {
+  const importantCards = state.cards
+    .filter(c => c.status === 'important')
+    .map(c => getCard(c.id));
+
+  // Step 2-1: selection grid
+  const grid = document.getElementById('step2-sel-grid');
+  grid.innerHTML = '';
+  importantCards.forEach(card => {
+    const isSelected = state.selected.includes(card.id);
+    const div = document.createElement('div');
+    div.className = 'step2-sel-card' + (isSelected ? ' selected' : '');
+    div.id = 'sel-card-' + card.id;
+    div.onclick = () => toggleSelect(card.id);
+    div.innerHTML = `
+      <div class="check-box">${isSelected ? '✓' : ''}</div>
+      <div class="card-info">
+        <div class="name">SN${card.sn} ${card.name}</div>
+        <div class="cat" style="color:${CAT_COLORS[card.cat]||'var(--muted)'}">${card.cat}</div>
+      </div>`;
+    grid.appendChild(div);
+  });
+  updateSelBadge();
+
+  // Step 2-2: sort section
+  if (state.selected.length >= 10) {
+    showSortSection();
+  } else {
+    document.getElementById('step2-sort-section').style.display = 'none';
+  }
+}
+
+function toggleSelect(id) {
+  const idx = state.selected.indexOf(id);
+  if (idx >= 0) {
+    state.selected.splice(idx, 1);
+    // also remove from ranked
+    const ri = state.ranked.indexOf(id);
+    if (ri >= 0) state.ranked.splice(ri, 1);
+  } else {
+    if (state.selected.length >= 20) {
+      document.getElementById('warn-sel-max').classList.add('show');
+      setTimeout(() => document.getElementById('warn-sel-max').classList.remove('show'), 2500);
+      showToast('最多只能選擇 20 張');
+      return;
+    }
+    state.selected.push(id);
+    if (!state.ranked.includes(id)) state.ranked.push(id);
+  }
+  document.getElementById('warn-sel-max').classList.remove('show');
+  const el = document.getElementById('sel-card-' + id);
+  if (el) {
+    const isNowSelected = state.selected.includes(id);
+    el.className = 'step2-sel-card' + (isNowSelected ? ' selected' : '');
+    el.querySelector('.check-box').textContent = isNowSelected ? '✓' : '';
+  }
+  updateSelBadge();
+  if (state.selected.length >= 10) {
+    showSortSection();
+  } else {
+    document.getElementById('step2-sort-section').style.display = 'none';
+  }
+  saveState();
+}
+
+function updateSelBadge() {
+  const n = state.selected.length;
+  const badge = document.getElementById('sel-badge');
+  const tab = document.getElementById('tab2-count');
+  badge.textContent = `已選 ${n} / 20`;
+  badge.className = 'count-badge' + (n>=10?' good':'') + (state.mode==='work'?' work-c':'');
+  if (tab) tab.textContent = n >= 10 ? `已選 ${n} 張` : `等待篩選`;
+}
+
+function showSortSection() {
+  const section = document.getElementById('step2-sort-section');
+  section.style.display = 'block';
+  // ensure ranked only contains selected ids, in order
+  state.ranked = state.ranked.filter(id => state.selected.includes(id));
+  // add any newly selected not yet in ranked
+  state.selected.forEach(id => {
+    if (!state.ranked.includes(id)) state.ranked.push(id);
+  });
+  renderDragList();
+}
+
+// ─── DRAG & DROP (Step 2-2) ───────────────────────────────────────────────────
+let dragSrcIdx = null;
+
+function renderDragList() {
+  const list = document.getElementById('drag-list');
+  list.innerHTML = '';
+  state.ranked.forEach((id, idx) => {
+    const card = getCard(id);
+    const item = document.createElement('div');
+    item.className = 'drag-item';
+    item.draggable = true;
+    item.dataset.id = id;
+    item.dataset.idx = idx;
+    const rankNum = idx + 1;
+    item.innerHTML = `
+      <div class="drag-rank ${rankNum <= 10 ? 'top10' : 'below10'}">${rankNum}</div>
+      <div class="drag-handle">⠿</div>
+      <div style="flex:1">
+        <div class="drag-name">${card.name}</div>
+        <div class="drag-cat" style="color:${CAT_COLORS[card.cat]||'var(--muted)'}">${card.cat}</div>
+      </div>`;
+    item.addEventListener('dragstart', onDragStart);
+    item.addEventListener('dragover', onDragOver);
+    item.addEventListener('drop', onDrop);
+    item.addEventListener('dragend', onDragEnd);
+    // touch support
+    item.addEventListener('touchstart', onTouchStart, {passive:true});
+    item.addEventListener('touchmove', onTouchMove, {passive:false});
+    item.addEventListener('touchend', onTouchEnd);
+    list.appendChild(item);
+    if (idx === 9 && state.ranked.length > 10) {
+      const divider = document.createElement('hr');
+      divider.className = 'top10-divider';
+      list.appendChild(divider);
+    }
+  });
+}
+
+function onDragStart(e) {
+  dragSrcIdx = parseInt(e.currentTarget.dataset.idx);
+  e.currentTarget.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function onDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  document.querySelectorAll('.drag-item').forEach(el => el.classList.remove('drag-over'));
+  e.currentTarget.classList.add('drag-over');
+}
+function onDrop(e) {
+  e.preventDefault();
+  const targetIdx = parseInt(e.currentTarget.dataset.idx);
+  if (dragSrcIdx === null || dragSrcIdx === targetIdx) return;
+  const moved = state.ranked.splice(dragSrcIdx, 1)[0];
+  state.ranked.splice(targetIdx, 0, moved);
+  saveState();
+  renderDragList();
+}
+function onDragEnd(e) {
+  document.querySelectorAll('.drag-item').forEach(el => {
+    el.classList.remove('dragging','drag-over');
+  });
+  dragSrcIdx = null;
+}
+
+// Touch drag support
+let touchDragIdx = null, touchClone = null, touchOffsetY = 0;
+function onTouchStart(e) {
+  touchDragIdx = parseInt(e.currentTarget.dataset.idx);
+  const rect = e.currentTarget.getBoundingClientRect();
+  touchOffsetY = e.touches[0].clientY - rect.top;
+  touchClone = e.currentTarget.cloneNode(true);
+  touchClone.style.cssText = `position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;opacity:.8;z-index:9999;pointer-events:none;`;
+  document.body.appendChild(touchClone);
+  e.currentTarget.style.opacity = '0.3';
+}
+function onTouchMove(e) {
+  e.preventDefault();
+  if (touchClone) {
+    touchClone.style.top = (e.touches[0].clientY - touchOffsetY) + 'px';
+  }
+}
+function onTouchEnd(e) {
+  if (touchClone) { touchClone.remove(); touchClone = null; }
+  document.querySelectorAll('.drag-item').forEach(el => el.style.opacity = '');
+  const touch = e.changedTouches[0];
+  const els = document.elementsFromPoint(touch.clientX, touch.clientY);
+  const target = els.find(el => el.classList.contains('drag-item') && parseInt(el.dataset.idx) !== touchDragIdx);
+  if (target) {
+    const targetIdx = parseInt(target.dataset.idx);
+    const moved = state.ranked.splice(touchDragIdx, 1)[0];
+    state.ranked.splice(targetIdx, 0, moved);
+    saveState();
+    renderDragList();
+  }
+  touchDragIdx = null;
+}
+
+function goToStep3() {
+  if (state.selected.length < 10) {
+    document.getElementById('warn-sel').classList.add('show');
+    showToast('請至少選擇 10 張卡片');
+    return;
+  }
+  document.getElementById('warn-sel').classList.remove('show');
+  saveState();
+  goToStep(3);
+}
+
+// ─── STEP 3 ───────────────────────────────────────────────────────────────────
+function renderStep3() {
+  const top10 = state.ranked.slice(0, 10);
+  const container = document.getElementById('step3-cards');
+  container.innerHTML = '';
+  top10.forEach((id, idx) => {
+    const card = getCard(id);
+    const reason = state.reasons[id] || '';
+    const div = document.createElement('div');
+    div.className = 'reason-card';
+    div.innerHTML = `
+      <div class="reason-rank">TOP ${idx+1}</div>
+      <div class="reason-name">${card.name}</div>
+      <div class="reason-cat" style="color:${CAT_COLORS[card.cat]||'var(--muted)'}">${card.cat} · SN${card.sn}</div>
+      <div class="reason-qs">
+        <div class="reason-q">為什麼這個價值觀對你重要？</div>
+        <div class="reason-q">哪些生命經驗讓你重視它？</div>
+        <div class="reason-q">如果生活中沒有它，會怎樣？</div>
+      </div>
+      <textarea class="r-textarea" id="reason-${id}" placeholder="請在此輸入你的想法（至少 10 個字）…" oninput="onReasonInput('${id}')">${reason}</textarea>
+      <div style="font-size:.72rem;color:var(--muted);margin-top:.3rem;text-align:right" id="reason-count-${id}">${reason.length} 字</div>`;
+    container.appendChild(div);
+  });
+  updateReasonBadge();
+}
+
+function onReasonInput(id) {
+  const ta = document.getElementById('reason-' + id);
+  const val = ta.value;
+  state.reasons[id] = val;
+  const countEl = document.getElementById('reason-count-' + id);
+  if (countEl) {
+    countEl.textContent = val.length + ' 字';
+    countEl.style.color = val.length >= 10 ? 'var(--accent2)' : 'var(--muted)';
+  }
+  ta.classList.toggle('error', val.length > 0 && val.length < 10);
+  updateReasonBadge();
+  saveState();
+}
+
+function updateReasonBadge() {
+  const top10 = state.ranked.slice(0, 10);
+  const filled = top10.filter(id => (state.reasons[id]||'').length >= 10).length;
+  const badge = document.getElementById('reason-badge');
+  const tab = document.getElementById('tab3-count');
+  badge.textContent = `已填 ${filled} / 10`;
+  badge.className = 'count-badge' + (filled===10?' good':'') + (state.mode==='work'?' work-c':'');
+  if (tab) tab.textContent = filled === 10 ? '已完成' : `已填 ${filled}/10`;
+}
+
+function goToStep4() {
+  const top10 = state.ranked.slice(0, 10);
+  const allFilled = top10.every(id => (state.reasons[id]||'').length >= 10);
+  if (!allFilled) {
+    document.getElementById('warn-reason').classList.add('show');
+    // highlight unfilled
+    top10.forEach(id => {
+      const ta = document.getElementById('reason-' + id);
+      if (ta && ta.value.length < 10) ta.classList.add('error');
+    });
+    showToast('請為每個價值觀填寫至少 10 個字');
+    return;
+  }
+  document.getElementById('warn-reason').classList.remove('show');
+  saveState();
+  goToStep(4);
+}
+
+// ─── STEP 4 ───────────────────────────────────────────────────────────────────
+function renderStep4() {
+  const top10 = state.ranked.slice(0, 10);
+  const container = document.getElementById('step4-cards');
+  container.innerHTML = '';
+  top10.forEach((id, idx) => {
+    const card = getCard(id);
+    const sat = state.satisfaction[id];
+    const hasVal = sat !== undefined && sat !== null;
+    const div = document.createElement('div');
+    div.className = 'sat-card';
+    div.innerHTML = `
+      <div class="sat-rank">TOP ${idx+1}</div>
+      <div class="sat-name">${card.name}</div>
+      <div class="sat-label">目前生活中，這個價值觀被滿足的程度是？</div>
+      <div class="sat-value-display ${hasVal?'':'unset'}" id="sat-val-${id}">${hasVal ? sat : '請移動滑桿'}</div>
+      <div class="sat-slider-wrap">
+        <input type="range" class="sat-slider" id="sat-slider-${id}"
+          min="1" max="10" step="1" value="${hasVal ? sat : 5}"
+          oninput="onSatInput('${id}', this.value)"
+          style="background:${hasVal ? getSatGradient(sat) : 'var(--border)'}">
+      </div>
+      <div class="sat-labels"><span>1 幾乎沒有</span><span>5 普通</span><span>10 完全滿足</span></div>`;
+    container.appendChild(div);
+    if (!hasVal) {
+      // mark as unset until user moves slider
+      const slider = div.querySelector('.sat-slider');
+      slider.dataset.touched = '0';
+    }
+  });
+  updateSatBadge();
+}
+
+function getSatGradient(val) {
+  const pct = ((val - 1) / 9) * 100;
+  const color = val <= 3 ? 'var(--accent)' : val <= 6 ? 'var(--accent3)' : 'var(--accent2)';
+  return `linear-gradient(to right, ${color} ${pct}%, var(--border) ${pct}%)`;
+}
+
+function onSatInput(id, val) {
+  const n = parseInt(val);
+  state.satisfaction[id] = n;
+  const display = document.getElementById('sat-val-' + id);
+  if (display) {
+    display.textContent = n;
+    display.className = 'sat-value-display';
+    display.style.color = n <= 3 ? 'var(--accent)' : n <= 6 ? 'var(--accent3)' : 'var(--accent2)';
+  }
+  const slider = document.getElementById('sat-slider-' + id);
+  if (slider) {
+    slider.style.background = getSatGradient(n);
+    slider.dataset.touched = '1';
+  }
+  updateSatBadge();
+  saveState();
+}
+
+function updateSatBadge() {
+  const top10 = state.ranked.slice(0, 10);
+  const rated = top10.filter(id => state.satisfaction[id] !== undefined && state.satisfaction[id] !== null).length;
+  const badge = document.getElementById('sat-badge');
+  const tab = document.getElementById('tab4-count');
+  badge.textContent = `已評 ${rated} / 10`;
+  badge.className = 'count-badge' + (rated===10?' good':'') + (state.mode==='work'?' work-c':'');
+  if (tab) tab.textContent = rated === 10 ? '已完成' : `已評 ${rated}/10`;
+}
+
+function goToResult() {
+  const top10 = state.ranked.slice(0, 10);
+  const allRated = top10.every(id => state.satisfaction[id] !== undefined && state.satisfaction[id] !== null);
+  if (!allRated) {
+    document.getElementById('warn-sat').classList.add('show');
+    showToast('請為每個價值觀完成評分');
+    return;
+  }
+  document.getElementById('warn-sat').classList.remove('show');
+  state.createdAt = state.createdAt || new Date().toISOString();
+  saveState();
+  renderResult();
+  // activate result tab
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('result').classList.add('active');
+  state.step = 5;
+  saveState();
+  window.scrollTo(0,0);
+}
+
+// ─── RESULT PAGE ──────────────────────────────────────────────────────────────
+function renderResult() {
+  const top10 = state.ranked.slice(0, 10);
+  const modeLabel = state.mode === 'work' ? '工作價值觀探索' : '人生價值觀探索';
+  const dateStr = state.createdAt
+    ? new Date(state.createdAt).toLocaleString('zh-TW', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})
+    : '';
+
+  document.getElementById('result-title').textContent = `${state.userName ? state.userName + ' 的' : '你的'}價值觀探索結果`;
+  document.getElementById('result-meta').textContent = `${modeLabel} · ${dateStr}`;
+
+  const container = document.getElementById('result-content');
+  container.innerHTML = '';
+
+  // ── Top 10 Table ──
+  const sec1 = document.createElement('div');
+  sec1.className = 'result-section';
+  sec1.innerHTML = `<h3>🏆 Top 10 價值觀</h3>`;
+  const table = document.createElement('table');
+  table.className = 'result-table';
+  table.innerHTML = `<thead><tr>
+    <th style="width:40px">排名</th>
+    <th>價值觀</th>
+    <th>分類</th>
+    <th>原因說明</th>
+    <th style="width:120px">滿意度</th>
+  </tr></thead>`;
+  const tbody = document.createElement('tbody');
+  top10.forEach((id, idx) => {
+    const card = getCard(id);
+    const sat = state.satisfaction[id] || 0;
+    const reason = state.reasons[id] || '';
+    const barClass = sat <= 3 ? 'low' : sat <= 6 ? 'mid' : 'high';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="font-weight:700;color:${idx<3?'var(--accent)':'var(--ink)'};font-size:1rem">${idx+1}</td>
+      <td><strong>${card.name}</strong><br><span style="font-size:.65rem;color:var(--muted)">SN${card.sn}</span></td>
+      <td><span class="cat-badge" style="background:${CAT_COLORS[card.cat]||'var(--warm)'}22;color:${CAT_COLORS[card.cat]||'var(--muted)'};border-color:${CAT_COLORS[card.cat]||'var(--border)'}44">${card.cat}</span></td>
+      <td style="font-size:.8rem;line-height:1.6">${escHtml(reason)}</td>
+      <td>
+        <div style="font-weight:700;font-size:1rem;color:${sat<=3?'var(--accent)':sat<=6?'var(--accent3)':'var(--accent2)'}">${sat} <span style="font-size:.65rem;font-weight:400;color:var(--muted)">/ 10</span></div>
+        <div class="sat-bar-wrap" style="margin-top:.3rem"><div class="sat-bar ${barClass}" style="width:${sat*10}%"></div></div>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  sec1.appendChild(table);
+  container.appendChild(sec1);
+
+  // ── Satisfaction Chart ──
+  const sec2 = document.createElement('div');
+  sec2.className = 'result-section';
+  sec2.innerHTML = `<h3>📊 滿意度視覺化</h3>`;
+  top10.forEach((id, idx) => {
+    const card = getCard(id);
+    const sat = state.satisfaction[id] || 0;
+    const barClass = sat <= 3 ? 'low' : sat <= 6 ? 'mid' : 'high';
+    const row = document.createElement('div');
+    row.className = 'chart-bar-row';
+    row.innerHTML = `
+      <div class="chart-bar-label">${idx+1}. ${card.name}</div>
+      <div class="chart-bar-track">
+        <div class="chart-bar-fill ${barClass}" style="width:${sat*10}%">${sat >= 3 ? sat : ''}</div>
+      </div>
+      <div class="chart-bar-score" style="color:${sat<=3?'var(--accent)':sat<=6?'var(--accent3)':'var(--accent2)'}">${sat}</div>`;
+    sec2.appendChild(row);
+  });
+  container.appendChild(sec2);
+
+  // ── Category Distribution ──
+  const catCount = {};
+  top10.forEach(id => {
+    const cat = getCard(id).cat;
+    catCount[cat] = (catCount[cat] || 0) + 1;
+  });
+  const sec3 = document.createElement('div');
+  sec3.className = 'result-section';
+  sec3.innerHTML = `<h3>🗂 類別分佈</h3>`;
+  const catWrap = document.createElement('div');
+  catWrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem';
+  Object.entries(catCount).sort((a,b)=>b[1]-a[1]).forEach(([cat, n]) => {
+    const span = document.createElement('span');
+    span.className = 'cat-badge';
+    span.style.cssText = `background:${CAT_COLORS[cat]||'var(--warm)'}22;color:${CAT_COLORS[cat]||'var(--muted)'};border-color:${CAT_COLORS[cat]||'var(--border)'}44;font-size:.82rem;padding:.3rem .9rem`;
+    span.textContent = `${cat} × ${n}`;
+    catWrap.appendChild(span);
+  });
+  sec3.appendChild(catWrap);
+  container.appendChild(sec3);
+
+  // ── Insights ──
+  const sec4 = document.createElement('div');
+  sec4.className = 'result-section';
+  sec4.innerHTML = `<h3>💡 洞察與提醒</h3>`;
+
+  const sats = top10.map(id => ({ id, card: getCard(id), sat: state.satisfaction[id] || 0 }));
+  const highest = sats.reduce((a,b) => a.sat >= b.sat ? a : b);
+  const lowest = sats.reduce((a,b) => a.sat <= b.sat ? a : b);
+  const avgSat = (sats.reduce((s,c) => s + c.sat, 0) / sats.length).toFixed(1);
+  const topCat = Object.entries(catCount).sort((a,b)=>b[1]-a[1])[0];
+
+  const insights = [
+    { label:'滿意度最高', value: `${highest.card.name}（${highest.sat} 分）`, sub:'這是你目前生活中最被滿足的核心價值。' },
+    { label:'滿意度最低', value: `${lowest.card.name}（${lowest.sat} 分）`, sub:'這個價值觀可能是你目前最需要關注的落差。' },
+    { label:'平均滿意度', value: `${avgSat} / 10`, sub: avgSat >= 7 ? '整體而言你的核心價值觀被滿足得不錯！' : avgSat >= 5 ? '有些價值觀還有提升空間。' : '你的核心價值觀目前有較大的落差，值得深入探索。' },
+    { label:'最集中的類別', value: `${topCat[0]}（${topCat[1]} 項）`, sub:'你的核心價值觀主要集中在這個領域。' }
+  ];
+  insights.forEach(ins => {
+    const div = document.createElement('div');
+    div.className = 'insight-card';
+    div.innerHTML = `<div class="insight-label">${ins.label}</div>
+      <div class="insight-value">${ins.value}</div>
+      <div class="insight-sub">${ins.sub}</div>`;
+    sec4.appendChild(div);
+  });
+
+  // Gap alerts (sat <= 4)
+  const gaps = sats.filter(s => s.sat <= 4);
+  if (gaps.length > 0) {
+    const alert = document.createElement('div');
+    alert.className = 'gap-alert';
+    alert.innerHTML = `<div class="gap-alert-title">⚠️ 落差提醒：以下價值觀滿意度偏低（≤ 4 分）</div>`;
+    gaps.forEach(g => {
+      const item = document.createElement('div');
+      item.className = 'gap-alert-item';
+      item.textContent = `${g.card.name}（${g.sat} 分）— 這個對你重要的價值觀目前可能未被充分滿足。`;
+      alert.appendChild(item);
+    });
+    sec4.appendChild(alert);
+  }
+  container.appendChild(sec4);
+}
+
+// ─── EXPORT ───────────────────────────────────────────────────────────────────
+function buildTextContent() {
+  const top10 = state.ranked.slice(0, 10);
+  const modeLabel = state.mode === 'work' ? '工作價值觀探索' : '人生價值觀探索';
+  const dateStr = state.createdAt
+    ? new Date(state.createdAt).toLocaleString('zh-TW')
+    : new Date().toLocaleString('zh-TW');
+  let txt = `# 價值觀探索報告\n\n`;
+  txt += `**姓名：** ${state.userName || '（未填寫）'}\n`;
+  txt += `**模式：** ${modeLabel}\n`;
+  txt += `**完成時間：** ${dateStr}\n\n`;
+  txt += `---\n\n## Top 10 價值觀\n\n`;
+  top10.forEach((id, idx) => {
+    const card = getCard(id);
+    const sat = state.satisfaction[id] || 0;
+    const reason = state.reasons[id] || '';
+    txt += `### ${idx+1}. ${card.name}\n`;
+    txt += `- **分類：** ${card.cat}\n`;
+    txt += `- **原因：** ${reason}\n`;
+    txt += `- **滿意度：** ${sat} / 10\n\n`;
+  });
+  return txt;
+}
+
+function downloadMd() {
+  const txt = buildTextContent();
+  const blob = new Blob([txt], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `價值觀探索_${state.userName || 'result'}_${new Date().toISOString().slice(0,10)}.md`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('已下載 Markdown 檔案');
+}
+
+function copyText() {
+  const txt = buildTextContent();
+  navigator.clipboard.writeText(txt).then(() => {
+    showToast('已複製到剪貼簿');
+  }).catch(() => {
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+    showToast('已複製到剪貼簿');
+  });
+}
+
+// ─── SEND REPORT ──────────────────────────────────────────────────────────────
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzfrZFdto5Y6TCvyfxQWn6ghX64YaN9oAST-XSn42UXwzyCq32qwhdi3Q9DZk2xz492/exec';
+const GAS_TOKEN = 'saori-lv-2026-xK9mP';
+
+async function sendReport() {
+  const emailEl = document.getElementById('report-email');
+  const email = emailEl.value.trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    emailEl.style.borderColor = 'var(--accent)';
+    emailEl.focus();
+    showToast('請輸入有效的 Email 地址');
+    return;
+  }
+  emailEl.style.borderColor = 'var(--border)';
+
+  const top10 = state.ranked.slice(0, 10).map((id, idx) => {
+    const card = getCard(id);
+    return {
+      name: card.name,
+      rank: idx + 1,
+      reason: state.reasons[id] || '',
+      satisfaction: state.satisfaction[id] || 0
+    };
+  });
+
+  const payload = {
+    token: GAS_TOKEN,
+    email: email,
+    userName: state.userName || '',
+    mode: state.mode,
+    top10: top10,
+    created_at: state.createdAt || new Date().toISOString()
+  };
+
+  document.getElementById('loading-overlay').classList.add('show');
+  document.getElementById('send-btn').disabled = true;
+
+  try {
+    // GAS Web App 不支援 CORS，改用 no-cors 模式送出
+    // no-cors 下無法讀取回應內容，採樂觀策略：送出即視為成功
+    await fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' }, // no-cors 只允許 simple headers
+      body: JSON.stringify(payload)
+    });
+    document.getElementById('loading-overlay').classList.remove('show');
+    document.getElementById('send-btn').disabled = false;
+    showToast('✅ 報表已寄送到 ' + email);
+  } catch (err) {
+    document.getElementById('loading-overlay').classList.remove('show');
+    document.getElementById('send-btn').disabled = false;
+    showToast('❌ 連線失敗，請稍後再試');
+  }
+}
+
+// ─── UTILITIES ────────────────────────────────────────────────────────────────
+function showToast(msg, duration = 2500) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), duration);
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\n/g,'<br>');
+}
+
+</script>
+</body>
+</html>
