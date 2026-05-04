@@ -1187,13 +1187,16 @@ function renderResult() {
   const highest = sats.reduce((a,b) => a.sat >= b.sat ? a : b);
   const lowest = sats.reduce((a,b) => a.sat <= b.sat ? a : b);
   const avgSat = (sats.reduce((s,c) => s + c.sat, 0) / sats.length).toFixed(1);
-  const topCat = Object.entries(catCount).sort((a,b)=>b[1]-a[1])[0];
+  const catEntries = Object.entries(catCount).sort((a,b)=>b[1]-a[1]);
+  const topCatCount = catEntries.length > 0 ? catEntries[0][1] : 0;
+  const topCats = catEntries.filter(([,n]) => n === topCatCount);
+  const topCatValue = topCats.map(([cat, n]) => `${cat}（${n} 項）`).join('、');
 
   const insights = [
     { label:'滿意度最高', value: `${highest.card.name}（${highest.sat} 分）`, sub:'這是你目前生活中最被滿足的核心價值。' },
     { label:'滿意度最低', value: `${lowest.card.name}（${lowest.sat} 分）`, sub:'這個價值觀可能是你目前最需要關注的落差。' },
     { label:'平均滿意度', value: `${avgSat} / 10`, sub: avgSat >= 7 ? '整體而言你的核心價值觀被滿足得不錯！' : avgSat >= 5 ? '有些價值觀還有提升空間。' : '你的核心價值觀目前有較大的落差，值得深入探索。' },
-    { label:'最集中的類別', value: `${topCat[0]}（${topCat[1]} 項）`, sub:'你的核心價值觀主要集中在這個領域。' }
+    { label:'最集中的類別', value: topCatValue, sub: topCats.length > 1 ? '你的核心價值觀同時集中在這幾個領域。' : '你的核心價值觀主要集中在這個領域。' }
   ];
   insights.forEach(ins => {
     const div = document.createElement('div');
@@ -1294,6 +1297,7 @@ async function sendReport() {
     const card = getCard(id);
     return {
       name: card.name,
+      category: card.cat,
       rank: idx + 1,
       reason: state.reasons[id] || '',
       satisfaction: state.satisfaction[id] || 0
