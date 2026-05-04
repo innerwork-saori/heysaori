@@ -144,9 +144,9 @@
   .result-table tr:last-child td { border-bottom:none; }
   .sat-bar-wrap { background:var(--warm); border-radius:4px; height:8px; width:100%; min-width:80px; overflow:hidden; }
   .sat-bar { height:100%; border-radius:4px; transition:width .3s; }
-  .sat-bar.low { background:var(--accent); }
-  .sat-bar.mid { background:var(--accent3); }
-  .sat-bar.high { background:var(--accent2); }
+  .sat-bar.low, .chart-bar-fill.low { background:var(--accent); }
+  .sat-bar.mid, .chart-bar-fill.mid { background:var(--accent3); }
+  .sat-bar.high, .chart-bar-fill.high { background:var(--accent2); }
   .insight-card { background:white; border:1px solid var(--border); border-radius:8px; padding:1rem 1.2rem; margin-bottom:.8rem; }
   .insight-label { font-size:.65rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:.3rem; }
   .insight-value { font-size:.9rem; font-weight:600; color:var(--ink); }
@@ -201,6 +201,65 @@
     .mode-badge { position:static; transform:none; width:100%; text-align:center; border-radius:0; padding:.45rem 1rem; border-bottom:1px solid var(--border); font-size:.65rem; order:-1; }
     .chart-bar-label { width:100px; font-size:.7rem; }
   }
+
+  /* ── 中斷點 600px ── */
+  @media(max-width:600px){
+    /* 進度列：tabs 縮小，只顯示 Step 編號 */
+    .progress-bar { flex-wrap:wrap; }
+    .step-tab { padding:.55rem .3rem; min-width:0; }
+    .tab-num { font-size:.55rem; letter-spacing:.05em; }
+    .tab-title { font-size:.65rem; }
+    .tab-count { display:none; }
+
+    /* Section header：badge 換行到下方 */
+    .section-header { flex-direction:column; align-items:flex-start; gap:.6rem; }
+    .count-badge { align-self:flex-start; }
+
+    /* 姓名輸入：全寬 */
+    .name-input-block { max-width:100%; }
+
+    /* Step 2 選卡格：單欄 */
+    .step2-sel-grid { grid-template-columns:1fr 1fr; }
+
+    /* 拖曳排序：全寬 */
+    .drag-list { max-width:100%; }
+
+    /* 導覽按鈕：全寬並排 */
+    .nav-btns { flex-direction:row; justify-content:stretch; }
+    .nav-btn { flex:1; text-align:center; padding:.65rem .8rem; }
+
+    /* 結果表格：轉為卡片式 */
+    .result-table thead { display:none; }
+    .result-table tr { display:block; background:white; border:1px solid var(--border); border-radius:8px; margin-bottom:.8rem; padding:.6rem .8rem; }
+    .result-table td { display:flex; justify-content:space-between; align-items:flex-start; gap:.5rem; padding:.35rem 0; border-bottom:1px solid var(--warm); font-size:.8rem; }
+    .result-table td:last-child { border-bottom:none; }
+    .result-table td::before { content:attr(data-label); font-size:.65rem; font-weight:700; letter-spacing:.06em; color:var(--muted); white-space:nowrap; flex-shrink:0; padding-top:.1rem; }
+    .result-table td:first-child { font-size:1rem; font-weight:700; justify-content:flex-start; gap:.5rem; }
+
+    /* 滿意度 bar：縮小 */
+    .sat-bar-wrap { min-width:60px; }
+
+    /* 圖表 bar label */
+    .chart-bar-label { width:80px; font-size:.68rem; }
+
+    /* Export bar：email 列全寬 */
+    .export-bar { padding:.7rem .8rem; gap:.5rem; }
+    #report-email { min-width:0; width:100%; }
+
+    /* Restore banner */
+    .restore-banner { flex-direction:column; align-items:stretch; text-align:center; }
+  }
+
+  /* ── 斷點 400px ── */
+  @media(max-width:400px){
+    .step-tab { padding:.45rem .2rem; }
+    .tab-num { font-size:.5rem; }
+    .tab-title { font-size:.6rem; }
+    .card-grid { grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); }
+    .step2-sel-grid { grid-template-columns:1fr; }
+    .nav-btn { font-size:.75rem; padding:.6rem .5rem; }
+    .chart-bar-label { width:64px; font-size:.62rem; }
+  }
 </style>
 </head>
 <body>
@@ -213,8 +272,7 @@
 
 <!-- RESTORE BANNER -->
 <div id="restore-banner" class="restore-banner" style="display:none">
-  <p>🔖 偵測到上次未完成的探索，是否要繼續？</p>
-  <button class="restore-btn" onclick="restoreState()">繼續上次進度</button>
+  <p>🔖 已自動繼續上次未完成的探索。</p>
   <button class="restore-btn dismiss" onclick="dismissRestore()">重新開始</button>
 </div>
 
@@ -516,6 +574,8 @@ function clearState() {
 window.addEventListener('DOMContentLoaded', () => {
   const saved = loadState();
   if (saved && saved.mode && saved.step > 0) {
+    // 自動繼續，不需要使用者確認
+    restoreState();
     document.getElementById('restore-banner').style.display = 'flex';
   }
 });
@@ -524,7 +584,6 @@ function restoreState() {
   const saved = loadState();
   if (!saved) return;
   state = saved;
-  document.getElementById('restore-banner').style.display = 'none';
   applyMode(state.mode);
   if (state.step === 5) {
     // restore result page
@@ -540,7 +599,12 @@ function restoreState() {
 
 function dismissRestore() {
   clearState();
+  state = { mode:null, step:0, userName:'', cards:[], selected:[], ranked:[], reasons:{}, satisfaction:{}, createdAt:null };
   document.getElementById('restore-banner').style.display = 'none';
+  document.getElementById('progress-bar').classList.remove('visible');
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('mode-screen').style.display = 'block';
+  window.scrollTo(0,0);
 }
 
 // ─── MODE ─────────────────────────────────────────────────────────────────────
@@ -1123,11 +1187,11 @@ function renderResult() {
     const barClass = sat <= 3 ? 'low' : sat <= 6 ? 'mid' : 'high';
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td style="font-weight:700;color:${idx<3?'var(--accent)':'var(--ink)'};font-size:1rem">${idx+1}</td>
-      <td><strong>${card.name}</strong><br><span style="font-size:.65rem;color:var(--muted)">SN${card.sn}</span></td>
-      <td><span class="cat-badge" style="background:${CAT_COLORS[card.cat]||'var(--warm)'}22;color:${CAT_COLORS[card.cat]||'var(--muted)'};border-color:${CAT_COLORS[card.cat]||'var(--border)'}44">${card.cat}</span></td>
-      <td style="font-size:.8rem;line-height:1.6">${escHtml(reason)}</td>
-      <td>
+      <td data-label="排名" style="font-weight:700;color:${idx<3?'var(--accent)':'var(--ink)'};font-size:1rem">${idx+1}</td>
+      <td data-label="價值觀"><strong>${card.name}</strong><br><span style="font-size:.65rem;color:var(--muted)">SN${card.sn}</span></td>
+      <td data-label="分類"><span class="cat-badge" style="background:${CAT_COLORS[card.cat]||'var(--warm)'}22;color:${CAT_COLORS[card.cat]||'var(--muted)'};border-color:${CAT_COLORS[card.cat]||'var(--border)'}44">${card.cat}</span></td>
+      <td data-label="原因說明" style="font-size:.8rem;line-height:1.6">${escHtml(reason)}</td>
+      <td data-label="滿意度">
         <div style="font-weight:700;font-size:1rem;color:${sat<=3?'var(--accent)':sat<=6?'var(--accent3)':'var(--accent2)'}">${sat} <span style="font-size:.65rem;font-weight:400;color:var(--muted)">/ 10</span></div>
         <div class="sat-bar-wrap" style="margin-top:.3rem"><div class="sat-bar ${barClass}" style="width:${sat*10}%"></div></div>
       </td>`;
