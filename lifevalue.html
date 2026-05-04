@@ -115,7 +115,7 @@
   .drag-name { font-size:.88rem; font-weight:600; flex:1; }
   .drag-cat { font-size:.65rem; color:var(--muted); }
   .top10-divider { border:none; border-top:2px dashed var(--accent3); margin:.5rem 0; position:relative; }
-  .top10-divider::after { content:'以下不計入 Top 10'; position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--paper); padding:0 .8rem; font-size:.65rem; color:var(--accent3); font-weight:700; white-space:nowrap; }
+  .top10-divider::after { content:'↑ 拖曳到這裡排序 Top 10 ↑'; position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--paper); padding:0 .8rem; font-size:.65rem; color:var(--accent3); font-weight:700; white-space:nowrap; }
   .reason-card { background:white; border:1.5px solid var(--border); border-radius:10px; padding:1.4rem; margin-bottom:1.2rem; position:relative; overflow:hidden; }
   .reason-card::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--accent); }
   .reason-rank { font-size:.65rem; font-weight:700; letter-spacing:.15em; color:var(--accent); margin-bottom:.3rem; }
@@ -386,8 +386,12 @@
   </div>
   <div id="step2-sort-section" style="display:none">
     <h3 style="font-family:'Noto Serif TC',serif;font-size:1rem;margin-bottom:.5rem;color:var(--accent)">Step 2-2：拖曳排序，找出你的 Top 10</h3>
-    <p style="font-size:.8rem;color:var(--muted);margin-bottom:1rem">拖曳卡片調整順序，排名第 1 的在最上方。只有前 10 名會進入後續步驟。</p>
-    <div class="drag-list" id="drag-list"></div>
+    <p style="font-size:.8rem;color:var(--muted);margin-bottom:.5rem">把卡片拖曳到虛線<strong>上方</strong>並排序，排名第 1 在最上方。至少需要排好 <strong>10 張</strong>才能繼續。</p>
+    <div class="warn-msg" id="warn-sort">⚠️ 請將至少 10 張卡片拖曳到虛線上方完成排序。</div>
+    <div id="sort-hint" style="font-size:.75rem;color:var(--muted);margin-bottom:.8rem"></div>
+    <div id="ranked-zone" class="drag-list" style="min-height:80px;border:2px dashed var(--accent3);border-radius:8px;transition:border-color .2s,background .2s;padding:4px 0"></div>
+    <hr class="top10-divider" style="margin:.8rem 0">
+    <div id="unranked-zone" class="drag-list" style="min-height:56px"></div>
   </div>
 </div>
 
@@ -653,11 +657,17 @@ function dismissRestore() {
 
 // ─── MODE ─────────────────────────────────────────────────────────────────────
 function startMode(mode) {
+  const savedName = state.userName || document.getElementById('user-name')?.value?.trim() || '';
+  // 保留跨模式共用的原因與滿意度（key 是 card id，兩個模式共用）
+  const savedReasons = { ...state.reasons };
+  const savedSatisfaction = { ...state.satisfaction };
   clearState();
   state = {
-    mode, step: 1, userName: '',
+    mode, step: 1, userName: savedName,
     cards: [], selected: [], ranked: [],
-    reasons: {}, satisfaction: {}, createdAt: null
+    reasons: savedReasons,
+    satisfaction: savedSatisfaction,
+    createdAt: null
   };
   const pool = mode === 'work'
     ? ALL_CARDS.filter(c => WORK_IDS.includes(c.id))
@@ -689,9 +699,7 @@ function applyMode(mode) {
 }
 
 function backToModeSelect() {
-  if (!confirm('確定要返回模式選擇？目前進度將會清除。')) return;
-  clearState();
-  state = { mode:null, step:0, userName:'', cards:[], selected:[], ranked:[], reasons:{}, satisfaction:{}, createdAt:null };
+  // 保留資料，直接回到模式選擇，不清空也不詢問
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('progress-bar').classList.remove('visible');
   document.getElementById('mode-screen').style.display = 'block';
@@ -910,9 +918,6 @@ function toggleSelect(id) {
   const idx = state.selected.indexOf(id);
   if (idx >= 0) {
     state.selected.splice(idx, 1);
-    // also remove from ranked
-    const ri = state.ranked.indexOf(id);
-    if (ri >= 0) state.ranked.splice(ri, 1);
   } else {
     if (state.selected.length >= 20) {
       document.getElementById('warn-sel-max').classList.add('show');
@@ -921,8 +926,9 @@ function toggleSelect(id) {
       return;
     }
     state.selected.push(id);
-    if (!state.ranked.includes(id)) state.ranked.push(id);
   }
+  // Step 2-1 有任何修改，ranked 全部 reset，強迫重新排序
+  state.ranked = [];
   document.getElementById('warn-sel-max').classList.remove('show');
   const el = document.getElementById('sel-card-' + id);
   if (el) {
@@ -951,12 +957,9 @@ function updateSelBadge() {
 function showSortSection() {
   const section = document.getElementById('step2-sort-section');
   section.style.display = 'block';
-  // ensure ranked only contains selected ids, in order
+  // ranked 只保留仍在 selected 中的 id（已排序的保留順序）
   state.ranked = state.ranked.filter(id => state.selected.includes(id));
-  // add any newly selected not yet in ranked
-  state.selected.forEach(id => {
-    if (!state.ranked.includes(id)) state.ranked.push(id);
-  });
+  // 未排序的卡片（不在 ranked 中）放在 unranked 區，不自動加入 ranked
   renderDragList();
 }
 
@@ -964,38 +967,86 @@ function showSortSection() {
 let dragSrcIdx = null;
 
 function renderDragList() {
-  const list = document.getElementById('drag-list');
-  list.innerHTML = '';
-  state.ranked.forEach((id, idx) => {
+  const rankedZone   = document.getElementById('ranked-zone');
+  const unrankedZone = document.getElementById('unranked-zone');
+  if (!rankedZone || !unrankedZone) return;
+  rankedZone.innerHTML   = '';
+  unrankedZone.innerHTML = '';
+
+  const unranked = state.selected.filter(id => !state.ranked.includes(id));
+  const allItems = [...state.ranked, ...unranked];
+
+  // ── 給 ranked-zone 本身加 dragover/drop，讓空白區域也能接收 ──
+  rankedZone.ondragover = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    rankedZone.style.borderColor = 'var(--accent3)';
+    rankedZone.style.background  = 'rgba(212,168,75,.06)';
+  };
+  rankedZone.ondragleave = () => {
+    rankedZone.style.borderColor = 'transparent';
+    rankedZone.style.background  = '';
+  };
+  rankedZone.ondrop = (e) => {
+    e.preventDefault();
+    rankedZone.style.borderColor = 'transparent';
+    rankedZone.style.background  = '';
+    if (dragSrcIdx === null) return;
+    const unrankedNow = state.selected.filter(id => !state.ranked.includes(id));
+    const all = [...state.ranked, ...unrankedNow];
+    const srcWasRanked = dragSrcIdx < state.ranked.length;
+    // drop 到 ranked-zone 空白 → 加到 ranked 末尾
+    if (!srcWasRanked) {
+      const movedId = all[dragSrcIdx];
+      state.ranked.push(movedId);
+      saveState(); renderDragList();
+    }
+  };
+
+  allItems.forEach((id, idx) => {
     const card = getCard(id);
+    const isRanked = idx < state.ranked.length;
+    const rankNum  = idx + 1;
     const item = document.createElement('div');
     item.className = 'drag-item';
     item.draggable = true;
-    item.dataset.id = id;
+    item.dataset.id  = id;
     item.dataset.idx = idx;
-    const rankNum = idx + 1;
     item.innerHTML = `
-      <div class="drag-rank ${rankNum <= 10 ? 'top10' : 'below10'}">${rankNum}</div>
+      <div class="drag-rank ${isRanked ? (rankNum <= 10 ? 'top10' : 'below10') : 'below10'}" style="${!isRanked ? 'background:var(--border);color:var(--muted)' : ''}">${isRanked ? rankNum : '—'}</div>
       <div class="drag-handle">⠿</div>
       <div style="flex:1">
         <div class="drag-name">${card.name}</div>
         <div class="drag-cat" style="color:${CAT_COLORS[card.cat]||'var(--muted)'}">${card.cat}</div>
       </div>`;
     item.addEventListener('dragstart', onDragStart);
-    item.addEventListener('dragover', onDragOver);
-    item.addEventListener('drop', onDrop);
-    item.addEventListener('dragend', onDragEnd);
-    // touch support
+    item.addEventListener('dragover',  onDragOver);
+    item.addEventListener('drop',      onDrop);
+    item.addEventListener('dragend',   onDragEnd);
     item.addEventListener('touchstart', onTouchStart, {passive:true});
-    item.addEventListener('touchmove', onTouchMove, {passive:false});
-    item.addEventListener('touchend', onTouchEnd);
-    list.appendChild(item);
-    if (idx === 9 && state.ranked.length > 10) {
-      const divider = document.createElement('hr');
-      divider.className = 'top10-divider';
-      list.appendChild(divider);
+    item.addEventListener('touchmove',  onTouchMove,  {passive:false});
+    item.addEventListener('touchend',   onTouchEnd);
+
+    if (isRanked) {
+      rankedZone.appendChild(item);
+    } else {
+      unrankedZone.appendChild(item);
     }
   });
+
+  updateSortHint();
+}
+
+function updateSortHint() {
+  const unranked = state.selected.filter(id => !state.ranked.includes(id));
+  const hint = document.getElementById('sort-hint');
+  if (hint) {
+    const top10Count = Math.min(state.ranked.length, 10);
+    hint.textContent = top10Count >= 10
+      ? `✅ 已排好 Top 10，可以繼續`
+      : `請將卡片拖曳到虛線上方排序（已排 ${top10Count} / 10）`;
+    hint.style.color = top10Count >= 10 ? 'var(--accent2)' : 'var(--muted)';
+  }
 }
 
 function onDragStart(e) {
@@ -1011,10 +1062,25 @@ function onDragOver(e) {
 }
 function onDrop(e) {
   e.preventDefault();
+  e.stopPropagation(); // 避免觸發 ranked-zone 的 ondrop
   const targetIdx = parseInt(e.currentTarget.dataset.idx);
   if (dragSrcIdx === null || dragSrcIdx === targetIdx) return;
-  const moved = state.ranked.splice(dragSrcIdx, 1)[0];
-  state.ranked.splice(targetIdx, 0, moved);
+
+  // 重建 allItems（ranked + unranked）
+  const unranked = state.selected.filter(id => !state.ranked.includes(id));
+  const allItems = [...state.ranked, ...unranked];
+
+  const movedId = allItems[dragSrcIdx];
+  allItems.splice(dragSrcIdx, 1);
+  allItems.splice(targetIdx, 0, movedId);
+
+  const srcWasRanked = dragSrcIdx < state.ranked.length;
+  const dstIsRanked  = targetIdx  < state.ranked.length;
+  let newLen = state.ranked.length;
+  if (!srcWasRanked && dstIsRanked) newLen = state.ranked.length + 1;
+  else if (srcWasRanked && !dstIsRanked) newLen = state.ranked.length - 1;
+
+  state.ranked = allItems.slice(0, newLen);
   saveState();
   renderDragList();
 }
@@ -1050,10 +1116,36 @@ function onTouchEnd(e) {
   const target = els.find(el => el.classList.contains('drag-item') && parseInt(el.dataset.idx) !== touchDragIdx);
   if (target) {
     const targetIdx = parseInt(target.dataset.idx);
-    const moved = state.ranked.splice(touchDragIdx, 1)[0];
-    state.ranked.splice(targetIdx, 0, moved);
+    const unranked = state.selected.filter(id => !state.ranked.includes(id));
+    const allItems = [...state.ranked, ...unranked];
+    const movedId = allItems[touchDragIdx];
+    allItems.splice(touchDragIdx, 1);
+    allItems.splice(targetIdx, 0, movedId);
+    const srcWasRanked = touchDragIdx < state.ranked.length;
+    const dstIsRanked = targetIdx < state.ranked.length;
+    let newLen = state.ranked.length;
+    if (!srcWasRanked && dstIsRanked) newLen = state.ranked.length + 1;
+    else if (srcWasRanked && !dstIsRanked) newLen = state.ranked.length - 1;
+    state.ranked = allItems.slice(0, newLen);
     saveState();
     renderDragList();
+  } else {
+    // 沒有 drop 到卡片上，檢查是否 drop 到 ranked-zone 空白區域
+    const rankedZone = document.getElementById('ranked-zone');
+    if (rankedZone) {
+      const rect = rankedZone.getBoundingClientRect();
+      if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+          touch.clientY >= rect.top  && touch.clientY <= rect.bottom) {
+        const unranked = state.selected.filter(id => !state.ranked.includes(id));
+        const all = [...state.ranked, ...unranked];
+        const srcWasRanked = touchDragIdx < state.ranked.length;
+        if (!srcWasRanked) {
+          const movedId = all[touchDragIdx];
+          state.ranked.push(movedId);
+          saveState(); renderDragList();
+        }
+      }
+    }
   }
   touchDragIdx = null;
 }
@@ -1065,6 +1157,12 @@ function goToStep3() {
     return;
   }
   document.getElementById('warn-sel').classList.remove('show');
+  if (state.ranked.length < 10) {
+    document.getElementById('warn-sort').classList.add('show');
+    showToast('請將至少 10 張卡片拖曳到虛線上方完成排序');
+    return;
+  }
+  document.getElementById('warn-sort').classList.remove('show');
   saveState();
   goToStep(3);
 }
