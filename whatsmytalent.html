@@ -254,6 +254,14 @@
   .nav-btn.primary.jm:hover { background:#485888; border-color:#485888; }
   .nav-btn.secondary { background:transparent; border-color:var(--border); color:var(--muted); }
   .nav-btn.secondary:hover { border-color:var(--muted); color:var(--ink); }
+  /* Sticky bottom nav bar */
+  .sticky-nav { display:none; position:fixed; bottom:0; left:0; right:0; z-index:200;
+    background:rgba(250,247,242,.92); backdrop-filter:blur(10px);
+    border-top:1px solid var(--border); padding:.75rem 1.5rem;
+    box-shadow:0 -2px 16px rgba(0,0,0,.08);
+    justify-content:flex-end; gap:.8rem; align-items:center; }
+  .sticky-nav.visible { display:flex; }
+  .section.active { padding-bottom:6rem; }
 
   /* MISC */
   .warn-msg { background:#fff8e6; border:1px solid #f0c040; border-radius:6px; padding:.65rem 1rem; font-size:.78rem; color:#7a5c00; margin-bottom:1.5rem; display:none; }
@@ -361,9 +369,6 @@
   <div class="warn-msg" id="warn-strength">⚠️ 優勢已達 5 個，請先取消其他優勢再新增。</div>
   <div class="warn-msg" id="warn-growth">⚠️ 成長機會已達 5 個，請先取消其他項目再新增。</div>
   <div id="explore-cards"></div>
-  <div class="nav-btns">
-    <button class="nav-btn primary" onclick="if(requireName('e-user-name','e-name-block'))goToStep(2)">下一步：描述與說明 →</button>
-  </div>
 </div>
 
 <!-- EXPLORE STEP 2 -->
@@ -375,10 +380,6 @@
     </div>
   </div>
   <div id="explore-step2-content"></div>
-  <div class="nav-btns">
-    <button class="nav-btn secondary" onclick="goToStep(1)">← 返回修改</button>
-    <button class="nav-btn primary" onclick="goToStep(3)">查看個人總覽 →</button>
-  </div>
 </div>
 
 <!-- EXPLORE STEP 3 -->
@@ -407,9 +408,6 @@
     <div style="width:100%;font-size:.78rem;color:var(--muted);padding-top:.3rem;">💡 把檔案內容交給 <a href="https://lin.ee/YVBqq6u" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:underline">Saori</a>，做進一步的探索喔！</div>
   </div>
   <div id="explore-step3-content"></div>
-  <div class="nav-btns">
-    <button class="nav-btn secondary" onclick="goToStep(2)">← 返回修改</button>
-  </div>
 </div>
 
 <!-- JOB STEP 1 -->
@@ -436,9 +434,6 @@
     <div class="legend-item" style="color:var(--accent3)">ℹ 點擊圖卡右上角 <em>i</em> 查看完整說明</div>
   </div>
   <div id="job-cards"></div>
-  <div class="nav-btns">
-    <button class="nav-btn primary jm" onclick="if(requireName('j-user-name','j-name-block')&&requireName('j-job-title','j-job-block'))goToStep(2)">下一步：填寫現況分析 →</button>
-  </div>
 </div>
 
 <!-- JOB STEP 2 -->
@@ -450,10 +445,6 @@
     </div>
   </div>
   <div id="job-step2-content"></div>
-  <div class="nav-btns">
-    <button class="nav-btn secondary" onclick="goToStep(1)">← 返回修改</button>
-    <button class="nav-btn primary jm" onclick="goToStep(3)">查看落差分析報告 →</button>
-  </div>
 </div>
 
 <!-- JOB STEP 3 -->
@@ -482,9 +473,6 @@
     <div style="width:100%;font-size:.78rem;color:var(--muted);padding-top:.3rem;">💡 把檔案內容交給 <a href="https://lin.ee/YVBqq6u" target="_blank" style="color:var(--accent4);font-weight:600;text-decoration:underline">Saori</a>，做進一步的探索喔！</div>
   </div>
   <div id="job-step3-content"></div>
-  <div class="nav-btns">
-    <button class="nav-btn secondary" onclick="goToStep(2)">← 返回修改</button>
-  </div>
 </div>
 
 <!-- CARD MODAL -->
@@ -498,6 +486,12 @@
     </div>
     <div class="card-modal-body" id="modal-body"></div>
   </div>
+</div>
+
+<!-- STICKY BOTTOM NAV -->
+<div class="sticky-nav" id="sticky-nav">
+  <button class="nav-btn secondary" id="nav-back" style="display:none" onclick=""></button>
+  <button class="nav-btn primary" id="nav-next" onclick=""></button>
 </div>
 
 <div class="loading-overlay" id="loading-overlay">
@@ -779,6 +773,46 @@ function backToModeSelect() {
   document.getElementById('mode-screen').style.display = 'block';
   document.getElementById('progress-bar').classList.remove('visible');
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sticky-nav').classList.remove('visible');
+}
+
+/* ── STICKY NAV BAR ── */
+function updateNavBar(n) {
+  const bar  = document.getElementById('sticky-nav');
+  const back = document.getElementById('nav-back');
+  const next = document.getElementById('nav-next');
+  const isJob = currentMode === 'job';
+
+  next.classList.toggle('jm', isJob);
+
+  const cfg = {
+    explore: {
+      1: { backShow:false, nextLabel:'下一步：描述與說明 →',  nextFn:"if(requireName('e-user-name','e-name-block'))goToStep(2)" },
+      2: { backShow:true,  backFn:'goToStep(1)', nextLabel:'查看個人總覽 →',       nextFn:'goToStep(3)' },
+      3: { backShow:true,  backFn:'goToStep(2)', nextLabel:null },
+    },
+    job: {
+      1: { backShow:false, nextLabel:'下一步：填寫現況分析 →', nextFn:"if(requireName('j-user-name','j-name-block')&&requireName('j-job-title','j-job-block'))goToStep(2)" },
+      2: { backShow:true,  backFn:'goToStep(1)', nextLabel:'查看落差分析報告 →',   nextFn:'goToStep(3)' },
+      3: { backShow:true,  backFn:'goToStep(2)', nextLabel:null },
+    },
+  };
+
+  const c = cfg[currentMode]?.[n];
+  if (!c) { bar.classList.remove('visible'); return; }
+
+  back.style.display = c.backShow ? '' : 'none';
+  if (c.backShow) { back.textContent = '← 返回修改'; back.setAttribute('onclick', c.backFn); }
+
+  if (c.nextLabel) {
+    next.style.display = '';
+    next.textContent = c.nextLabel;
+    next.setAttribute('onclick', c.nextFn);
+  } else {
+    next.style.display = 'none';
+  }
+
+  bar.classList.add('visible');
 }
 
 /* ── NAV ── */
@@ -795,6 +829,7 @@ function goToStep(n) {
   document.getElementById(`${p}-step${n}`).classList.add('active');
   if (currentMode === 'explore') { if (n===2) renderExploreStep2(); if (n===3) renderExploreStep3(); }
   else                           { if (n===2) renderJobStep2();     if (n===3) renderJobStep3(); }
+  updateNavBar(n);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
