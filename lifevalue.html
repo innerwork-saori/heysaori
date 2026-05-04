@@ -38,7 +38,10 @@
   .progress-bar { display:none; justify-content:center; background:var(--warm); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,.06); flex-wrap:wrap; }
   .progress-bar.visible { display:flex; }
   .mode-badge { position:absolute; left:1rem; top:50%; transform:translateY(-50%); font-size:.63rem; font-weight:700; letter-spacing:.08em; padding:.2rem .6rem; border-radius:20px; cursor:pointer; white-space:nowrap; }
-  .mode-badge.full { background:rgba(200,80,42,.12); color:var(--accent); }
+  .mode-badge::after { content:''; }
+  @media(max-width:900px){
+    .mode-badge::after { content:' · 點此切換'; font-weight:400; opacity:.7; }
+  }  .mode-badge.full { background:rgba(200,80,42,.12); color:var(--accent); }
   .mode-badge.work { background:rgba(90,110,160,.12); color:var(--accent4); }
   .step-tab { flex:1; max-width:220px; padding:.9rem 1rem; text-align:center; cursor:pointer; border-bottom:3px solid transparent; transition:all .3s; }
   .step-tab:hover { background:rgba(200,80,42,.05); }
@@ -206,7 +209,7 @@
     .section { padding:1.5rem 1rem 3rem; }
     .step-tab { padding:.7rem .5rem; }
     .tab-title { font-size:.73rem; }
-    .mode-badge { position:static; transform:none; width:100%; text-align:center; border-radius:0; padding:.45rem 1rem; border-bottom:1px solid var(--border); font-size:.65rem; order:-1; }
+    .mode-badge { position:static; transform:none; width:100%; text-align:center; border-radius:0; padding:.45rem 1rem; border-bottom:1px solid var(--border); font-size:.65rem; order:-1; white-space:normal; }
     .chart-bar-label { width:100px; font-size:.7rem; }
   }
 
@@ -576,7 +579,14 @@ window.addEventListener('DOMContentLoaded', () => {
   if (saved && saved.mode && saved.step > 0) {
     // 自動繼續，不需要使用者確認
     restoreState();
-    document.getElementById('restore-banner').style.display = 'flex';
+    const banner = document.getElementById('restore-banner');
+    banner.style.display = 'flex';
+    // 30 秒後自動消失
+    setTimeout(() => {
+      banner.style.transition = 'opacity .6s';
+      banner.style.opacity = '0';
+      setTimeout(() => { banner.style.display = 'none'; banner.style.opacity = ''; }, 650);
+    }, 30000);
   }
 });
 
