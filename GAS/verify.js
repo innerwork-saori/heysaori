@@ -119,6 +119,14 @@ function verifyCode(code, sheetId, sheetName) {
     }
 
     if (expiredDate < today) {
+      // 驗證失敗（已過期）：E 欄（第 5 欄）計數 +1
+      const failCell = sheet.getRange(i + 2, 5);
+      const failCount = failCell.getValue();
+      failCell.setValue(
+        (typeof failCount === 'number' && !isNaN(failCount) && failCount > 0)
+          ? failCount + 1
+          : 1
+      );
       return {
         ok: false,
         error: 'code_expired',
@@ -126,7 +134,14 @@ function verifyCode(code, sheetId, sheetName) {
       };
     }
 
-    // 驗證成功
+    // 驗證成功：D 欄（第 4 欄）計數 +1
+    const countCell = sheet.getRange(i + 2, 4); // i+2：跳過標題列（第1列），i 從 0 起
+    const currentCount = countCell.getValue();
+    const newCount = (typeof currentCount === 'number' && !isNaN(currentCount) && currentCount > 0)
+      ? currentCount + 1
+      : 1;
+    countCell.setValue(newCount);
+
     return {
       ok: true,
       userName: rowName,
