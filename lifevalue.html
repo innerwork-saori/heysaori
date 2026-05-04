@@ -597,7 +597,7 @@ function submitCode() {
     if (result.ok) {
       saveCodeAuth(result.userName || '');
       hideCodeModal();
-      showToast('✅ 驗證成功，歡迎使用！');
+      showToast('✅ 驗證成功，歡迎繼續使用！請再次點選下一步。');
       if (_codeCallback) _codeCallback();
     } else {
       input.classList.add('error');
@@ -623,6 +623,7 @@ function submitCode() {
   }, 10000);
 
   const url = `${VERIFY_GAS_URL}?callback=${cbName}&token=${encodeURIComponent(VERIFY_TOKEN)}&code=${encodeURIComponent(code)}`;
+  script.crossOrigin = 'anonymous'; // 不帶 cookie，避免 Google 插入 /u/1/
   script.src = url;
   script.onerror = () => {
     clearTimeout(timeout);
