@@ -38,9 +38,9 @@
   .progress-bar { display:none; justify-content:center; background:var(--warm); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,.06); flex-wrap:wrap; }
   .progress-bar.visible { display:flex; }
   .mode-badge { position:absolute; left:1rem; top:50%; transform:translateY(-50%); font-size:.63rem; font-weight:700; letter-spacing:.08em; padding:.2rem .6rem; border-radius:20px; cursor:pointer; white-space:nowrap; }
-  .mode-badge::after { content:''; }
+  .mode-badge::after { content:' · 點此切換模式'; font-weight:400; opacity:.7; }
   @media(max-width:900px){
-    .mode-badge::after { content:' · 點此切換'; font-weight:400; opacity:.7; }
+    .mode-badge::after { content:' · 點此切換'; }
   }  .mode-badge.full { background:rgba(200,80,42,.12); color:var(--accent); }
   .mode-badge.work { background:rgba(90,110,160,.12); color:var(--accent4); }
   .step-tab { flex:1; max-width:220px; padding:.9rem 1rem; text-align:center; cursor:pointer; border-bottom:3px solid transparent; transition:all .3s; }
@@ -425,7 +425,8 @@
       <p id="result-meta"></p>
     </div>
   </div>
-  <div class="export-bar">
+  <div id="result-content"></div>
+  <div class="export-bar" style="margin-top:2rem">
     <span>💾 儲存方式：</span>
     <button class="export-btn dl" onclick="downloadMd()">⬇ 下載 Markdown</button>
     <button class="export-btn copy" onclick="copyText()">📋 複製文字</button>
@@ -442,7 +443,6 @@
     </div>
     <div style="width:100%;font-size:.78rem;color:var(--muted);padding-top:.3rem;">💡 把結果交給 <a href="https://lin.ee/YVBqq6u" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:underline">Saori</a>，做進一步的探索喔！</div>
   </div>
-  <div id="result-content"></div>
 </div>
 
 <!-- STICKY BOTTOM NAV -->
@@ -595,6 +595,7 @@ function restoreState() {
   if (!saved) return;
   state = saved;
   applyMode(state.mode);
+  syncAllBadges();
   if (state.step === 5) {
     // restore result page
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -606,6 +607,38 @@ function restoreState() {
   } else {
     goToStep(state.step);
   }
+}
+
+// 一次更新所有 tab 的進度說明（restore 後呼叫）
+function syncAllBadges() {
+  // Tab 1：重要幾張
+  const impN = state.cards.filter(c => c.status === 'important').length;
+  const t1 = document.getElementById('tab1-count');
+  const b1 = document.getElementById('imp-badge');
+  if (t1) t1.textContent = `重要 ${impN} 張`;
+  if (b1) { b1.textContent = `重要 ${impN} 張`; b1.className = 'count-badge' + (impN>=10?' good':'') + (state.mode==='work'?' work-c':''); }
+
+  // Tab 2：已選幾張
+  const selN = state.selected.length;
+  const t2 = document.getElementById('tab2-count');
+  const b2 = document.getElementById('sel-badge');
+  if (t2) t2.textContent = selN >= 10 ? `已選 ${selN} 張` : (selN > 0 ? `已選 ${selN} 張` : '等待篩選');
+  if (b2) { b2.textContent = `已選 ${selN} / 20`; b2.className = 'count-badge' + (selN>=10?' good':'') + (state.mode==='work'?' work-c':''); }
+
+  // Tab 3：原因說明填了幾個
+  const top10 = state.ranked.slice(0, 10);
+  const filled = top10.filter(id => (state.reasons[id]||'').length >= 10).length;
+  const t3 = document.getElementById('tab3-count');
+  const b3 = document.getElementById('reason-badge');
+  if (t3) t3.textContent = filled === 10 ? '已完成' : (filled > 0 ? `已填 ${filled}/10` : '等待填寫');
+  if (b3) { b3.textContent = `已填 ${filled} / 10`; b3.className = 'count-badge' + (filled===10?' good':'') + (state.mode==='work'?' work-c':''); }
+
+  // Tab 4：滿意度評了幾個
+  const rated = top10.filter(id => state.satisfaction[id] !== undefined && state.satisfaction[id] !== null).length;
+  const t4 = document.getElementById('tab4-count');
+  const b4 = document.getElementById('sat-badge');
+  if (t4) t4.textContent = rated === 10 ? '已完成' : (rated > 0 ? `已評 ${rated}/10` : '等待評分');
+  if (b4) { b4.textContent = `已評 ${rated} / 10`; b4.className = 'count-badge' + (rated===10?' good':'') + (state.mode==='work'?' work-c':''); }
 }
 
 function dismissRestore() {
