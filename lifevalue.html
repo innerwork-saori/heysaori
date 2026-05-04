@@ -495,7 +495,8 @@ let state = {
 };
 
 function saveState() {
-  state.userName = document.getElementById('user-name')?.value || state.userName;
+  const nameVal = document.getElementById('user-name')?.value?.trim();
+  if (nameVal) state.userName = nameVal;
   try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch(e){}
 }
 
@@ -1075,6 +1076,10 @@ function renderResult() {
     ? new Date(state.createdAt).toLocaleString('zh-TW', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})
     : '';
 
+  // 優先讀取輸入框的最新值，確保 userName 不為空
+  const displayName = document.getElementById('user-name')?.value?.trim() || state.userName || '';
+  if (displayName) state.userName = displayName;
+
   document.getElementById('result-title').textContent = `${state.userName ? state.userName + ' 的' : '你的'}價值觀探索結果`;
   document.getElementById('result-meta').textContent = `${modeLabel} · ${dateStr}`;
 
@@ -1279,10 +1284,13 @@ async function sendReport() {
     };
   });
 
+  // 確保 userName 是最新值（優先讀取輸入框，再 fallback 到 state）
+  const latestName = document.getElementById('user-name')?.value?.trim() || state.userName || '';
+
   const payload = {
     token: GAS_TOKEN,
     email: email,
-    userName: state.userName || '',
+    userName: latestName,
     mode: state.mode,
     top10: top10,
     created_at: state.createdAt || new Date().toISOString()
