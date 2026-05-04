@@ -105,10 +105,13 @@ function buildReportHtml(data) {
       catCount[item.category] = (catCount[item.category] || 0) + 1;
     }
   });
-  const catSummary = Object.entries(catCount)
-    .sort((a, b) => b[1] - a[1])
+  // 只取並列最高的類別
+  const catEntries = Object.entries(catCount).sort((a, b) => b[1] - a[1]);
+  const topCount = catEntries.length > 0 ? catEntries[0][1] : 0;
+  const catSummary = catEntries
+    .filter(([, n]) => n === topCount)
     .map(([cat, n]) => `${cat} × ${n}`)
-    .join('　');
+    .join('、');
 
   // 落差提醒（滿意度 ≤ 4）
   const gaps = top10.filter(item => (item.satisfaction || 0) <= 4);
