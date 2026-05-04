@@ -153,6 +153,38 @@ function buildReportHtml(data) {
         </div>`).join('')}
     </div>` : '';
 
+  // 洞察與提醒
+  const highest = top10.reduce((a, b) => (a.satisfaction || 0) >= (b.satisfaction || 0) ? a : b);
+  const lowest  = top10.reduce((a, b) => (a.satisfaction || 0) <= (b.satisfaction || 0) ? a : b);
+  const avgSatNum = Number(avgSat);
+  const avgSatSub = avgSatNum >= 7
+    ? '整體而言你的核心價值觀被滿足得不錯！'
+    : avgSatNum >= 5
+      ? '有些價值觀還有提升空間。'
+      : '你的核心價值觀目前有較大的落差，值得深入探索。';
+  const topCatSub = catEntries.filter(([, n]) => n === topCount).length > 1
+    ? '你的核心價值觀同時集中在這幾個領域。'
+    : '你的核心價值觀主要集中在這個領域。';
+
+  const insightCards = [
+    { label: '滿意度最高', value: `${escHtml(highest.name)}（${highest.satisfaction} 分）`, sub: '這是你目前生活中最被滿足的核心價值。' },
+    { label: '滿意度最低', value: `${escHtml(lowest.name)}（${lowest.satisfaction} 分）`,  sub: '這個價值觀可能是你目前最需要關注的落差。' },
+    { label: '平均滿意度', value: `${avgSat} / 10`, sub: avgSatSub },
+    { label: '最集中的類別', value: catSummary || '—', sub: topCatSub }
+  ].map(ins => `
+    <div style="background:white;border:1px solid #d8cfc0;border-radius:8px;padding:12px 16px;margin-bottom:10px;">
+      <div style="font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8a7f72;margin-bottom:4px;">${ins.label}</div>
+      <div style="font-size:.92rem;font-weight:700;color:#1a1410;">${ins.value}</div>
+      <div style="font-size:.78rem;color:#8a7f72;margin-top:3px;">${ins.sub}</div>
+    </div>`).join('');
+
+  // 類別分佈 badges
+  const catBadges = catEntries.map(([cat, n]) => {
+    const catColors = { '自我與生活': '#4a7c6f', '美德': '#5a6ea0', '人際關係': '#c8502a', '工作': '#d4a84b' };
+    const color = catColors[cat] || '#8a7f72';
+    return `<span style="display:inline-block;font-size:.75rem;font-weight:600;padding:4px 12px;border-radius:20px;background:${color}22;color:${color};border:1px solid ${color}44;margin:3px;">${escHtml(cat)} × ${n}</span>`;
+  }).join('');
+
   return `<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -286,6 +318,18 @@ function buildReportHtml(data) {
       </tbody>
     </table>
     ${gapHtml}
+  </div>
+
+  <!-- Category Distribution -->
+  <div class="section">
+    <div class="section-title">🗂 類別分佈</div>
+    <div style="margin-bottom:8px;">${catBadges}</div>
+  </div>
+
+  <!-- Insights -->
+  <div class="section">
+    <div class="section-title">💡 洞察與提醒</div>
+    ${insightCards}
   </div>
 
   <!-- Footer -->
