@@ -176,7 +176,15 @@
   .nav-btn.primary.wm:hover { background:#485888; border-color:#485888; }
   .nav-btn.secondary { background:transparent; border-color:var(--border); color:var(--muted); }
   .nav-btn.secondary:hover { border-color:var(--muted); color:var(--ink); }
-  .warn-msg { background:#fff8e6; border:1px solid #f0c040; border-radius:6px; padding:.65rem 1rem; font-size:.78rem; color:#7a5c00; margin-bottom:1.5rem; display:none; }
+  /* Sticky bottom nav bar */
+  .sticky-nav { display:none; position:fixed; bottom:0; left:0; right:0; z-index:200;
+    background:rgba(250,247,242,.92); backdrop-filter:blur(10px);
+    border-top:1px solid var(--border); padding:.75rem 1.5rem;
+    box-shadow:0 -2px 16px rgba(0,0,0,.08);
+    justify-content:flex-end; gap:.8rem; align-items:center; }
+  .sticky-nav.visible { display:flex; }
+  /* push section content above the sticky bar */
+  .section.active { padding-bottom:6rem; }  .warn-msg { background:#fff8e6; border:1px solid #f0c040; border-radius:6px; padding:.65rem 1rem; font-size:.78rem; color:#7a5c00; margin-bottom:1.5rem; display:none; }
   .warn-msg.show { display:block; }
   .empty-state { text-align:center; padding:3rem 2rem; color:var(--muted); }
   .empty-state .emoji { font-size:2.5rem; margin-bottom:1rem; }
@@ -218,15 +226,21 @@
     /* 姓名輸入：全寬 */
     .name-input-block { max-width:100%; }
 
+    /* 卡片格：強制兩欄，卡片夠寬按鈕不換行 */
+    .card-grid { grid-template-columns:repeat(2, 1fr); }
+
+    /* 按鈕文字縮小避免換行 */
+    .btn-imp, .btn-unimp { font-size:.62rem; padding:.28rem .15rem; white-space:nowrap; }
+
     /* Step 2 選卡格：單欄 */
     .step2-sel-grid { grid-template-columns:1fr 1fr; }
 
     /* 拖曳排序：全寬 */
     .drag-list { max-width:100%; }
-
-    /* 導覽按鈕：全寬並排 */
     .nav-btns { flex-direction:row; justify-content:stretch; }
     .nav-btn { flex:1; text-align:center; padding:.65rem .8rem; }
+    .sticky-nav { padding:.65rem 1rem; gap:.5rem; }
+    .sticky-nav .nav-btn { flex:1; text-align:center; padding:.65rem .5rem; }
 
     /* 結果表格：轉為卡片式 */
     .result-table thead { display:none; }
@@ -255,7 +269,6 @@
     .step-tab { padding:.45rem .2rem; }
     .tab-num { font-size:.5rem; }
     .tab-title { font-size:.6rem; }
-    .card-grid { grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); }
     .step2-sel-grid { grid-template-columns:1fr; }
     .nav-btn { font-size:.75rem; padding:.6rem .5rem; }
     .chart-bar-label { width:64px; font-size:.62rem; }
@@ -351,9 +364,6 @@
   </div>
   <div class="warn-msg" id="warn-min10">⚠️ 請至少標記 10 張「重要」的卡片才能繼續。</div>
   <div id="step1-cards"></div>
-  <div class="nav-btns">
-    <button class="nav-btn primary" onclick="goToStep2()">下一步：篩選排序 →</button>
-  </div>
 </div>
 
 <!-- STEP 2: 篩選排序 -->
@@ -376,10 +386,6 @@
     <p style="font-size:.8rem;color:var(--muted);margin-bottom:1rem">拖曳卡片調整順序，排名第 1 的在最上方。只有前 10 名會進入後續步驟。</p>
     <div class="drag-list" id="drag-list"></div>
   </div>
-  <div class="nav-btns">
-    <button class="nav-btn secondary" onclick="goToStep(1)">← 返回修改</button>
-    <button class="nav-btn primary" onclick="goToStep3()">下一步：原因說明 →</button>
-  </div>
 </div>
 
 <!-- STEP 3: 原因說明 -->
@@ -393,10 +399,6 @@
   </div>
   <div class="warn-msg" id="warn-reason">⚠️ 請為每個價值觀填寫至少 10 個字的說明。</div>
   <div id="step3-cards"></div>
-  <div class="nav-btns">
-    <button class="nav-btn secondary" onclick="goToStep(2)">← 返回修改</button>
-    <button class="nav-btn primary" onclick="goToStep4()">下一步：滿意度評分 →</button>
-  </div>
 </div>
 
 <!-- STEP 4: 滿意度評分 -->
@@ -410,10 +412,6 @@
   </div>
   <div class="warn-msg" id="warn-sat">⚠️ 請為每個價值觀完成評分（移動滑桿）。</div>
   <div id="step4-cards"></div>
-  <div class="nav-btns">
-    <button class="nav-btn secondary" onclick="goToStep(3)">← 返回修改</button>
-    <button class="nav-btn primary" onclick="goToResult()">查看結果 →</button>
-  </div>
 </div>
 
 <!-- RESULT PAGE -->
@@ -442,10 +440,12 @@
     <div style="width:100%;font-size:.78rem;color:var(--muted);padding-top:.3rem;">💡 把結果交給 <a href="https://lin.ee/YVBqq6u" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:underline">Saori</a>，做進一步的探索喔！</div>
   </div>
   <div id="result-content"></div>
-  <div class="nav-btns">
-    <button class="nav-btn secondary" onclick="goToStep(4)">← 返回修改</button>
-    <button class="nav-btn primary" onclick="backToModeSelect()">重新探索</button>
-  </div>
+</div>
+
+<!-- STICKY BOTTOM NAV -->
+<div class="sticky-nav" id="sticky-nav">
+  <button class="nav-btn secondary" id="nav-back" style="display:none" onclick="">← 返回修改</button>
+  <button class="nav-btn primary" id="nav-next" onclick=""></button>
 </div>
 
 <div class="loading-overlay" id="loading-overlay">
@@ -591,6 +591,7 @@ function restoreState() {
     document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
     document.getElementById('result').classList.add('active');
     renderResult();
+    updateNavBar(5);
     window.scrollTo(0,0);
   } else {
     goToStep(state.step);
@@ -651,14 +652,46 @@ function backToModeSelect() {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('progress-bar').classList.remove('visible');
   document.getElementById('mode-screen').style.display = 'block';
+  document.getElementById('sticky-nav').classList.remove('visible');
   window.scrollTo(0,0);
+}
+
+// ─── STICKY NAV BAR ───────────────────────────────────────────────────────────
+function updateNavBar(step) {
+  const bar    = document.getElementById('sticky-nav');
+  const back   = document.getElementById('nav-back');
+  const next   = document.getElementById('nav-next');
+  const isWork = state.mode === 'work';
+
+  // reset wm class on next button
+  next.classList.toggle('wm', isWork);
+
+  const cfg = {
+    1: { backShow: false, nextLabel: '下一步：篩選排序 →', nextFn: 'goToStep2()' },
+    2: { backShow: true,  backFn: 'goToStep(1)', backLabel: '← 返回修改', nextLabel: '下一步：原因說明 →', nextFn: 'goToStep3()' },
+    3: { backShow: true,  backFn: 'goToStep(2)', backLabel: '← 返回修改', nextLabel: '下一步：滿意度評分 →', nextFn: 'goToStep4()' },
+    4: { backShow: true,  backFn: 'goToStep(3)', backLabel: '← 返回修改', nextLabel: '查看結果 →', nextFn: 'goToResult()' },
+    5: { backShow: true,  backFn: 'goToStep(4)', backLabel: '← 返回修改', nextLabel: '重新探索', nextFn: 'backToModeSelect()' },
+  };
+
+  const c = cfg[step];
+  if (!c) { bar.classList.remove('visible'); return; }
+
+  back.style.display = c.backShow ? '' : 'none';
+  if (c.backShow) {
+    back.textContent = c.backLabel;
+    back.setAttribute('onclick', c.backFn);
+  }
+  next.textContent = c.nextLabel;
+  next.setAttribute('onclick', c.nextFn);
+  bar.classList.add('visible');
 }
 
 // ─── STEP NAVIGATION ──────────────────────────────────────────────────────────
 function goToStep(n) {
   // 不管哪種模式，往前推進時都必須先填姓名
   if (n > 1) {
-    const name = document.getElementById('user-name')?.value?.trim();
+    const name = document.getElementById('user-name')?.value?.trim() || state.userName;
     if (!name) {
       const nameBlock = document.getElementById('name-block');
       nameBlock.classList.add('error');
@@ -681,6 +714,7 @@ function goToStep(n) {
   document.getElementById(target).classList.add('active');
   state.step = n;
   saveState();
+  updateNavBar(n);
   window.scrollTo(0,0);
 
   if (n === 1) renderStep1();
@@ -770,7 +804,7 @@ function bulkMark(action) {
 }
 
 function goToStep2() {
-  const name = document.getElementById('user-name')?.value?.trim();
+  const name = document.getElementById('user-name')?.value?.trim() || state.userName;
   const nameBlock = document.getElementById('name-block');
   if (!name) {
     nameBlock.classList.add('error');
@@ -1145,6 +1179,7 @@ function goToResult() {
   document.getElementById('result').classList.add('active');
   state.step = 5;
   saveState();
+  updateNavBar(5);
   window.scrollTo(0,0);
 }
 
