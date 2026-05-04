@@ -328,7 +328,7 @@
       <div class="mode-title">人生價值觀探索</div>
       <div class="mode-desc">從 70 張價值觀卡片中，找出你最在乎的事，深入了解自己的人生優先順序。</div>
       <div class="mode-steps">
-        <div class="mode-step">① 分類 70 張卡片：重要 / 不重要</div>
+        <div class="mode-step">① 分類 70 張卡片</div>
         <div class="mode-step">② 篩選並排序你的 Top 10</div>
         <div class="mode-step">③ 說明每個價值觀的原因</div>
         <div class="mode-step">④ 評估目前的滿意度</div>
@@ -339,7 +339,7 @@
       <div class="mode-title">工作價值觀探索</div>
       <div class="mode-desc">聚焦在工作與職涯領域，從 30 張工作價值觀卡片中，找出你最重視的工作意義。</div>
       <div class="mode-steps">
-        <div class="mode-step">① 分類 30 張工作卡片：重要 / 不重要</div>
+        <div class="mode-step">① 分類 30 張工作卡片</div>
         <div class="mode-step">② 篩選並排序你的 Top 10</div>
         <div class="mode-step">③ 說明每個價值觀的原因</div>
         <div class="mode-step">④ 評估目前的滿意度</div>
@@ -377,8 +377,8 @@
 <div class="section" id="step1">
   <div class="section-header">
     <div>
-      <h2>重要 / 不重要分類</h2>
-      <p>瀏覽所有價值觀卡片，標記哪些對你重要、哪些不重要。<br>至少需要標記 <strong>10 張重要</strong>才能繼續。</p>
+      <h2>重要 / 次要分類</h2>
+      <p>瀏覽所有價值觀卡片，標記哪些對你重要、哪些次要（非優先考量）。<br>至少需要標記 <strong>10 張重要</strong>才能繼續。</p>
     </div>
     <div class="count-badge" id="imp-badge">重要 0 張</div>
   </div>
@@ -388,7 +388,7 @@
   </div>
   <div class="bulk-btns">
     <button class="bulk-btn" onclick="bulkMark('important')">⭐ 全部標為重要</button>
-    <button class="bulk-btn" onclick="bulkMark('unimportant')">✕ 全部標為不重要</button>
+    <button class="bulk-btn" onclick="bulkMark('unimportant')">✕ 全部標為次要</button>
     <button class="bulk-btn" onclick="bulkMark('reset')">↺ 全部清除</button>
   </div>
   <div class="warn-msg" id="warn-min10">⚠️ 請至少標記 10 張「重要」的卡片才能繼續。</div>
@@ -998,7 +998,7 @@ function buildValCard(card) {
     <div class="card-cat-badge" style="background:${CAT_COLORS[card.cat]||'var(--accent3)'}22;color:${CAT_COLORS[card.cat]||'var(--accent3)'};border-color:${CAT_COLORS[card.cat]||'var(--accent3)'}44">${card.cat}</div>
     <div class="card-actions">
       <button class="btn-imp${status==='important'?' imp-active':''}" onclick="markCard('${card.id}','important')">⭐ 重要</button>
-      <button class="btn-unimp${status==='unimportant'?' unimp-active':''}" onclick="markCard('${card.id}','unimportant')">✕ 不重要</button>
+      <button class="btn-unimp${status==='unimportant'?' unimp-active':''}" onclick="markCard('${card.id}','unimportant')">✕ 次要</button>
     </div>`;
   return div;
 }
