@@ -199,6 +199,32 @@
   .loading-spinner { width:44px; height:44px; border:3px solid rgba(250,247,242,.2); border-top-color:var(--accent3); border-radius:50%; animation:spin .8s linear infinite; }
   @keyframes spin { to { transform:rotate(360deg); } }
   .loading-text { color:var(--paper); font-size:.9rem; letter-spacing:.05em; }
+
+  /* ── Code 驗證 Modal ── */
+  .code-modal-backdrop { display:none; position:fixed; inset:0; background:rgba(26,20,16,.65); z-index:8000; align-items:center; justify-content:center; backdrop-filter:blur(4px); padding:1rem; }
+  .code-modal-backdrop.show { display:flex; }
+  .code-modal { background:var(--paper); border-radius:16px; padding:2.2rem 2rem 1.8rem; max-width:420px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,.3); position:relative; }
+  .code-modal-icon { font-size:2.2rem; text-align:center; margin-bottom:.8rem; }
+  .code-modal h2 { font-family:'Noto Serif TC',serif; font-size:1.25rem; font-weight:700; text-align:center; margin-bottom:.4rem; }
+  .code-modal .code-modal-sub { font-size:.82rem; color:var(--muted); text-align:center; line-height:1.7; margin-bottom:1.6rem; }
+  .code-input-wrap { display:flex; gap:.6rem; margin-bottom:.8rem; }
+  .code-input { flex:1; min-width:0; border:2px solid var(--border); border-radius:8px; padding:.7rem 1rem; font-family:'Noto Sans TC',sans-serif; font-size:1rem; font-weight:600; letter-spacing:.15em; text-transform:uppercase; color:var(--ink); outline:none; transition:border-color .2s,box-shadow .2s; background:white; text-align:center; }
+  .code-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(200,80,42,.1); }
+  .code-input.error { border-color:var(--accent); animation:shake .3s ease; }
+  .code-submit-btn { padding:.7rem 1.4rem; background:var(--accent); border:none; border-radius:8px; color:white; font-family:'Noto Sans TC',sans-serif; font-size:.88rem; font-weight:700; cursor:pointer; transition:background .2s; white-space:nowrap; flex-shrink:0; }
+  .code-submit-btn:hover { background:#a8401e; }
+  .code-submit-btn:disabled { background:var(--border); cursor:not-allowed; }
+  .code-submit-btn.wm { background:var(--accent4); }
+  .code-submit-btn.wm:hover { background:#485888; }
+  @media(max-width:480px){
+    .code-modal { padding:1.8rem 1.2rem 1.5rem; }
+    .code-input-wrap { flex-direction:column; }
+    .code-submit-btn { width:100%; padding:.8rem; font-size:.95rem; }
+  }
+  .code-error-msg { font-size:.78rem; color:var(--accent); min-height:1.2em; margin-bottom:.6rem; text-align:center; }
+  .code-modal-footer { font-size:.72rem; color:var(--muted); text-align:center; line-height:1.6; margin-top:.8rem; border-top:1px solid var(--border); padding-top:.8rem; }
+  .code-modal-footer a { color:var(--accent); text-decoration:underline; }
+  .code-spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,.4); border-top-color:white; border-radius:50%; animation:spin .7s linear infinite; vertical-align:middle; margin-right:.4rem; }
   .restore-banner { background:#fff8e6; border:1px solid #f0c040; border-radius:8px; padding:.9rem 1.2rem; margin:1.5rem auto; max-width:720px; display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
   .restore-banner p { font-size:.82rem; color:#7a5c00; flex:1; }
   .restore-btn { font-size:.78rem; padding:.35rem .9rem; border-radius:6px; border:1.5px solid #f0c040; background:white; cursor:pointer; font-family:inherit; color:#7a5c00; font-weight:600; transition:all .15s; }
@@ -455,6 +481,30 @@
   <button class="nav-btn primary" id="nav-next" onclick=""></button>
 </div>
 
+<!-- CODE 驗證 MODAL -->
+<div class="code-modal-backdrop" id="code-modal-backdrop">
+  <div class="code-modal">
+    <div class="code-modal-icon">🔐</div>
+    <h2>請輸入存取碼</h2>
+    <p class="code-modal-sub">繼續進行「原因說明」步驟前，<br>需要輸入有效的存取碼。</p>
+    <div class="code-input-wrap">
+      <input type="text" class="code-input" id="code-input"
+        placeholder="輸入存取碼…"
+        maxlength="30"
+        autocomplete="off"
+        spellcheck="false"
+        onkeydown="if(event.key==='Enter') submitCode()"
+        oninput="this.value=this.value.toUpperCase(); document.getElementById('code-error-msg').textContent=''" />
+      <button class="code-submit-btn" id="code-submit-btn" onclick="submitCode()">驗證</button>
+    </div>
+    <div class="code-error-msg" id="code-error-msg"></div>
+    <div class="code-modal-footer">
+      驗證成功後 14 天內免重新輸入。<br>
+      沒有存取碼？請聯絡 <a href="https://lin.ee/YVBqq6u" target="_blank">Saori</a> 取得。
+    </div>
+  </div>
+</div>
+
 <div class="loading-overlay" id="loading-overlay">
   <div class="loading-spinner"></div>
   <div class="loading-text">產生報表中，請稍候…</div>
@@ -462,6 +512,132 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// ─── CODE 驗證 ────────────────────────────────────────────────────────────────
+const VERIFY_GAS_URL = 'https://script.google.com/macros/s/AKfycbx0KnmS9mIl0UInXDGOOkLuQFlVhBkI0RnmdJtSof4EwUi9ZDKmH--JSVSlLfii5ECT/exec'; // ← 換成 verify.js 部署後的網址
+const VERIFY_TOKEN   = 'saori-lv-2026-xK9mP';
+const CODE_CACHE_KEY = 'lifevalue_code_auth_v1';
+const CODE_VALID_DAYS = 14;
+
+/** 檢查 localStorage 中是否有未過期的驗證記錄 */
+function isCodeAuthorized() {
+  try {
+    const raw = localStorage.getItem(CODE_CACHE_KEY);
+    if (!raw) return false;
+    const cache = JSON.parse(raw);
+    if (!cache || !cache.expiry) return false;
+    return Date.now() < cache.expiry;
+  } catch (e) { return false; }
+}
+
+/** 將驗證成功的結果存入 localStorage（14 天） */
+function saveCodeAuth(userName) {
+  const expiry = Date.now() + CODE_VALID_DAYS * 24 * 60 * 60 * 1000;
+  try {
+    localStorage.setItem(CODE_CACHE_KEY, JSON.stringify({ expiry, userName }));
+  } catch (e) {}
+}
+
+/** 顯示 code modal，驗證成功後執行 callback */
+let _codeCallback = null;
+function showCodeModal(callback) {
+  _codeCallback = callback;
+  const modal = document.getElementById('code-modal-backdrop');
+  const input = document.getElementById('code-input');
+  const errEl = document.getElementById('code-error-msg');
+  const btn   = document.getElementById('code-submit-btn');
+  // 套用模式顏色
+  btn.className = 'code-submit-btn' + (state.mode === 'work' ? ' wm' : '');
+  errEl.textContent = '';
+  input.value = '';
+  input.classList.remove('error');
+  modal.classList.add('show');
+  setTimeout(() => input.focus(), 100);
+}
+
+function hideCodeModal() {
+  document.getElementById('code-modal-backdrop').classList.remove('show');
+  _codeCallback = null;
+}
+
+/** 送出 code 驗證（JSONP 方式，繞過 GAS CORS 限制） */
+function submitCode() {
+  const input = document.getElementById('code-input');
+  const errEl = document.getElementById('code-error-msg');
+  const btn   = document.getElementById('code-submit-btn');
+  const code  = input.value.trim().toUpperCase();
+
+  if (!code) {
+    input.classList.add('error');
+    errEl.textContent = '請輸入存取碼';
+    setTimeout(() => input.classList.remove('error'), 600);
+    return;
+  }
+
+  // 顯示 loading 狀態
+  btn.disabled = true;
+  btn.innerHTML = '<span class="code-spinner"></span>驗證中…';
+  errEl.textContent = '';
+
+  // 使用 JSONP 呼叫 GAS（繞過 CORS）
+  const cbName = '_gasVerifyCb_' + Date.now();
+  const script = document.createElement('script');
+  let settled = false;
+
+  const cleanup = () => {
+    settled = true;
+    delete window[cbName];
+    if (script.parentNode) script.parentNode.removeChild(script);
+    btn.disabled = false;
+    btn.textContent = '驗證';
+  };
+
+  window[cbName] = function(result) {
+    cleanup();
+    if (result.ok) {
+      saveCodeAuth(result.userName || '');
+      hideCodeModal();
+      showToast('✅ 驗證成功，歡迎使用！');
+      if (_codeCallback) _codeCallback();
+    } else {
+      input.classList.add('error');
+      setTimeout(() => input.classList.remove('error'), 600);
+      const msgs = {
+        invalid_code:   '存取碼無效，請確認後重新輸入。',
+        code_expired:   `存取碼已於 ${result.expiredAt || ''} 過期，請聯絡 Saori 更新。`,
+        missing_code:   '請輸入存取碼。',
+        unauthorized:   '驗證失敗，請稍後再試。',
+        sheet_not_found:'系統設定錯誤，請聯絡管理員。',
+        server_error:   '伺服器錯誤，請稍後再試。'
+      };
+      errEl.textContent = msgs[result.error] || '驗證失敗，請稍後再試。';
+    }
+  };
+
+  // 逾時處理（10 秒）
+  const timeout = setTimeout(() => {
+    if (!settled) {
+      cleanup();
+      errEl.textContent = '連線逾時，請檢查網路後再試。';
+    }
+  }, 10000);
+
+  const url = `${VERIFY_GAS_URL}?callback=${cbName}&token=${encodeURIComponent(VERIFY_TOKEN)}&code=${encodeURIComponent(code)}`;
+  script.src = url;
+  script.onerror = () => {
+    clearTimeout(timeout);
+    cleanup();
+    errEl.textContent = '連線失敗，請稍後再試。';
+  };
+  document.head.appendChild(script);
+}
+
+// 點擊背景關閉 modal（不強制，讓使用者可以取消）
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('code-modal-backdrop').addEventListener('click', function(e) {
+    if (e.target === this) hideCodeModal();
+  });
+});
+
 // ─── CARD DATA ───────────────────────────────────────────────────────────────
 const ALL_CARDS = [
   {id:'1',sn:1,name:'享受生活與美食',cat:'自我與生活'},
@@ -754,6 +930,12 @@ function goToStep(n) {
       return;
     }
     state.userName = name;
+  }
+
+  // ── Step 3 / 4 需要 code 驗證 ──
+  if (n >= 3 && !isCodeAuthorized()) {
+    showCodeModal(() => goToStep(n));
+    return;
   }
 
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -1164,6 +1346,7 @@ function goToStep3() {
   }
   document.getElementById('warn-sort').classList.remove('show');
   saveState();
+  // 驗證由 goToStep(3) 統一處理
   goToStep(3);
 }
 
