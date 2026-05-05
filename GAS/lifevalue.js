@@ -88,7 +88,8 @@ function getSatLabel(sat) {
 
 // ─── 組 HTML 報表 ────────────────────────────────────────────────────────────
 function buildReportHtml(data) {
-  const { userName, mode, top10, others, created_at } = data;
+  const { userName, mode, top10, created_at } = data;
+  const others = data.others || []; // 明確取得 others，預設為空陣列
   const modeLabel = getModeLabel(mode);
   const dateStr = created_at
     ? Utilities.formatDate(new Date(created_at), 'Asia/Taipei', 'yyyy/MM/dd HH:mm')
