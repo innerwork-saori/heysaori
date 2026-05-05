@@ -1375,6 +1375,12 @@ function renderStep2() {
     .filter(c => c.status === 'important')
     .map(c => getCard(c.id));
 
+  // ★ 如果重要卡片 ≤ 20 張，自動全選
+  if (importantCards.length <= 20 && state.selected.length === 0) {
+    state.selected = importantCards.map(c => c.id);
+    saveState();
+  }
+
   // Step 2-1: selection grid
   const grid = document.getElementById('step2-sel-grid');
   grid.innerHTML = '';
