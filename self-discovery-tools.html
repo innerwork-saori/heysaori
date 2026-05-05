@@ -183,7 +183,7 @@
 
     .tools-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 1.5px;
       background: rgba(0,0,0,0.07);
       border: 1px solid rgba(0,0,0,0.07);
@@ -465,6 +465,9 @@
     }
 
     /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .tools-grid { grid-template-columns: repeat(2, 1fr); }
+    }
     @media (max-width: 680px) {
       .tools-grid { grid-template-columns: 1fr; }
       .nav-title { display: none; }
@@ -518,9 +521,9 @@
   </h2>
   <p class="intro-body">
     在職涯諮詢的工作中，我發現一個規律：<br>
-    大多數人在探索方向之前，需要先做兩件事：<br>
-    <strong>釐清價值觀</strong>，以及<strong>盤點自己的職能</strong>。<br><br>
-    這兩個工具，就是為了這個目的而設計的。<br>
+    大多數人在探索方向之前，需要先做三件事：<br>
+    <strong>釐清價值觀</strong>、<strong>盤點自己的職能</strong>，以及<strong>找到真正的熱情所在</strong>。<br><br>
+    這三個工具，就是為了這個目的而設計的。<br>
     它們不會告訴你答案，但會幫你看見自己。
   </p>
   <div class="intro-divider"></div>
@@ -570,6 +573,28 @@
       </ul>
       <div class="tool-arrow">開始盤點 →</div>
     </a>
+
+    <!-- 工具三：熱情探索 -->
+    <div class="tool-card" style="cursor: default;">
+      <div class="tool-number">03</div>
+      <div class="tool-category">self-awareness · passion</div>
+      <div class="tool-name">熱情探索</div>
+      <div class="tool-subtitle">Passion & Interest Discovery</div>
+      <div class="tool-tag">Holland Code 職業興趣框架</div>
+      <div class="tool-desc">
+        知道自己擅長什麼還不夠——你還需要知道什麼事讓你真正「燃起來」。<br>
+        這個工具以 Holland Code 為核心框架，幫你系統性地探索職業興趣類型，找出與你天生氣質最相符的工作環境與方向。
+      </div>
+      <ul class="tool-highlights">
+        <li>依據 Holland Code 六大類型進行興趣探索</li>
+        <li>找出熱情與職能的交集地帶</li>
+        <li>對應適合的職業方向與工作環境</li>
+        <li>結合價值觀與職能結果，形成完整自我圖像</li>
+      </ul>
+      <div class="tool-arrow" style="color: var(--accent-sage);">
+        <a href="https://heysaori.com/letscounseling/" class="about-link"></a>有興趣請聯繫 Saori →</a>
+      </div>
+    </div>
 
   </div>
 </div>
