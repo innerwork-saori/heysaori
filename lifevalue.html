@@ -101,14 +101,21 @@
   .mode-desc { font-size:.8rem; color:var(--muted); line-height:1.7; }
   .mode-steps { margin-top:1rem; display:flex; flex-direction:column; gap:.3rem; }
   .mode-step { font-size:.72rem; color:var(--muted); background:var(--warm); border-radius:4px; padding:.25rem .5rem; }
-  .progress-bar { display:none; justify-content:center; background:var(--warm); border-bottom:1px solid var(--border); position:sticky; top:56px; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,.06); flex-wrap:wrap; }
+  .progress-bar { display:none; flex-direction:column; background:var(--warm); border-bottom:1px solid var(--border); position:sticky; top:56px; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,.06); }
   .progress-bar.visible { display:flex; }
-  .mode-badge { position:absolute; left:1rem; top:50%; transform:translateY(-50%); font-size:.63rem; font-weight:700; letter-spacing:.08em; padding:.2rem .6rem; border-radius:20px; cursor:pointer; white-space:nowrap; }
+  .progress-header { display:flex; justify-content:space-between; align-items:center; padding:.5rem 1rem; border-bottom:1px solid var(--border); background:rgba(255,255,255,.5); }
+  .mode-badge { font-size:.63rem; font-weight:700; letter-spacing:.08em; padding:.2rem .6rem; border-radius:20px; cursor:pointer; white-space:nowrap; }
   .mode-badge::after { content:' · 點此切換模式'; font-weight:400; opacity:.7; }
   @media(max-width:900px){
     .mode-badge::after { content:' · 點此切換'; }
-  }  .mode-badge.full { background:rgba(200,80,42,.12); color:var(--accent); }
+  }
+  .mode-badge.full { background:rgba(200,80,42,.12); color:var(--accent); }
   .mode-badge.work { background:rgba(90,110,160,.12); color:var(--accent4); }
+  .progress-badges { display:flex; gap:.5rem; flex-wrap:wrap; }
+  .progress-count-badge { background:var(--accent); color:white; padding:.2rem .6rem; border-radius:20px; font-size:.68rem; font-weight:600; white-space:nowrap; }
+  .progress-count-badge.good { background:var(--accent2); }
+  .progress-count-badge.work-c { background:var(--accent4); }
+  .progress-tabs { display:flex; justify-content:center; flex-wrap:wrap; }
   .step-tab { flex:1; max-width:220px; padding:.9rem 1rem; text-align:center; cursor:pointer; border-bottom:3px solid transparent; transition:all .3s; }
   .step-tab:hover { background:rgba(200,80,42,.05); }
   .step-tab.active { border-bottom-color:var(--accent); background:white; }
@@ -122,12 +129,9 @@
   .mode-work .step-tab.active .tab-count { color:var(--accent4); }
   .section { display:none; max-width:1100px; margin:0 auto; padding:2.5rem 1.5rem 4rem; }
   .section.active { display:block; }
-  .section-header { margin-bottom:2rem; display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:1rem; padding-bottom:1rem; border-bottom:1px solid var(--border); }
+  .section-header { margin-bottom:2rem; padding-bottom:1rem; border-bottom:1px solid var(--border); }
   .section-header h2 { font-family:'Noto Serif TC',serif; font-size:1.3rem; font-weight:600; }
   .section-header p { font-size:.83rem; color:var(--muted); margin-top:.3rem; line-height:1.6; }
-  .count-badge { background:var(--accent); color:white; padding:.3rem .8rem; border-radius:20px; font-size:.75rem; font-weight:600; white-space:nowrap; min-width:110px; text-align:center; }
-  .count-badge.good { background:var(--accent2); }
-  .count-badge.work-c { background:var(--accent4); }
   .name-input-block { display:flex; align-items:center; gap:.8rem; background:white; border:1.5px solid var(--border); border-radius:8px; padding:.8rem 1rem; margin-bottom:1.5rem; max-width:380px; transition:border-color .2s,box-shadow .2s; }
   .name-input-block.error { border-color:var(--accent); box-shadow:0 0 0 3px rgba(200,80,42,.12); animation:shake .3s ease; }
   @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
@@ -167,8 +171,9 @@
   .step2-sel-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:.6rem; margin-bottom:2rem; }
   .drag-list { display:flex; flex-direction:column; gap:.5rem; max-width:600px; }
   .drag-item { background:white; border:1.5px solid var(--border); border-radius:8px; padding:.75rem 1rem; display:flex; align-items:center; gap:.8rem; cursor:grab; transition:all .2s; user-select:none; will-change:transform; transform:translateZ(0); }
+  .drag-item * { pointer-events:none; }
   .drag-item:active { cursor:grabbing; }
-  .drag-item.dragging { opacity:.3; border-style:dashed; pointer-events:none; }
+  .drag-item.dragging { opacity:.3; border-style:dashed; }
   .drag-item.drag-over { border-color:var(--accent); background:#fff8f6; transform:scale(1.01) translateZ(0); }
   .drag-rank { font-size:.75rem; font-weight:700; color:white; background:var(--accent); width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .drag-rank.top10 { background:var(--accent); }
@@ -297,7 +302,8 @@
     .section { padding:1.5rem 1rem 3rem; }
     .step-tab { padding:.7rem .5rem; }
     .tab-title { font-size:.73rem; }
-    .mode-badge { position:static; transform:none; width:100%; text-align:center; border-radius:0; padding:.45rem 1rem; border-bottom:1px solid var(--border); font-size:.65rem; order:-1; white-space:normal; }
+    .progress-header { flex-direction:column; align-items:stretch; gap:.4rem; }
+    .progress-badges { justify-content:center; }
     .chart-bar-label { width:100px; font-size:.7rem; }
   }
 
@@ -521,37 +527,41 @@
 
 <!-- PROGRESS BAR -->
 <div class="progress-bar" id="progress-bar">
-  <div class="mode-badge" id="mode-badge" onclick="backToModeSelect()">← 切換模式</div>
-  <div class="step-tab active" id="tab1" onclick="goToStep(1)">
-    <div class="tab-num">Step 01</div>
-    <div class="tab-title">分類</div>
-    <div class="tab-count" id="tab1-count">重要 0 張</div>
+  <div class="progress-header">
+    <div class="mode-badge" id="mode-badge" onclick="backToModeSelect()">← 切換模式</div>
+    <div class="progress-badges" id="progress-badges">
+      <!-- 動態顯示當前步驟的進度 badge -->
+    </div>
   </div>
-  <div class="step-tab" id="tab2" onclick="goToStep(2)">
-    <div class="tab-num">Step 02</div>
-    <div class="tab-title">篩選排序</div>
-    <div class="tab-count" id="tab2-count">等待篩選</div>
-  </div>
-  <div class="step-tab" id="tab3" onclick="goToStep(3)">
-    <div class="tab-num">Step 03</div>
-    <div class="tab-title">原因說明</div>
-    <div class="tab-count" id="tab3-count">等待填寫</div>
-  </div>
-  <div class="step-tab" id="tab4" onclick="goToStep(4)">
-    <div class="tab-num">Step 04</div>
-    <div class="tab-title">滿意度評分</div>
-    <div class="tab-count" id="tab4-count">等待評分</div>
+  <div class="progress-tabs">
+    <div class="step-tab active" id="tab1" onclick="goToStep(1)">
+      <div class="tab-num">Step 01</div>
+      <div class="tab-title">分類</div>
+      <div class="tab-count" id="tab1-count">重要 0 張</div>
+    </div>
+    <div class="step-tab" id="tab2" onclick="goToStep(2)">
+      <div class="tab-num">Step 02</div>
+      <div class="tab-title">篩選排序</div>
+      <div class="tab-count" id="tab2-count">等待篩選</div>
+    </div>
+    <div class="step-tab" id="tab3" onclick="goToStep(3)">
+      <div class="tab-num">Step 03</div>
+      <div class="tab-title">原因說明</div>
+      <div class="tab-count" id="tab3-count">等待填寫</div>
+    </div>
+    <div class="step-tab" id="tab4" onclick="goToStep(4)">
+      <div class="tab-num">Step 04</div>
+      <div class="tab-title">滿意度評分</div>
+      <div class="tab-count" id="tab4-count">等待評分</div>
+    </div>
   </div>
 </div>
 
 <!-- STEP 1: 分類 -->
 <div class="section" id="step1">
   <div class="section-header">
-    <div>
-      <h2>重要 / 次要分類</h2>
-      <p>瀏覽所有價值觀卡片，標記哪些對你重要、哪些次要（非優先考量）。<br>至少需要標記 <strong>10 張重要</strong>才能繼續。</p>
-    </div>
-    <div class="count-badge" id="imp-badge">重要 0 張</div>
+    <h2>重要 / 次要分類</h2>
+    <p>瀏覽所有價值觀卡片，標記哪些對你重要、哪些次要（非優先考量）。<br>至少需要標記 <strong>10 張重要</strong>才能繼續。</p>
   </div>
   <div class="name-input-block" id="name-block">
     <label>👤 你的姓名 <span class="name-required-tag">必填</span></label>
@@ -580,11 +590,8 @@
 <!-- STEP 2: 篩選排序 -->
 <div class="section" id="step2">
   <div class="section-header">
-    <div>
-      <h2>篩選與排序</h2>
-      <p>從你標記的重要卡片中，選出最重要的 10–20 張，再拖曳排序找出你的 Top 10。</p>
-    </div>
-    <div class="count-badge" id="sel-badge">已選 0 / 20</div>
+    <h2>篩選與排序</h2>
+    <p>從你標記的重要卡片中，選出最重要的 10–20 張，再拖曳排序找出你的 Top 10。</p>
   </div>
   <div style="margin-bottom:2rem">
     <h3 style="font-family:'Noto Serif TC',serif;font-size:1rem;margin-bottom:.8rem;color:var(--accent)">Step 2-1：選出最重要的卡片（10–20 張）</h3>
@@ -606,11 +613,8 @@
 <!-- STEP 3: 原因說明 -->
 <div class="section" id="step3">
   <div class="section-header">
-    <div>
-      <h2>原因說明</h2>
-      <p>針對你的 Top 10 價值觀，寫下它對你重要的原因。</p>
-    </div>
-    <div class="count-badge" id="reason-badge">已填 0 / 10</div>
+    <h2>原因說明</h2>
+    <p>針對你的 Top 10 價值觀，寫下它對你重要的原因。</p>
   </div>
   <div class="warn-msg" id="warn-reason">⚠️ 建議為每個價值觀填寫說明，幫助你更深入思考。</div>
   <div id="step3-cards"></div>
@@ -619,11 +623,8 @@
 <!-- STEP 4: 滿意度評分 -->
 <div class="section" id="step4">
   <div class="section-header">
-    <div>
-      <h2>滿意度評分</h2>
-      <p>針對你的 Top 10 價值觀，評估目前生活中被滿足的程度。每項都需要評分才能繼續。</p>
-    </div>
-    <div class="count-badge" id="sat-badge">已評 0 / 10</div>
+    <h2>滿意度評分</h2>
+    <p>針對你的 Top 10 價值觀，評估目前生活中被滿足的程度。每項都需要評分才能繼續。</p>
   </div>
   <div class="warn-msg" id="warn-sat">⚠️ 請為每個價值觀完成評分（移動滑桿）。</div>
   <div id="step4-cards"></div>
@@ -1046,31 +1047,26 @@ function syncAllBadges() {
   // Tab 1：重要幾張
   const impN = state.cards.filter(c => c.status === 'important').length;
   const t1 = document.getElementById('tab1-count');
-  const b1 = document.getElementById('imp-badge');
   if (t1) t1.textContent = `重要 ${impN} 張`;
-  if (b1) { b1.textContent = `重要 ${impN} 張`; b1.className = 'count-badge' + (impN>=10?' good':'') + (state.mode==='work'?' work-c':''); }
 
   // Tab 2：已選幾張
   const selN = state.selected.length;
   const t2 = document.getElementById('tab2-count');
-  const b2 = document.getElementById('sel-badge');
   if (t2) t2.textContent = selN >= 10 ? `已選 ${selN} 張` : (selN > 0 ? `已選 ${selN} 張` : '等待篩選');
-  if (b2) { b2.textContent = `已選 ${selN} / 20`; b2.className = 'count-badge' + (selN>=10?' good':'') + (state.mode==='work'?' work-c':''); }
 
   // Tab 3：原因說明填了幾個
   const top10 = state.ranked.slice(0, 10);
   const filled = top10.filter(id => (state.reasons[id]||'').length >= 10).length;
   const t3 = document.getElementById('tab3-count');
-  const b3 = document.getElementById('reason-badge');
   if (t3) t3.textContent = filled === 10 ? '已完成' : (filled > 0 ? `已填 ${filled}/10` : '等待填寫');
-  if (b3) { b3.textContent = `已填 ${filled} / 10`; b3.className = 'count-badge' + (filled===10?' good':'') + (state.mode==='work'?' work-c':''); }
 
   // Tab 4：滿意度評了幾個
   const rated = top10.filter(id => state.satisfaction[id] !== undefined && state.satisfaction[id] !== null).length;
   const t4 = document.getElementById('tab4-count');
-  const b4 = document.getElementById('sat-badge');
   if (t4) t4.textContent = rated === 10 ? '已完成' : (rated > 0 ? `已評 ${rated}/10` : '等待評分');
-  if (b4) { b4.textContent = `已評 ${rated} / 10`; b4.className = 'count-badge' + (rated===10?' good':'') + (state.mode==='work'?' work-c':''); }
+  
+  // 更新 progress badges
+  updateProgressBadges();
 }
 
 function dismissRestore() {
@@ -1233,6 +1229,9 @@ function goToStep(n) {
   if (n === 2) renderStep2();
   if (n === 3) renderStep3();
   if (n === 4) renderStep4();
+  
+  // 更新 progress badges
+  updateProgressBadges();
 }
 
 // ─── STEP 1 ───────────────────────────────────────────────────────────────────
@@ -1308,11 +1307,46 @@ function markCard(id, status) {
 
 function updateImpBadge() {
   const n = state.cards.filter(c => c.status==='important').length;
-  const badge = document.getElementById('imp-badge');
   const tab = document.getElementById('tab1-count');
-  badge.textContent = `重要 ${n} 張`;
-  badge.className = 'count-badge' + (n>=10?' good':'') + (state.mode==='work'?' work-c':'');
   if (tab) tab.textContent = `重要 ${n} 張`;
+  updateProgressBadges();
+}
+
+function updateProgressBadges() {
+  const container = document.getElementById('progress-badges');
+  if (!container) return;
+  container.innerHTML = '';
+  
+  const step = state.step;
+  const isWork = state.mode === 'work';
+  
+  if (step === 1) {
+    const n = state.cards.filter(c => c.status==='important').length;
+    const badge = document.createElement('div');
+    badge.className = 'progress-count-badge' + (n>=10?' good':'') + (isWork?' work-c':'');
+    badge.textContent = `重要 ${n} 張`;
+    container.appendChild(badge);
+  } else if (step === 2) {
+    const selN = state.selected.length;
+    const badge = document.createElement('div');
+    badge.className = 'progress-count-badge' + (selN>=10?' good':'') + (isWork?' work-c':'');
+    badge.textContent = `已選 ${selN} / 20`;
+    container.appendChild(badge);
+  } else if (step === 3) {
+    const top10 = state.ranked.slice(0, 10);
+    const filled = top10.filter(id => (state.reasons[id]||'').length >= 10).length;
+    const badge = document.createElement('div');
+    badge.className = 'progress-count-badge' + (filled===10?' good':'') + (isWork?' work-c':'');
+    badge.textContent = `已填 ${filled} / 10`;
+    container.appendChild(badge);
+  } else if (step === 4) {
+    const top10 = state.ranked.slice(0, 10);
+    const rated = top10.filter(id => state.satisfaction[id] !== undefined && state.satisfaction[id] !== null).length;
+    const badge = document.createElement('div');
+    badge.className = 'progress-count-badge' + (rated===10?' good':'') + (isWork?' work-c':'');
+    badge.textContent = `已評 ${rated} / 10`;
+    container.appendChild(badge);
+  }
 }
 
 function bulkMark(action) {
@@ -1441,11 +1475,9 @@ function toggleSelect(id) {
 
 function updateSelBadge() {
   const n = state.selected.length;
-  const badge = document.getElementById('sel-badge');
   const tab = document.getElementById('tab2-count');
-  badge.textContent = `已選 ${n} / 20`;
-  badge.className = 'count-badge' + (n>=10?' good':'') + (state.mode==='work'?' work-c':'');
   if (tab) tab.textContent = n >= 10 ? `已選 ${n} 張` : `等待篩選`;
+  updateProgressBadges();
 }
 
 function showSortSection() {
@@ -1514,7 +1546,9 @@ function renderDragList() {
         <div class="drag-cat" style="color:${CAT_COLORS[card.cat]||'var(--muted)'}">${card.cat}</div>
       </div>`;
     item.addEventListener('dragstart', onDragStart);
+    item.addEventListener('dragenter', onDragEnter);
     item.addEventListener('dragover',  onDragOver);
+    item.addEventListener('dragleave', onDragLeave);
     item.addEventListener('drop',      onDrop);
     item.addEventListener('dragend',   onDragEnd);
     item.addEventListener('touchstart', onTouchStart, {passive:true});
@@ -1547,25 +1581,32 @@ function onDragStart(e) {
   dragSrcIdx = parseInt(e.currentTarget.dataset.idx);
   e.currentTarget.classList.add('dragging');
   e.dataTransfer.effectAllowed = 'move';
-  e.dataTransfer.setData('text/html', e.currentTarget.innerHTML);
-  // 使用自訂拖曳圖像減少殘影
-  const dragImg = e.currentTarget.cloneNode(true);
-  dragImg.style.cssText = 'position:absolute;top:-9999px;opacity:0.8;';
-  document.body.appendChild(dragImg);
-  e.dataTransfer.setDragImage(dragImg, 0, 0);
-  setTimeout(() => dragImg.remove(), 0);
+  e.dataTransfer.setData('text/plain', dragSrcIdx.toString());
+}
+function onDragEnter(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  if (!e.currentTarget.classList.contains('dragging')) {
+    e.currentTarget.classList.add('drag-over');
+  }
 }
 function onDragOver(e) {
   e.preventDefault();
+  e.stopPropagation();
   e.dataTransfer.dropEffect = 'move';
-  document.querySelectorAll('.drag-item').forEach(el => el.classList.remove('drag-over'));
-  if (!e.currentTarget.classList.contains('dragging')) {
-    e.currentTarget.classList.add('drag-over');
+  return false;
+}
+function onDragLeave(e) {
+  // 只在真正離開元素時移除（不是進入子元素）
+  if (e.currentTarget === e.target || !e.currentTarget.contains(e.relatedTarget)) {
+    e.currentTarget.classList.remove('drag-over');
   }
 }
 function onDrop(e) {
   e.preventDefault();
   e.stopPropagation(); // 避免觸發 ranked-zone 的 ondrop
+  e.currentTarget.classList.remove('drag-over');
+  
   const targetIdx = parseInt(e.currentTarget.dataset.idx);
   if (dragSrcIdx === null || dragSrcIdx === targetIdx) return;
 
@@ -1732,11 +1773,9 @@ function onReasonInput(id) {
 function updateReasonBadge() {
   const top10 = state.ranked.slice(0, 10);
   const filled = top10.filter(id => (state.reasons[id]||'').length >= 10).length;
-  const badge = document.getElementById('reason-badge');
   const tab = document.getElementById('tab3-count');
-  badge.textContent = `已填 ${filled} / 10`;
-  badge.className = 'count-badge' + (filled===10?' good':'') + (state.mode==='work'?' work-c':'');
   if (tab) tab.textContent = filled === 10 ? '已完成' : `已填 ${filled}/10`;
+  updateProgressBadges();
 }
 
 function goToStep4() {
@@ -1808,11 +1847,9 @@ function onSatInput(id, val) {
 function updateSatBadge() {
   const top10 = state.ranked.slice(0, 10);
   const rated = top10.filter(id => state.satisfaction[id] !== undefined && state.satisfaction[id] !== null).length;
-  const badge = document.getElementById('sat-badge');
   const tab = document.getElementById('tab4-count');
-  badge.textContent = `已評 ${rated} / 10`;
-  badge.className = 'count-badge' + (rated===10?' good':'') + (state.mode==='work'?' work-c':'');
   if (tab) tab.textContent = rated === 10 ? '已完成' : `已評 ${rated}/10`;
+  updateProgressBadges();
 }
 
 function goToResult() {
