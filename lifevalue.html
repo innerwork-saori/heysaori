@@ -143,8 +143,7 @@
   .val-card::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:transparent; transition:background .2s; border-radius:8px 0 0 8px; }
   .val-card.important { background:#fff8f6; border-color:var(--accent); box-shadow:0 2px 10px rgba(200,80,42,.15); }
   .val-card.important::before { background:var(--accent); }
-  .val-card.unimportant { background:#f7f7f7; border-color:var(--border); opacity:.65; }
-  .val-card.unimportant::before { background:var(--muted); }
+
   .card-top-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:.2rem; }
   .card-sn { font-size:.6rem; font-weight:700; color:var(--border); }
   .val-card.important .card-sn { color:rgba(200,80,42,.3); }
@@ -152,12 +151,9 @@
   .card-cat-badge { display:inline-block; font-size:.58rem; font-weight:700; letter-spacing:.06em; padding:.15rem .45rem; border-radius:10px; background:rgba(0,0,0,.05); color:var(--muted); margin-top:.35rem; border:1px solid rgba(0,0,0,.07); }
   .val-card.important .card-cat-badge { background:rgba(200,80,42,.08); color:var(--accent); border-color:rgba(200,80,42,.15); }
   .card-actions { display:flex; gap:.3rem; margin-top:.65rem; }
-  .btn-imp { flex:1; font-size:.58rem; padding:.22rem .2rem; border:1px solid var(--border); border-radius:4px; background:white; cursor:pointer; font-family:inherit; color:var(--muted); transition:all .15s; font-weight:500; }
+  .btn-imp { width:100%; font-size:.58rem; padding:.22rem .2rem; border:1px solid var(--border); border-radius:4px; background:white; cursor:pointer; font-family:inherit; color:var(--muted); transition:all .15s; font-weight:500; }
   .btn-imp:hover { border-color:var(--accent); color:var(--accent); }
   .btn-imp.imp-active { background:var(--accent); border-color:var(--accent); color:white; }
-  .btn-unimp { flex:1; font-size:.58rem; padding:.22rem .2rem; border:1px solid var(--border); border-radius:4px; background:white; cursor:pointer; font-family:inherit; color:var(--muted); transition:all .15s; font-weight:500; }
-  .btn-unimp:hover { border-color:var(--muted); color:var(--ink); }
-  .btn-unimp.unimp-active { background:var(--muted); border-color:var(--muted); color:white; }
   .bulk-btns { display:flex; gap:.6rem; margin-bottom:1.2rem; flex-wrap:wrap; }
   .bulk-btn { font-size:.75rem; padding:.35rem .9rem; border-radius:6px; border:1.5px solid var(--border); background:white; cursor:pointer; font-family:inherit; color:var(--muted); transition:all .15s; font-weight:500; }
   .bulk-btn:hover { border-color:var(--accent); color:var(--accent); }
@@ -325,7 +321,7 @@
     .card-grid { grid-template-columns:repeat(2, 1fr); }
 
     /* 按鈕文字縮小避免換行 */
-    .btn-imp, .btn-unimp { font-size:.62rem; padding:.28rem .15rem; white-space:nowrap; }
+    .btn-imp { font-size:.62rem; padding:.28rem .15rem; white-space:nowrap; }
 
     /* Step 2 選卡格：單欄 */
     .step2-sel-grid { grid-template-columns:1fr 1fr; }
@@ -575,8 +571,6 @@
   </div>
   <div id="inline-code-error" style="font-size:.75rem;color:var(--accent);margin-top:-.8rem;margin-bottom:1rem;min-height:1.1em;padding-left:.2rem;"></div>
   <div class="bulk-btns">
-    <button class="bulk-btn" onclick="bulkMark('important')">⭐ 全部標為重要</button>
-    <button class="bulk-btn" onclick="bulkMark('unimportant')">✕ 全部標為次要</button>
     <button class="bulk-btn" onclick="bulkMark('reset')">↺ 全部清除</button>
   </div>
   <div class="warn-msg" id="warn-min10">⚠️ 請至少標記 10 張「重要」的卡片才能繼續。</div>
@@ -1284,7 +1278,7 @@ function buildValCard(card) {
   const cs = getCardState(card.id);
   const status = cs ? cs.status : 'none';
   const div = document.createElement('div');
-  div.className = 'val-card' + (status==='important'?' important':status==='unimportant'?' unimportant':'');
+  div.className = 'val-card' + (status==='important'?' important':'');
   div.id = 'vcard-' + card.id;
   div.innerHTML = `
     <div class="card-top-row">
@@ -1294,7 +1288,6 @@ function buildValCard(card) {
     <div class="card-cat-badge" style="background:${CAT_COLORS[card.cat]||'var(--accent3)'}22;color:${CAT_COLORS[card.cat]||'var(--accent3)'};border-color:${CAT_COLORS[card.cat]||'var(--accent3)'}44">${card.cat}</div>
     <div class="card-actions">
       <button class="btn-imp${status==='important'?' imp-active':''}" onclick="markCard('${card.id}','important')">⭐ 重要</button>
-      <button class="btn-unimp${status==='unimportant'?' unimp-active':''}" onclick="markCard('${card.id}','unimportant')">✕ 次要</button>
     </div>`;
   return div;
 }
@@ -1306,9 +1299,8 @@ function markCard(id, status) {
   const card = getCard(id);
   const el = document.getElementById('vcard-' + id);
   if (el) {
-    el.className = 'val-card' + (cs.status==='important'?' important':cs.status==='unimportant'?' unimportant':'');
+    el.className = 'val-card' + (cs.status==='important'?' important':'');
     el.querySelector('.btn-imp').className = 'btn-imp' + (cs.status==='important'?' imp-active':'');
-    el.querySelector('.btn-unimp').className = 'btn-unimp' + (cs.status==='unimportant'?' unimp-active':'');
   }
   updateImpBadge();
   saveState();
@@ -1324,12 +1316,11 @@ function updateImpBadge() {
 }
 
 function bulkMark(action) {
-  state.cards.forEach(c => {
-    if (action === 'reset') c.status = 'none';
-    else c.status = action;
-  });
-  renderStep1();
-  saveState();
+  if (action === 'reset') {
+    state.cards.forEach(c => c.status = 'none');
+    renderStep1();
+    saveState();
+  }
 }
 
 function goToStep2() {
