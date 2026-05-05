@@ -166,10 +166,10 @@
   .step2-sel-card .card-info .cat { font-size:.65rem; color:var(--muted); margin-top:.15rem; }
   .step2-sel-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:.6rem; margin-bottom:2rem; }
   .drag-list { display:flex; flex-direction:column; gap:.5rem; max-width:600px; }
-  .drag-item { background:white; border:1.5px solid var(--border); border-radius:8px; padding:.75rem 1rem; display:flex; align-items:center; gap:.8rem; cursor:grab; transition:all .2s; user-select:none; }
+  .drag-item { background:white; border:1.5px solid var(--border); border-radius:8px; padding:.75rem 1rem; display:flex; align-items:center; gap:.8rem; cursor:grab; transition:all .2s; user-select:none; will-change:transform; transform:translateZ(0); }
   .drag-item:active { cursor:grabbing; }
-  .drag-item.dragging { opacity:.5; border-style:dashed; }
-  .drag-item.drag-over { border-color:var(--accent); background:#fff8f6; transform:scale(1.01); }
+  .drag-item.dragging { opacity:.3; border-style:dashed; pointer-events:none; }
+  .drag-item.drag-over { border-color:var(--accent); background:#fff8f6; transform:scale(1.01) translateZ(0); }
   .drag-rank { font-size:.75rem; font-weight:700; color:white; background:var(--accent); width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .drag-rank.top10 { background:var(--accent); }
   .drag-rank.below10 { background:var(--muted); }
@@ -1541,12 +1541,21 @@ function onDragStart(e) {
   dragSrcIdx = parseInt(e.currentTarget.dataset.idx);
   e.currentTarget.classList.add('dragging');
   e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/html', e.currentTarget.innerHTML);
+  // 使用自訂拖曳圖像減少殘影
+  const dragImg = e.currentTarget.cloneNode(true);
+  dragImg.style.cssText = 'position:absolute;top:-9999px;opacity:0.8;';
+  document.body.appendChild(dragImg);
+  e.dataTransfer.setDragImage(dragImg, 0, 0);
+  setTimeout(() => dragImg.remove(), 0);
 }
 function onDragOver(e) {
   e.preventDefault();
   e.dataTransfer.dropEffect = 'move';
   document.querySelectorAll('.drag-item').forEach(el => el.classList.remove('drag-over'));
-  e.currentTarget.classList.add('drag-over');
+  if (!e.currentTarget.classList.contains('dragging')) {
+    e.currentTarget.classList.add('drag-over');
+  }
 }
 function onDrop(e) {
   e.preventDefault();
@@ -1573,10 +1582,17 @@ function onDrop(e) {
   renderDragList();
 }
 function onDragEnd(e) {
+  e.currentTarget.classList.remove('dragging');
   document.querySelectorAll('.drag-item').forEach(el => {
     el.classList.remove('dragging','drag-over');
   });
   dragSrcIdx = null;
+  // 強制重繪以清除殘影
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.drag-item').forEach(el => {
+      el.style.transform = 'translateZ(0)';
+    });
+  });
 }
 
 // Touch drag support
@@ -1586,19 +1602,24 @@ function onTouchStart(e) {
   const rect = e.currentTarget.getBoundingClientRect();
   touchOffsetY = e.touches[0].clientY - rect.top;
   touchClone = e.currentTarget.cloneNode(true);
-  touchClone.style.cssText = `position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;opacity:.8;z-index:9999;pointer-events:none;`;
+  touchClone.style.cssText = `position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;opacity:.8;z-index:9999;pointer-events:none;transform:translateZ(0);`;
   document.body.appendChild(touchClone);
   e.currentTarget.style.opacity = '0.3';
+  e.currentTarget.style.pointerEvents = 'none';
 }
 function onTouchMove(e) {
   e.preventDefault();
   if (touchClone) {
     touchClone.style.top = (e.touches[0].clientY - touchOffsetY) + 'px';
+    touchClone.style.transform = 'translateZ(0)';
   }
 }
 function onTouchEnd(e) {
   if (touchClone) { touchClone.remove(); touchClone = null; }
-  document.querySelectorAll('.drag-item').forEach(el => el.style.opacity = '');
+  document.querySelectorAll('.drag-item').forEach(el => {
+    el.style.opacity = '';
+    el.style.pointerEvents = '';
+  });
   const touch = e.changedTouches[0];
   const els = document.elementsFromPoint(touch.clientX, touch.clientY);
   const target = els.find(el => el.classList.contains('drag-item') && parseInt(el.dataset.idx) !== touchDragIdx);
@@ -1636,6 +1657,12 @@ function onTouchEnd(e) {
     }
   }
   touchDragIdx = null;
+  // 強制重繪清除殘影
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.drag-item').forEach(el => {
+      el.style.transform = 'translateZ(0)';
+    });
+  });
 }
 
 function goToStep3() {
