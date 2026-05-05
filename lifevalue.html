@@ -424,18 +424,22 @@
   </div>
 </div>
 
-<!-- BEFORE YOU START BLOCK -->
-<div style="
-  max-width: 680px;
-  margin: 3rem auto 0;
-  padding: 0 1.5rem;
-">
+<!-- RESTORE BANNER -->
+<div id="restore-banner" class="restore-banner" style="display:none">
+  <p>🔖 已自動繼續上次未完成的探索。</p>
+  <button class="restore-btn dismiss" onclick="dismissRestore()">重新開始</button>
+</div>
+
+<!-- MODE SELECTION -->
+<div id="mode-screen" class="mode-screen">
+  <!-- BEFORE YOU START -->
   <div style="
     background: white;
     border: 1.5px solid var(--border);
     border-radius: 16px;
-    padding: 2rem 2rem 1.6rem;
+    padding: 1.6rem 2rem;
     text-align: center;
+    margin-bottom: 2.5rem;
   ">
     <div style="
       font-size: 0.65rem;
@@ -458,7 +462,7 @@
       color: var(--muted);
       line-height: 1.9;
       margin-bottom: 0.8rem;
-    ">這不只是一份需要「想清楚再填」的工具，<br>更是一段讓你靜下來、好好和自己對話的時間。<br>找一個不被打擾的空間，把手機調成勿擾，跟著直覺慢慢走。</p>
+    ">這不只是一份需要「想清楚再填」的工具，<br>還是一段讓你靜下來、好好和自己對話的時間。<br>找一個不被打擾的空間，把手機調成勿擾，跟著直覺慢慢走。</p>
     <div style="
       display: flex;
       align-items: center;
@@ -488,16 +492,7 @@
       在 Spotify 開啟收聽
     </a>
   </div>
-</div>
 
-<!-- RESTORE BANNER -->
-<div id="restore-banner" class="restore-banner" style="display:none">
-  <p>🔖 已自動繼續上次未完成的探索。</p>
-  <button class="restore-btn dismiss" onclick="dismissRestore()">重新開始</button>
-</div>
-
-<!-- MODE SELECTION -->
-<div id="mode-screen" class="mode-screen">
   <h2>請選擇你的探索模式</h2>
   <p class="sub">依據你的目標選擇適合的模式，<br>每種模式有不同的引導步驟。</p>
   <div class="mode-cards">
