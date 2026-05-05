@@ -106,7 +106,7 @@
   .mode-step { font-size:.72rem; color:var(--muted); background:var(--warm); border-radius:4px; padding:.25rem .5rem; }
 
   /* PROGRESS BAR */
-  .progress-bar { display:none; justify-content:center; background:var(--warm); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,.06); flex-wrap:wrap; }
+  .progress-bar { display:none; justify-content:center; background:var(--warm); border-bottom:1px solid var(--border); position:sticky; top:56px; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,.06); flex-wrap:wrap; }
   .progress-bar.visible { display:flex; }
   .mode-badge { position:absolute; left:1rem; top:50%; transform:translateY(-50%); font-size:.63rem; font-weight:700; letter-spacing:.08em; padding:.2rem .6rem; border-radius:20px; cursor:pointer; white-space:nowrap; }
   .mode-badge.explore { background:rgba(200,80,42,.12); color:var(--accent); }
@@ -498,6 +498,19 @@
     <label>👤 你的姓名 <span class="name-required-tag">必填</span></label>
     <input type="text" id="e-user-name" placeholder="請輸入你的名字…" oninput="updateExploreName()" />
   </div>
+  <div class="name-input-block" id="e-code-inline-block" style="max-width:480px;flex-wrap:wrap;gap:.6rem;">
+    <label>🔐 存取碼 <span class="name-required-tag">必填</span></label>
+    <input type="text" id="e-inline-code-input"
+      placeholder="請輸入存取碼…"
+      maxlength="30"
+      autocomplete="off"
+      spellcheck="false"
+      style="letter-spacing:.12em;text-transform:uppercase;font-weight:600;"
+      oninput="this.value=this.value.toUpperCase(); document.getElementById('e-inline-code-error').textContent=''"
+      onkeydown="if(event.key==='Enter') goToStep(2)" />
+    <button id="e-inline-code-verified-badge" style="display:none;font-size:.72rem;font-weight:700;color:var(--accent2);background:rgba(74,124,111,.1);border:1px solid rgba(74,124,111,.2);border-radius:20px;padding:.2rem .7rem;white-space:nowrap;cursor:default;">✓ 已驗證</button>
+  </div>
+  <div id="e-inline-code-error" style="font-size:.75rem;color:var(--accent);margin-top:-.8rem;margin-bottom:1rem;min-height:1.1em;padding-left:.2rem;"></div>
   <div class="legend" style="margin-bottom:1.5rem">
     <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> 優勢（最多 5 個）</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div> 成長機會（最多 5 個）</div>
@@ -566,6 +579,19 @@
     <label>🎯 目標職缺 <span class="name-required-tag">必填</span></label>
     <input type="text" id="j-job-title" placeholder="例：產品經理、UX 設計師、行銷企劃…" />
   </div>
+  <div class="name-input-block" id="j-code-inline-block" style="max-width:480px;flex-wrap:wrap;gap:.6rem;">
+    <label>🔐 存取碼 <span class="name-required-tag">必填</span></label>
+    <input type="text" id="j-inline-code-input"
+      placeholder="請輸入存取碼…"
+      maxlength="30"
+      autocomplete="off"
+      spellcheck="false"
+      style="letter-spacing:.12em;text-transform:uppercase;font-weight:600;"
+      oninput="this.value=this.value.toUpperCase(); document.getElementById('j-inline-code-error').textContent=''"
+      onkeydown="if(event.key==='Enter') goToStep(2)" />
+    <button id="j-inline-code-verified-badge" style="display:none;font-size:.72rem;font-weight:700;color:var(--accent2);background:rgba(74,124,111,.1);border:1px solid rgba(74,124,111,.2);border-radius:20px;padding:.2rem .7rem;white-space:nowrap;cursor:default;">✓ 已驗證</button>
+  </div>
+  <div id="j-inline-code-error" style="font-size:.75rem;color:var(--accent);margin-top:-.8rem;margin-bottom:1rem;min-height:1.1em;padding-left:.2rem;"></div>
   <div class="legend" style="margin-bottom:1.5rem">
     <div class="legend-item"><div class="legend-dot" style="background:var(--accent4)"></div> 職缺所需能力</div>
     <div class="legend-item" style="color:var(--accent3)">ℹ 點擊圖卡右上角 <em>i</em> 查看完整說明</div>
@@ -777,6 +803,76 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target === this) hideCodeModal();
   });
 });
+
+/** Inline 驗證（step 1 欄位用），prefix = 'e' 或 'j'，成功後執行 callback */
+function submitInlineCode(code, prefix, callback) {
+  const codeInput = document.getElementById(`${prefix}-inline-code-input`);
+  const codeBlock = document.getElementById(`${prefix}-code-inline-block`);
+  const codeErr   = document.getElementById(`${prefix}-inline-code-error`);
+  const nextBtn   = document.getElementById('nav-next');
+
+  // 顯示遮罩
+  const overlay = document.getElementById('loading-overlay');
+  const overlayText = overlay?.querySelector('.loading-text');
+  if (overlayText) overlayText.textContent = '驗證中，請稍候…';
+  if (overlay) overlay.classList.add('show');
+
+  if (nextBtn) { nextBtn.disabled = true; nextBtn.textContent = '驗證中…'; }
+  codeErr.textContent = '';
+
+  const cbName = '_gasVerifyCb_' + Date.now();
+  const script = document.createElement('script');
+  let settled = false;
+
+  const cleanup = () => {
+    settled = true;
+    delete window[cbName];
+    if (script.parentNode) script.parentNode.removeChild(script);
+    if (nextBtn) { nextBtn.disabled = false; nextBtn.textContent = nextBtn.dataset.label || '下一步 →'; }
+  };
+
+  window[cbName] = function(result) {
+    cleanup();
+    // 隱藏遮罩
+    if (overlay) overlay.classList.remove('show');
+    
+    if (result.ok) {
+      saveCodeAuth();
+      // 顯示已驗證 badge，隱藏輸入框
+      if (codeInput) codeInput.style.display = 'none';
+      const badge = document.getElementById(`${prefix}-inline-code-verified-badge`);
+      if (badge) badge.style.display = 'inline-block';
+      if (callback) callback();
+    } else {
+      codeBlock.classList.add('error');
+      setTimeout(() => codeBlock.classList.remove('error'), 1500);
+      const msgs = {
+        invalid_code:   '存取碼無效，請確認後重新輸入。',
+        code_expired:   `存取碼已過期，請聯絡 Saori 更新。`,
+        missing_code:   '請輸入存取碼。',
+        unauthorized:   '驗證失敗，請稍後再試。',
+        sheet_not_found:'系統設定錯誤，請聯絡管理員。',
+        server_error:   '伺服器錯誤，請稍後再試。'
+      };
+      codeErr.textContent = msgs[result.error] || '驗證失敗，請稍後再試。';
+      if (codeInput) codeInput.focus();
+    }
+  };
+
+  const timeout = setTimeout(() => {
+    if (!settled) { cleanup(); codeErr.textContent = '連線逾時，請檢查網路後再試。'; }
+  }, 10000);
+
+  const url = `${VERIFY_GAS_URL}?callback=${cbName}&token=${encodeURIComponent(VERIFY_TOKEN)}&code=${encodeURIComponent(code)}&sheet=${VERIFY_SHEET}`;
+  script.crossOrigin = 'anonymous';
+  script.src = url;
+  script.onerror = () => {
+    clearTimeout(timeout);
+    cleanup();
+    codeErr.textContent = '連線失敗，請稍後再試。';
+  };
+  document.head.appendChild(script);
+}
 
 /* ── CARD DATA ── */
 const CARD_DATA = {
@@ -1063,12 +1159,12 @@ function updateNavBar(n) {
 
   const cfg = {
     explore: {
-      1: { backShow:false, nextLabel:'下一步：描述與說明 →',  nextFn:"if(requireName('e-user-name','e-name-block'))goToStep(2)" },
+      1: { backShow:false, nextLabel:'下一步：描述與說明 →',  nextFn:'goToStep(2)' },
       2: { backShow:true,  backFn:'goToStep(1)', nextLabel:'查看個人總覽 →',       nextFn:'goToStep(3)' },
       3: { backShow:true,  backFn:'goToStep(2)', nextLabel:null },
     },
     job: {
-      1: { backShow:false, nextLabel:'下一步：填寫現況分析 →', nextFn:"if(requireName('j-user-name','j-name-block')&&requireName('j-job-title','j-job-block'))goToStep(2)" },
+      1: { backShow:false, nextLabel:'下一步：填寫現況分析 →', nextFn:'goToStep(2)' },
       2: { backShow:true,  backFn:'goToStep(1)', nextLabel:'查看落差分析報告 →',   nextFn:'goToStep(3)' },
       3: { backShow:true,  backFn:'goToStep(2)', nextLabel:null },
     },
@@ -1099,9 +1195,29 @@ function goToStep(n) {
     if (!requireName(nid, bid)) return;
     if (currentMode === 'job' && !requireName('j-job-title', 'j-job-block')) return;
   }
-  // ── Step 2 以上需要 code 驗證 ──
+  // ── Step 2 以上需要 code 驗證（tab 直接跳也會被擋）──
   if (n >= 2 && !isCodeAuthorized()) {
-    showCodeModal(() => goToStep(n));
+    const prefix    = currentMode === 'job' ? 'j' : 'e';
+    const codeInput = document.getElementById(`${prefix}-inline-code-input`);
+    const codeBlock = document.getElementById(`${prefix}-code-inline-block`);
+    const codeErr   = document.getElementById(`${prefix}-inline-code-error`);
+    const code = codeInput?.value?.trim().toUpperCase() || '';
+    if (code) {
+      // 有填 code，直接送驗證
+      submitInlineCode(code, prefix, () => goToStep(n));
+      return;
+    }
+    // 沒填 code：跳回 step 1，捲到驗證碼欄位並提示
+    goToStep(1);
+    setTimeout(() => {
+      if (codeBlock) {
+        codeBlock.classList.add('error');
+        setTimeout(() => codeBlock.classList.remove('error'), 1500);
+        codeBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      if (codeErr) codeErr.textContent = '請先輸入存取碼才能繼續';
+      if (codeInput) codeInput.focus();
+    }, 50);
     return;
   }
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -1110,6 +1226,16 @@ function goToStep(n) {
   document.getElementById(`${p}-step${n}`).classList.add('active');
   if (currentMode === 'explore') { if (n===2) renderExploreStep2(); if (n===3) renderExploreStep3(); }
   else                           { if (n===2) renderJobStep2();     if (n===3) renderJobStep3(); }
+  // 回到 step 1 時同步已驗證狀態
+  if (n === 1) {
+    ['e','j'].forEach(prefix => {
+      const ci = document.getElementById(`${prefix}-inline-code-input`);
+      const bd = document.getElementById(`${prefix}-inline-code-verified-badge`);
+      if (!ci || !bd) return;
+      if (isCodeAuthorized()) { ci.style.display = 'none'; bd.style.display = 'inline-block'; }
+      else                    { ci.style.display = '';     bd.style.display = 'none'; }
+    });
+  }
   updateNavBar(n);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }

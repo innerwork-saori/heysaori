@@ -826,6 +826,12 @@ function submitInlineCode(code, callback) {
   const codeErr   = document.getElementById('inline-code-error');
   const nextBtn   = document.getElementById('nav-next');
 
+  // 顯示遮罩
+  const overlay = document.getElementById('loading-overlay');
+  const overlayText = overlay?.querySelector('.loading-text');
+  if (overlayText) overlayText.textContent = '驗證中，請稍候…';
+  if (overlay) overlay.classList.add('show');
+
   if (nextBtn) { nextBtn.disabled = true; nextBtn.textContent = '驗證中…'; }
   codeErr.textContent = '';
 
@@ -842,6 +848,9 @@ function submitInlineCode(code, callback) {
 
   window[cbName] = function(result) {
     cleanup();
+    // 隱藏遮罩
+    if (overlay) overlay.classList.remove('show');
+    
     if (result.ok) {
       saveCodeAuth(result.userName || '');
       // 顯示已驗證 badge，隱藏輸入框
