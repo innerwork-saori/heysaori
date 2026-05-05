@@ -351,6 +351,7 @@
     .step-tab { padding:.7rem .5rem; }
     .tab-title { font-size:.73rem; }
     .mode-badge { position:static; transform:none; width:100%; text-align:center; border-radius:0; padding:.45rem 1rem; border-bottom:1px solid var(--border); font-size:.65rem; order:-1; }
+    .restore-banner { flex-direction:column; align-items:stretch; text-align:center; }
   }
 
   /* ── Code 驗證 Modal ── */
@@ -378,6 +379,14 @@
   .code-modal-footer { font-size:.72rem; color:var(--muted); text-align:center; line-height:1.6; margin-top:.8rem; border-top:1px solid var(--border); padding-top:.8rem; }
   .code-modal-footer a { color:var(--accent); text-decoration:underline; }
   .code-spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,.4); border-top-color:white; border-radius:50%; animation:spin .7s linear infinite; vertical-align:middle; margin-right:.4rem; }
+  
+  /* ── RESTORE BANNER ── */
+  .restore-banner { background:#fff8e6; border:1px solid #f0c040; border-radius:8px; padding:.9rem 1.2rem; margin:1.5rem auto; max-width:720px; display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .restore-banner p { font-size:.82rem; color:#7a5c00; flex:1; }
+  .restore-btn { font-size:.78rem; padding:.35rem .9rem; border-radius:6px; border:1.5px solid #f0c040; background:white; cursor:pointer; font-family:inherit; color:#7a5c00; font-weight:600; transition:all .15s; }
+  .restore-btn:hover { background:#f0c040; color:white; }
+  .restore-btn.dismiss { border-color:var(--border); color:var(--muted); }
+
 </style>
 </head>
 <body>
@@ -432,6 +441,12 @@
     <div class="header-divider"></div>
     <p>認識自己的優勢，找到成長的方向</p>
   </div>
+</div>
+
+<!-- RESTORE BANNER -->
+<div id="restore-banner" class="restore-banner" style="display:none">
+  <p>🔖 已自動繼續上次未完成的探索。</p>
+  <button class="restore-btn dismiss" onclick="dismissRestore()">重新開始</button>
 </div>
 
 <!-- MODE SELECTION -->
@@ -802,6 +817,25 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('code-modal-backdrop').addEventListener('click', function(e) {
     if (e.target === this) hideCodeModal();
   });
+  
+  // 自動恢復上次未完成的探索
+  const saved = loadState();
+  if (saved && saved.mode && saved.currentStep > 0) {
+    restoreState();
+    const banner = document.getElementById('restore-banner');
+    if (banner) {
+      banner.style.display = 'flex';
+      // 30 秒後自動消失
+      setTimeout(() => {
+        banner.style.transition = 'opacity .6s';
+        banner.style.opacity = '0';
+        setTimeout(() => { 
+          banner.style.display = 'none'; 
+          banner.style.opacity = ''; 
+        }, 650);
+      }, 30000);
+    }
+  }
 });
 
 /** Inline 驗證（step 1 欄位用），prefix = 'e' 或 'j'，成功後執行 callback */
@@ -1009,9 +1043,153 @@ const DATA = [
 ];
 
 /* ── STATE ── */
+const STATE_KEY = 'whatsmytalent_state';
 let currentMode = null;
 const eS = new Set(), eG = new Set(), eR = {};
 const jSel = new Set(), jData = {};
+
+// State management functions
+function saveState() {
+  const state = {
+    mode: currentMode,
+    currentStep: getCurrentStep(),
+    userName: {
+      explore: document.getElementById('e-user-name')?.value?.trim() || '',
+      job: document.getElementById('j-user-name')?.value?.trim() || ''
+    },
+    jobTitle: document.getElementById('j-job-title')?.value?.trim() || '',
+    explore: {
+      strengths: Array.from(eS),
+      growth: Array.from(eG),
+      reflections: {...eR}
+    },
+    job: {
+      selected: Array.from(jSel),
+      data: {...jData}
+    },
+    createdAt: state?.createdAt || Date.now()
+  };
+  try { 
+    localStorage.setItem(STATE_KEY, JSON.stringify(state)); 
+  } catch(e) {
+    console.warn('無法儲存狀態:', e);
+  }
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STATE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {
+    console.warn('無法載入狀態:', e);
+  }
+  return null;
+}
+
+function clearState() {
+  localStorage.removeItem(STATE_KEY);
+}
+
+function getCurrentStep() {
+  const activeSection = document.querySelector('.section.active');
+  if (!activeSection) return 0;
+  if (activeSection.id === 'explore-step1') return 1;
+  if (activeSection.id === 'explore-step2') return 2;
+  if (activeSection.id === 'explore-step3') return 3;
+  if (activeSection.id === 'job-step1') return 1;
+  if (activeSection.id === 'job-step2') return 2;
+  if (activeSection.id === 'job-step3') return 3;
+  return 0;
+}
+
+function restoreState() {
+  const saved = loadState();
+  if (!saved) return;
+  
+  // 恢復模式
+  currentMode = saved.mode;
+  
+  // 恢復姓名
+  if (saved.userName) {
+    const eNameInput = document.getElementById('e-user-name');
+    const jNameInput = document.getElementById('j-user-name');
+    if (eNameInput && saved.userName.explore) eNameInput.value = saved.userName.explore;
+    if (jNameInput && saved.userName.job) jNameInput.value = saved.userName.job;
+  }
+  
+  // 恢復職缺標題
+  if (saved.jobTitle) {
+    const jTitleInput = document.getElementById('j-job-title');
+    if (jTitleInput) jTitleInput.value = saved.jobTitle;
+  }
+  
+  // 恢復探索模式資料
+  if (saved.explore) {
+    eS.clear();
+    saved.explore.strengths.forEach(key => eS.add(key));
+    eG.clear();
+    saved.explore.growth.forEach(key => eG.add(key));
+    Object.assign(eR, saved.explore.reflections);
+  }
+  
+  // 恢復職缺模式資料
+  if (saved.job) {
+    jSel.clear();
+    saved.job.selected.forEach(key => jSel.add(key));
+    Object.assign(jData, saved.job.data);
+  }
+  
+  // 切換到對應模式（不觸發 saveState，避免遞迴）
+  if (saved.mode) {
+    currentMode = saved.mode;
+    document.getElementById('mode-screen').style.display = 'none';
+    const pb = document.getElementById('progress-bar');
+    pb.classList.add('visible');
+    pb.classList.toggle('mode-job', saved.mode === 'job');
+    const badge = document.getElementById('mode-badge');
+    badge.className = `mode-badge ${saved.mode}`;
+    
+    if (saved.mode === 'explore') {
+      document.getElementById('tab1-title').textContent = '挑選優勢與成長';
+      document.getElementById('tab2-title').textContent = '描述與說明';
+      document.getElementById('tab3-title').textContent = '個人總覽';
+      renderCards('explore-cards', 'explore');
+      // 更新計數
+      updateEC();
+    } else {
+      document.getElementById('tab1-title').textContent = '標記所需能力';
+      document.getElementById('tab2-title').textContent = '現況與行動計畫';
+      document.getElementById('tab3-title').textContent = '落差分析報告';
+      renderCards('job-cards', 'job');
+      // 更新計數
+      document.getElementById('j-badge').textContent = `已選 ${jSel.size} 個`;
+      document.getElementById('tab1-count').textContent = `已選 ${jSel.size} 個`;
+    }
+    
+    // 跳到對應步驟（不觸發 saveState）
+    if (saved.currentStep > 0) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.step-tab').forEach((t, i) => t.classList.toggle('active', i+1 === saved.currentStep));
+      const p = saved.mode === 'job' ? 'job' : 'explore';
+      document.getElementById(`${p}-step${saved.currentStep}`).classList.add('active');
+      if (saved.mode === 'explore') { 
+        if (saved.currentStep===2) renderExploreStep2(); 
+        if (saved.currentStep===3) renderExploreStep3(); 
+      } else { 
+        if (saved.currentStep===2) renderJobStep2(); 
+        if (saved.currentStep===3) renderJobStep3(); 
+      }
+      updateNavBar(saved.currentStep);
+    }
+  }
+}
+
+function dismissRestore() {
+  if (confirm('確定要清除所有資料並重新開始嗎？')) {
+    clearState();
+    location.reload();
+  }
+}
 
 /* ── MODAL ── */
 function openCardModal(no, e) {
@@ -1137,6 +1315,7 @@ function startMode(mode) {
     renderCards('job-cards', 'job');
   }
   goToStep(1);
+  saveState(); // 自動儲存
 }
 
 function backToModeSelect() {
@@ -1146,6 +1325,7 @@ function backToModeSelect() {
   document.getElementById('progress-bar').classList.remove('visible');
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('sticky-nav').classList.remove('visible');
+  saveState(); // 自動儲存
 }
 
 /* ── STICKY NAV BAR ── */
@@ -1238,6 +1418,7 @@ function goToStep(n) {
   }
   updateNavBar(n);
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  saveState(); // 自動儲存
 }
 
 /* ── HELPERS ── */
@@ -1294,12 +1475,14 @@ function toggleES(key,e) {
   if (eS.has(key)) eS.delete(key);
   else { if (eS.size>=5){showWarn('warn-strength');return;} eS.add(key); }
   refreshEC(key); updateEC();
+  saveState(); // 自動儲存
 }
 function toggleEG(key,e) {
   e.stopPropagation();
   if (eG.has(key)) eG.delete(key);
   else { if (eG.size>=5){showWarn('warn-growth');return;} eG.add(key); }
   refreshEC(key); updateEC();
+  saveState(); // 自動儲存
 }
 function refreshEC(key) {
   const c=document.getElementById(`ec-${key}`); if(!c) return;
@@ -1319,10 +1502,12 @@ function updateEC() {
 function updateExploreName() {
   const n=(document.getElementById('e-user-name')?.value||'').trim();
   document.getElementById('e-summary-title').textContent = n?`${n} 的職能盤點總覽`:'你的職能盤點總覽';
+  saveState(); // 自動儲存
 }
 function updateJobName() {
   const v=document.getElementById('j-user-name')?.value||'';
   const e=document.getElementById('e-user-name'); if(e&&e.value!==v) { e.value=v; updateExploreName(); }
+  saveState(); // 自動儲存
 }
 
 /* ── JOB TOGGLE ── */
@@ -1335,6 +1520,7 @@ function toggleJob(key,e) {
   c.querySelector('.btn-toggle').className=`btn-toggle${isJ?' j-active':''}`;
   document.getElementById('j-badge').textContent=`已選 ${jSel.size} 個`;
   document.getElementById('tab1-count').textContent=`已選 ${jSel.size} 個`;
+  saveState(); // 自動儲存
 }
 
 /* ── EXPLORE STEP 2 ── */
@@ -1384,6 +1570,7 @@ function saveER(key,val) {
   eS.forEach(k=>{if(eR[`s_${k}`])f++;});
   eG.forEach(k=>{if(eR[`g_${k}`])f++;});
   document.getElementById('tab2-count').textContent=`已填 ${f}/${eS.size+eG.size}`;
+  saveState(); // 自動儲存
 }
 
 /* ── EXPLORE STEP 3 ── */
@@ -1491,12 +1678,14 @@ function toggleOwned(key, checked) {
   if (ta)  ta.placeholder  = checked ? '例：我在過去專案中負責排程規劃，能準時完成90%以上的任務…' : '目前在這個能力上的實際狀況是什麼？（例：常常花太多時間完成一件事）';
   let f=0; jSel.forEach(k=>{const d=jData[k];if(d&&(d.current||d.ideal||d.action||d.owned))f++;});
   document.getElementById('tab2-count').textContent=`已填 ${f}/${jSel.size}`;
+  saveState(); // 自動儲存
 }
 function saveJD(key,field,val) {
   if (!jData[key]) jData[key]={owned:false,current:'',ideal:'',action:'',deadline:''};
   jData[key][field]=val;
   let f=0; jSel.forEach(k=>{const d=jData[k];if(d&&(d.current||d.ideal||d.action||d.owned))f++;});
   document.getElementById('tab2-count').textContent=`已填 ${f}/${jSel.size}`;
+  saveState(); // 自動儲存
 }
 
 /* ── JOB STEP 3 ── */
