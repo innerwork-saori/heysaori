@@ -88,7 +88,7 @@ function getSatLabel(sat) {
 
 // ─── 組 HTML 報表 ────────────────────────────────────────────────────────────
 function buildReportHtml(data) {
-  const { userName, mode, top10, created_at } = data;
+  const { userName, mode, top10, others, created_at } = data;
   const modeLabel = getModeLabel(mode);
   const dateStr = created_at
     ? Utilities.formatDate(new Date(created_at), 'Asia/Taipei', 'yyyy/MM/dd HH:mm')
@@ -177,6 +177,16 @@ function buildReportHtml(data) {
       <div style="font-size:.92rem;font-weight:700;color:#1a1410;">${ins.value}</div>
       <div style="font-size:.78rem;color:#8a7f72;margin-top:3px;">${ins.sub}</div>
     </div>`).join('');
+
+  // 其他重要價值觀（第 11-20 名）
+  const othersHtml = (others && others.length > 0) ? `
+    <div style="background:#f9f9f9;border:1px solid #d8cfc0;border-radius:8px;padding:14px 18px;margin-top:12px;">
+      <div style="font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8a7f72;margin-bottom:8px;">📌 其他你重視的價值觀（第 11-${10 + others.length} 名）</div>
+      <div style="font-size:.82rem;color:#8a7f72;line-height:1.7;margin-bottom:8px;">這些價值觀雖然沒有進入你的 Top 10，但在篩選時你仍認為它們很重要，值得留意：</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${others.map(item => `<span style="display:inline-block;font-size:.75rem;font-weight:600;padding:4px 12px;border-radius:20px;background:white;color:#1a1410;border:1px solid #d8cfc0;">${item.rank}. ${escHtml(item.name)}</span>`).join('')}
+      </div>
+    </div>` : '';
 
   // 類別分佈 badges
   const catBadges = catEntries.map(([cat, n]) => {
@@ -330,6 +340,7 @@ function buildReportHtml(data) {
   <div class="section">
     <div class="section-title">💡 洞察與提醒</div>
     ${insightCards}
+    ${othersHtml}
   </div>
 
   <!-- Footer -->
@@ -454,6 +465,11 @@ function testSendReport() {
       { name: '自由自在不受拘束', category: '自我與生活', rank: 8, reason: '自由是我最基本的需求。', satisfaction: 5 },
       { name: '公平正義', category: '美德', rank: 9, reason: '不公平的事讓我無法接受。', satisfaction: 3 },
       { name: '創新與創造', category: '工作', rank: 10, reason: '創造新事物讓我興奮。', satisfaction: 6 }
+    ],
+    others: [
+      { name: '資產與金錢', category: '工作', rank: 11 },
+      { name: '有一個安穩的家', category: '人際關係', rank: 12 },
+      { name: '內在的平靜', category: '自我與生活', rank: 13 }
     ],
     created_at: new Date().toISOString()
   };

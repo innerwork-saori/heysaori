@@ -2087,6 +2087,16 @@ async function sendReport() {
     };
   });
 
+  // 加入第 11-20 名
+  const others = state.ranked.slice(10, 20).map((id, idx) => {
+    const card = getCard(id);
+    return {
+      name: card.name,
+      category: card.cat,
+      rank: 10 + idx + 1
+    };
+  });
+
   // 確保 userName 是最新值（優先讀取輸入框，再 fallback 到 state）
   const latestName = document.getElementById('user-name')?.value?.trim() || state.userName || '';
 
@@ -2096,6 +2106,7 @@ async function sendReport() {
     userName: latestName,
     mode: state.mode,
     top10: top10,
+    others: others, // 新增：第 11-20 名
     created_at: state.createdAt || new Date().toISOString()
   };
 
