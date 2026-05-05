@@ -1973,12 +1973,35 @@ function renderResult() {
     });
     sec4.appendChild(alert);
   }
+
+  // ── 其他重要價值觀（第 11-20 名）──
+  const others = state.ranked.slice(10, 20);
+  if (others.length > 0) {
+    const othersCard = document.createElement('div');
+    othersCard.style.cssText = 'background:#f9f9f9;border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;margin-top:1rem;';
+    othersCard.innerHTML = `<div style="font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem;">📌 其他你重視的價值觀（第 11-${10+others.length} 名）</div>
+      <div style="font-size:.82rem;color:var(--muted);line-height:1.7;margin-bottom:.6rem;">這些價值觀雖然沒有進入你的 Top 10，但在篩選時你仍認為它們很重要，值得留意：</div>`;
+    const othersList = document.createElement('div');
+    othersList.style.cssText = 'display:flex;flex-wrap:wrap;gap:.4rem;';
+    others.forEach((id, idx) => {
+      const card = getCard(id);
+      const badge = document.createElement('span');
+      badge.className = 'cat-badge';
+      badge.style.cssText = `background:white;border:1px solid var(--border);color:var(--ink);font-size:.78rem;padding:.3rem .8rem;`;
+      badge.textContent = `${10+idx+1}. ${card.name}`;
+      othersList.appendChild(badge);
+    });
+    othersCard.appendChild(othersList);
+    sec4.appendChild(othersCard);
+  }
+
   container.appendChild(sec4);
 }
 
 // ─── EXPORT ───────────────────────────────────────────────────────────────────
 function buildTextContent() {
   const top10 = state.ranked.slice(0, 10);
+  const others = state.ranked.slice(10, 20);
   const modeLabel = state.mode === 'work' ? '工作價值觀探索' : '人生價值觀探索';
   const dateStr = state.createdAt
     ? new Date(state.createdAt).toLocaleString('zh-TW')
@@ -1997,6 +2020,14 @@ function buildTextContent() {
     txt += `- **原因：** ${reason}\n`;
     txt += `- **滿意度：** ${sat} / 10\n\n`;
   });
+  if (others.length > 0) {
+    txt += `---\n\n## 其他重視的價值觀（第 11-${10+others.length} 名）\n\n`;
+    others.forEach((id, idx) => {
+      const card = getCard(id);
+      txt += `${10+idx+1}. ${card.name}（${card.cat}）\n`;
+    });
+    txt += `\n`;
+  }
   return txt;
 }
 
