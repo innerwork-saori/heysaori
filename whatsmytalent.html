@@ -475,6 +475,41 @@
       </div>
     </div>
   </div>
+
+  <!-- 匯入區塊 -->
+  <div style="
+    margin-top: 2rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .6rem;
+  ">
+    <p style="font-size:.8rem;color:var(--muted);margin:0;">已有之前的探索資料？</p>
+    <button
+      onclick="document.getElementById('wmt-file-input').click()"
+      style="
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .65rem 1.6rem;
+        border-radius: 8px;
+        border: 2px solid var(--border);
+        background: white;
+        font-family: 'Noto Sans TC', sans-serif;
+        font-size: .85rem;
+        font-weight: 600;
+        color: var(--ink);
+        cursor: pointer;
+        transition: all .2s;
+      "
+      onmouseover="this.style.borderColor='var(--accent3)';this.style.color='var(--ink)'"
+      onmouseout="this.style.borderColor='var(--border)'"
+    >
+      📂 匯入 JSON，繼續上次的探索
+    </button>
+  </div>
 </div>
 
 <!-- PROGRESS BAR -->
@@ -558,8 +593,7 @@
   <div id="explore-step3-content"></div>
   <div class="export-bar" style="margin-top:2rem">
     <span>💾 儲存方式：</span>
-    <button class="export-btn dl" onclick="downloadMd('explore')">⬇ 下載 Markdown</button>
-    <button class="export-btn copy" onclick="copyText('explore')">📋 複製文字</button>
+    <button class="export-btn dl" onclick="exportWmtJSON('explore')" style="background:var(--warm);border-color:var(--accent3);color:var(--ink);">📦 匯出 JSON</button>
     <button class="export-btn dl" onclick="window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
     <div style="width:100%;border-top:1px solid var(--border);padding-top:.8rem;margin-top:.3rem;display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;">
       <span style="font-size:.78rem;color:var(--muted);font-weight:600;">📧 產生報表並寄送：</span>
@@ -636,8 +670,7 @@
   <div id="job-step3-content"></div>
   <div class="export-bar" style="margin-top:2rem">
     <span>💾 儲存方式：</span>
-    <button class="export-btn dl" onclick="downloadMd('job')">⬇ 下載 Markdown</button>
-    <button class="export-btn copy" onclick="copyText('job')">📋 複製文字</button>
+    <button class="export-btn dl" onclick="exportWmtJSON('job')" style="background:var(--warm);border-color:var(--accent3);color:var(--ink);">📦 匯出 JSON</button>
     <button class="export-btn dl" onclick="window.print()" style="margin-left:auto">🖨 列印 / PDF</button>
     <div style="width:100%;border-top:1px solid var(--border);padding-top:.8rem;margin-top:.3rem;display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;">
       <span style="font-size:.78rem;color:var(--muted);font-weight:600;">📧 產生報表並寄送：</span>
@@ -698,6 +731,9 @@
 <div class="loading-overlay" id="loading-overlay">
   <div class="loading-spinner"></div>
   <div class="loading-text">產生報表中，請稍候…</div>
+</div>
+
+<input type="file" id="wmt-file-input" accept=".json" style="display:none">
 </div>
 
 <div class="toast" id="toast"></div>
@@ -836,6 +872,38 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 30000);
     }
   }
+
+  // JSON 匯入
+  document.getElementById('wmt-file-input').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      try {
+        const data = JSON.parse(evt.target.result);
+        if (!validateWmtImport(data)) {
+          showToast('⚠️ 格式不符，請確認為本工具匯出的 JSON');
+          return;
+        }
+        // 寫入 localStorage 再 reload，讓 restoreState 接手
+        const stateToSave = {
+          mode: data.mode,
+          currentStep: 3, // 直接跳到報告頁
+          userName: data.userName || { explore: '', job: '' },
+          jobTitle: data.jobTitle || '',
+          explore: data.explore || { strengths: [], growth: [], reflections: {} },
+          job: data.job || { selected: [], data: {} }
+        };
+        localStorage.setItem(STATE_KEY, JSON.stringify(stateToSave));
+        location.reload();
+      } catch (err) {
+        showToast('⚠️ 檔案讀取失敗，請重試');
+      }
+    };
+    reader.onerror = function() { showToast('⚠️ 檔案讀取失敗，請重試'); };
+    reader.readAsText(file, 'utf-8');
+    e.target.value = '';
+  });
 });
 
 /** Inline 驗證（step 1 欄位用），prefix = 'e' 或 'j'，成功後執行 callback */
@@ -1574,29 +1642,6 @@ function saveER(key,val) {
 }
 
 /* ── EXPLORE STEP 3 ── */
-function buildCardDetailMd(no) {
-  const d = CARD_DATA[no];
-  if (!d) return '';
-  let md = '';
-  md += `\n**特質：** ${d.traits.join('、')}\n`;
-  if (d.shadow && d.shadow.length) {
-    md += `\n**如何管理陰影：**\n`;
-    d.shadow.forEach(p => { md += `- 後果：${p.c} → 調整：${p.a}\n`; });
-  }
-  if (d.strength) {
-    if (d.strength.s) md += `\n**適合領域：** ${d.strength.s}\n`;
-    if (d.strength.t) md += `**適合任務：** ${d.strength.t}\n`;
-    if (d.strength.g) md += `**通用建議：** ${d.strength.g}\n`;
-  }
-  if (d.improve && d.improve.length) {
-    md += `\n**缺乏如何提升：**\n`;
-    d.improve.forEach((imp, i) => { md += `${i+1}. ${imp}\n`; });
-  }
-  const tip = TIPS[d.name];
-  if (tip) md += `\n**核心定義：** ${tip}\n`;
-  return md;
-}
-
 function renderExploreStep3() {
   const c=document.getElementById('explore-step3-content');
   if (eS.size===0&&eG.size===0) { c.innerHTML=`<div class="empty-state"><div class="emoji">📋</div><p>請先完成 Step 1 與 Step 2，才能查看總覽。</p></div>`; document.getElementById('tab3-count').textContent='尚未完成'; return; }
@@ -1745,87 +1790,55 @@ function renderJobStep3() {
   }
 }
 
-/* ── EXPORT ── */
-function buildMd(mode) {
-  const date=new Date().toLocaleDateString('zh-TW',{year:'numeric',month:'long',day:'numeric'});
-  if (mode==='explore') {
-    const name=(document.getElementById('e-user-name')?.value||'').trim();
-    let md=`# ${name?name+' 的':''}職能盤點結果\n\n`;
-    if (name) md+=`> **姓名：** ${name}  \n`;
-    md+=`> **完成日期：** ${date}\n\n---\n\n## ⭐ 我的優勢\n\n`;
-    let si=1; eS.forEach(key=>{
-      const i=findItem(key); if(!i) return;
-      const cat=findCategory(key);
-      md+=`### ${si++}. ${i.zh}${cat?` _(${cat.categoryZh})_`:''}\n\n`;
-      md+=`**我的描述：** ${eR['s_'+key]||'_（尚未填寫）_'}\n\n`;
-      md+=buildCardDetailMd(i.no);
-      md+=`\n`;
-    });
-    md+=`---\n\n## 🌱 我的成長計畫\n\n`;
-    let gi=1; eG.forEach(key=>{
-      const i=findItem(key); if(!i) return;
-      const cat=findCategory(key);
-      md+=`### ${gi++}. ${i.zh}${cat?` _(${cat.categoryZh})_`:''}\n\n`;
-      md+=`**我的描述：** ${eR['g_'+key]||'_（尚未填寫）_'}\n\n`;
-      md+=buildCardDetailMd(i.no);
-      md+=`\n`;
-    });
-    md+=`---\n\n_由職能盤點工具產生 · heysaori.com_\n`;
-    return { md, name, fname:`${name?name+'_':''}職能盤點結果.md` };
-  } else {
-    const name=(document.getElementById('j-user-name')?.value||'').trim();
-    const jt=(document.getElementById('j-job-title')?.value||'').trim();
-    let md=`# ${name?name+' 的':''}職缺能力落差分析\n\n`;
-    if (name) md+=`> **姓名：** ${name}  \n`;
-    if (jt) md+=`> **目標職缺：** ${jt}  \n`;
-    md+=`> **完成日期：** ${date}\n\n---\n\n`;
-    const ownedKeys=[], gapKeys=[];
-    jSel.forEach(key=>{ const d=jData[key]||{}; (d.owned?ownedKeys:gapKeys).push(key); });
-    if (ownedKeys.length>0) {
-      md+=`## ✅ 已具備的能力\n\n`;
-      ownedKeys.forEach(key=>{
-        const i=findItem(key); if(!i) return;
-        const cat=findCategory(key); const d=jData[key]||{};
-        md+=`### ${i.zh}${cat?` _(${cat.categoryZh})_`:''}\n\n`;
-        md+=`${d.current?`**展現方式：** ${d.current}\n\n`:'_（未填寫）_\n\n'}`;
-        md+=buildCardDetailMd(i.no);
-        md+=`\n`;
-      });
-      md+=`---\n\n`;
+/* ── JSON 匯出 ── */
+function exportWmtJSON(mode) {
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
+  const name = (document.getElementById(mode==='explore'?'e-user-name':'j-user-name')?.value||'').trim();
+  const jTitle = mode==='job' ? (document.getElementById('j-job-title')?.value||'').trim() : '';
+
+  const exportObj = {
+    version: '1.0',
+    tool: 'whatsmytalent',
+    exportedAt: now.toISOString(),
+    mode,
+    userName: {
+      explore: (document.getElementById('e-user-name')?.value||'').trim(),
+      job: (document.getElementById('j-user-name')?.value||'').trim()
+    },
+    jobTitle: jTitle,
+    explore: {
+      strengths: Array.from(eS),
+      growth: Array.from(eG),
+      reflections: { ...eR }
+    },
+    job: {
+      selected: Array.from(jSel),
+      data: { ...jData }
     }
-    if (gapKeys.length>0) {
-      md+=`## 🚀 需要發展的能力\n\n`;
-      let idx=1; gapKeys.forEach(key=>{
-        const i=findItem(key); if(!i) return;
-        const cat=findCategory(key); const d=jData[key]||{};
-        md+=`### ${idx++}. ${i.zh}${cat?` _(${cat.categoryZh})_`:''}\n\n`;
-        if(d.current) md+=`**📍 現況：** ${d.current}\n\n`;
-        if(d.ideal) md+=`**🌟 理想狀態：** ${d.ideal}\n\n`;
-        if(d.action) md+=`**🚀 行動計畫：** ${d.action}\n\n`;
-        if(d.deadline) md+=`**📅 預計完成：** ${d.deadline}\n\n`;
-        md+=buildCardDetailMd(i.no);
-        md+=`\n---\n\n`;
-      });
-    }
-    md+=`_由職能盤點工具產生 · heysaori.com_\n`;
-    return { md, name, fname:`${name?name+'_':''}${jt?jt+'_':''}職缺能力分析.md` };
-  }
+  };
+
+  const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const safeName = name ? name + '_' : '';
+  const safeJob  = jTitle ? jTitle + '_' : '';
+  a.download = `whatsmytalent_${safeName}${safeJob}${dateStr}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('✅ 已匯出 JSON 檔案！');
 }
 
-function downloadMd(mode) {
-  const nid=mode==='explore'?'e-user-name':'j-user-name', bid=mode==='explore'?'e-name-block':'j-name-block';
-  if (!requireName(nid,bid)) return;
-  const {md,fname}=buildMd(mode);
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([md],{type:'text/markdown;charset=utf-8'}));
-  a.download=fname; a.click();
-  showToast('✅ 已下載 Markdown 檔案！');
-}
-function copyText(mode) {
-  const nid=mode==='explore'?'e-user-name':'j-user-name', bid=mode==='explore'?'e-name-block':'j-name-block';
-  if (!requireName(nid,bid)) return;
-  const {md}=buildMd(mode);
-  navigator.clipboard.writeText(md).then(()=>showToast('✅ 已複製到剪貼簿！')).catch(()=>{ prompt('無法自動複製，請全選後按 Ctrl+C（Mac 用 ⌘+C）複製：',md); });
+/* ── JSON 匯入驗證 ── */
+function validateWmtImport(data) {
+  if (!data || typeof data !== 'object') return false;
+  if (data.tool && data.tool !== 'whatsmytalent') return false;
+  return Object.prototype.hasOwnProperty.call(data, 'mode') &&
+         Object.prototype.hasOwnProperty.call(data, 'explore') &&
+         Object.prototype.hasOwnProperty.call(data, 'job');
 }
 
 /* ── SEND REPORT ── */
