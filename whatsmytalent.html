@@ -88,7 +88,6 @@
   }
 
   /* MODE SCREEN */
-  .mode-screen { max-width:720px; margin:3rem auto; padding:0 1.5rem 4rem; }
   .mode-screen h2 { font-family:'Noto Serif TC',serif; font-size:1.3rem; text-align:center; margin-bottom:.5rem; }
   .mode-screen .sub { text-align:center; color:var(--muted); font-size:.85rem; margin-bottom:2.5rem; line-height:1.7; }
   .mode-cards { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; }
@@ -387,6 +386,118 @@
   .restore-btn:hover { background:#f0c040; color:white; }
   .restore-btn.dismiss { border-color:var(--border); color:var(--muted); }
 
+  /* ── WELCOME PANEL (career-card style) ── */
+  .welcome-panel {
+    max-width: 640px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 16px;
+    padding: 2.8rem 2.4rem 2.4rem;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+  }
+  .welcome-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+  .welcome-subtitle {
+    font-size: 0.95rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    margin-bottom: 1.4rem;
+  }
+  .welcome-desc {
+    font-size: 0.88rem;
+    color: var(--ink);
+    line-height: 1.8;
+    margin-bottom: 1.6rem;
+  }
+  .welcome-steps {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  .welcome-steps li {
+    font-size: 0.85rem;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    line-height: 1.5;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--warm);
+    border: 1px solid var(--border);
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+  .welcome-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  .btn-welcome {
+    padding: 0.75rem 1.8rem;
+    border-radius: 8px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+    border: 2px solid;
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .btn-welcome-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+  .btn-welcome-primary:hover { background: #a8401e; border-color: #a8401e; }
+  .btn-welcome-secondary {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--muted);
+  }
+  .btn-welcome-secondary:hover { border-color: var(--muted); color: var(--ink); }
+  /* mode-screen 雙欄並排（PC），手機單欄 */
+  .mode-screen {
+    max-width: 1100px;
+    margin: 3rem auto;
+    padding: 0 1.5rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  @media (max-width: 700px) {
+    .mode-screen { grid-template-columns: 1fr; }
+  }
+  /* welcome-panel 在並排時不限寬 */
+  .mode-screen .welcome-panel {
+    max-width: none;
+    margin: 0;
+  }
+
 </style>
 </head>
 <body>
@@ -451,65 +562,45 @@
 
 <!-- MODE SELECTION -->
 <div id="mode-screen" class="mode-screen">
-  <h2>請選擇你的探索模式</h2>
-  <p class="sub">依據你的目標選擇適合的模式，<br>每種模式有不同的引導步驟。</p>
-  <div class="mode-cards">
-    <div class="mode-card explore" onclick="startMode('explore')">
-      <div class="mode-icon">🧭</div>
-      <div class="mode-title">自我探索模式</div>
-      <div class="mode-desc">深入認識自己的天賦優勢，找出值得投資的成長空間，建立屬於自己的職能地圖。</div>
-      <div class="mode-steps">
-        <div class="mode-step">① 挑選 5 個優勢 × 5 個成長項目</div>
-        <div class="mode-step">② 具體描述你的優勢與成長計畫</div>
-        <div class="mode-step">③ 輸出個人職能盤點總覽</div>
-      </div>
-    </div>
-    <div class="mode-card job" onclick="startMode('job')">
-      <div class="mode-icon">🎯</div>
-      <div class="mode-title">目標職缺探索模式</div>
-      <div class="mode-desc">對準特定職缺或職涯方向，系統性盤點所需能力的現況落差，制定具體行動計畫。</div>
-      <div class="mode-steps">
-        <div class="mode-step">① 標記目標職缺所需的關鍵能力</div>
-        <div class="mode-step">② 填寫現況落差與行動計畫</div>
-        <div class="mode-step">③ 輸出職缺能力落差分析報告</div>
-      </div>
+
+  <!-- 自我探索模式入口 -->
+  <div class="welcome-panel" id="panel-explore">
+    <div class="welcome-title">自我探索模式</div>
+    <div class="welcome-subtitle">認識天賦優勢，找到成長方向</div>
+    <p class="welcome-desc">
+      深入認識自己的天賦優勢，找出值得投資的成長空間，<br>
+      建立屬於自己的職能地圖。
+    </p>
+    <ol class="welcome-steps">
+      <li><span class="step-num">01</span> 挑選 5 個優勢 × 5 個成長項目</li>
+      <li><span class="step-num">02</span> 具體描述你的優勢與成長計畫</li>
+      <li><span class="step-num">03</span> 輸出個人職能盤點總覽</li>
+    </ol>
+    <div class="welcome-actions">
+      <button class="btn-welcome btn-welcome-primary" onclick="startMode('explore')">開始探索</button>
+      <button class="btn-welcome btn-welcome-secondary" onclick="document.getElementById('wmt-file-input').click()">匯入 JSON 資料</button>
     </div>
   </div>
 
-  <!-- 匯入區塊 -->
-  <div style="
-    margin-top: 2rem;
-    border-top: 1px solid var(--border);
-    padding-top: 1.6rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: .6rem;
-  ">
-    <p style="font-size:.8rem;color:var(--muted);margin:0;">已有之前的探索資料？</p>
-    <button
-      onclick="document.getElementById('wmt-file-input').click()"
-      style="
-        display: inline-flex;
-        align-items: center;
-        gap: .5rem;
-        padding: .65rem 1.6rem;
-        border-radius: 8px;
-        border: 2px solid var(--border);
-        background: white;
-        font-family: 'Noto Sans TC', sans-serif;
-        font-size: .85rem;
-        font-weight: 600;
-        color: var(--ink);
-        cursor: pointer;
-        transition: all .2s;
-      "
-      onmouseover="this.style.borderColor='var(--accent3)';this.style.color='var(--ink)'"
-      onmouseout="this.style.borderColor='var(--border)'"
-    >
-      📂 匯入 JSON，繼續上次的探索
-    </button>
+  <!-- 目標職缺探索模式入口 -->
+  <div class="welcome-panel" id="panel-job">
+    <div class="welcome-title">目標職缺探索模式</div>
+    <div class="welcome-subtitle">對準職缺，盤點能力落差</div>
+    <p class="welcome-desc">
+      對準特定職缺或職涯方向，系統性盤點所需能力的現況落差，<br>
+      制定具體行動計畫。
+    </p>
+    <ol class="welcome-steps">
+      <li><span class="step-num">01</span> 標記目標職缺所需的關鍵能力</li>
+      <li><span class="step-num">02</span> 填寫現況落差與行動計畫</li>
+      <li><span class="step-num">03</span> 輸出職缺能力落差分析報告</li>
+    </ol>
+    <div class="welcome-actions">
+      <button class="btn-welcome btn-welcome-primary" style="background:var(--accent4);border-color:var(--accent4);" onclick="startMode('job')">開始探索</button>
+      <button class="btn-welcome btn-welcome-secondary" onclick="document.getElementById('wmt-file-input').click()">匯入 JSON 資料</button>
+    </div>
   </div>
+
 </div>
 
 <!-- PROGRESS BAR -->
@@ -1389,7 +1480,7 @@ function startMode(mode) {
 function backToModeSelect() {
   if (!confirm('返回模式選擇頁？已填資料仍會保留。')) return;
   currentMode = null;
-  document.getElementById('mode-screen').style.display = 'block';
+  document.getElementById('mode-screen').style.display = '';
   document.getElementById('progress-bar').classList.remove('visible');
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('sticky-nav').classList.remove('visible');
@@ -1824,7 +1915,7 @@ function exportWmtJSON(mode) {
   a.href = url;
   const safeName = name ? name + '_' : '';
   const safeJob  = jTitle ? jTitle + '_' : '';
-  a.download = `whatsmytalent_${safeName}${safeJob}${dateStr}.json`;
+  a.download = `whatsmytalent_${mode}_${safeName}${safeJob}${dateStr}.json`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
