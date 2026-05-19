@@ -1,0 +1,29 @@
+# Editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# Dropbox
+*.dropbox
+.dropbox
+.dropbox.attr
+
+# Temp / backup files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Logs
+*.log
+
+# Node (if ever added)
+node_modules/
+npm-debug.log*
