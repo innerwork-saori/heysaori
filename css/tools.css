@@ -1,66 +1,4 @@
-
-    :root {
-      --ink: #1c1a17;
-      --ink-soft: #2e2b26;
-      --paper: #faf7f2;
-      --paper-warm: #f5f0e8;
-      --paper-mid: #ede7da;
-      --accent1: #8b6f47;
-      --accent2: #c4956a;
-      --accent3: #d4a96a;
-      --accent-sage: #7a8c72;
-      --text-main: #2e2b26;
-      --text-mid: #5c5549;
-      --text-soft: #8c8278;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--paper);
-      color: var(--text-main);
-      font-family: 'Noto Sans TC', sans-serif;
-      font-weight: 300;
-      line-height: 1.8;
-      overflow-x: hidden;
-    }
-
-    /* ── NAV ── */
-    .nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      padding: 1.2rem 2rem;
-      background: rgba(28,26,23,0.92);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid rgba(250,247,242,0.06);
-    }
-    .nav-back {
-      font-family: 'EB Garamond', serif;
-      font-style: italic;
-      font-size: 0.82rem;
-      color: rgba(250,247,242,0.5);
-      text-decoration: none;
-      letter-spacing: 0.12em;
-      transition: color 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .nav-back:hover { color: var(--accent3); }
-    .nav-back::before { content: '←'; font-style: normal; }
-    .nav-title {
-      font-family: 'Noto Serif TC', serif;
-      font-size: 0.8rem;
-      color: rgba(250,247,242,0.35);
-      letter-spacing: 0.18em;
-    }
-
-    /* ── HERO ── */
+/* ── HERO ── */
     .hero {
       background: var(--ink);
       padding: 9rem 2rem 5rem;
@@ -271,14 +209,6 @@
     }
 
     /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 680px) {

@@ -1,0 +1,22 @@
+/* ── CSS Variables (WMT / LifeValue / CareerCard shared palette) ── */
+:root {
+  --ink: #1a1410;
+  --paper: #faf7f2;
+  --warm: #f0ebe0;
+  --accent: #c8502a;
+  --accent2: #4a7c6f;
+  --accent3: #d4a84b;
+  --accent4: #5a6ea0;
+  --muted: #8a7f72;
+  --border: #d8cfc0;
+}
+
+/* ── Reset ── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}

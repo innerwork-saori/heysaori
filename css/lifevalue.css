@@ -1,12 +1,4 @@
-
-  :root {
-    --ink: #1a1410; --paper: #faf7f2; --warm: #f0ebe0;
-    --accent: #c8502a; --accent2: #4a7c6f; --accent3: #d4a84b; --accent4: #5a6ea0;
-    --muted: #8a7f72; --border: #d8cfc0;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Noto Sans TC', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; overflow-x: hidden; }
-  /* ── HERO HEADER ── */
+/* ── HERO HEADER ── */
   .header {
     background: var(--ink);
     padding: 9rem 2rem 6rem;
@@ -163,7 +155,7 @@
   .step2-sel-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:.6rem; margin-bottom:2rem; }
   .drag-list { display:flex; flex-direction:column; gap:.5rem; max-width:600px; }
   .drag-item { background:white; border:1.5px solid var(--border); border-radius:8px; padding:.75rem 1rem; display:flex; align-items:center; gap:.8rem; cursor:grab; transition:all .2s; user-select:none; will-change:transform; transform:translateZ(0); }
-  .drag-item * { pointer-events:none; }
+  .drag-item
   .drag-item:active { cursor:grabbing; }
   .drag-item.dragging { opacity:.3; border-style:dashed; }
   .drag-item.drag-over { border-color:var(--accent); background:#fff8f6; transform:scale(1.01) translateZ(0); }

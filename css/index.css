@@ -1,34 +1,4 @@
-
-    :root {
-      --ink: #1c1a17;
-      --ink-soft: #2e2b26;
-      --paper: #faf7f2;
-      --paper-warm: #f5f0e8;
-      --paper-mid: #ede7da;
-      --accent1: #8b6f47;
-      --accent2: #c4956a;
-      --accent3: #d4a96a;
-      --accent-sage: #7a8c72;
-      --accent-rose: #b87c6e;
-      --text-main: #2e2b26;
-      --text-mid: #5c5549;
-      --text-soft: #8c8278;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--paper);
-      color: var(--text-main);
-      font-family: 'Noto Sans TC', sans-serif;
-      font-weight: 300;
-      line-height: 1.8;
-      overflow-x: hidden;
-    }
-
-    /* ── HERO ── */
+/* ── HERO ── */
     .hero {
       position: relative;
       min-height: 100vh;
@@ -660,14 +630,6 @@
     }
 
     /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
     @keyframes scrollPulse {
       0%, 100% { opacity: 0.3; transform: scaleY(1); }
       50%       { opacity: 0.8; transform: scaleY(1.15); }
