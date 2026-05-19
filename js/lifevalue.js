@@ -315,16 +315,37 @@ function clearState() {
 window.addEventListener('DOMContentLoaded', () => {
   const saved = loadState();
   if (saved && saved.mode && saved.step > 0) {
-    // 自動繼續，不需要使用者確認
-    restoreState();
-    const banner = document.getElementById('restore-banner');
-    banner.style.display = 'flex';
-    // 30 秒後自動消失
-    setTimeout(() => {
-      banner.style.transition = 'opacity .6s';
-      banner.style.opacity = '0';
-      setTimeout(() => { banner.style.display = 'none'; banner.style.opacity = ''; }, 650);
-    }, 30000);
+    const resumeSection = document.getElementById('resume-section');
+    const modeSelectSection = document.getElementById('mode-select-section');
+    if (resumeSection) resumeSection.style.display = 'block';
+    if (modeSelectSection) modeSelectSection.style.display = 'none';
+    const meta = document.getElementById('resume-meta');
+    if (meta) {
+      const modeLabel = saved.mode === 'work' ? '工作價值觀探索' : '人生價值觀探索';
+      const stepLabel = saved.step >= 5 ? '已完成探索' : `進度：Step 0${saved.step}`;
+      const nameLabel = saved.userName ? `${saved.userName}・` : '';
+      meta.textContent = `${nameLabel}${modeLabel}・${stepLabel}`;
+    }
+  }
+
+  const fileInput = document.getElementById('lv-file-input');
+  if (fileInput) {
+    fileInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const data = JSON.parse(evt.target.result);
+          if (!validateImportJSON(data)) { showToast('格式不符，請確認檔案為本工具匯出的 JSON'); return; }
+          localStorage.setItem(STATE_KEY, JSON.stringify(data));
+          location.reload();
+        } catch(err) { showToast('檔案讀取失敗，請重試'); }
+      };
+      reader.onerror = () => showToast('檔案讀取失敗，請重試');
+      reader.readAsText(file, 'utf-8');
+      e.target.value = '';
+    });
   }
 });
 
@@ -382,6 +403,59 @@ function dismissRestore() {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('mode-screen').style.display = 'block';
   window.scrollTo(0,0);
+}
+
+function resumeExploration() {
+  restoreState();
+}
+
+function startFresh() {
+  if (confirm('確定要重新開始嗎？目前的探索進度將會清除。')) {
+    clearState();
+    state = { mode:null, step:0, userName:'', cards:[], selected:[], ranked:[], reasons:{}, satisfaction:{}, createdAt:null };
+    const resumeSection = document.getElementById('resume-section');
+    const modeSelectSection = document.getElementById('mode-select-section');
+    if (resumeSection) resumeSection.style.display = 'none';
+    if (modeSelectSection) modeSelectSection.style.display = 'block';
+  }
+}
+
+function triggerImportJSON() {
+  const input = document.getElementById('lv-file-input');
+  if (input) input.click();
+}
+
+function validateImportJSON(data) {
+  if (!data || typeof data !== 'object') return false;
+  return ['mode', 'step', 'cards', 'selected', 'ranked', 'reasons', 'satisfaction'].every(
+    f => Object.prototype.hasOwnProperty.call(data, f)
+  );
+}
+
+function exportJSON() {
+  const now = new Date();
+  const dateStr = now.toISOString().slice(0, 10).replace(/-/g, '');
+  const exportObj = {
+    version: '1.0',
+    exportedAt: now.toISOString(),
+    mode: state.mode,
+    step: state.step,
+    userName: state.userName,
+    cards: state.cards,
+    selected: state.selected,
+    ranked: state.ranked,
+    reasons: state.reasons,
+    satisfaction: state.satisfaction,
+    createdAt: state.createdAt
+  };
+  const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `價值觀探索_${state.userName || 'result'}_${dateStr}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('已匯出 JSON 檔案');
 }
 
 // ─── MODE ─────────────────────────────────────────────────────────────────────
