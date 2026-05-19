@@ -979,6 +979,30 @@
     line-height: 1.6;
     margin-bottom: 0.75rem;
   }
+  .reflection-pure-hint {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+    padding: 0.6rem 0.75rem;
+    background: var(--warm);
+    border-radius: 8px;
+  }
+  .reflection-hint-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .reflection-hint-tag {
+    font-size: 0.72rem;
+    color: var(--ink);
+    background: white;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 20px;
+    padding: 0.15rem 0.6rem;
+  }
 
   /* ── REPORT PAGE ── */
   .report-section {

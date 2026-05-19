@@ -1,4 +1,4 @@
-
+﻿
   // DATA
 /**
  * career-card-data.js
@@ -802,8 +802,9 @@ function renderStep5() {
   ranked.forEach(function(item) {
     var row = document.createElement('div');
     row.className = 'bar-row';
+    var pct = topCount > 0 ? Math.round(item.count / topCount * 100) : 0;
     row.innerHTML = '<div class="bar-label">' + item.label + '</div>' +
-      '<div class="bar-track"><div class="bar-fill" style="width:' + (item.count * 14 + 8) + 'px; background:' + (HOLLAND_COLORS[item.code]?.bg || '#eee') + ';"></div></div>' +
+      '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%; background:' + (HOLLAND_COLORS[item.code]?.bg || '#eee') + ';"></div></div>' +
       '<div class="bar-count">' + item.count + '</div>';
     chart.appendChild(row);
   });
@@ -864,6 +865,15 @@ function renderStep6() {
     });
     wrapper.appendChild(qNum);
     wrapper.appendChild(qText);
+    if (index === 0 && pureLikeCards.length > 0) {
+      var hint = document.createElement('div');
+      hint.className = 'reflection-pure-hint';
+      hint.innerHTML = '<span class="reflection-hint-label">你的「純粹喜歡」：</span>' +
+        pureLikeCards.map(function(c) {
+          return '<span class="reflection-hint-tag">' + c.nameZh + '</span>';
+        }).join('');
+      wrapper.appendChild(hint);
+    }
     wrapper.appendChild(field);
     container.appendChild(wrapper);
   });
