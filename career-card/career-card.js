@@ -641,6 +641,7 @@ function renderStep2() {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'classify-btn' + (classification === type ? ' active-' + type : '');
+      btn.setAttribute('data-category', type);
       btn.textContent = label;
       btn.setAttribute('aria-pressed', classification === type ? 'true' : 'false');
       btn.addEventListener('click', function() {
