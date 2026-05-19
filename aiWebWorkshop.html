@@ -6,98 +6,7 @@
 <title>一頁式個人品牌網站工作坊｜職涯諮詢師專屬</title>
     <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">  <!-- 放這裡 ✓ -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Noto Sans TC',sans-serif;background:#fff;color:#1a1a1a;line-height:1.6}
-a{color:inherit;text-decoration:none}
-
-/* NAV */
-nav{position:sticky;top:0;background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);border-bottom:1px solid #eee;z-index:100;padding:0 2rem}
-.nav-inner{max-width:860px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;height:56px}
-.nav-logo{font-size:15px;font-weight:700;color:#1D9E75}
-.nav-cta{background:#1D9E75;color:#fff;font-size:13px;font-weight:500;padding:8px 20px;border-radius:8px;cursor:pointer;border:none}
-
-/* LAYOUT */
-.container{max-width:860px;margin:0 auto;padding:0 2rem}
-
-/* HERO */
-.hero{padding:5rem 2rem 4rem;text-align:center;background:linear-gradient(180deg,#F0FBF7 0%,#fff 100%)}
-.hero .container{max-width:640px}
-.badge{display:inline-block;background:#E1F5EE;color:#0F6E56;font-size:12px;font-weight:500;padding:5px 16px;border-radius:20px;margin-bottom:1.4rem}
-.hero h1{font-size:32px;font-weight:700;color:#111;line-height:1.35;margin-bottom:1.1rem}
-.hero h1 span{color:#1D9E75}
-.hero p{font-size:16px;color:#555;line-height:1.75;margin-bottom:2rem;max-width:480px;margin-left:auto;margin-right:auto}
-.cta-btn{display:inline-block;background:#1D9E75;color:#fff;font-size:15px;font-weight:500;padding:14px 36px;border-radius:10px;cursor:pointer;border:none;box-shadow:0 4px 14px rgba(29,158,117,0.25);transition:transform 0.15s,box-shadow 0.15s}
-.cta-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(29,158,117,0.3)}
-.cta-sub{font-size:12px;color:#999;margin-top:0.7rem}
-.meta-row{display:flex;justify-content:center;gap:2rem;margin-top:2.2rem;flex-wrap:wrap}
-.meta-item{font-size:13px;color:#666;display:flex;align-items:center;gap:6px}
-.meta-dot{width:7px;height:7px;border-radius:50%;background:#1D9E75;flex-shrink:0}
-
-/* SECTIONS */
-.section{padding:4rem 2rem}
-.section.gray{background:#F8FAFB}
-.section-label{font-size:11px;font-weight:500;color:#1D9E75;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem}
-.section h2{font-size:22px;font-weight:700;color:#111;margin-bottom:0.7rem}
-.section .sub{font-size:15px;color:#555;line-height:1.7;margin-bottom:2rem}
-
-/* PROBLEM */
-.problem-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-@media(max-width:640px){.problem-cards{grid-template-columns:1fr}}
-.problem-card{background:#fff;border:1px solid #eee;border-radius:12px;padding:1.4rem}
-.problem-card strong{display:block;font-size:14px;font-weight:700;color:#111;margin-bottom:6px}
-.problem-card p{font-size:13px;color:#666;line-height:1.65}
-
-/* OUTCOMES */
-.outcome-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:480px){.outcome-grid{grid-template-columns:1fr}}
-.outcome-item{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid #eee;border-radius:12px;padding:1.1rem}
-.outcome-check{width:22px;height:22px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.outcome-check svg{width:11px;height:11px}
-.outcome-text{font-size:14px;color:#333;line-height:1.55}
-
-/* FLOW */
-.flow{display:flex;flex-direction:column;gap:0;border:1px solid #eee;border-radius:14px;overflow:hidden}
-.flow-step{display:flex;gap:16px;align-items:flex-start;padding:1.1rem 1.4rem;border-bottom:1px solid #eee;background:#fff}
-.flow-step:last-child{border-bottom:none}
-.flow-step:nth-child(even){background:#FAFAFA}
-.flow-num{width:30px;height:30px;border-radius:50%;background:#1D9E75;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.flow-num.break{background:#ddd;color:#888}
-.flow-content{flex:1}
-.flow-content strong{display:block;font-size:14px;font-weight:700;color:#111;margin-bottom:2px}
-.flow-content span{font-size:13px;color:#777;line-height:1.5}
-.flow-time{font-size:12px;color:#1D9E75;font-weight:500;white-space:nowrap;padding-top:5px}
-
-/* TOOLS */
-.tools-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-@media(max-width:560px){.tools-row{grid-template-columns:1fr}}
-.tool-card{background:#fff;border:1px solid #eee;border-radius:12px;padding:1.3rem}
-.tool-icon{font-size:24px;margin-bottom:0.5rem}
-.tool-card strong{display:block;font-size:15px;font-weight:700;color:#111;margin-bottom:4px}
-.tool-card span{font-size:13px;color:#666;line-height:1.55}
-.tool-free{display:inline-block;background:#E1F5EE;color:#0F6E56;font-size:11px;font-weight:500;padding:2px 8px;border-radius:6px;margin-top:8px}
-
-/* FAQ */
-.faq-list{border:1px solid #eee;border-radius:14px;overflow:hidden}
-.faq-item{border-bottom:1px solid #eee;background:#fff}
-.faq-item:last-child{border-bottom:none}
-.faq-q{width:100%;text-align:left;font-size:14px;font-weight:500;color:#111;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:1.1rem 1.4rem;cursor:pointer;background:none;border:none;font-family:inherit}
-.faq-q:hover{background:#FAFAFA}
-.faq-arrow{font-size:18px;color:#aaa;transition:transform 0.2s;flex-shrink:0;line-height:1}
-.faq-item.open .faq-arrow{transform:rotate(45deg);color:#1D9E75}
-.faq-a{font-size:13px;color:#555;line-height:1.7;padding:0 1.4rem 1.1rem;display:none}
-.faq-item.open .faq-a{display:block}
-
-/* FOOTER CTA */
-.footer-cta{background:linear-gradient(135deg,#0F6E56,#1D9E75);padding:4rem 2rem;text-align:center}
-.footer-cta h3{font-size:22px;font-weight:700;color:#fff;margin-bottom:0.7rem}
-.footer-cta p{font-size:15px;color:rgba(255,255,255,0.8);margin-bottom:1.8rem;line-height:1.7}
-.footer-cta .cta-btn{background:#fff;color:#0F6E56}
-.footer-cta .cta-btn:hover{box-shadow:0 6px 18px rgba(0,0,0,0.15)}
-.footer-cta .cta-sub{color:rgba(255,255,255,0.6)}
-
-footer{padding:1.5rem 2rem;text-align:center;font-size:12px;color:#aaa;border-top:1px solid #eee}
-</style>
+<link rel="stylesheet" href="css/aiWebWorkshop.css">
 </head>
 <body>
 
@@ -312,11 +221,6 @@ footer{padding:1.5rem 2rem;text-align:center;font-size:12px;color:#aaa;border-to
 </footer>
 
 
-<script>
-function toggleFaq(btn){
-  const item = btn.closest('.faq-item');
-  item.classList.toggle('open');
-}
-</script>
+<script src="js/aiWebWorkshop.js"></script>
 </body>
 </html>
