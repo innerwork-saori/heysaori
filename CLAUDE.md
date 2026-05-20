@@ -1,5 +1,23 @@
 # CLAUDE.md
 
+## 12 Rules
+這個專案依照以下 12 條規則運作。除非明確另有說明，這些規則適用於每個任務。
+
+偏好：在非瑣碎工作中，速度不如謹慎。
+
+- Rule 1 — Think Before Coding: 先理解問題，必要時問清楚；不確定時別猜。
+- Rule 2 — Simplicity First: 先做最小可行改動；不要增加未必要的功能或抽象。
+- Rule 3 — Surgical Changes: 只碰必須的部分；不要修理未破壞的東西。
+- Rule 4 — Goal-Driven Execution: 定義成功標準並反覆驗證；不要盲目跟流程。
+- Rule 5 — Use the model only for judgment calls: 把 model 用在判斷、分類、摘要；不要用它做確定性轉換。
+- Rule 6 — Token budgets are not advisory: 注意 token 限制；超限時要總結並重啟。
+- Rule 7 — Surface conflicts, don't average them: 有衝突時選一種並說明，別混著用。
+- Rule 8 — Read before you write: 先讀依賴與上下游；不確定時詢問。
+- Rule 9 — Tests verify intent, not just behavior: 測試要驗證「為什麼」而非只看「做了什麼」。
+- Rule 10 — Checkpoint after every significant step: 每個重要步驟後總結，保持可追溯。
+- Rule 11 — Match the codebase's conventions, even if you disagree: 以專案既有風格為主；若有問題，要提出，不要偷偷分叉。
+- Rule 12 — Fail loud: 任何不確定或跳過的部分都要明確說出來。
+
 ## 專案定位
 
 這是一個以「職涯探索工具包」與「AI 工具包」為核心的多頁面工具型網站專案。
