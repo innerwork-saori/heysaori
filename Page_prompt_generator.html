@@ -214,8 +214,18 @@
 
   <!-- Actions -->
   <div class="actions">
-    <button class="primary" onclick="gen()" data-i18n="btnGen">產生 Prompt</button>
+    <button class="primary" onclick="gen()" data-i18n="btnGen">產生主要 Prompt</button>
     <button onclick="copyText()" data-i18n="btnCopy">複製</button>
+  </div>
+
+  <!-- Quick Templates -->
+  <div class="snippet-group">
+    <div class="snippet-label" data-i18n="snippetGroupLabel">快速指令範本</div>
+    <div class="snippet-btns">
+      <button class="snippet" onclick="setSnippet('style')" data-i18n="snippetStyleBtn">調整視覺風格</button>
+      <button class="snippet" onclick="setSnippet('text')" data-i18n="snippetTextBtn">修改文字內容</button>
+      <button class="snippet" onclick="setSnippet('photo')" data-i18n="snippetPhotoBtn">加入照片</button>
+    </div>
   </div>
 
   <!-- Output -->

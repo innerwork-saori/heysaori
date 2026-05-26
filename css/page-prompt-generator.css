@@ -284,6 +284,43 @@ button.primary {
 }
 button.primary:hover { background: var(--ink-soft); }
 
+/* ── QUICK TEMPLATES ── */
+.snippet-group {
+  margin-top: 1.2rem;
+  padding-top: 1.2rem;
+  border-top: 1px dashed var(--paper-mid);
+}
+.snippet-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  color: var(--text-soft);
+  margin-bottom: 0.7rem;
+  text-transform: uppercase;
+}
+.snippet-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+button.snippet {
+  padding: 0.5rem 1.2rem;
+  border: 1px dashed var(--paper-mid);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--text-soft);
+  font-family: 'Noto Serif TC', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: border-color 0.25s, color 0.25s, background 0.25s;
+}
+button.snippet:hover {
+  border-color: var(--accent3);
+  border-style: solid;
+  color: var(--accent1);
+  background: var(--paper-warm);
+}
+
 /* ── OUTPUT BLOCK ── */
 .output-wrap {
   margin-top: 3rem;

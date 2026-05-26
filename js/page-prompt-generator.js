@@ -54,7 +54,7 @@ const i18n = {
     errTooEmpty: '欸呀～資訊太少啦！再多給我一些線索，我才能幫你變出厲害的網站內容喔',
     errCustomColor: '選了自訂配色，請填寫你喜歡的配色描述 🎨',
     smartFallback: '（請反問我問題協助我釐清之後再開始生成網頁）',
-    promptHeader: '你是一位專業的網頁設計師。請幫我設計一個一頁式個人品牌網站的完整 HTML 檔案。',
+    promptHeader: '你是一位專業的網頁設計師。請遵循網頁 UX 原則幫我設計一個一頁式個人品牌網站的完整 HTML 檔案。',
     promptAbout: '【關於我】',
     promptAudience: '【目標客戶與服務】',
     promptBgSection: '【我的背景】',
@@ -105,6 +105,29 @@ const i18n = {
     labelCustomFont: '自訂字型名稱 <span style="color:var(--accent-rose)">*必填</span>',
     phCustomFont: '例：Nunito、Source Han Sans、思源黑體',
     errCustomFont: '選了自訂字型，請填寫字型名稱 🔤',
+    snippetGroupLabel: '快速指令範本',
+    snippetStyleBtn: '調整視覺風格',
+    snippetTextBtn: '修改文字內容',
+    snippetPhotoBtn: '加入照片',
+    snippetStyleContent: `請修改這個網站設計，調整以下部分：
+
+1. 主色調改為 [填入顏色描述，例如：深藍色 #1a3c5e]
+2. Hero 區塊的背景改為 [純色／漸層／圖片]
+3. 字型改為更 [現代／溫暖／正式] 的風格
+4. 按鈕樣式改為 [圓角／方形／有陰影]
+
+其他內容維持不變，請輸出完整的修改後 HTML 檔案。`,
+    snippetTextContent: `請修改 HTML 中的以下內容，其他都不要動：
+
+- Hero 標題改為：[填入]
+- About 區塊第一段改為：[填入]
+- Service 項目一改為：[填入]
+
+請輸出修改後的完整 HTML 檔案。`,
+    snippetPhotoContent: `請在 Hero 區塊加入我的個人照片。
+https://xxx.github.io/ooo/zzz.webp
+請把照片放在文字的右側，圓形裁切，寬度約 200–250px，在手機版時照片移到文字下方。
+其他內容不變，請輸出完整修改後的 HTML 檔案。`,
   },
   en: {
     pageTitle: 'Website Prompt Generator · Saori',
@@ -159,7 +182,7 @@ const i18n = {
     errTooEmpty: 'Not enough info yet! Give me a few more details so I can craft a great prompt.',
     errCustomColor: 'You selected Custom Color — please describe your preferred palette 🎨',
     smartFallback: '(Please ask me clarifying questions before generating the page)',
-    promptHeader: 'You are a professional web designer. Please create a complete single-page personal brand website as a full HTML file.',
+    promptHeader: 'You are a professional web designer. Please follow web UX principles and create a complete single-page personal brand website as a full HTML file.',
     promptAbout: '[About Me]',
     promptAudience: '[Target Audience & Services]',
     promptBgSection: '[My Background]',
@@ -212,6 +235,29 @@ const i18n = {
     labelCustomFont: 'Custom Font Name <span style="color:var(--accent-rose)">*required</span>',
     phCustomFont: 'e.g. Nunito, Outfit, Josefin Sans',
     errCustomFont: 'You selected Custom font — please enter the font name 🔤',
+    snippetGroupLabel: 'Quick Template Prompts',
+    snippetStyleBtn: 'Adjust Visual Style',
+    snippetTextBtn: 'Edit Text Content',
+    snippetPhotoBtn: 'Add a Photo',
+    snippetStyleContent: `Please update the website design with the following changes:
+
+1. Change the primary color to [e.g., deep navy blue #1a3c5e]
+2. Change the Hero section background to [solid color / gradient / image]
+3. Update the typography to a more [modern / warm / formal] style
+4. Change the button style to [rounded / square / with shadow]
+
+Keep all other content unchanged. Please output the complete modified HTML file.`,
+    snippetTextContent: `Please update the following text in the HTML — do not change anything else:
+
+- Hero headline: [fill in]
+- About section first paragraph: [fill in]
+- Service item 1: [fill in]
+
+Please output the complete modified HTML file.`,
+    snippetPhotoContent: `Please add my personal photo to the Hero section.
+https://xxx.github.io/ooo/zzz.webp
+Place the photo to the right of the text, cropped in a circle, approximately 200–250px wide. On mobile, move the photo below the text.
+Keep all other content unchanged. Please output the complete modified HTML file.`,
   }
 };
 
@@ -464,6 +510,10 @@ ${L.layoutNote}
 ${L.promptFooter}`;
 
   showOutput(t);
+}
+
+function setSnippet(type) {
+  showOutput(i18n[currentLang]['snippet' + type.charAt(0).toUpperCase() + type.slice(1) + 'Content']);
 }
 
 function copyText() {
