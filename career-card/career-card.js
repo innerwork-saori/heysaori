@@ -389,7 +389,7 @@ function loadFromStorage() {
  * @param {object} state - 應用程式狀態物件
  * @returns {object} 匯出的 JSON 物件
  */
-function exportJSON(state) {
+function exportJSON(state = appState) {
   const now = new Date();
   const yyyy = now.getFullYear();
   const mm = String(now.getMonth() + 1).padStart(2, '0');
