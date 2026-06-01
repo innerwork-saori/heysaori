@@ -302,8 +302,27 @@
     justify-content: space-between;
     align-items: center;
     gap: 0.8rem;
+    flex-wrap: wrap;
   }
   .sticky-nav.visible { display: flex; }
+  .nav-export-row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: -0.2rem;
+  }
+  .nav-export-btn {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 0.75rem;
+    cursor: pointer;
+    padding: 0.1rem 0.6rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  .nav-export-btn:hover { color: #666; }
   .nav-btn {
     padding: 0.65rem 1.8rem;
     border-radius: 6px;
