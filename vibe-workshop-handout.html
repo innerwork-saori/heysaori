@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 一頁式網站工作坊 學習單 | Saori</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saori-base.css">
+<link rel="stylesheet" href="css/vibe-workshop-handout.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">回首頁</a>
+  <div class="nav-title">AI 一頁式網站工作坊</div>
+</nav>
+
+<!-- ANCHOR NAV -->
+<div class="anchor-nav">
+  <a href="#tools" class="anchor-link">🧰 工具準備</a>
+  <span class="anchor-sep">·</span>
+  <a href="#structure" class="anchor-link">📋 架構</a>
+  <span class="anchor-sep">·</span>
+  <a href="#step1" class="anchor-link">Step 1 Prompt</a>
+  <span class="anchor-sep">·</span>
+  <a href="#step2" class="anchor-link">Step 2 生成</a>
+  <span class="anchor-sep">·</span>
+  <a href="#step3" class="anchor-link">Step 3 上架</a>
+  <span class="anchor-sep">·</span>
+  <a href="#step4" class="anchor-link">Step 4 優化</a>
+  <span class="anchor-sep">·</span>
+  <a href="#ref" class="anchor-link">🔧 速查</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines" aria-hidden="true">
+    <svg viewBox="0 0 1440 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="150" x2="350" y2="0" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <line x1="1440" y1="350" x2="1100" y2="500" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <circle cx="1250" cy="100" r="160" fill="none" stroke="rgba(250,247,242,0.03)" stroke-width="1"/>
+      <circle cx="180" cy="420" r="100" fill="none" stroke="rgba(196,149,106,0.05)" stroke-width="1"/>
+    </svg>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-label">AI × Vibe Coding · Workshop Handout</div>
+    <h1 class="hero-title">AI 一頁式網站工作坊<br>學習單</h1>
+    <div class="hero-divider"></div>
+    <div class="hero-instructor">
+      講師：Saori・謝孟娟・<a href="https://heysaori.com" target="_blank" rel="noopener">heysaori.com</a>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS TABLE -->
+<section id="tools" class="ws-section">
+  <div class="container">
+    <div class="section-label">工具準備</div>
+    <h2 class="section-title">🧰 今日工具一覽（全部免費）</h2>
+    <div class="section-rule"></div>
+    <div class="tools-table-wrap">
+      <table class="tools-table">
+        <thead>
+          <tr><th>工具</th><th>用途</th><th>網址</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Claude</strong></td>
+            <td>核心工具：生成完整 HTML 網站</td>
+            <td><a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a></td>
+          </tr>
+          <tr>
+            <td><strong>ChatGPT</strong></td>
+            <td>整理內容文字 / 生成圖片素材</td>
+            <td><a href="https://chatgpt.com" target="_blank" rel="noopener">chatgpt.com</a></td>
+          </tr>
+          <tr>
+            <td><strong>Perplexity</strong></td>
+            <td>搜尋靈感、找設計範例</td>
+            <td><a href="https://perplexity.ai" target="_blank" rel="noopener">perplexity.ai</a></td>
+          </tr>
+          <tr>
+            <td><strong>Gemini</strong></td>
+            <td>查資料、輔助工具</td>
+            <td><a href="https://gemini.google.com" target="_blank" rel="noopener">gemini.google.com</a></td>
+          </tr>
+          <tr>
+            <td><strong>VS Code</strong></td>
+            <td>網站編輯器</td>
+            <td><a href="https://code.visualstudio.com" target="_blank" rel="noopener">code.visualstudio.com</a></td>
+          </tr>
+          <tr>
+            <td><strong>Git</strong></td>
+            <td>版本控制工具</td>
+            <td><a href="https://git-scm.com" target="_blank" rel="noopener">git-scm.com</a></td>
+          </tr>
+          <tr>
+            <td><strong>GitHub</strong></td>
+            <td>存放網站 + 免費網址</td>
+            <td><a href="https://github.com" target="_blank" rel="noopener">github.com</a></td>
+          </tr>
+          <tr>
+            <td><strong>Saori AI 工具箱</strong></td>
+            <td>取得 Prompt 產生器</td>
+            <td><a href="http://to.heysaori.com/saoris_aitools" target="_blank" rel="noopener">to.heysaori.com/saoris_aitools</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- WEBSITE STRUCTURE -->
+<section id="structure" class="ws-section warm">
+  <div class="container">
+    <div class="section-label">網站架構</div>
+    <h2 class="section-title">📋 一頁式網站六大區塊</h2>
+    <div class="section-rule"></div>
+    <p class="section-sub">你的網站需要包含以下六個區塊，每個都有其核心任務：</p>
+    <div class="structure-grid">
+      <div class="structure-item">
+        <div class="structure-num">01</div>
+        <div class="structure-content">
+          <strong>Hero</strong>
+          <span>第一眼印象，說明「你是誰」/「你幫誰解決什麼問題」（大字標題）</span>
+        </div>
+      </div>
+      <div class="structure-item">
+        <div class="structure-num">02</div>
+        <div class="structure-content">
+          <strong>About</strong>
+          <span>關於我，用 2–3 段說明為什麼你適合做這件事</span>
+        </div>
+      </div>
+      <div class="structure-item">
+        <div class="structure-num">03</div>
+        <div class="structure-content">
+          <strong>Service</strong>
+          <span>服務項目，說明你提供什麼，以及客戶能得到什麼</span>
+        </div>
+      </div>
+      <div class="structure-item">
+        <div class="structure-num">04</div>
+        <div class="structure-content">
+          <strong>Process</strong>
+          <span>如何合作，用 3–4 個步驟降低客戶不確定感</span>
+        </div>
+      </div>
+      <div class="structure-item">
+        <div class="structure-num">05</div>
+        <div class="structure-content">
+          <strong>Trust</strong>
+          <span>信任感，包含客戶推薦、媒體露出或具體成果數據</span>
+        </div>
+      </div>
+      <div class="structure-item">
+        <div class="structure-num">06</div>
+        <div class="structure-content">
+          <strong>Contact</strong>
+          <span>聯絡我，清楚的行動呼籲（CTA）＋聯絡方式</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 1 -->
+<section id="step1" class="ws-section">
+  <div class="container">
+    <div class="step-header">
+      <div class="step-eyebrow">Step 1</div>
+      <h2 class="section-title">✍️ 產生網站 Prompt</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="step-url">
+      <span class="url-label">工具網址</span>
+      <a href="http://to.heysaori.com/saoris_aitools" target="_blank" rel="noopener" class="url-link">to.heysaori.com/saoris_aitools</a>
+      <span class="url-hint">→ 選「網站 Prompt 產生器」</span>
+    </div>
+
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" class="check-input">
+        <div class="check-box"></div>
+        <div class="check-text">填寫「<strong>關於你</strong>」：姓名、職稱／定位、我的背景（2–3 句話）</div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input">
+        <div class="check-box"></div>
+        <div class="check-text">填寫「<strong>目標客戶與服務</strong>」：目標客戶、客戶痛點、我提供的服務、我的特色</div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input">
+        <div class="check-box"></div>
+        <div class="check-text">填寫「<strong>信任感元素</strong>」：客戶推薦、媒體露出、成果數據等</div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input">
+        <div class="check-box"></div>
+        <div class="check-text">選擇「<strong>設計風格</strong>」（參考下方風格表）</div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input">
+        <div class="check-box"></div>
+        <div class="check-text">點擊「<strong>產生 Prompt</strong>」並複製</div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input">
+        <div class="check-box"></div>
+        <div class="check-text">遇到不知道怎麼填的欄位，可以跳過，或先跟 AI 討論</div>
+      </label>
+    </div>
+  </div>
+</section>
+
+<!-- DESIGN STYLES -->
+<section class="ws-section warm">
+  <div class="container">
+    <div class="section-label">設計參考</div>
+    <h2 class="section-title">🎨 設計風格參考</h2>
+    <div class="section-rule"></div>
+    <div class="style-grid">
+      <div class="style-card">
+        <div class="style-area">minimal</div>
+        <div class="style-name">極簡清新風</div>
+        <div class="style-desc">乾淨・留白多・耐看<br>白底、簡單排版、少量強調色</div>
+      </div>
+      <div class="style-card">
+        <div class="style-area">professional</div>
+        <div class="style-name">專業科技風</div>
+        <div class="style-desc">理性・俐落・像新創官網<br>深色或中性色、卡片區塊</div>
+      </div>
+      <div class="style-card">
+        <div class="style-area">editorial</div>
+        <div class="style-name">雜誌編輯風</div>
+        <div class="style-desc">有質感・重排版<br>大標題、強字體對比</div>
+      </div>
+      <div class="style-card">
+        <div class="style-area">illustrative</div>
+        <div class="style-name">插畫親切風</div>
+        <div class="style-desc">輕鬆・有品牌個性<br>插畫主視覺、柔和配色</div>
+      </div>
+      <div class="style-card">
+        <div class="style-area">retro</div>
+        <div class="style-name">復古懷舊風</div>
+        <div class="style-desc">溫暖・有年代感<br>復古配色、褪色質感裝飾</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 2 -->
+<section id="step2" class="ws-section">
+  <div class="container">
+    <div class="step-header">
+      <div class="step-eyebrow">Step 2</div>
+      <h2 class="section-title">🤖 用 Claude 生成網站</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="step-url">
+      <span class="url-label">工具網址</span>
+      <a href="https://claude.ai" target="_blank" rel="noopener" class="url-link">claude.ai</a>
+    </div>
+
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" class="check-input">
+        <div class="check-box"></div>
+        <div class="check-text">開啟 Claude，新增對話</div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input">
+        <div class="check-box"></div>
+        <div class="check-text">將第一步產出的 Prompt <strong>完整貼上</strong></div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input">
+        <div class="check-box"></div>
+        <div class="check-text">Claude 會生成完整的 HTML 網頁程式碼</div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input">
+        <div class="check-box"></div>
+        <div class="check-text">點擊右上角 <strong>Copy → Download</strong>，下載 HTML 檔案</div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input">
+        <div class="check-box"></div>
+        <div class="check-text">儲存時，<strong>檔名必須命名為 <code>index.html</code></strong></div>
+      </label>
+    </div>
+
+    <div class="note-box">
+      <div class="note-title">常見問題</div>
+      <div class="note-item"><span class="note-q">程式有錯誤？</span>把錯誤訊息複製貼給 AI，它會幫你修正</div>
+      <div class="note-item"><span class="note-q">做出來不是想要的？</span>確認規格說明是否夠清楚（Garbage In, Garbage Out）</div>
+    </div>
+
+    <div class="section-label" style="margin-top:2.5rem;">可選：加入個人照片</div>
+    <p class="hint" style="margin-top:0.3rem;margin-bottom:0.8rem;">先用 <a href="https://cloudconvert.com" target="_blank" rel="noopener">CloudConvert</a> 將照片轉成 <code>.webp</code> 格式，上傳到 GitHub 取得網址後，貼以下指令給 Claude：</p>
+    <div class="code-block-wrap">
+      <div class="code-label">prompt 範例</div>
+      <pre class="code-block">請在 Hero 區塊加入我的個人照片。
+https://你的帳號.github.io/你的repo名稱/照片.webp
+請把照片放在文字的右側，圓形裁切，寬度約 200–250px，
+在手機版時照片移到文字下方。
+其他內容不變，請輸出完整修改後的 HTML 檔案。</pre>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 3 BASIC -->
+<section id="step3" class="ws-section warm">
+  <div class="container">
+    <div class="step-header">
+      <div class="step-eyebrow">Step 3</div>
+      <h2 class="section-title">🚀 上架到 GitHub（零安裝方案）</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="step-url">
+      <span class="url-label">工具網址</span>
+      <a href="https://github.com" target="_blank" rel="noopener" class="url-link">github.com</a>
+    </div>
+
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" class="check-input">
+        <div class="check-box"></div>
+        <div class="check-text">在 GitHub 申請帳號（記住你的帳號名稱）</div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input">
+        <div class="check-box"></div>
+        <div class="check-text">新增 Repository（命名為你想要的網址名稱）</div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input">
+        <div class="check-box"></div>
+        <div class="check-text">上傳 <code>index.html</code> 檔案到 Repository</div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input">
+        <div class="check-box"></div>
+        <div class="check-text">進入 Repository → <strong>Settings</strong> → <strong>Pages</strong></div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input">
+        <div class="check-box"></div>
+        <div class="check-text">Source 選擇 <strong>main branch</strong> → 點擊 <strong>Save</strong></div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input">
+        <div class="check-box"></div>
+        <div class="check-text">稍等片刻，網站上線！</div>
+      </label>
+    </div>
+
+    <div class="result-box">
+      <div class="result-label">你的網址</div>
+      <div class="result-url">你的帳號.github.io/repo名稱</div>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 3 ADVANCED -->
+<section class="ws-section">
+  <div class="container">
+    <div class="step-header">
+      <div class="step-eyebrow">Step 3 進階</div>
+      <h2 class="section-title">💻 用 VS Code 上架</h2>
+      <div class="section-rule"></div>
+    </div>
+    <p class="section-sub">適合想持續開發的同學。</p>
+
+    <div class="substep">
+      <div class="substep-title">安裝工具</div>
+      <div class="checklist">
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">
+            安裝 Git：<a href="https://git-scm.com" target="_blank" rel="noopener">git-scm.com</a>
+            <ul class="sub-notes">
+              <li>取消勾選「Git GUI 工具」</li>
+              <li>勾選「check daily for git for windows updates」</li>
+              <li>編輯器選「Use Visual Studio Code as Git's default editor」</li>
+            </ul>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">安裝 VS Code：<a href="https://code.visualstudio.com" target="_blank" rel="noopener">code.visualstudio.com</a></div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">設定 Git 身份（終端機輸入以下指令）</div>
+        </label>
+      </div>
+      <div class="code-block-wrap">
+        <pre class="code-block">git config --global user.name "你的名字"
+git config --global user.email "你的GitHub信箱"</pre>
+      </div>
+    </div>
+
+    <div class="substep">
+      <div class="substep-title">上傳網站到 GitHub</div>
+      <div class="checklist">
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">在 VS Code 打開你的網站資料夾</div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">點擊左側「<strong>Source Control</strong>」圖示（分支圖示）</div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">點擊「<strong>Initialize Repository</strong>」</div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">點擊「<strong>Publish to GitHub</strong>」</div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">選擇「<strong>Publish to GitHub public repository</strong>」</div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">選擇要上傳的檔案，點擊 <strong>OK</strong></div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">成功後點擊「<strong>Open on GitHub</strong>」確認</div>
+        </label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 4 -->
+<section id="step4" class="ws-section warm">
+  <div class="container">
+    <div class="step-header">
+      <div class="step-eyebrow">Step 4</div>
+      <h2 class="section-title">✨ 優化網站</h2>
+      <div class="section-rule"></div>
+    </div>
+    <p class="section-sub">上架後，繼續請 Claude 幫你改進。複製以下 Prompt 範本，填入你的需求後貼給 Claude：</p>
+
+    <div class="optimize-block">
+      <div class="optimize-area">調整視覺風格</div>
+      <div class="code-block-wrap">
+        <pre class="code-block">請修改上面的網站設計，調整以下部分：
+1. 主色調改為 [填入顏色，例如：深藍色 #1a3c5e]
+2. Hero 區塊的背景改為 [純色／漸層／圖片]
+3. 字型改為更 [現代／溫暖／正式] 的風格
+4. 按鈕樣式改為 [圓角／方形／有陰影]
+其他內容維持不變，請輸出完整修改後 HTML 檔案。</pre>
+      </div>
+    </div>
+
+    <div class="optimize-block">
+      <div class="optimize-area">修改文字內容</div>
+      <div class="code-block-wrap">
+        <pre class="code-block">請修改 HTML 中的以下內容，其他都不要動：
+- Hero 標題改為：[填入]
+- About 區塊第一段改為：[填入]
+- Service 項目一改為：[填入]
+請輸出修改後的完整 HTML 檔案。</pre>
+      </div>
+    </div>
+
+    <div class="optimize-block">
+      <div class="optimize-area">新增 / 修改區塊</div>
+      <div class="code-block-wrap">
+        <pre class="code-block">請幫我改善這個網站的以下部分：
+1. Service 區塊加入價格資訊（[填入定價]）
+2. 新增一個 FAQ 區塊，問題如下：
+   - Q1：[填入] A1：[填入]
+3. Contact 區塊加入一個 Calendly 預約連結按鈕
+   - 連結：[填入你的 Calendly 網址]
+請輸出完整修改後的 HTML 檔案。</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK REFERENCE -->
+<section id="ref" class="ws-section ink">
+  <div class="container">
+    <div class="section-label">快速參考</div>
+    <h2 class="section-title">🔧 常用工具網址速查</h2>
+    <div class="section-rule"></div>
+    <div class="ref-grid">
+      <a href="https://claude.ai" target="_blank" rel="noopener" class="ref-card">
+        <div class="ref-icon">🤖</div>
+        <div class="ref-name">Claude</div>
+        <div class="ref-url">claude.ai</div>
+      </a>
+      <a href="https://chatgpt.com" target="_blank" rel="noopener" class="ref-card">
+        <div class="ref-icon">💬</div>
+        <div class="ref-name">ChatGPT</div>
+        <div class="ref-url">chatgpt.com</div>
+      </a>
+      <a href="https://perplexity.ai" target="_blank" rel="noopener" class="ref-card">
+        <div class="ref-icon">🔍</div>
+        <div class="ref-name">Perplexity</div>
+        <div class="ref-url">perplexity.ai</div>
+      </a>
+      <a href="https://github.com" target="_blank" rel="noopener" class="ref-card">
+        <div class="ref-icon">🐙</div>
+        <div class="ref-name">GitHub</div>
+        <div class="ref-url">github.com</div>
+      </a>
+      <a href="https://git-scm.com" target="_blank" rel="noopener" class="ref-card">
+        <div class="ref-icon">⚙️</div>
+        <div class="ref-name">Git 下載</div>
+        <div class="ref-url">git-scm.com</div>
+      </a>
+      <a href="https://code.visualstudio.com" target="_blank" rel="noopener" class="ref-card">
+        <div class="ref-icon">💻</div>
+        <div class="ref-name">VS Code</div>
+        <div class="ref-url">code.visualstudio.com</div>
+      </a>
+      <a href="https://www.happyhues.co" target="_blank" rel="noopener" class="ref-card">
+        <div class="ref-icon">🎨</div>
+        <div class="ref-name">Happy Hues</div>
+        <div class="ref-url">happyhues.co</div>
+      </a>
+      <a href="https://cloudconvert.com" target="_blank" rel="noopener" class="ref-card">
+        <div class="ref-icon">🔄</div>
+        <div class="ref-name">CloudConvert</div>
+        <div class="ref-url">cloudconvert.com</div>
+      </a>
+      <a href="http://to.heysaori.com/saoris_aitools" target="_blank" rel="noopener" class="ref-card ref-card--highlight">
+        <div class="ref-icon">✨</div>
+        <div class="ref-name">Saori AI 工具箱</div>
+        <div class="ref-url">to.heysaori.com/saoris_aitools</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="inner">
+    <div class="footer-name">Saori</div>
+    <div class="footer-role">軟體工程師・系統分析師・生涯諮詢師</div>
+    <div class="footer-rule"></div>
+    <a href="https://heysaori.com/" target="_blank" rel="noopener" class="footer-link">人生探索手札 · heysaori.com</a>
+    <div class="footer-copy">© Saori · AI 一頁式網站工作坊 學習單</div>
+  </div>
+</footer>
+
+</body>
+</html>
