@@ -594,41 +594,6 @@
       letter-spacing: 0.06em;
     }
 
-    /* ── TOOLS TEASER ── */
-    .tools-teaser {
-      background: var(--ink-soft);
-      padding: 5rem 2rem;
-      text-align: center;
-      border-top: 1px solid rgba(250,247,242,0.06);
-    }
-    .tools-teaser-inner {
-      max-width: 560px;
-      margin: 0 auto;
-    }
-    .tools-teaser-desc {
-      font-size: 0.85rem;
-      color: rgba(250,247,242,0.45);
-      letter-spacing: 0.06em;
-      line-height: 2;
-      margin-bottom: 2rem;
-    }
-    .btn-tools {
-      display: inline-block;
-      padding: 0.85rem 2.2rem;
-      background: transparent;
-      border: 1px solid var(--accent3);
-      color: var(--accent3);
-      font-family: 'Noto Serif TC', serif;
-      font-size: 0.82rem;
-      letter-spacing: 0.18em;
-      text-decoration: none;
-      transition: background 0.3s, color 0.3s;
-    }
-    .btn-tools:hover {
-      background: var(--accent3);
-      color: var(--ink);
-    }
-
     /* ── ANIMATIONS ── */
     @keyframes scrollPulse {
       0%, 100% { opacity: 0.3; transform: scaleY(1); }
