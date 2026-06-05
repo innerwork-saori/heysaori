@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title data-i18n="pageTitle">店家網站 Prompt 產生器 · Saori</title>
+<link rel="shortcut icon" href="/heysaori/favicon.ico?v=1" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Zen+Maru+Gothic:wght@400;700&family=Shippori+Mincho:wght@400;700&family=Kiwi+Maru:wght@400;700&family=Kosugi+Maru&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=Lora:ital,wght@0,400;0,600;1,400&family=Raleway:wght@300;400;600&family=Merriweather:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saori-base.css">
+<link rel="stylesheet" href="css/page-prompt-generator.css">
+</head>
+<body>
+
+<div id="toast" data-i18n-toast>✓ 已複製至剪貼簿</div>
+
+<!-- ── LANG SWITCHER ── -->
+<div class="lang-switcher" role="group" aria-label="Language switcher">
+  <button class="lang-btn active" onclick="setLang('zh')" id="btnZh">中文</button>
+  <button class="lang-btn" onclick="setLang('en')" id="btnEn">EN</button>
+</div>
+
+<!-- ── HERO ── -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines" aria-hidden="true">
+    <svg viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="120" x2="320" y2="0" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <line x1="1200" y1="280" x2="900" y2="400" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <circle cx="1050" cy="80" r="150" fill="none" stroke="rgba(250,247,242,0.04)" stroke-width="1"/>
+      <circle cx="120" cy="340" r="90" fill="none" stroke="rgba(196,149,106,0.05)" stroke-width="1"/>
+      <rect x="40" y="40" width="120" height="120" fill="none" stroke="rgba(250,247,242,0.03)" stroke-width="1" transform="rotate(12,100,100)"/>
+    </svg>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-label">shop website prompt generator</div>
+    <h1 class="hero-title" data-i18n="heroTitle">店家一頁式網站<br>Prompt 產生器</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-desc" data-i18n="heroDesc">填入店家資訊，自動生成可交給 AI 設計網站的完整 Prompt</p>
+  </div>
+</header>
+
+<!-- ── MAIN ── -->
+<main class="main-wrap">
+
+  <!-- 關於這家店 -->
+  <div class="form-block">
+    <div class="section-label">about shop</div>
+    <h2 class="section-title" data-i18n="sec1Title">關於這家店</h2>
+    <div class="section-rule"></div>
+    <div class="grid">
+      <div class="field">
+        <label data-i18n="labelShopName">店名 <span class="req">必填</span></label>
+        <input id="shopName" data-i18n-ph="phShopName" placeholder="例：山田珈琲">
+      </div>
+      <div class="field">
+        <label data-i18n="labelShopType">店家類型 <span class="req">必填</span></label>
+        <input id="shopType" data-i18n-ph="phShopType" placeholder="例：咖啡店、甜點店、美甲工作室、花店">
+      </div>
+      <div class="field full">
+        <label data-i18n="labelShopPositioning">一句定位 <span class="req">必填</span></label>
+        <input id="shopPositioning" data-i18n-ph="phShopPositioning" placeholder="例：巷弄裡適合安靜坐一下午的手沖咖啡店">
+      </div>
+      <div class="field full">
+        <label data-i18n="labelShopIntro">品牌／店家簡介（2–3 句話）<span class="req">必填</span></label>
+        <textarea id="shopIntro" data-i18n-ph="phShopIntro" placeholder="例：我們是一間以自家烘豆與季節甜點為主的小店，希望讓來店的人在城市裡找到放鬆片刻。"></textarea>
+      </div>
+      <div class="field">
+        <label data-i18n="labelShopArea">所在城市／區域 <span class="req">必填</span></label>
+        <input id="shopArea" data-i18n-ph="phShopArea" placeholder="例：台北市大安區">
+      </div>
+    </div>
+  </div>
+
+  <hr class="form-sep">
+
+  <!-- 商品與客群 -->
+  <div class="form-block">
+    <div class="section-label">products & customers</div>
+    <h2 class="section-title" data-i18n="sec2Title">商品與客群</h2>
+    <div class="section-rule"></div>
+    <div class="grid">
+      <div class="field">
+        <label data-i18n="labelTargetCustomers">主要客群 <span class="req">必填</span></label>
+        <input id="targetCustomers" data-i18n-ph="phTargetCustomers" placeholder="例：附近上班族、喜歡安靜空間的咖啡愛好者">
+      </div>
+      <div class="field">
+        <label data-i18n="labelSignatureItems">招牌品項／熱門服務 <span class="req">必填</span></label>
+        <input id="signatureItems" data-i18n-ph="phSignatureItems" placeholder="例：拿鐵、布丁、焙茶巴斯克；日系裸色凝膠">
+      </div>
+
+      <!-- 第一組二擇一 -->
+      <div class="or-pair">
+        <div class="or-pair-label" data-i18n="orLabel">以下二擇一必填</div>
+        <div class="or-pair-inner">
+          <div class="field">
+            <label data-i18n="labelCustomerNeed">顧客會來找這家店的原因</label>
+            <input id="customerNeed" data-i18n-ph="phCustomerNeed" placeholder="例：想找好喝咖啡與舒適空間、想做自然耐看的日系美甲">
+          </div>
+          <div class="or-pair-divider">OR</div>
+          <div class="field">
+            <label data-i18n="labelMainProducts">主要商品／服務</label>
+            <input id="mainProducts" data-i18n-ph="phMainProducts" placeholder="例：手沖咖啡、巴斯克乳酪蛋糕、預約制凝膠美甲">
+          </div>
+        </div>
+      </div>
+
+      <!-- 第二組二擇一 -->
+      <div class="or-pair">
+        <div class="or-pair-label" data-i18n="orLabel">以下二擇一必填</div>
+        <div class="or-pair-inner">
+          <div class="field">
+            <label data-i18n="labelShopFeature">店家特色 ／ 差異</label>
+            <input id="shopFeature" data-i18n-ph="phShopFeature" placeholder="例：木質安靜空間、甜點每日限量、主打自然裸透感設計">
+          </div>
+          <div class="or-pair-divider">OR</div>
+          <div class="field">
+            <label data-i18n="labelCustomerExperience">顧客來店能獲得</label>
+            <textarea id="customerExperience" data-i18n-ph="phCustomerExperience" placeholder="例：放鬆不趕時間的用餐體驗、安心溝通並完成適合自己的款式"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label data-i18n="labelAtmosphereKeywords">空間／品牌氛圍關鍵字 <span class="req">必填</span></label>
+        <input id="atmosphereKeywords" data-i18n-ph="phAtmosphereKeywords" placeholder="例：溫暖、木質、日系、安靜、職人感">
+      </div>
+      <div class="field">
+        <label data-i18n="labelConsumptionType">消費方式 <span class="req">必填</span></label>
+        <input id="consumptionType" data-i18n-ph="phConsumptionType" placeholder="例：內用／外帶／預約制／現場候位／可外送">
+      </div>
+      <div class="field">
+        <label data-i18n="labelPriceRange">價位帶</label>
+        <input id="priceRange" data-i18n-ph="phPriceRange" placeholder="例：每人低消 180 元；美甲單次約 1200–2200 元">
+      </div>
+      <div class="field full">
+        <label data-i18n="labelBrandStory">品牌故事／創店理念</label>
+        <textarea id="brandStory" data-i18n-ph="phBrandStory" placeholder="例：希望在快節奏的城市裡，提供一個讓人慢下來喝杯咖啡的地方。"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <hr class="form-sep">
+
+  <!-- 信任感建立 -->
+  <div class="form-block">
+    <div class="section-label">social proof</div>
+    <h2 class="section-title" data-i18n="sec3Title">信任感建立</h2>
+    <div class="section-rule"></div>
+    <div class="grid">
+      <div class="field full">
+        <label data-i18n="labelReviews">顧客評價 ／ 心得分享</label>
+        <textarea id="reviews" data-i18n-ph="phReviews" placeholder="如尚無評價，填「暫無」即可，AI 將提示位置留空">暫無</textarea>
+      </div>
+      <div class="field">
+        <label data-i18n="labelMediaMention">媒體報導 ／ 合作經歷</label>
+        <input id="mediaMention" data-i18n-ph="phMediaMention" placeholder="例：曾被在地咖啡地圖推薦；如無可填「暫無」">
+      </div>
+      <div class="field">
+        <label data-i18n="labelPhotoFocus">建議呈現的照片內容 <span class="req">必填</span></label>
+        <input id="photoFocus" data-i18n-ph="phPhotoFocus" placeholder="例：店門口、內部座位區、招牌甜點、咖啡沖煮過程">
+      </div>
+      <div class="field full">
+        <label data-i18n="labelFaq">常見問題</label>
+        <input id="faq" data-i18n-ph="phFaq" placeholder="例：是否可訂位、是否有低消、是否可帶寵物、是否接受刷卡">
+      </div>
+    </div>
+  </div>
+
+  <hr class="form-sep">
+
+  <!-- 到店資訊 -->
+  <div class="form-block">
+    <div class="section-label">visit info</div>
+    <h2 class="section-title" data-i18n="sec4Title">到店資訊</h2>
+    <div class="section-rule"></div>
+    <div class="grid">
+      <div class="field full">
+        <label data-i18n="labelAddress">地址 <span class="req">必填</span></label>
+        <input id="address" data-i18n-ph="phAddress" placeholder="例：台北市大安區 xx 路 xx 號">
+      </div>
+      <div class="field">
+        <label data-i18n="labelBusinessHours">營業時間 <span class="req">必填</span></label>
+        <input id="businessHours" data-i18n-ph="phBusinessHours" placeholder="例：週二至週日 12:00–19:00">
+      </div>
+      <div class="field">
+        <label data-i18n="labelClosedDays">公休日</label>
+        <input id="closedDays" data-i18n-ph="phClosedDays" placeholder="例：每週一">
+      </div>
+      <div class="field">
+        <label data-i18n="labelTransportation">交通方式</label>
+        <input id="transportation" data-i18n-ph="phTransportation" placeholder="例：捷運大安站步行 5 分鐘，附近有收費停車場">
+      </div>
+      <div class="field">
+        <label data-i18n="labelBookingMethod">預約 ／ 訂位方式 <span class="req">必填</span></label>
+        <input id="bookingMethod" data-i18n-ph="phBookingMethod" placeholder="例：請私訊 Instagram／LINE 預約；可電話訂位">
+      </div>
+      <div class="field">
+        <label data-i18n="labelOtherContact">其他聯絡方式 <span class="req">必填</span></label>
+        <input id="otherContact" data-i18n-ph="phOtherContact" placeholder="例：LINE ID、Instagram、電話">
+      </div>
+      <div class="field">
+        <label data-i18n="labelEmail">Email</label>
+        <input id="email" placeholder="hello@example.com">
+      </div>
+      <div class="field">
+        <label data-i18n="labelMapLink">Google Maps 連結</label>
+        <input id="mapLink" data-i18n-ph="phMapLink" placeholder="例：https://maps.app.goo.gl/xxxx">
+      </div>
+      <div class="field full">
+        <label data-i18n="labelSocialLinks">社群連結</label>
+        <input id="socialLinks" data-i18n-ph="phSocialLinks" placeholder="例：Instagram、Facebook、LINE 官方帳號">
+      </div>
+    </div>
+  </div>
+
+  <hr class="form-sep">
+
+  <!-- 設計偏好 -->
+  <div class="form-block">
+    <div class="section-label">design preference</div>
+    <h2 class="section-title" data-i18n="sec5Title">設計偏好</h2>
+    <div class="section-rule"></div>
+    <div class="grid grid-design">
+      <div class="field">
+        <label data-i18n="labelStyle">風格（按住 shift 不放，滑鼠點選即可多選）</label>
+        <select id="style" multiple size="5" onchange="toggleCustomStyle()">
+          <!-- options injected by setLang() -->
+        </select>
+        <details id="styleDetails" style="margin-top:8px;">
+          <summary style="font-size:0.72rem;color:var(--accent2);cursor:pointer;letter-spacing:0.08em;list-style:none;display:inline-flex;align-items:center;gap:4px;">
+            <span data-i18n="styleDetailsSummary">▸ 風格參考說明</span>
+          </summary>
+          <div id="styleDetailsBody" style="margin-top:8px;border:1px solid var(--paper-mid);border-radius:2px;overflow:hidden;font-size:0.75rem;">
+            <!-- injected by setLang() -->
+          </div>
+        </details>
+        <div id="customStyleWrap" style="display:none;margin-top:8px;">
+          <label style="margin-bottom:4px;" data-i18n="labelCustomStyle">自訂風格描述 <span style="color:var(--accent-rose)">*必填</span></label>
+          <textarea id="customStyle" data-i18n-ph="phCustomStyle" placeholder="例：日系喫茶店感、像選物店一樣乾淨安靜……"></textarea>
+        </div>
+      </div>
+      <div class="field">
+        <label data-i18n="labelColor">配色</label>
+        <select id="color" onchange="toggleCustomColor()">
+          <option value="" data-i18n="colorOpt0">（不指定，讓 AI 決定）</option>
+          <option data-i18n="colorOpt1">柔和藍綠色調</option>
+          <option data-i18n="colorOpt2">暖橙色調</option>
+          <option data-i18n="colorOpt3">莫蘭迪中性色</option>
+          <option data-i18n="colorOpt4">黑白極簡</option>
+          <option data-i18n="colorOpt5">自訂配色（請填下方）</option>
+        </select>
+        <div id="customColorWrap" style="display:none;margin-top:8px;">
+          <label style="margin-bottom:4px;" data-i18n="labelCustomColor">自訂配色 <span style="color:var(--accent-rose)">*必填</span></label>
+          <textarea id="customColor" data-i18n-ph="phCustomColor" placeholder="例：奶油白、深木色、抹茶綠"></textarea>
+        </div>
+        <details style="margin-top:8px;">
+          <summary style="font-size:0.72rem;color:var(--accent2);cursor:pointer;letter-spacing:0.08em;list-style:none;display:inline-flex;align-items:center;gap:4px;">
+            <span data-i18n="colorDetailsSummary">▸ 配色靈感參考</span>
+          </summary>
+          <div id="colorDetailsBody" style="margin-top:8px;font-size:0.75rem;line-height:2;color:var(--text-mid);">
+            <!-- injected by setLang() -->
+          </div>
+        </details>
+      </div>
+    </div>
+    <div class="grid" style="margin-top:1.4rem;">
+      <div class="field">
+        <label data-i18n="labelFont">字型</label>
+        <select id="font" onchange="previewFont()">
+          <!-- options injected by setLang() -->
+        </select>
+        <div id="customFontWrap" style="display:none;margin-top:8px;">
+          <label style="margin-bottom:4px;" data-i18n="labelCustomFont">自訂字型名稱 <span style="color:var(--accent-rose)">*必填</span></label>
+          <input id="customFont" data-i18n-ph="phCustomFont" placeholder="例：Nunito、Source Han Sans、思源黑體">
+        </div>
+        <div id="fontPreview" class="font-preview-box" data-i18n="fontPreviewText">字型預覽：品牌感從文字開始</div>
+      </div>
+      <div class="field">
+        <label data-i18n="labelWebsiteGoal">網站主要目標 <span class="req">必填</span></label>
+        <input id="websiteGoal" data-i18n-ph="phWebsiteGoal" placeholder="例：吸引來店、提升訂位、展示菜單、建立品牌感">
+      </div>
+      <div class="field full">
+        <label data-i18n="labelReferenceSites">參考網站／品牌</label>
+        <input id="referenceSites" data-i18n-ph="phReferenceSites" placeholder="例：想參考 Blue Bottle、% Arabica、某間日系美甲店 IG">
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <button class="primary" onclick="gen()" data-i18n="btnGen">產生主要 Prompt</button>
+    <button onclick="copyText()" data-i18n="btnCopy">複製</button>
+  </div>
+
+  <!-- Quick Templates -->
+  <div class="snippet-group">
+    <div class="snippet-label" data-i18n="snippetGroupLabel">快速指令範本</div>
+    <div class="snippet-btns">
+      <button class="snippet" onclick="setSnippet('style')" data-i18n="snippetStyleBtn">調整視覺風格</button>
+      <button class="snippet" onclick="setSnippet('text')" data-i18n="snippetTextBtn">修改文字內容</button>
+      <button class="snippet" onclick="setSnippet('photo')" data-i18n="snippetPhotoBtn">加入照片</button>
+    </div>
+  </div>
+
+  <!-- Output -->
+  <div class="output-wrap" id="outputWrap" style="display:none;">
+    <div class="output-label">generated prompt</div>
+    <textarea id="out" spellcheck="false" style="width:100%;min-height:650px;resize:vertical;background:var(--ink);color:rgba(250,247,242,0.85);padding:1.5rem;border:none;border-radius:2px;font-family:monospace;font-size:0.82rem;line-height:1.9;letter-spacing:0.02em;white-space:pre-wrap;"></textarea>
+    <div class="actions" style="margin-top:1rem;">
+      <button id="copyBtn2" onclick="copyText()" data-i18n="btnCopy">複製</button>
+    </div>
+    <div style="margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid var(--paper-mid);">
+      <div style="font-size:0.72rem;color:var(--text-soft);letter-spacing:0.12em;margin-bottom:0.7rem;" data-i18n="pasteHint">複製後貼到 AI ↗</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+        <a href="https://claude.ai" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border:1px solid var(--paper-mid);border-radius:2px;font-size:0.75rem;color:var(--text-mid);text-decoration:none;letter-spacing:0.06em;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--paper-mid)';this.style.color='var(--text-mid)'">Claude</a>
+        <a href="https://chatgpt.com" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border:1px solid var(--paper-mid);border-radius:2px;font-size:0.75rem;color:var(--text-mid);text-decoration:none;letter-spacing:0.06em;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--paper-mid)';this.style.color='var(--text-mid)'">ChatGPT</a>
+        <a href="https://gemini.google.com" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border:1px solid var(--paper-mid);border-radius:2px;font-size:0.75rem;color:var(--text-mid);text-decoration:none;letter-spacing:0.06em;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--paper-mid)';this.style.color='var(--text-mid)'">Gemini</a>
+        <a href="https://www.perplexity.ai" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border:1px solid var(--paper-mid);border-radius:2px;font-size:0.75rem;color:var(--text-mid);text-decoration:none;letter-spacing:0.06em;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--paper-mid)';this.style.color='var(--text-mid)'">Perplexity</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="inner">
+    <div class="footer-name">Saori</div>
+    <div class="footer-role" data-i18n="footerRole">軟體工程師・系統分析師・生涯諮詢師</div>
+    <div class="footer-rule"></div>
+    <div><a href="https://heysaori.com/" target="_blank" class="footer-link">人生探索手札 · heysaori.com</a></div>
+    <div class="footer-copy">© Saori · 店家網站 Prompt 產生器</div>
+  </div>
+</footer>
+
+<script src="js/shoppage-prompt-generator.js"></script>
+</body>
+</html>
