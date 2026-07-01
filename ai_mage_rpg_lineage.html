@@ -1,51 +1,49 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>AI 法師等級鑑定 ─ 魔法大陸</title>
-  <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">  <!-- 放這裡 ✓ -->
+  <title>AI 法師真功夫 6 道封印鑑別 | Saori</title>
+  <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
   <link rel="stylesheet" href="css/ai-mage-rpg.css">
 </head>
 <body>
 <div id="app">
 
-<!-- ═══ INTRO ═══ -->
 <div class="screen active" id="s-intro">
   <div class="page-header">
     <div class="hdr-rule"><div class="hdr-line"></div><span class="hdr-lbl">ARCANE CONTINENT</span><div class="hdr-line r"></div></div>
-    <div class="main-title">AI 法師等級鑑定</div>
-    <div class="hdr-gems"><div class="hdr-gem-l"></div><span style="font-size:9px;color:var(--gold);letter-spacing:.3em">✦ ✦ ✦</span><div class="hdr-gem-r"></div></div>
+    <div class="main-title">AI 法師真功夫鑑別</div>
+    <div class="hdr-gems"><div class="hdr-gem-l"></div><span style="font-size:9px;color:var(--gold);letter-spacing:.3em">6 GATES</span><div class="hdr-gem-r"></div></div>
   </div>
   <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:16px">
     <div class="panel fadein" style="width:100%;max-width:400px;padding:32px 28px;border-radius:1px">
       <div style="text-align:center;margin-bottom:20px">
-        <div style="font-size:3.5rem;margin-bottom:10px;filter:drop-shadow(0 0 12px rgba(201,168,76,.5))">🧙‍♂️</div>
-        <p style="color:var(--text-dim);font-size:.8rem;letter-spacing:.06em;line-height:1.8">回答 7 個考驗，盤點你的魔法技能<br>解鎖專屬的法師階級稱號</p>
+        <div style="font-size:3.5rem;margin-bottom:10px;filter:drop-shadow(0 0 12px rgba(201,168,76,.5))">✦</div>
+        <p style="color:var(--text-dim);font-size:.8rem;letter-spacing:.06em;line-height:1.8">通過六道試煉，檢驗自己作為 AI 法師的真實深度——你是真的能落地，還是停在展示層次？</p>
       </div>
       <div class="divider"></div>
       <div style="margin-bottom:16px">
-        <div style="color:var(--text-dim);text-align:center;margin-bottom:8px;font-size:.7rem;letter-spacing:.15em">— 輸入你的法師名號 —</div>
-        <input type="text" id="nameInput" placeholder="名字或暱稱" style="width:100%;padding:10px 14px;text-align:center;border-radius:1px" onkeydown="if(event.key==='Enter')startGame()">
+        <div style="color:var(--text-dim);text-align:center;margin-bottom:8px;font-size:.7rem;letter-spacing:.15em">輸入你的冒險者稱號</div>
+        <input type="text" id="nameInput" placeholder="例如：Saori" style="width:100%;padding:10px 14px;text-align:center;border-radius:1px" onkeydown="if(event.key==='Enter')startGame()">
       </div>
-      <button class="btn btn-gold" style="width:100%;padding:12px;border-radius:1px" onclick="startGame()">✦ 開始鑑定 ✦</button>
+      <button class="btn btn-gold" style="width:100%;padding:12px;border-radius:1px" onclick="startGame()">踏入試煉</button>
     </div>
   </div>
   <footer class="footer">
     <div class="footer-orn"><div class="ft-ll"></div><div class="gem"></div><div class="ft-lr"></div></div>
     <div class="ft-name">Saori</div>
-    <div class="ft-tags">初階 AI 法師 · 軟體工程師 · 系統分析師 · 生涯諮詢師</div>
-    <div style="margin-top:8px"><a href="https://heysaori.com/" target="_blank" rel="noopener" class="ft-link">人生探索手札 · heysaori.com</a></div>
+    <div class="ft-tags">AI 工具包 · 職涯探索 · 實用工具 · 可落地教學</div>
+    <div style="margin-top:8px"><a href="https://heysaori.com/" target="_blank" rel="noopener" class="ft-link">回到 heysaori.com</a></div>
   </footer>
 </div>
 
-<!-- ═══ QUESTION ═══ -->
 <div class="screen" id="s-question">
   <div class="page-header">
     <div class="hdr-rule"><div class="hdr-line"></div><span class="hdr-lbl">ARCANE CONTINENT</span><div class="hdr-line r"></div></div>
-    <div class="main-title">AI 法師等級鑑定</div>
-    <div class="hdr-gems"><div class="hdr-gem-l"></div><span style="font-size:9px;color:var(--gold);letter-spacing:.3em">✦ ✦ ✦</span><div class="hdr-gem-r"></div></div>
+    <div class="main-title">AI 法師真功夫鑑別</div>
+    <div class="hdr-gems"><div class="hdr-gem-l"></div><span style="font-size:9px;color:var(--gold);letter-spacing:.3em">6 GATES</span><div class="hdr-gem-r"></div></div>
   </div>
   <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:16px">
     <div class="panel fadein" style="width:100%;max-width:580px;padding:24px;border-radius:1px">
@@ -62,137 +60,130 @@
   <footer class="footer">
     <div class="footer-orn"><div class="ft-ll"></div><div class="gem"></div><div class="ft-lr"></div></div>
     <div class="ft-name">Saori</div>
-    <div class="ft-tags">初階 AI 法師 · 軟體工程師 · 系統分析師 · 生涯諮詢師</div>
-    <div style="margin-top:8px"><a href="https://heysaori.com/" target="_blank" rel="noopener" class="ft-link">人生探索手札 · heysaori.com</a></div>
+    <div class="ft-tags">AI 工具包 · 職涯探索 · 實用工具 · 可落地教學</div>
+    <div style="margin-top:8px"><a href="https://heysaori.com/" target="_blank" rel="noopener" class="ft-link">回到 heysaori.com</a></div>
   </footer>
 </div>
 
-<!-- ═══ INVENTORY ═══ -->
 <div class="screen" id="s-inventory">
   <div class="page-header">
     <div class="hdr-rule"><div class="hdr-line"></div><span class="hdr-lbl">ARCANE CONTINENT</span><div class="hdr-line r"></div></div>
-    <div class="main-title">AI 法師等級鑑定</div>
-    <div class="hdr-gems"><div class="hdr-gem-l"></div><span style="font-size:9px;color:var(--gold);letter-spacing:.3em">✦ ✦ ✦</span><div class="hdr-gem-r"></div></div>
+    <div class="main-title">AI 法師真功夫鑑別</div>
+    <div class="hdr-gems"><div class="hdr-gem-l"></div><span style="font-size:9px;color:var(--gold);letter-spacing:.3em">EVIDENCE</span><div class="hdr-gem-r"></div></div>
   </div>
   <div style="flex:1;display:flex;align-items:flex-start;justify-content:center;padding:16px">
     <div class="panel fadein" style="width:100%;max-width:580px;padding:24px;border-radius:1px">
       <div style="text-align:center;margin-bottom:16px">
         <div style="color:var(--text-dim);font-size:.65rem;letter-spacing:.2em;margin-bottom:4px">FINAL STEP</div>
-        <div style="color:var(--gold);font-size:1.1rem;letter-spacing:.08em;font-weight:700">盤點技能與裝備</div>
-        <p style="color:var(--text-dim);font-size:.72rem;margin-top:6px;line-height:1.6">點選你目前已掌握的項目（可複選，也可跳過）</p>
+        <div style="color:var(--gold);font-size:1.1rem;letter-spacing:.08em;font-weight:700">標記你實際做到的事</div>
+        <p style="color:var(--text-dim);font-size:.72rem;margin-top:6px;line-height:1.6">勾選你真的做過、產出過、或還在持續使用的能力與成果。沒把握的就先不勾。</p>
       </div>
       <div class="divider"></div>
       <div style="margin-bottom:20px">
-        <div class="flex-c gap8" style="margin-bottom:8px"><div class="gem green"></div><span class="sec-lbl">魔法技能</span></div>
+        <div class="flex-c gap8" style="margin-bottom:8px"><div class="gem green"></div><span class="sec-lbl">我已具備的能力</span></div>
         <div id="skill-list"></div>
       </div>
       <div style="margin-bottom:16px">
-        <div class="flex-c gap8" style="margin-bottom:8px"><div class="gem orange"></div><span class="sec-lbl">魔法裝備</span></div>
+        <div class="flex-c gap8" style="margin-bottom:8px"><div class="gem orange"></div><span class="sec-lbl">我已做出的成果</span></div>
         <div id="gear-list"></div>
       </div>
       <div id="inv-sum" style="display:none;background:#0d0b07;border:1px solid #2a1f0a;padding:10px 14px;margin-bottom:16px;border-radius:1px">
-        <div style="color:var(--text-dim);font-size:.65rem;letter-spacing:.1em;margin-bottom:8px">已選擇</div>
+        <div style="color:var(--text-dim);font-size:.65rem;letter-spacing:.1em;margin-bottom:8px">已標記的項目</div>
         <div class="wrap-gap" id="inv-sum-items"></div>
       </div>
-      <button class="btn btn-gold" style="width:100%;padding:12px;border-radius:1px;margin-bottom:8px" onclick="goResult()">✦ 查看鑑定結果 ✦</button>
-      <button class="btn" style="width:100%;padding:8px;border-radius:1px;color:var(--text-dim)" onclick="goResult()">跳過，直接看結果</button>
+      <button class="btn btn-gold" style="width:100%;padding:12px;border-radius:1px;margin-bottom:8px" onclick="goResult()">查看我的試煉結果</button>
+      <button class="btn" style="width:100%;padding:8px;border-radius:1px;color:var(--text-dim)" onclick="goResult()">略過這步，直接看結果</button>
     </div>
   </div>
   <footer class="footer">
     <div class="footer-orn"><div class="ft-ll"></div><div class="gem"></div><div class="ft-lr"></div></div>
     <div class="ft-name">Saori</div>
-    <div class="ft-tags">初階 AI 法師 · 軟體工程師 · 系統分析師 · 生涯諮詢師</div>
-    <div style="margin-top:8px"><a href="https://heysaori.com/" target="_blank" rel="noopener" class="ft-link">人生探索手札 · heysaori.com</a></div>
+    <div class="ft-tags">AI 工具包 · 職涯探索 · 實用工具 · 可落地教學</div>
+    <div style="margin-top:8px"><a href="https://heysaori.com/" target="_blank" rel="noopener" class="ft-link">回到 heysaori.com</a></div>
   </footer>
 </div>
 
-<!-- ═══ RESULT ═══ -->
 <div class="screen" id="s-result">
   <div class="page-header">
     <div class="hdr-rule"><div class="hdr-line"></div><span class="hdr-lbl">ARCANE CONTINENT</span><div class="hdr-line r"></div></div>
-    <div class="main-title">AI 法師等級鑑定</div>
-    <div class="hdr-gems"><div class="hdr-gem-l"></div><span style="font-size:9px;color:var(--gold);letter-spacing:.3em">✦ ✦ ✦</span><div class="hdr-gem-r"></div></div>
+    <div class="main-title">AI 法師真功夫鑑別</div>
+    <div class="hdr-gems"><div class="hdr-gem-l"></div><span style="font-size:9px;color:var(--gold);letter-spacing:.3em">RESULT</span><div class="hdr-gem-r"></div></div>
   </div>
   <div class="content">
     <div class="res-grid" style="margin-bottom:16px">
-      <!-- Rank -->
       <div class="panel fadein" style="padding:22px;border-radius:1px">
-        <div style="color:var(--text-dim);font-size:.65rem;letter-spacing:.2em;margin-bottom:8px">YOUR RANK</div>
+        <div style="color:var(--text-dim);font-size:.65rem;letter-spacing:.2em;margin-bottom:8px">YOUR LENS</div>
         <div style="color:var(--gold);font-size:.9rem;letter-spacing:.05em;margin-bottom:4px" id="r-user"></div>
         <div class="rank-badge" id="r-rank"></div>
-        <p style="color:var(--text-dim);font-size:.65rem;margin-bottom:4px">鑑定時間：<span id="r-time"></span></p>
-        <p style="font-size:.78rem;line-height:1.7;color:#b0a080;margin-bottom:16px">根據你的作答結果，這是你目前的 AI 法師等級。</p>
+        <p style="color:var(--text-dim);font-size:.65rem;margin-bottom:4px">試煉時間：<span id="r-time"></span></p>
+        <p style="font-size:.78rem;line-height:1.7;color:#b0a080;margin-bottom:16px" id="r-summary"></p>
         <div class="divider"></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-red" style="flex:1;padding:8px 10px;border-radius:1px;min-width:90px;font-size:.78rem" onclick="restart()">🔄 重新鑑定</button>
-          <button class="btn btn-gold" style="flex:1;padding:8px 10px;border-radius:1px;min-width:90px;font-size:.78rem" onclick="openShare()">📜 分享成果</button>
+          <button class="btn btn-red" style="flex:1;padding:8px 10px;border-radius:1px;min-width:90px;font-size:.78rem" onclick="restart()">重啟試煉</button>
+          <button class="btn btn-gold" style="flex:1;padding:8px 10px;border-radius:1px;min-width:90px;font-size:.78rem" onclick="openShare()">傳播鑑別結果</button>
         </div>
       </div>
-      <!-- Inventory result -->
       <div class="panel fadein" style="padding:22px;border-radius:1px;animation-delay:.1s">
-        <div class="flex-c gap8" style="margin-bottom:12px"><div class="gem green"></div><span class="sec-lbl">盤點成果</span></div>
+        <div class="flex-c gap8" style="margin-bottom:12px"><div class="gem green"></div><span class="sec-lbl">我已標記的能力與成果</span></div>
         <div id="r-inv"></div>
       </div>
-      <!-- Upgrade -->
       <div class="panel fadein" style="padding:22px;border-radius:1px;animation-delay:.2s">
-        <div class="flex-c gap8" style="margin-bottom:12px"><div class="gem"></div><span class="sec-lbl">升階建議</span></div>
-        <div style="color:var(--text-dim);font-size:.72rem;margin-bottom:12px">下一階 → <span style="color:var(--gold);font-weight:700" id="r-next"></span></div>
+        <div class="flex-c gap8" style="margin-bottom:12px"><div class="gem"></div><span class="sec-lbl">下一步要強化的方向</span></div>
+        <div style="color:var(--text-dim);font-size:.72rem;margin-bottom:12px">建議先從這裡開始：<span style="color:var(--gold);font-weight:700" id="r-next"></span></div>
         <div class="divider"></div>
-        <p style="color:var(--gold);font-size:.72rem;letter-spacing:.1em;margin-bottom:8px">建議成長技能</p>
+        <p style="color:var(--gold);font-size:.72rem;letter-spacing:.1em;margin-bottom:8px">問問自己</p>
         <ul id="r-skills" style="list-style:none;margin-bottom:14px"></ul>
-        <p style="color:var(--gold);font-size:.72rem;letter-spacing:.1em;margin-bottom:8px">建議補齊裝備</p>
+        <p style="color:var(--gold);font-size:.72rem;letter-spacing:.1em;margin-bottom:8px">可以開始累積的證據</p>
         <ul id="r-gear" style="list-style:none"></ul>
       </div>
     </div>
-    <!-- Roadmap -->
     <div class="panel" style="border-radius:1px;padding:20px;margin-bottom:0">
-      <div style="text-align:center;margin-bottom:16px"><span class="sec-lbl">⚔ AI 法師成長路線圖</span></div>
+      <div style="text-align:center;margin-bottom:16px"><span class="sec-lbl">AI 法師真功夫成長路線圖</span></div>
       <div class="road-row" id="roadmap"></div>
     </div>
   </div>
   <footer class="footer">
     <div class="footer-orn"><div class="ft-ll"></div><div class="gem"></div><div class="ft-lr"></div></div>
     <div class="ft-name">Saori</div>
-    <div class="ft-tags">初階 AI 法師 · 軟體工程師 · 系統分析師 · 生涯諮詢師</div>
-    <div style="margin-top:8px"><a href="https://heysaori.com/" target="_blank" rel="noopener" class="ft-link">人生探索手札 · heysaori.com</a></div>
+    <div class="ft-tags">AI 工具包 · 職涯探索 · 實用工具 · 可落地教學</div>
+    <div style="margin-top:8px"><a href="https://heysaori.com/" target="_blank" rel="noopener" class="ft-link">回到 heysaori.com</a></div>
   </footer>
 </div>
 
-</div><!-- #app -->
+</div>
 
-<!-- ═══ SHARE MODAL ═══ -->
 <div class="modal-bg" id="modal" onclick="closeShare()">
   <div class="panel modal-box fadein" onclick="event.stopPropagation()">
     <div style="padding:28px 24px;background:linear-gradient(160deg,#1a1408,#0d0b07 50%,#12100a)">
       <div style="text-align:center;margin-bottom:16px">
-        <div style="font-size:2.5rem;filter:drop-shadow(0 0 10px rgba(201,168,76,.5))">🧙‍♂️</div>
-        <div style="color:var(--text-dim);font-size:.62rem;letter-spacing:.22em;margin:8px 0 4px">AI 法師等級鑑定</div>
+        <div style="font-size:2.5rem;filter:drop-shadow(0 0 10px rgba(201,168,76,.5))">✦</div>
+        <div style="color:var(--text-dim);font-size:.62rem;letter-spacing:.22em;margin:8px 0 4px">AI 法師真功夫鑑別</div>
         <div style="font-size:.85rem;color:#b0a080;margin-bottom:6px" id="sh-user"></div>
         <div class="rank-badge" id="sh-rank" style="font-size:1.1rem"></div>
         <div style="color:var(--text-dim);font-size:.62rem;margin-top:4px" id="sh-time"></div>
       </div>
       <div class="divider"></div>
       <div id="sh-sk-wrap" style="margin-bottom:12px">
-        <p style="color:var(--text-dim);font-size:.62rem;letter-spacing:.12em;margin-bottom:8px">⚡ 已掌握技能</p>
+        <p style="color:var(--text-dim);font-size:.62rem;letter-spacing:.12em;margin-bottom:8px">我已具備的能力</p>
         <div class="wrap-gap" id="sh-sk"></div>
       </div>
       <div id="sh-ge-wrap" style="margin-bottom:12px">
-        <p style="color:var(--text-dim);font-size:.62rem;letter-spacing:.12em;margin-bottom:8px">⚔ 已備齊裝備</p>
+        <p style="color:var(--text-dim);font-size:.62rem;letter-spacing:.12em;margin-bottom:8px">我已做出的成果</p>
         <div class="wrap-gap" id="sh-ge"></div>
       </div>
       <div style="margin-bottom:12px">
-        <p style="color:var(--text-dim);font-size:.62rem;letter-spacing:.12em;margin-bottom:4px">🎯 下一個目標</p>
+        <p style="color:var(--text-dim);font-size:.62rem;letter-spacing:.12em;margin-bottom:4px">下一步要強化的方向</p>
         <p style="color:var(--gold);font-size:.85rem;font-weight:700" id="sh-next"></p>
         <p style="color:var(--text-dim);font-size:.7rem;margin-top:3px" id="sh-nextsk"></p>
       </div>
       <div class="divider"></div>
       <div style="text-align:center">
-        <p style="color:var(--text-dim);font-size:.7rem;line-height:1.6">你也來測測看你的 AI 法師等級吧 🔮</p>
+        <p style="color:var(--text-dim);font-size:.7rem;line-height:1.6">越真正懂 AI 的法師，越能讓人看見魔法，也看懂魔法背後的真相。</p>
         <p style="color:var(--gold);font-size:.65rem;margin-top:6px;letter-spacing:.08em">Saori · heysaori.com</p>
       </div>
     </div>
     <div style="padding:12px 20px;background:#0d0b07;border-top:1px solid #2a1f0a">
-      <button class="btn" style="width:100%;padding:10px;border-radius:1px;letter-spacing:.1em" onclick="closeShare()">— 關閉 —</button>
+      <button class="btn" style="width:100%;padding:10px;border-radius:1px;letter-spacing:.1em" onclick="closeShare()">離開</button>
     </div>
   </div>
 </div>
