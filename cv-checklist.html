@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>履歷優化檢核表 · Saori 謝孟娟</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/saori-base.css">
+  <link rel="stylesheet" href="css/cv-checklist.css">
+</head>
+<body>
+
+<!-- ══════════ NAV ══════════ -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">回首頁</a>
+  <div class="nav-title">履歷優化檢核表</div>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines" aria-hidden="true">
+    <svg viewBox="0 0 1440 400" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="100" x2="300" y2="0" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <line x1="1440" y1="300" x2="1200" y2="400" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <circle cx="1300" cy="80" r="140" fill="none" stroke="rgba(250,247,242,0.03)" stroke-width="1"/>
+      <circle cx="100" cy="320" r="90" fill="none" stroke="rgba(196,149,106,0.05)" stroke-width="1"/>
+    </svg>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-label">by Saori · CV checklist</div>
+    <h1 class="hero-title">履歷優化檢核表</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">每完成一項就打勾<br>這份清單不是要讓履歷「看起來很多」<br>而是幫你的履歷更容易獲得面試機會</p>
+  </div>
+</section>
+
+<!-- ══════════ MAIN ══════════ -->
+<main class="checklist-page">
+
+  <!-- progress -->
+  <div class="progress-bar-wrap">
+    <div class="progress-info">
+      <span class="progress-label">完成進度</span>
+      <span class="progress-count" id="progressCount">0 / 0</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- toolbar -->
+  <div class="toolbar">
+    <button class="btn-reset" id="btnReset">重置全部</button>
+  </div>
+
+
+  <!-- ── Section: Basic ── -->
+  <section class="cl-section" data-section="basic">
+    <h2 class="cl-section-title">Basic</h2>
+    <p class="cl-section-subtitle">基礎正確性</p>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">聯絡資訊</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="b1"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">手機、Email、LinkedIn（若有）資訊皆正確</span></li>
+        <li class="cl-item" data-id="b2"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">Email 名稱專業（避免暱稱、生日、特殊符號）</span></li>
+        <li class="cl-item" data-id="b3"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">聯絡資訊放在容易看到的位置（手機閱讀也清楚）</span></li>
+      </ul>
+    </div>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">檔案</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="b4">
+          <span class="cl-checkbox" aria-hidden="true"></span>
+          <span class="cl-text">檔名採用 <code style="font-size:0.78rem;background:var(--paper-mid);padding:0.05rem 0.35rem;border-radius:2px;font-family:'Courier New',monospace;color:var(--accent1);">Name, Position.pdf</code>
+            <div class="cl-note">例如：<code>Howard Tseng, Business Analyst.pdf</code></div>
+          </span>
+        </li>
+        <li class="cl-item" data-id="b5"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">已存成 PDF</span></li>
+        <li class="cl-item" data-id="b6"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">PDF 開啟後排版沒有跑掉</span></li>
+      </ul>
+    </div>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">基本正確性</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="b7"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">拼字、文法已檢查（可使用 Grammarly、Word 等工具）</span></li>
+        <li class="cl-item" data-id="b8"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">日期、公司名稱、職稱皆正確</span></li>
+        <li class="cl-item" data-id="b9"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">數字皆有單位與千分位</span></li>
+        <li class="cl-item" data-id="b10"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">所有內容皆為真實，可經得起 Background Check</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Section: Visual / Format ── -->
+  <section class="cl-section" data-section="visual">
+    <h2 class="cl-section-title">Visual / Format</h2>
+    <p class="cl-section-subtitle">視覺與排版</p>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">一致性</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="v1"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">相同語言使用一致的字體</span></li>
+        <li class="cl-item" data-id="v2"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">字體大小一致且容易閱讀</span></li>
+        <li class="cl-item" data-id="v3"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">標題、內文、日期格式一致</span></li>
+      </ul>
+    </div>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">對齊</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="v4"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">左右對齊整齊</span></li>
+        <li class="cl-item" data-id="v5"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">間距一致</span></li>
+        <li class="cl-item" data-id="v6"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">使用尺或輔助線檢查版面</span></li>
+      </ul>
+    </div>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">強調方式</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="v7"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">粗體、斜體、顏色都有一致的使用規則</span></li>
+        <li class="cl-item" data-id="v8"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">重點有被凸顯，但沒有過度強調</span></li>
+      </ul>
+    </div>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">易讀性</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="v9"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">留白充足</span></li>
+        <li class="cl-item" data-id="v10"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">一眼就能找到重要資訊</span></li>
+        <li class="cl-item" data-id="v11"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">沒有密密麻麻的大段文字</span></li>
+      </ul>
+    </div>
+  </section>
+
+
+  <!-- ── Section: Content ── -->
+  <section class="cl-section" data-section="content">
+    <h2 class="cl-section-title">Content</h2>
+    <p class="cl-section-subtitle">內容品質</p>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">客製化</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="c1"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">我研究過 JD（Job Description）</span></li>
+        <li class="cl-item" data-id="c2"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">我的履歷回應了公司的需求</span></li>
+        <li class="cl-item" data-id="c3"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">我突出了最符合這份工作的能力</span></li>
+      </ul>
+    </div>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">人設是否清楚</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="c4"><span class="cl-checkbox" aria-hidden="true"></span>
+          <span class="cl-text">我能用一句話描述這份履歷想讓主管記住我的特色
+            <div class="cl-note">例如：「跨部門協作能力強」、「資料分析能力佳」、「具備產品思維的工程師」</div>
+          </span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">每段經歷</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="c5"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">每份工作都有明確成果</span></li>
+        <li class="cl-item" data-id="c6"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">每份工作都有代表性的案例</span></li>
+        <li class="cl-item" data-id="c7"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">每份工作都能回答：「我創造了什麼價值？」</span></li>
+      </ul>
+    </div>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">客觀證據</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="c8"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">優先使用數字描述成果</span></li>
+        <li class="cl-item" data-id="c9"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">使用客觀事實，而不是主觀形容詞</span></li>
+        <li class="cl-item" data-id="c10"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">能量化就量化</span></li>
+      </ul>
+    </div>
+    <div class="cl-example">
+      <span class="good">✔ 提升 API 效能 40%</span><br>
+      <span class="good">✔ 將錯誤率降低至 0.2%</span><br>
+      <span class="bad">✘ 工作認真、負責任</span>
+    </div>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">可理解性</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="c11"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">非本科的人也大致能理解我的工作內容</span></li>
+        <li class="cl-item" data-id="c12"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">必要時補充術語說明</span></li>
+        <li class="cl-item" data-id="c13"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">避免只有公司內部才懂的縮寫</span></li>
+      </ul>
+    </div>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">可驗證性</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="c14"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">履歷上的每一句內容，我都能在面試中舉出真實例子</span></li>
+        <li class="cl-item" data-id="c15"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">我知道每一項成果是如何完成的</span></li>
+        <li class="cl-item" data-id="c16"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">我能說明自己的貢獻，而非只是團隊完成</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Section: Writing ── -->
+  <section class="cl-section" data-section="writing">
+    <h2 class="cl-section-title">Writing</h2>
+    <p class="cl-section-subtitle">寫作品質</p>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">結論先行</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="w1"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">每個 Bullet Point 都先寫成果</span></li>
+        <li class="cl-item" data-id="w2"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">不讓讀者看到最後才知道重點</span></li>
+      </ul>
+    </div>
+    <div class="cl-example">
+      <span class="good">✔ 將網站速度提升 35%，重新設計快取機制</span><br>
+      <span class="bad">✘ 負責重新設計快取機制，最後提升網站速度</span>
+    </div>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">Impact-driven</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="w3"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">每一句都回答了：我做了什麼？</span></li>
+        <li class="cl-item" data-id="w4"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">每一句都回答了：帶來什麼成果？</span></li>
+        <li class="cl-item" data-id="w5"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">每一句都回答了：為什麼重要？</span></li>
+      </ul>
+    </div>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">精簡</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="w6"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">沒有冗長句子</span></li>
+        <li class="cl-item" data-id="w7"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">沒有空泛形容詞</span></li>
+        <li class="cl-item" data-id="w8"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">每一句都有存在價值</span></li>
+      </ul>
+    </div>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">動詞</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="w9"><span class="cl-checkbox" aria-hidden="true"></span>
+          <span class="cl-text">使用具體動詞開頭
+            <div class="cl-note">推薦：Led · Designed · Built · Improved · Reduced · Automated · Delivered</div>
+            <div class="cl-note">避免：Responsible for · Helped · Participated in</div>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+
+  <!-- ── Section: Structure ── -->
+  <section class="cl-section" data-section="structure">
+    <h2 class="cl-section-title">Structure</h2>
+    <p class="cl-section-subtitle">邏輯架構</p>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">金字塔架構（Pyramid Principle）</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="s1"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">每段經歷都有一句最重要的成果</span></li>
+        <li class="cl-item" data-id="s2"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">下面再展開支持這個成果的內容</span></li>
+        <li class="cl-item" data-id="s3"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">技術細節放最後</span></li>
+      </ul>
+    </div>
+
+    <div class="cl-subsection">
+      <h3 class="cl-subsection-title">MECE</h3>
+      <ul class="cl-list">
+        <li class="cl-item" data-id="s4"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">同一份工作的 Bullets 不重複</span></li>
+        <li class="cl-item" data-id="s5"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">沒遺漏重要能力</span></li>
+        <li class="cl-item" data-id="s6"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">每一點代表不同面向（例如：系統架構、跨團隊合作、效能優化）</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Section: ATS ── -->
+  <section class="cl-section" data-section="ats">
+    <h2 class="cl-section-title">ATS</h2>
+    <p class="cl-section-subtitle">Applicant Tracking System — 如果公司可能使用 ATS</p>
+    <div class="cl-subsection">
+      <ul class="cl-list">
+        <li class="cl-item" data-id="a1"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">使用真正的文字，不是圖片</span></li>
+        <li class="cl-item" data-id="a2"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">PDF 可以正常選取文字</span></li>
+        <li class="cl-item" data-id="a3"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">不大量使用文字方塊</span></li>
+        <li class="cl-item" data-id="a4"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">不大量使用表格</span></li>
+        <li class="cl-item" data-id="a5"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">使用 JD 裡的重要關鍵字</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Section: First Impression ── -->
+  <section class="cl-section" data-section="first">
+    <h2 class="cl-section-title">First Impression</h2>
+    <p class="cl-section-subtitle">10 秒檢查 — 放下 10 分鐘後重新打開，只看 10 秒</p>
+    <div class="cl-subsection">
+      <ul class="cl-list">
+        <li class="cl-item" data-id="f1"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">我知道這個人是做什麼的</span></li>
+        <li class="cl-item" data-id="f2"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">我知道他的最大優勢</span></li>
+        <li class="cl-item" data-id="f3"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">我看得到重要成果</span></li>
+        <li class="cl-item" data-id="f4"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">我知道為什麼值得找他面試</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Section: Collaboration ── -->
+  <section class="cl-section" data-section="collab">
+    <h2 class="cl-section-title">Collaboration</h2>
+    <p class="cl-section-subtitle">請別人協助</p>
+    <div class="cl-subsection">
+      <ul class="cl-list">
+        <li class="cl-item" data-id="co1"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">至少請一位值得信任的人閱讀履歷</span></li>
+        <li class="cl-item" data-id="co2"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">根據回饋修改內容</span></li>
+        <li class="cl-item" data-id="co3"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">若為英文履歷，請英文能力佳的人協助校稿</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Section: Final Review ── -->
+  <section class="cl-section" data-section="final">
+    <h2 class="cl-section-title">Final Review</h2>
+    <p class="cl-section-subtitle">送出履歷前，再確認一次</p>
+    <div class="cl-subsection">
+      <ul class="cl-list">
+        <li class="cl-item" data-id="fr1"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">PDF 正常</span></li>
+        <li class="cl-item" data-id="fr2"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">檔名正確</span></li>
+        <li class="cl-item" data-id="fr3"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">聯絡資訊正確</span></li>
+        <li class="cl-item" data-id="fr4"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">沒有錯字</span></li>
+        <li class="cl-item" data-id="fr5"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">日期正確</span></li>
+        <li class="cl-item" data-id="fr6"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">公司名稱正確</span></li>
+        <li class="cl-item" data-id="fr7"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">職稱正確</span></li>
+        <li class="cl-item" data-id="fr8"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">所有連結都能正常開啟</span></li>
+        <li class="cl-item" data-id="fr9"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">每一句都能在面試中說出完整故事</span></li>
+        <li class="cl-item" data-id="fr10"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">如果我是面試官，只花 10 秒，我會願意找自己來面試</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Closing note ── -->
+  <div class="closing-note">
+    <h3>最後提醒</h3>
+    <p>一份好的履歷，不是把人生全部寫進去。<br>而是讓面試官快速回答三個問題：</p>
+    <ol>
+      <li><strong>你會什麼？</strong></li>
+      <li><strong>你創造過什麼價值？</strong></li>
+      <li><strong>為什麼我要找你來面試？</strong></li>
+    </ol>
+    <p>如果你的履歷能在短時間內回答這三個問題，就已經贏過大部分的履歷了。</p>
+  </div>
+
+</main>
+
+
+<!-- ══════════ CTA ══════════ -->
+<section class="cta-strip">
+  <div class="cta-eyebrow">想要更深入的陪伴？</div>
+  <h2 class="cta-heading">履歷看起來還是卡卡的？<br>來聊聊，一起找出問題。</h2>
+  <p class="cta-body">
+    自我檢核只是第一步。<br>
+    如果你想要有人陪你看整份履歷、幫你找到真正的亮點——<br>
+    預約一對一職涯諮詢，讓我們一起讓你的履歷發揮最大效果。
+  </p>
+  <a href="https://heysaori.com/letscounseling/" class="btn-cta">預約諮詢 →</a>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="inner">
+    <div class="footer-links">
+      <a href="self-discovery-tools.html">職涯探索工具</a>
+      <a href="tools.html">AI 工具集</a>
+      <a href="https://heysaori.com">heysaori.com</a>
+    </div>
+    <div class="footer-copy">© Saori · 謝孟娟 · heysaori.com</div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const STORAGE_KEY = 'cv_checklist_v1';
+
+  // ── Load state from localStorage ──
+  function loadState() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  // ── Save state to localStorage ──
+  function saveState(state) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  // ── Update progress bar ──
+  function updateProgress() {
+    const items = document.querySelectorAll('.cl-item');
+    const checked = document.querySelectorAll('.cl-item.checked');
+    const total = items.length;
+    const done = checked.length;
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+    document.getElementById('progressCount').textContent = done + ' / ' + total;
+    document.getElementById('progressFill').style.width = pct + '%';
+  }
+
+  // ── Apply saved state to DOM ──
+  function applyState(state) {
+    document.querySelectorAll('.cl-item').forEach(function (item) {
+      const id = item.dataset.id;
+      if (state[id]) {
+        item.classList.add('checked');
+      } else {
+        item.classList.remove('checked');
+      }
+    });
+    updateProgress();
+  }
+
+  // ── Toggle item ──
+  function toggleItem(item) {
+    const id = item.dataset.id;
+    const state = loadState();
+    if (item.classList.contains('checked')) {
+      item.classList.remove('checked');
+      delete state[id];
+    } else {
+      item.classList.add('checked');
+      state[id] = true;
+    }
+    saveState(state);
+    updateProgress();
+  }
+
+  // ── Bind click on items ──
+  document.querySelectorAll('.cl-item').forEach(function (item) {
+    item.addEventListener('click', function () {
+      toggleItem(item);
+    });
+    // keyboard accessibility
+    item.setAttribute('tabindex', '0');
+    item.setAttribute('role', 'checkbox');
+    item.addEventListener('keydown', function (e) {
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        toggleItem(item);
+      }
+    });
+  });
+
+  // ── Reset button ──
+  document.getElementById('btnReset').addEventListener('click', function () {
+    if (!confirm('確定要重置所有勾選？')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    applyState({});
+  });
+
+  // ── Init ──
+  applyState(loadState());
+
+  // Update aria-checked on change
+  function syncAria() {
+    document.querySelectorAll('.cl-item').forEach(function (item) {
+      item.setAttribute('aria-checked', item.classList.contains('checked') ? 'true' : 'false');
+    });
+  }
+  document.querySelectorAll('.cl-item').forEach(function (item) {
+    item.addEventListener('click', syncAria);
+  });
+  syncAria();
+})();
+</script>
+
+</body>
+</html>
