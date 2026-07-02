@@ -72,6 +72,32 @@
 
 也可能共享部分 base styles 或共用邏輯。
 
+## 網站風格設定
+
+### 主網站風格（Saori Base Style）
+
+主要頁面（`index.html`、`tools.html`、`self-discovery-tools.html`、`lifevalue.html`、`whatsmytalent.html` 等）共用 `css/saori-base.css`，風格特徵如下：
+
+- **色調**：暖米色紙感（`--paper: #faf7f2`、`--ink: #1c1a17`）
+- **字體**：`Noto Sans TC`（body）+ `Noto Serif TC` / `EB Garamond`（heading、accent）
+- **設計語感**：輕量文藝、可讀性高、無過度裝飾
+- **Accent 色**：大地色系（`--accent1: #8b6f47`、`--accent2: #c4956a`、`--accent3: #d4a96a`）
+- **語調**：友善、精簡、教學導向
+
+新增主網站工具頁時，請繼承這套 base style，並在對應的 page-specific CSS 檔補充差異。
+
+### 獨立風格頁面
+
+以下頁面有自己獨立的視覺風格，**不繼承也不影響主網站風格**，修改時請勿混用：
+
+#### `ai_mage_rpg_lineage.html`（AI 法師真功夫鑑別）
+- **CSS 檔**：`css/ai-mage-rpg.css`（完全獨立，不引用 saori-base.css）
+- **風格**：暗黑奇幻 RPG
+- **色調**：幾近黑底（`#080604`）+ 金色（`--gold: #c9a84c`）為主色
+- **字體**：`Georgia`, `Times New Roman`（serif）
+- **設計語感**：煉金術、奇幻大陸、魔法封印氛圍；有光暈動畫、金色漸層 title、gem 裝飾元素
+- **重要**：這是主題型體驗頁，風格刻意與主網站切開，維護時不要「統一」到主網站風格
+
 ## Repository structure
 
 ### 主要資料夾
