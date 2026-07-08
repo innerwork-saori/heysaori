@@ -41,6 +41,101 @@
 <!-- ══════════ MAIN ══════════ -->
 <main class="checklist-page">
 
+  <!-- ══════════ QUICK VERSION ══════════ -->
+  <section class="quick-section" id="quick-checklist">
+    <div class="quick-header">
+      <div class="quick-label">10 分鐘快速版</div>
+      <h2 class="quick-title">先掃一遍，找出還沒做的</h2>
+      <p class="quick-desc">完成所有項目打勾後，再往下看詳細版補細節</p>
+      <div class="quick-progress-wrap">
+        <div class="quick-progress-info">
+          <span class="quick-progress-count" id="quickProgressCount">0 / 0</span>
+          <span class="quick-progress-pct" id="quickProgressPct">0%</span>
+        </div>
+        <div class="quick-progress-track">
+          <div class="quick-progress-fill" id="quickProgressFill"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-groups">
+
+      <div class="quick-group">
+        <div class="quick-group-title">1. 基本資訊</div>
+        <ul class="cl-list">
+          <li class="cl-item" data-id="q-a1"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">手機、Email、LinkedIn（若有）資訊正確且可聯絡</span></li>
+          <li class="cl-item" data-id="q-a2"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">Email 名稱專業，不使用暱稱或特殊符號</span></li>
+          <li class="cl-item" data-id="q-a3"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">檔名採用 <code class="inline-code">Name, Position.pdf</code>，並已存成 PDF</span></li>
+        </ul>
+      </div>
+
+      <div class="quick-group">
+        <div class="quick-group-title">2. 第一印象</div>
+        <ul class="cl-list">
+          <li class="cl-item" data-id="q-b1"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">我能用一句話描述這份履歷想讓主管記住我的特色</span></li>
+          <li class="cl-item" data-id="q-b2"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">最重要的成果放在容易看到的位置</span></li>
+          <li class="cl-item" data-id="q-b3"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">只看 10 秒，就知道我是做什麼的人</span></li>
+        </ul>
+      </div>
+
+      <div class="quick-group">
+        <div class="quick-group-title">3. 內容</div>
+        <ul class="cl-list">
+          <li class="cl-item" data-id="q-c1"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">履歷有根據這份職缺（JD）調整，而不是投所有公司都用同一份</span></li>
+          <li class="cl-item" data-id="q-c2"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">每份工作都描述了「我創造的價值」，而不只是工作內容</span></li>
+          <li class="cl-item" data-id="q-c3"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">優先使用數字、成果或影響（Impact）呈現能力</span></li>
+          <li class="cl-item" data-id="q-c4"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">我避免使用空泛形容詞（例如：認真、負責、積極）</span></li>
+        </ul>
+      </div>
+
+      <div class="quick-group">
+        <div class="quick-group-title">4. 寫作</div>
+        <ul class="cl-list">
+          <li class="cl-item" data-id="q-d1"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">每個 Bullet Point 都先講成果，再補充做法</span></li>
+          <li class="cl-item" data-id="q-d2"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">每一句都有存在價值，沒有冗長或重複內容</span></li>
+          <li class="cl-item" data-id="q-d3"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">使用具體動詞開頭（Led · Designed · Built · Improved…）</span></li>
+        </ul>
+      </div>
+
+      <div class="quick-group">
+        <div class="quick-group-title">5. 排版</div>
+        <ul class="cl-list">
+          <li class="cl-item" data-id="q-e1"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">字體、標題、日期格式一致</span></li>
+          <li class="cl-item" data-id="q-e2"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">對齊整齊、留白充足，容易閱讀</span></li>
+          <li class="cl-item" data-id="q-e3"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">PDF 開啟後排版正常，手機閱讀也清楚</span></li>
+        </ul>
+      </div>
+
+      <div class="quick-group">
+        <div class="quick-group-title">6. 最後確認</div>
+        <ul class="cl-list">
+          <li class="cl-item" data-id="q-f1"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">拼字、文法、日期、公司名稱與職稱皆正確</span></li>
+          <li class="cl-item" data-id="q-f2"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">所有內容都是真實的，面試時都能舉出例子</span></li>
+          <li class="cl-item" data-id="q-f3"><span class="cl-checkbox" aria-hidden="true"></span><span class="cl-text">如果我是面試官，我願意因為這份履歷邀請自己來面試</span></li>
+        </ul>
+      </div>
+
+    </div><!-- /quick-groups -->
+
+    <div class="quick-closing">
+      <p>履歷不是工作日誌，而是一份行銷文件。它應該回答三個問題：</p>
+      <div class="quick-three-qs">
+        <span>你會什麼？</span>
+        <span>你創造過什麼價值？</span>
+        <span>為什麼我要找你來面試？</span>
+      </div>
+    </div>
+
+    <div class="quick-detail-link">
+      <a href="#detail-checklist" class="btn-detail-link">想看更詳細的版本？往下滑 ↓</a>
+    </div>
+  </section>
+
+  <!-- ── Divider ── -->
+  <div class="section-divider" id="detail-checklist">
+    <div class="divider-label">完整版</div>
+  </div>
+
   <!-- progress -->
   <div class="progress-bar-wrap">
     <div class="progress-info">
@@ -384,7 +479,7 @@
 (function () {
   const STORAGE_KEY = 'cv_checklist_v1';
 
-  // ── Load state from localStorage ──
+  // ── Load / Save state ──
   function loadState() {
     try {
       return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
@@ -392,60 +487,71 @@
       return {};
     }
   }
-
-  // ── Save state to localStorage ──
   function saveState(state) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }
 
-  // ── Update progress bar ──
-  function updateProgress() {
-    const items = document.querySelectorAll('.cl-item');
-    const checked = document.querySelectorAll('.cl-item.checked');
-    const total = items.length;
-    const done = checked.length;
-    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  // ── Update detail progress bar (items NOT in quick-section) ──
+  function updateDetailProgress() {
+    const items   = document.querySelectorAll('.cl-section .cl-item');
+    const done    = document.querySelectorAll('.cl-section .cl-item.checked').length;
+    const total   = items.length;
+    const pct     = total > 0 ? Math.round((done / total) * 100) : 0;
 
     document.getElementById('progressCount').textContent = done + ' / ' + total;
-    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressFill').style.width  = pct + '%';
   }
 
-  // ── Apply saved state to DOM ──
+  // ── Update quick progress bar ──
+  function updateQuickProgress() {
+    const items = document.querySelectorAll('.quick-section .cl-item');
+    const done  = document.querySelectorAll('.quick-section .cl-item.checked').length;
+    const total = items.length;
+    const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
+
+    document.getElementById('quickProgressCount').textContent = done + ' / ' + total;
+    document.getElementById('quickProgressPct').textContent   = pct + '%';
+    document.getElementById('quickProgressFill').style.width  = pct + '%';
+  }
+
+  // ── Apply saved state to all items ──
   function applyState(state) {
     document.querySelectorAll('.cl-item').forEach(function (item) {
-      const id = item.dataset.id;
-      if (state[id]) {
+      if (state[item.dataset.id]) {
         item.classList.add('checked');
       } else {
         item.classList.remove('checked');
       }
     });
-    updateProgress();
+    updateDetailProgress();
+    updateQuickProgress();
   }
 
   // ── Toggle item ──
   function toggleItem(item) {
-    const id = item.dataset.id;
     const state = loadState();
     if (item.classList.contains('checked')) {
       item.classList.remove('checked');
-      delete state[id];
+      delete state[item.dataset.id];
     } else {
       item.classList.add('checked');
-      state[id] = true;
+      state[item.dataset.id] = true;
     }
     saveState(state);
-    updateProgress();
+    item.setAttribute('aria-checked', item.classList.contains('checked') ? 'true' : 'false');
+    // update whichever counter this item belongs to
+    if (item.closest('.quick-section')) {
+      updateQuickProgress();
+    } else {
+      updateDetailProgress();
+    }
   }
 
-  // ── Bind click on items ──
+  // ── Bind all items ──
   document.querySelectorAll('.cl-item').forEach(function (item) {
-    item.addEventListener('click', function () {
-      toggleItem(item);
-    });
-    // keyboard accessibility
     item.setAttribute('tabindex', '0');
     item.setAttribute('role', 'checkbox');
+    item.addEventListener('click', function () { toggleItem(item); });
     item.addEventListener('keydown', function (e) {
       if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
@@ -454,26 +560,15 @@
     });
   });
 
-  // ── Reset button ──
+  // ── Reset button (clears everything) ──
   document.getElementById('btnReset').addEventListener('click', function () {
-    if (!confirm('確定要重置所有勾選？')) return;
+    if (!confirm('確定要重置所有勾選（包含快速版）？')) return;
     localStorage.removeItem(STORAGE_KEY);
     applyState({});
   });
 
   // ── Init ──
   applyState(loadState());
-
-  // Update aria-checked on change
-  function syncAria() {
-    document.querySelectorAll('.cl-item').forEach(function (item) {
-      item.setAttribute('aria-checked', item.classList.contains('checked') ? 'true' : 'false');
-    });
-  }
-  document.querySelectorAll('.cl-item').forEach(function (item) {
-    item.addEventListener('click', syncAria);
-  });
-  syncAria();
 })();
 </script>
 

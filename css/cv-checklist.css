@@ -373,3 +373,198 @@ footer .inner { max-width: 600px; margin: 0 auto; }
   .checklist-page { padding: 3rem 1.2rem 5rem; }
   .progress-bar-wrap { padding: 0.8rem 0; }
 }
+
+/* ══════════════════════════════════════
+   QUICK CHECKLIST (10-min version)
+   ══════════════════════════════════════ */
+
+.quick-section {
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-mid);
+  border-radius: 6px;
+  padding: 2.4rem 2rem 2rem;
+  margin-bottom: 3.5rem;
+}
+
+/* Header */
+.quick-header {
+  text-align: center;
+  margin-bottom: 2.2rem;
+}
+.quick-label {
+  display: inline-block;
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  color: var(--accent2);
+  background: rgba(196,149,106,0.08);
+  border: 1px solid rgba(196,149,106,0.2);
+  padding: 0.2rem 0.9rem;
+  border-radius: 2px;
+  margin-bottom: 1rem;
+}
+.quick-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.4rem;
+}
+.quick-desc {
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  letter-spacing: 0.06em;
+  margin-bottom: 1.4rem;
+}
+
+/* Quick progress */
+.quick-progress-wrap {
+  max-width: 320px;
+  margin: 0 auto;
+}
+.quick-progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+.quick-progress-count,
+.quick-progress-pct {
+  font-size: 0.72rem;
+  color: var(--accent1);
+  font-family: 'Noto Serif TC', serif;
+  letter-spacing: 0.08em;
+}
+.quick-progress-track {
+  height: 2px;
+  background: var(--paper-mid);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.quick-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent3), var(--accent2));
+  border-radius: 2px;
+  transition: width 0.35s ease;
+  width: 0%;
+}
+
+/* Groups */
+.quick-groups {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 2.5rem;
+}
+@media (max-width: 620px) {
+  .quick-groups { grid-template-columns: 1fr; }
+}
+
+.quick-group {
+  margin-bottom: 1.6rem;
+}
+.quick-group-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--accent1);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--paper-mid);
+}
+
+/* Tighten item spacing a little inside quick-section */
+.quick-section .cl-item {
+  padding: 0.5rem 0;
+  padding-left: 0.3rem;
+}
+.quick-section .cl-text {
+  font-size: 0.83rem;
+}
+
+/* Inline code */
+.inline-code {
+  font-size: 0.78rem;
+  background: var(--paper-mid);
+  padding: 0.05rem 0.35rem;
+  border-radius: 2px;
+  font-family: 'Courier New', monospace;
+  color: var(--accent1);
+}
+
+/* Closing tagline */
+.quick-closing {
+  border-top: 1px solid var(--paper-mid);
+  margin-top: 0.8rem;
+  padding-top: 1.4rem;
+  text-align: center;
+}
+.quick-closing p {
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  margin-bottom: 0.8rem;
+  line-height: 1.8;
+}
+.quick-three-qs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem 1.8rem;
+  flex-wrap: wrap;
+}
+.quick-three-qs span {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-main);
+}
+.quick-three-qs span::before {
+  content: '→ ';
+  color: var(--accent2);
+}
+
+/* Link to detail */
+.quick-detail-link {
+  text-align: center;
+  margin-top: 1.6rem;
+}
+.btn-detail-link {
+  display: inline-block;
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--accent1);
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(139,111,71,0.25);
+  padding-bottom: 1px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.btn-detail-link:hover {
+  color: var(--accent2);
+  border-color: var(--accent2);
+}
+
+/* ── Section Divider ── */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+.section-divider::before,
+.section-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--paper-mid);
+}
+.divider-label {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  letter-spacing: 0.22em;
+  white-space: nowrap;
+}
