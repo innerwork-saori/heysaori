@@ -165,7 +165,7 @@ function gen() {
     sections.push(`- 每個檔案請單獨輸出，並說明各檔案的用途與存放位置`);
   } else {
     sections.push(`- 請輸出完整的單一 HTML 檔案，CSS 與 JavaScript 全部內嵌`);
-    sections.push(`- 不需要後端伺服器，純前端即可運作`);
+    sections.push(`- 不需要後端伺服器，純前端即可運作。（如果有必要，跟我確認要不要使用 google app script 作為後端串接）`);
   }
 
   sections.push(`- 畫面要乾淨易用，適合非技術背景的使用者操作`);
