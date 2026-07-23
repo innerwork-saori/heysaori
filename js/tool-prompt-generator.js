@@ -92,15 +92,15 @@ function gen() {
 
   sections.push(`\n【目標與問題】`);
   sections.push(`幫誰、解決什麼問題：\n${smart('goalWho')}`);
-  if (opt('goalPain')) sections.push(`現況痛點：\n${opt('goalPain')}`);
+  sections.push(`現況痛點：\n${smart('goalPain')}`);
 
   sections.push(`\n${'='.repeat(60)}`);
   sections.push(`【INPUT — 使用者輸入】`);
   sections.push(`${'='.repeat(60)}`);
   sections.push(`輸入欄位：\n${smart('inputFields')}`);
-  if (opt('inputExample')) sections.push(`填寫範例：\n${opt('inputExample')}`);
-  if (opt('inputValidation')) sections.push(`欄位合法值限制：\n${opt('inputValidation')}`);
-  if (opt('inputMissing')) sections.push(`欄位缺漏時的處理：\n${opt('inputMissing')}`);
+  sections.push(`填寫範例：\n${smart('inputExample')}`);
+  sections.push(`欄位合法值限制：\n${smart('inputValidation')}`);
+  sections.push(`欄位缺漏時的處理：\n${smart('inputMissing')}`);
   if (opt('inputSource')) sections.push(`資料來源：\n${opt('inputSource')}`);
   else sections.push(`資料來源：使用者在畫面上手動輸入`);
 
@@ -108,16 +108,16 @@ function gen() {
   sections.push(`【OUTPUT — 輸出結果】`);
   sections.push(`${'='.repeat(60)}`);
   sections.push(`輸出格式與畫面：\n${smart('outputFormat')}`);
-  if (opt('outputExample')) sections.push(`結果範例：\n${opt('outputExample')}`);
-  if (opt('outputPrecision')) sections.push(`精準度與格式要求：\n${opt('outputPrecision')}`);
-  if (opt('outputError')) sections.push(`錯誤或失敗時的回應：\n${opt('outputError')}`);
+  sections.push(`結果範例：\n${smart('outputExample')}`);
+  sections.push(`精準度與格式要求：\n${smart('outputPrecision')}`);
+  sections.push(`錯誤或失敗時的回應：\n${smart('outputError')}`);
 
   sections.push(`\n${'='.repeat(60)}`);
   sections.push(`【RULES — 商業規則與限制】`);
   sections.push(`${'='.repeat(60)}`);
   if (opt('rulesBiz')) sections.push(`固定規則與計算邏輯：\n${opt('rulesBiz')}`);
   else sections.push(`固定規則與計算邏輯：（無特別規定，請依常識判斷）`);
-  if (opt('rulesNot')) sections.push(`不能做的事：\n${opt('rulesNot')}`);
+  sections.push(`不能做的事：\n${smart('rulesNot')}`);
 
   sections.push(`\n${'='.repeat(60)}`);
   sections.push(`【EDGE CASES — 異常情況處理】`);
@@ -126,8 +126,8 @@ function gen() {
   else sections.push(`空白送出：顯示友善提示訊息，標示必填欄位，不執行計算`);
   if (opt('edgeInvalid')) sections.push(`異常值：\n${opt('edgeInvalid')}`);
   else sections.push(`異常值：顯示清楚的錯誤提示，告知使用者正確輸入方式`);
-  if (opt('edgeConflict')) sections.push(`資料衝突：\n${opt('edgeConflict')}`);
-  if (opt('edgeAmbiguous')) sections.push(`模糊情境：\n${opt('edgeAmbiguous')}`);
+  sections.push(`資料衝突：\n${smart('edgeConflict')}`);
+  sections.push(`模糊情境：\n${smart('edgeAmbiguous')}`);
 
   sections.push(`\n${'='.repeat(60)}`);
   sections.push(`【DESIGN — 設計偏好】`);
@@ -148,9 +148,9 @@ function gen() {
   sections.push(`【ACCEPTANCE CRITERIA — 驗收標準】`);
   sections.push(`${'='.repeat(60)}`);
   sections.push(`做對了的情境：\n${smart('acCorrect')}`);
-  if (opt('acWrong')) sections.push(`做錯了的情境（不能出現）：\n${opt('acWrong')}`);
-  if (opt('acUX')) sections.push(`視覺與體驗要求：\n${opt('acUX')}`);
-  if (opt('acExtra')) sections.push(`其他補充：\n${opt('acExtra')}`);
+  sections.push(`做錯了的情境（不能出現）：\n${smart('acWrong')}`);
+  sections.push(`視覺與體驗要求：\n${smart('acUX')}`);
+  sections.push(`其他補充：\n${smart('acExtra')}`);
 
   sections.push(`\n${'='.repeat(60)}`);
   sections.push(`【開發要求】`);
