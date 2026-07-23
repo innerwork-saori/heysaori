@@ -1,3 +1,199 @@
+/* ── 範例 Prompt 展示 ── */
+
+// 範例情境資料（信用卡帳單整理工具）
+const EXAMPLE_PROMPT = (function buildExamplePrompt() {
+  const sep = '='.repeat(60);
+  const lines = [
+    '你是一位專業的軟體工程師、UIUX 設計師與系統分析師。',
+    '請先釐清以下需求（如有不完善之處，請提問或提出建議與我確認），確認後再開發工具並輸出完整可直接使用的靜態網頁程式碼。',
+    '',
+    sep,
+    '【工具基本資訊】',
+    sep,
+    '工具類型：🌐 網頁工具',
+    '工具名稱：信用卡帳單整理工具',
+    '',
+    '【目標與問題】',
+    '幫誰、解決什麼問題：',
+    '幫我（Saori）自動讀取 mail 附檔中的信用卡帳單，整理成一覽表，省去逐封開信對帳的麻煩。',
+    '現況痛點：',
+    '一封一封開啟 mail，開啟附件，人工逐行比對資料，容易漏看也很耗時。',
+    '',
+    sep,
+    '【INPUT — 使用者輸入】',
+    sep,
+    '輸入欄位：',
+    '這個工具自動讀取 mail 的附檔',
+    '填寫範例：',
+    'mail 中的信用卡帳單附檔',
+    '欄位合法值限制：',
+    '（請反問我問題協助我釐清）',
+    '欄位缺漏時的處理：',
+    '（請反問我問題協助我釐清）',
+    '資料來源：',
+    'mail 附檔通常是 PDF，有密碼',
+    '',
+    sep,
+    '【OUTPUT — 輸出結果】',
+    sep,
+    '輸出格式與畫面：',
+    '將所有資料印在畫面上，顯示日期（可能有兩個） / 銀行 / 消費項目名稱 / 金額',
+    '結果範例：',
+    '（請反問我問題協助我釐清）',
+    '精準度與格式要求：',
+    '（請反問我問題協助我釐清）',
+    '錯誤或失敗時的回應：',
+    '（請反問我問題協助我釐清）',
+    '',
+    sep,
+    '【RULES — 商業規則與限制】',
+    sep,
+    '固定規則與計算邏輯：（無特別規定，請依常識判斷）',
+    '不能做的事：',
+    '（請反問我問題協助我釐清）',
+    '',
+    sep,
+    '【EDGE CASES — 異常情況處理】',
+    sep,
+    '空白送出：顯示友善提示訊息，標示必填欄位，不執行計算',
+    '異常值：顯示清楚的錯誤提示，告知使用者正確輸入方式',
+    '資料衝突：',
+    '（請反問我問題協助我釐清）',
+    '模糊情境：',
+    '（請反問我問題協助我釐清）',
+    '',
+    sep,
+    '【DESIGN — 設計偏好】',
+    sep,
+    '風格偏好：柔角新粗獷風（Soft Neo-Brutalism）',
+    '字型：Noto Sans TC（清晰通用）',
+    '',
+    sep,
+    '【ACCEPTANCE CRITERIA — 驗收標準】',
+    sep,
+    '做對了的情境：',
+    '列出所有帳單資料，每筆顯示日期、銀行、消費項目、金額',
+    '做錯了的情境（不能出現）：',
+    '（請反問我問題協助我釐清）',
+    '視覺與體驗要求：',
+    '（請反問我問題協助我釐清）',
+    '其他補充：',
+    '（請反問我問題協助我釐清）',
+    '',
+    sep,
+    '【開發要求】',
+    sep,
+    '- 請輸出完整的單一 HTML 檔案，CSS 與 JavaScript 全部內嵌',
+    '- 不需要後端伺服器，純前端即可運作。（如果有必要，跟我確認要不要使用 google app script 作為後端串接）',
+    '- 畫面要乾淨易用，適合非技術背景的使用者操作',
+    '- 頁面要能在手機與電腦上正常顯示（RWD）',
+    '- 所有錯誤訊息請使用繁體中文，語氣友善',
+    '- 程式碼請加入適當的中文註解，方便未來修改',
+  ];
+  return lines.join('\n');
+})();
+
+// AI 回覆範例內容（對應上方的信用卡帳單整理工具 Prompt）
+const EXAMPLE_AI_REPLY = `目前我不建議直接開始開發，因為你的需求裡有幾個關鍵點還沒定義清楚，尤其是「純前端」與「自動讀 mail 附檔」本身有落差：純靜態網頁不能直接安全地讀取 Gmail 郵件與附件，若要自動化抓取 mail、處理受密碼保護的 PDF，通常需要 Google Apps Script 或其他後端協助串接。
+
+▌先確認架構
+
+我先幫你把需求拆成兩種可行方案，你選一種後，我再輸出完整單一 HTML：
+
+  方案 A — 純前端版
+  適合：先做 MVP、手動上傳 PDF
+  優點：可立即做成單一 HTML、部署最簡單
+  限制：不能自動讀 Gmail，也不能穩定解密所有受密碼保護 PDF
+
+  方案 B — 前端 + Google Apps Script
+  適合：真的要自動讀 mail 附檔、整理帳單
+  優點：可串 Gmail、可集中處理附件與解析流程
+  限制：需要你授權 Gmail / Drive / Sheet，已不是純前端
+
+▌需求缺口
+
+請你直接回覆下面問題，我會依你的答案整理成正式規格，再開始寫 HTML：
+
+1. 你要選 A 還是 B？
+
+2. PDF 密碼規則是什麼？
+   每家銀行固定同一組？還是依卡號末幾碼 / 身分證 / 生日組成？
+
+3. 你說的「日期（好像有兩個）」是指哪兩個？
+   · 帳單期間
+   · 消費日 / 入帳日
+   · 繳款截止日
+   你最後想顯示哪一個，或要不要兩個都顯示？
+
+4. 「item 名稱」是要顯示什麼層級？
+   每筆交易明細名稱、商店名稱，或只要總金額與少數欄位？
+
+5. 支援幾家銀行？先只做 1 家還是多家混合解析？
+
+6. 你要不要做「對帳」？只列出資料，還是要比對重複交易 / 金額異常？
+
+▌我建議的 MVP
+
+如果你想快速落地，我建議第一版先這樣定義：
+
+  · 使用者可手動上傳 1 到多份信用卡 PDF
+  · 若 PDF 有密碼，使用者輸入該 PDF 密碼
+  · 畫面列出：銀行、帳單月份、交易日、商店名稱、金額
+  · 支援搜尋、排序、依銀行篩選
+  · 解析失敗時顯示友善錯誤訊息
+  · UI 採柔角新粗獷風，字型用 Noto Sans TC，手機與桌機皆可用
+
+請直接用下面格式回我，我下一步就整理成確認版規格：
+
+  方案：A / B
+  銀行：
+  PDF 密碼規則：
+  要顯示的日期欄位：
+  item 名稱定義：
+  是否需要對帳規則：
+  是否需要匯出 CSV：`;
+
+function toggleExamplePrompt() {
+  const body = document.getElementById('examplePromptBody');
+  const chevron = document.getElementById('exampleChevron');
+  const toggle = document.getElementById('examplePromptToggle');
+  if (!body || !chevron || !toggle) return;
+
+  const isOpen = !body.hidden;
+
+  if (isOpen) {
+    // 收起
+    body.hidden = true;
+    chevron.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  } else {
+    // 展開，並確保範例內容已填入
+    const outputEl = document.getElementById('examplePromptOutput');
+    if (outputEl && !outputEl.textContent) {
+      outputEl.textContent = EXAMPLE_PROMPT;
+    }
+    const replyEl = document.getElementById('exampleAiReplyOutput');
+    if (replyEl && !replyEl.textContent) {
+      replyEl.textContent = EXAMPLE_AI_REPLY;
+    }
+    body.hidden = false;
+    chevron.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+  }
+}
+
+// 鍵盤支援（Enter / Space 觸發展開）
+document.addEventListener('DOMContentLoaded', function () {
+  const toggle = document.getElementById('examplePromptToggle');
+  if (toggle) {
+    toggle.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleExamplePrompt();
+      }
+    });
+  }
+});
 
 /* ── Design helpers ── */
 function toggleCustomColor() {

@@ -46,6 +46,38 @@
     AI 就能幫你做出來。每個欄位都有說明與範例，不確定時可以先填看看。
   </div>
 
+  <!-- 範例 Prompt 展示 -->
+  <div class="example-prompt-section">
+    <button class="example-prompt-toggle" id="examplePromptToggle" onclick="toggleExamplePrompt()" aria-expanded="false" aria-controls="examplePromptBody">
+      <span class="example-prompt-toggle-left">
+        <span class="example-prompt-icon" aria-hidden="true">📋</span>
+        <span class="example-prompt-toggle-text">
+          <span class="example-prompt-toggle-title">想先看看填完長什麼樣？</span>
+          <span class="example-prompt-toggle-sub">展開查看一個完整填寫範例與實際產出的 Prompt</span>
+        </span>
+      </span>
+      <span class="example-prompt-chevron" id="exampleChevron" aria-hidden="true">▸</span>
+    </button>
+    <div class="example-prompt-body" id="examplePromptBody" hidden>
+      <div class="example-scenario-header">
+        <div class="example-scenario-tag">範例情境</div>
+        <div class="example-scenario-title">📊 信用卡帳單整理工具</div>
+        <div class="example-scenario-desc">幫我自動讀取 mail 附檔（PDF）中的信用卡帳單，整理成一覽表。省去一封一封開信箱、對帳的麻煩。</div>
+      </div>
+      <div class="example-prompt-divider-label">↓ 以下是這份填寫內容實際產出的 Prompt</div>
+      <pre class="example-prompt-output" id="examplePromptOutput"></pre>
+      <div class="example-prompt-note">這份 Prompt 是由上方的表單填寫內容自動產生的格式，你填什麼就會產出什麼。</div>
+
+      <!-- AI 回覆範例 -->
+      <div class="example-ai-reply-header">
+        <div class="example-ai-reply-label">💬 AI 的回覆</div>
+        <div class="example-ai-reply-sub">把上面的 Prompt 貼給 AI 之後，它是這樣回應的</div>
+      </div>
+      <pre class="example-ai-reply-output" id="exampleAiReplyOutput"></pre>
+      <div class="example-prompt-note">AI 沒有直接開始寫程式，而是先問清楚你的需求——這正是這份 Prompt 設計的目的。你越填越清楚，AI 問的問題就越少，做出來的工具就越符合你要的。</div>
+    </div>
+  </div>
+
   <!-- ① 目標 -->
   <div class="form-block">
     <div class="section-label">01 · goal</div>
