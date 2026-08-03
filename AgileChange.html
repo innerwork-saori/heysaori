@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agile Mindset 測驗</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saori-base.css">
+<link rel="stylesheet" href="css/agile-change.css">
+</head>
+<body>
+
+<!-- ══════════ NAV ══════════ -->
+<nav style="
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  padding: 1.2rem 2rem;
+  background: rgba(26,20,16,0.92);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(250,247,242,0.06);
+">
+  <a href="self-discovery-tools.html" style="
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 0.82rem;
+    color: rgba(250,247,242,0.5);
+    text-decoration: none;
+    letter-spacing: 0.12em;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  " onmouseover="this.style.color='#d4a96a'" onmouseout="this.style.color='rgba(250,247,242,0.5)'">← 職涯探索工具</a>
+  <div style="
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.8rem;
+    color: rgba(250,247,242,0.35);
+    letter-spacing: 0.18em;
+  ">Agile Mindset 測驗</div>
+</nav>
+
+<!-- ══════════ HEADER ══════════ -->
+<div class="header">
+  <div class="header-bg"></div>
+  <div class="header-lines" aria-hidden="true">
+    <svg viewBox="0 0 1440 460" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="120" x2="320" y2="0" stroke="rgba(212,168,75,0.07)" stroke-width="1"/>
+      <line x1="1440" y1="340" x2="1180" y2="460" stroke="rgba(212,168,75,0.07)" stroke-width="1"/>
+      <line x1="720" y1="0" x2="900" y2="460" stroke="rgba(250,247,242,0.025)" stroke-width="1"/>
+      <circle cx="1320" cy="90" r="160" fill="none" stroke="rgba(250,247,242,0.03)" stroke-width="1"/>
+      <circle cx="80" cy="360" r="100" fill="none" stroke="rgba(212,168,75,0.05)" stroke-width="1"/>
+      <circle cx="720" cy="230" r="260" fill="none" stroke="rgba(212,168,75,0.03)" stroke-width="0.5"/>
+    </svg>
+  </div>
+  <div class="header-inner">
+    <div class="header-eyebrow">Self-Discovery Tool</div>
+    <h1>Agile Mindset 測驗</h1>
+    <div class="header-divider"></div>
+    <p>了解你現在的敏捷心態，找到成長的起點</p>
+  </div>
+</div>
+
+<!-- ══════════ SECTION 1: 開始畫面 ══════════ -->
+<div id="section-start" class="section section--active">
+  <div class="start-card">
+    <h2>測驗說明</h2>
+    <p class="start-meta">共 15 道題目，約需 5 分鐘</p>
+    <ul class="start-tips">
+      <li>根據直覺作答，沒有標準答案</li>
+      <li>每道題以 1–10 分作答（1 = 完全不同意，10 = 完全同意）</li>
+      <li>完成後即時看到 5 大分類分數</li>
+    </ul>
+    <button id="btn-start" class="btn-primary">開始測驗 →</button>
+  </div>
+</div>
+
+<!-- ══════════ SECTION 2: 答題畫面 ══════════ -->
+<div id="section-quiz" class="section">
+  <div class="quiz-container">
+    <!-- 進度條 -->
+    <div id="quiz-progress">
+      <div id="progress-bar-track">
+        <div id="progress-bar-fill"></div>
+      </div>
+      <div id="progress-label">第 1 題，共 15 題</div>
+    </div>
+
+    <!-- 分類標籤 -->
+    <div id="quiz-category-label" class="category-badge"></div>
+
+    <!-- 題目主體 -->
+    <div id="quiz-question-card" class="question-card">
+      <div id="quiz-question-number" class="question-number"></div>
+      <p id="quiz-question-text" class="question-text"></p>
+
+      <!-- 量表（1–10 單選） -->
+      <div id="quiz-scale" class="scale-group" role="group" aria-label="選擇分數 1 至 10">
+        <!-- 由 JS 動態產生 10 個按鈕 -->
+      </div>
+      <div class="scale-labels">
+        <span>完全不同意</span>
+        <span>完全同意</span>
+      </div>
+    </div>
+
+    <!-- 底部導航 -->
+    <div class="quiz-nav">
+      <button id="btn-prev-question" class="btn-secondary">← 上一題</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SECTION 3: 結果畫面 ══════════ -->
+<div id="section-result" class="section">
+  <div class="result-container">
+    <!-- 整體分數 -->
+    <div class="result-overall">
+      <div id="result-score-display" class="result-score"></div>
+      <h2 id="result-headline"></h2>
+      <p id="result-body"></p>
+    </div>
+
+    <!-- 5 大分類結果 -->
+    <div id="result-categories" class="result-categories">
+      <!-- 由 JS 動態產生分類卡片 -->
+    </div>
+
+    <!-- 行動按鈕 -->
+    <div class="result-actions">
+      <button id="btn-restart" class="btn-secondary">重新測驗</button>
+      <a id="btn-contact" href="https://lin.ee/YVBqq6u" target="_blank" rel="noopener noreferrer" class="btn-primary">
+        與 Saori 深聊 →
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer style="background:var(--ink);color:rgba(250,247,242,.55);padding:2.5rem 2rem;text-align:center;margin-top:4rem;font-size:.78rem;line-height:2;letter-spacing:.04em;">
+  <div style="max-width:600px;margin:0 auto;">
+    <div style="font-family:'Noto Serif TC',serif;font-size:1rem;font-weight:600;color:var(--paper);letter-spacing:.12em;margin-bottom:.4rem;">Saori</div>
+    <div style="color:var(--accent3);font-size:.72rem;letter-spacing:.18em;margin-bottom:1rem;">軟體工程師・系統分析師・生涯諮詢師</div>
+    <div style="width:32px;height:1px;background:rgba(250,247,242,.2);margin:.8rem auto;"></div>
+    <div>
+      <a href="https://heysaori.com/" target="_blank"
+        style="color:rgba(250,247,242,.75);text-decoration:none;border-bottom:1px solid rgba(250,247,242,.25);padding-bottom:1px;font-family:'Noto Serif TC',serif;letter-spacing:.08em;"
+        onmouseover="this.style.color='var(--accent3)';this.style.borderColor='var(--accent3)'"
+        onmouseout="this.style.color='rgba(250,247,242,.75)';this.style.borderColor='rgba(250,247,242,.25)'">
+        人生探索手札 · heysaori.com
+      </a>
+    </div>
+    <div style="margin-top:1.2rem;font-size:.68rem;color:rgba(250,247,242,.3);">© Saori · Agile Mindset 測驗</div>
+  </div>
+</footer>
+
+<script src="js/agile-change.js"></script>
+</body>
+</html>

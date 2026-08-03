@@ -1,0 +1,759 @@
+/* agile-change.css — Agile Mindset 測驗 page-specific styles */
+/* Inherits CSS variables from saori-base.css */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   HERO HEADER
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.header {
+  background: var(--ink);
+  padding: 9rem 2rem 6rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.header-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 85%, rgba(212,168,75,.12) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 30% at 20% 20%, rgba(74,124,111,.06) 0%, transparent 60%),
+    linear-gradient(160deg, #1a1410 0%, #221c14 60%, #1a1410 100%);
+}
+
+.header-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.header-lines svg {
+  width: 100%;
+  height: 100%;
+}
+
+.header-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.header-eyebrow {
+  font-family: 'Noto Serif TC', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 0.82rem;
+  letter-spacing: 0.28em;
+  color: var(--accent3);
+  text-transform: uppercase;
+  margin-bottom: 1.4rem;
+  opacity: 0;
+  animation: hdrFadeUp 0.9s 0.2s ease forwards;
+}
+
+.header h1 {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(2rem, 5.5vw, 3.2rem);
+  font-weight: 700;
+  color: var(--paper);
+  letter-spacing: 0.1em;
+  line-height: 1.3;
+  margin-bottom: 0;
+  opacity: 0;
+  animation: hdrFadeUp 0.9s 0.4s ease forwards;
+}
+
+.header-divider {
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent3), transparent);
+  margin: 1.4rem auto;
+  opacity: 0;
+  animation: hdrFadeIn 0.9s 0.6s ease forwards;
+}
+
+.header p {
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: rgba(250,247,242,.48);
+  letter-spacing: 0.06em;
+  line-height: 2;
+  opacity: 0;
+  animation: hdrFadeUp 0.9s 0.75s ease forwards;
+}
+
+@keyframes hdrFadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hdrFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (max-width: 599px) {
+  .header { padding: 7rem 1.5rem 4rem; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LAYOUT & SECTION VISIBILITY
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Page layout: account for fixed nav (approx 60px) */
+body {
+  padding-top: 60px;
+}
+
+/* Main container: center-aligned, max-width for readability */
+.page-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* Section visibility control: only .section--active is visible */
+.section {
+  display: none;
+}
+
+/* Default active state; flex-based sections override this below */
+.section--active {
+  display: block;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   START SCREEN
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Start section: vertically centered content */
+#section-start {
+  min-height: calc(100vh - 60px);
+  display: none;          /* hidden by default via .section */
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+}
+
+/* Override: use flex when this section is active */
+#section-start.section--active {
+  display: flex;
+}
+
+/* Start card: centered card with warm paper background */
+.start-card {
+  background: var(--paper-warm);
+  color: var(--ink);
+  border: 1px solid var(--paper-mid);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  max-width: 580px;
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.start-card h2 {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--ink);
+}
+
+.start-card p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin-bottom: 1.5rem;
+}
+
+/* Start tips list */
+.start-tips {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+  background: var(--paper);
+  border-radius: 8px;
+  padding: 1.2rem 1.5rem;
+  border: 1px solid var(--paper-mid);
+}
+
+.start-tips li {
+  font-size: 0.85rem;
+  line-height: 1.8;
+  color: var(--text-main);
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 0.7rem;
+}
+
+.start-tips li:last-child {
+  margin-bottom: 0;
+}
+
+.start-tips li::before {
+  content: '·';
+  color: var(--accent1);
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+/* Load error message */
+.load-error {
+  background: #fff8e6;
+  border: 1px solid #f0c040;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+  color: #7a5c00;
+  display: none;
+}
+
+.load-error.show {
+  display: block;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   BUTTONS
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.btn-primary {
+  display: inline-block;
+  background: var(--accent1);
+  color: var(--paper);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn-primary:hover {
+  background: #75583a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 111, 71, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  background: var(--text-soft);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-secondary {
+  display: inline-block;
+  background: transparent;
+  color: var(--text-mid);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.7rem 1.8rem;
+  border: 2px solid var(--paper-mid);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent1);
+  color: var(--accent1);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .start-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .start-card h2 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding-top: 56px;
+  }
+
+  #section-start.section--active {
+    min-height: calc(100vh - 56px);
+    padding: 2rem 1rem;
+  }
+
+  .start-card {
+    padding: 1.8rem 1.2rem;
+  }
+
+  .start-card h2 {
+    font-size: 1.2rem;
+  }
+
+  .start-card p {
+    font-size: 0.85rem;
+  }
+
+  .start-tips {
+    padding: 1rem 1.2rem;
+  }
+
+  .start-tips li {
+    font-size: 0.8rem;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 0.8rem 1.5rem;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   QUIZ SCREEN — SECTION LAYOUT
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Quiz section: centred, constrained width for readability */
+#section-quiz {
+  padding: 2.5rem 1.5rem;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* Inner container wrappers */
+.quiz-container {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.result-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Progress area: sits above the question card */
+#quiz-progress {
+  margin-bottom: 1.5rem;
+}
+
+/* Progress bar track */
+#progress-bar-track {
+  height: 6px;
+  background: var(--paper-mid);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+/* Progress bar fill */
+#progress-bar-fill {
+  height: 100%;
+  background: var(--accent2);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* Progress label: "第 N 題，共 15 題" */
+#progress-label {
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CATEGORY BADGE
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Pill-shaped category label above the question card */
+.category-badge {
+  display: inline-block;
+  background: var(--paper-warm);
+  color: var(--accent1);
+  border: 1px solid var(--paper-mid);
+  border-radius: 20px;
+  padding: 0.25rem 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.75rem;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   QUESTION CARD
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.question-card {
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-mid);
+  border-radius: 16px;
+  padding: 2rem 1.75rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.question-number {
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  margin-bottom: 0.6rem;
+  font-weight: 400;
+}
+
+.question-text {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--ink);
+  margin-bottom: 1.75rem;
+  font-weight: 400;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SCALE (1–10 BUTTONS)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Scale container: flex row, wraps on small screens, centred */
+.scale-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+}
+
+/* Individual scale button — touch target ≥ 44×44 px (Req 2.1, Req 7.3) */
+.scale-btn {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.25rem 0.5rem;
+  background: var(--paper);
+  border: 2px solid var(--paper-mid);
+  border-radius: 8px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Hover state — only apply when button is NOT selected */
+.scale-btn:hover:not(.scale-btn--selected) {
+  background: var(--paper-mid);
+  border-color: var(--accent2);
+  color: var(--ink);
+}
+
+/* Selected state — visual confirmation (Req 2.2, Req 7.2) */
+.scale-btn--selected {
+  background: var(--accent1);
+  color: var(--paper);
+  border-color: var(--accent1);
+}
+
+/* Focus ring for keyboard accessibility (Req 7.3) */
+.scale-btn:focus-visible {
+  outline: 2px solid var(--accent1);
+  outline-offset: 2px;
+}
+
+/* Scale endpoint labels: "完全不同意" ↔ "完全同意" */
+.scale-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--text-soft);
+  padding: 0 0.25rem;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   QUIZ NAVIGATION
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.quiz-nav {
+  margin-top: 1.25rem;
+  text-align: left;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   QUIZ SCREEN — RESPONSIVE
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 480px) {
+  #section-quiz {
+    padding: 1.5rem 1rem;
+  }
+
+  .question-card {
+    padding: 1.5rem 1.2rem;
+  }
+
+  .question-text {
+    font-size: 0.95rem;
+  }
+
+  /* On very small screens, allow buttons to grow to fill available space */
+  .scale-btn {
+    min-width: 40px;
+    min-height: 44px;
+    flex: 1 0 40px;
+    font-size: 0.85rem;
+  }
+
+  .scale-labels {
+    font-size: 0.68rem;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   QUIZ SECTION
+   ══════════════════════════════════════════════════════════════════════════ */
+
+#section-quiz {
+  padding: 2rem 0;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESULT PAGE
+   ══════════════════════════════════════════════════════════════════════════ */
+
+#section-result {
+  padding: 2rem 0 3rem;
+}
+
+/* Overall score display: centered block */
+.result-overall {
+  text-align: center;
+  padding: 2rem 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Large score number */
+.result-score {
+  display: block;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--accent1);
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+}
+
+/* Category cards grid */
+.result-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+/* Base category card */
+.category-card {
+  background: var(--paper);
+  border: 1px solid var(--paper-mid);
+  border-radius: 12px;
+  padding: 1.4rem 1.5rem;
+}
+
+/* Level tint variants */
+.category-card--low {
+  background: var(--paper-warm);
+}
+
+.category-card--medium {
+  background: var(--paper-mid);
+}
+
+.category-card--high {
+  background: rgba(139, 111, 71, 0.08);
+}
+
+/* Card header: label + score on same row */
+.category-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.category-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.category-score {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent1);
+}
+
+/* Feedback text */
+.category-feedback {
+  font-size: 0.85rem;
+  color: var(--text-mid);
+  line-height: 1.7;
+  margin: 0.5rem 0 0.9rem;
+}
+
+/* Score bar container */
+.score-bar {
+  height: 6px;
+  background: var(--paper-mid);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+/* Score bar fill */
+.score-bar-fill {
+  height: 100%;
+  background: var(--accent2);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* Level badge — shared pill shape */
+.level-badge--low,
+.level-badge--medium,
+.level-badge--high {
+  display: inline-block;
+  border-radius: 20px;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.level-badge--low {
+  background: var(--paper-mid);
+  color: var(--text-mid);
+}
+
+.level-badge--medium {
+  background: rgba(196, 149, 106, 0.2);
+  color: var(--accent2);
+}
+
+.level-badge--high {
+  background: rgba(139, 111, 71, 0.15);
+  color: var(--accent1);
+}
+
+/* Result action buttons row */
+.result-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE — result page additions
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .result-score {
+    font-size: 3rem;
+  }
+
+  .result-categories {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  #section-result {
+    padding: 1.5rem 0 2rem;
+  }
+
+  .result-score {
+    font-size: 2.6rem;
+  }
+
+  .result-overall {
+    padding: 1.5rem 0.5rem;
+  }
+
+  .category-card {
+    padding: 1.2rem 1.2rem;
+  }
+
+  .result-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .result-actions .btn-primary,
+  .result-actions .btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   QUIZ-SPECIFIC RWD (scale buttons, result categories, result score)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* Result categories: switch to single or narrow two-column grid */
+  .result-categories {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+
+  /* Scale buttons: ensure touch target remains accessible */
+  .scale-btn {
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Result categories: collapse to single column */
+  .result-categories {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  /* Category cards: reduce padding on small screens */
+  .category-card {
+    padding: 1rem 1.2rem;
+  }
+
+  /* Result score: scale down the prominent score number */
+  .result-score {
+    font-size: 2.5rem;
+  }
+
+  /* Scale buttons: smaller but maintain 44px minimum touch target (Req 7.3) */
+  .scale-btn {
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.3rem;
+  }
+}

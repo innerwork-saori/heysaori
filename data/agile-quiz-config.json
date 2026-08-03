@@ -1,0 +1,106 @@
+{
+  "meta": {
+    "title": "Agile Mindset 測驗",
+    "subtitle": "了解你的敏捷心態現況",
+    "totalQuestions": 15,
+    "scaleMin": 1,
+    "scaleMax": 10,
+    "version": "1.0.0"
+  },
+
+  "scoringRules": {
+    "overallFormula": "（15 題總分 ÷ 15）× 10",
+    "categoryFormula": "（分類 3 題總分 ÷ 3）× 10",
+    "levels": [
+      { "id": "low",    "label": "仍在建立",  "minScore": 0,  "maxScore": 69  },
+      { "id": "medium", "label": "持續成長",  "minScore": 70, "maxScore": 89  },
+      { "id": "high",   "label": "強項展現",  "minScore": 90, "maxScore": 100 }
+    ]
+  },
+
+  "categories": [
+    {
+      "id": "beginner-mindset",
+      "label": "初學者心態",
+      "labelEn": "Beginner Mindset",
+      "questionIds": ["q1", "q2", "q3"]
+    },
+    {
+      "id": "done-over-perfect",
+      "label": "完成勝於完美",
+      "labelEn": "Done is Better than Perfect",
+      "questionIds": ["q4", "q5", "q6"]
+    },
+    {
+      "id": "failure-seeking",
+      "label": "追求失敗勝於迴避失敗",
+      "labelEn": "Failure-Seeking over Failure Aversion",
+      "questionIds": ["q7", "q8", "q9"]
+    },
+    {
+      "id": "empathy-over-engagement",
+      "label": "同理勝於投入",
+      "labelEn": "Empathy over Engagement",
+      "questionIds": ["q10", "q11", "q12"]
+    },
+    {
+      "id": "self-compassion",
+      "label": "自我慈悲勝於自我批判",
+      "labelEn": "Self-Compassion over Self-Judgment",
+      "questionIds": ["q13", "q14", "q15"]
+    }
+  ],
+
+  "questions": [
+    { "id": "q1",  "categoryId": "beginner-mindset",       "text": "你在多大程度上會接受所有想法作為可能性？",                             "isReversed": false, "weight": 1 },
+    { "id": "q2",  "categoryId": "beginner-mindset",       "text": "當我面對變革挑戰時，我會提醒自己組織裡有很多人也有和我一樣的感受。",     "isReversed": false, "weight": 1 },
+    { "id": "q3",  "categoryId": "beginner-mindset",       "text": "你多常會嘗試新事物，即使你不知道該怎麼做？",                             "isReversed": false, "weight": 1 },
+    { "id": "q4",  "categoryId": "done-over-perfect",      "text": "我偏好採用「測試並學習」的方式，而不是花時間取得完整的需求。",             "isReversed": false, "weight": 1 },
+    { "id": "q5",  "categoryId": "done-over-perfect",      "text": "你在多大程度上會保持天生的好奇心並尋求學習新事物？",                       "isReversed": false, "weight": 1 },
+    { "id": "q6",  "categoryId": "done-over-perfect",      "text": "你在多大程度上能夠在還看不到全貌的情況下採取行動？",                       "isReversed": false, "weight": 1 },
+    { "id": "q7",  "categoryId": "failure-seeking",        "text": "我會全心全意地聆聽，而不會去想接下來要說什麼。",                           "isReversed": false, "weight": 1 },
+    { "id": "q8",  "categoryId": "failure-seeking",        "text": "即使工作尚未完成或不夠完美，我也能自在地分享我正在進行的工作。",           "isReversed": false, "weight": 1 },
+    { "id": "q9",  "categoryId": "failure-seeking",        "text": "當我在對自己重要的事情上失敗時，我會試著保持客觀的角度看待。",             "isReversed": false, "weight": 1 },
+    { "id": "q10", "categoryId": "empathy-over-engagement", "text": "你在多大程度上會將失敗和錯誤視為學習的機會？",                            "isReversed": false, "weight": 1 },
+    { "id": "q11", "categoryId": "empathy-over-engagement", "text": "我經常反思自己做過的事情，思考如何能做得更好。",                          "isReversed": false, "weight": 1 },
+    { "id": "q12", "categoryId": "empathy-over-engagement", "text": "你多常會主動嘗試從另一個角度看待事情？",                                  "isReversed": false, "weight": 1 },
+    { "id": "q13", "categoryId": "self-compassion",         "text": "我經常在工作中把自己推出舒適圈。",                                        "isReversed": false, "weight": 1 },
+    { "id": "q14", "categoryId": "self-compassion",         "text": "當我感到情緒上的痛苦時，我會試著善待自己。",                              "isReversed": false, "weight": 1 },
+    { "id": "q15", "categoryId": "self-compassion",         "text": "當你不知道某件事時，你對於提問感到多自在？",                              "isReversed": false, "weight": 1 }
+  ],
+
+  "results": {
+    "overall": {
+      "low":    { "headline": "敏捷心態：仍在建立",  "body": "你的敏捷心態正在萌芽中。每個起點都是珍貴的學習機會，帶著好奇心繼續探索吧！" },
+      "medium": { "headline": "敏捷心態：持續成長",  "body": "你已具備相當的敏捷心態，並在多數情境下能靈活回應變化。繼續深化這些優勢，你的影響力將更廣泛。" },
+      "high":   { "headline": "敏捷心態：強項展現",  "body": "恭喜！你展現了高度的敏捷心態，能夠擁抱不確定性、從失敗中學習、並以同理心面對自己與他人。" }
+    },
+    "categories": {
+      "beginner-mindset": {
+        "low":    { "feedback": "對新想法保持開放仍需練習。試著在下一次對話中，先完整聽完對方的想法再給意見。" },
+        "medium": { "feedback": "你能接受多元想法，偶爾仍會受既有框架影響。刻意練習「先問問題」而非急著評判，會有幫助。" },
+        "high":   { "feedback": "你展現了典型的初學者心態——真誠地將每個想法視為可能性。這是敏捷文化的核心特質之一。" }
+      },
+      "done-over-perfect": {
+        "low":    { "feedback": "你可能傾向等到「準備好了」才行動。試著設定一個「夠好就發出去」的標準，從小事開始練習。" },
+        "medium": { "feedback": "你能夠在不完美的情況下行動，但有時還是會等待更多確定性。持續練習迭代思維！" },
+        "high":   { "feedback": "你完全內化了「完成勝於完美」的精神——行動優先，從回饋中學習。這讓你的迭代速度遠超他人。" }
+      },
+      "failure-seeking": {
+        "low":    { "feedback": "失敗對你來說仍是需要避開的事。試著把下一次的小失誤當作實驗資料，而非個人評價。" },
+        "medium": { "feedback": "你能夠理性看待失敗，但情緒上仍有些影響。持續練習把「沒做好」和「我不夠好」分開來。" },
+        "high":   { "feedback": "你真正把失敗視為學習素材，而非威脅。這種心態讓你能冒更聰明的風險，也更能幫助團隊心理安全。" }
+      },
+      "empathy-over-engagement": {
+        "low":    { "feedback": "你在聆聽與換位思考上還有成長空間。試著在下一次對話中，至少問一個「你是怎麼看這件事？」的問題。" },
+        "medium": { "feedback": "你具備同理心，但有時還是以自身視角為主。有意識地練習「先理解，再回應」的習慣。" },
+        "high":   { "feedback": "你展現了強烈的同理心與反思能力——這讓你在團隊協作與個人成長上都具備深厚的基礎。" }
+      },
+      "self-compassion": {
+        "low":    { "feedback": "你對自己的批判可能比對他人更嚴格。試著在下一次犯錯時，用對待好朋友的方式對待自己。" },
+        "medium": { "feedback": "你能夠善待自己，但壓力大時自我批判仍可能浮現。持續練習自我慈悲，讓它成為你的預設反應。" },
+        "high":   { "feedback": "你能夠在痛苦和挑戰中善待自己——這是敏捷心態最深層的基礎，也是持續成長不可或缺的能量來源。" }
+      }
+    }
+  }
+}
