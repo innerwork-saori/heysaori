@@ -11,6 +11,7 @@
      題目、分類、計分規則、結果文案全部在此維護。
      純靜態專案，不需要 fetch()。
      ════════════════════════════════════════════════════════════════ */
+  /* ── v2 改版：五大構面重新命名、15 道全新題目、計分公式語意更新、15 段新文案 ── */
   var QUIZ_CONFIG = {
     meta: {
       title: 'Agile Mindset 測驗',
@@ -18,16 +19,16 @@
       totalQuestions: 15,
       scaleMin: 1,
       scaleMax: 10,
-      version: '1.0.0'
+      version: '2.0.0'
     },
 
     scoringRules: {
-      overallFormula: '（15 題總分 ÷ 15）× 10',
-      categoryFormula: '（分類 3 題總分 ÷ 3）× 10',
+      overallFormula: '（15 題總分 ÷ 150）× 100，四捨五入至小數後 1 位',
+      categoryFormula: '（分類 3 題總分 ÷ 30）× 100，四捨五入至小數後 1 位',
       levels: [
-        { id: 'low',    label: '仍在建立',  minScore: 0,  maxScore: 69  },
-        { id: 'medium', label: '持續成長',  minScore: 70, maxScore: 89  },
-        { id: 'high',   label: '強項展現',  minScore: 90, maxScore: 100 }
+        { id: 'emerging',  label: '建立中',   minScore: 0,  maxScore: 59  },
+        { id: 'growing',   label: '穩定成長', minScore: 60, maxScore: 79  },
+        { id: 'thriving',  label: '敏捷強項', minScore: 80, maxScore: 100 }
       ]
     },
 
@@ -39,80 +40,80 @@
         questionIds: ['q1', 'q2', 'q3']
       },
       {
-        id: 'done-over-perfect',
-        label: '完成勝於完美',
-        labelEn: 'Done is Better than Perfect',
+        id: 'action-over-perfection',
+        label: '行動導向',
+        labelEn: 'Action over Perfection',
         questionIds: ['q4', 'q5', 'q6']
       },
       {
-        id: 'failure-seeking',
-        label: '追求失敗勝於迴避失敗',
-        labelEn: 'Failure-Seeking over Failure Aversion',
+        id: 'failure-embracing',
+        label: '擁抱失敗',
+        labelEn: 'Failure Embracing',
         questionIds: ['q7', 'q8', 'q9']
       },
       {
-        id: 'empathy-over-engagement',
-        label: '同理勝於投入',
-        labelEn: 'Empathy over Engagement',
+        id: 'empathy-collaboration',
+        label: '同理與協作',
+        labelEn: 'Empathy & Collaboration',
         questionIds: ['q10', 'q11', 'q12']
       },
       {
-        id: 'self-compassion',
-        label: '自我慈悲勝於自我批判',
-        labelEn: 'Self-Compassion over Self-Judgment',
+        id: 'self-care',
+        label: '自我照顧',
+        labelEn: 'Self-Care',
         questionIds: ['q13', 'q14', 'q15']
       }
     ],
 
     questions: [
-      { id: 'q1',  categoryId: 'beginner-mindset',        text: '你在多大程度上會接受所有想法作為可能性？',                             isReversed: false, weight: 1 },
-      { id: 'q2',  categoryId: 'beginner-mindset',        text: '當我面對變革挑戰時，我會提醒自己組織裡有很多人也有和我一樣的感受。',     isReversed: false, weight: 1 },
-      { id: 'q3',  categoryId: 'beginner-mindset',        text: '你多常會嘗試新事物，即使你不知道該怎麼做？',                             isReversed: false, weight: 1 },
-      { id: 'q4',  categoryId: 'done-over-perfect',       text: '我偏好採用「測試並學習」的方式，而不是花時間取得完整的需求。',             isReversed: false, weight: 1 },
-      { id: 'q5',  categoryId: 'done-over-perfect',       text: '你在多大程度上會保持天生的好奇心並尋求學習新事物？',                       isReversed: false, weight: 1 },
-      { id: 'q6',  categoryId: 'done-over-perfect',       text: '你在多大程度上能夠在還看不到全貌的情況下採取行動？',                       isReversed: false, weight: 1 },
-      { id: 'q7',  categoryId: 'failure-seeking',         text: '我會全心全意地聆聽，而不會去想接下來要說什麼。',                           isReversed: false, weight: 1 },
-      { id: 'q8',  categoryId: 'failure-seeking',         text: '即使工作尚未完成或不夠完美，我也能自在地分享我正在進行的工作。',           isReversed: false, weight: 1 },
-      { id: 'q9',  categoryId: 'failure-seeking',         text: '當我在對自己重要的事情上失敗時，我會試著保持客觀的角度看待。',             isReversed: false, weight: 1 },
-      { id: 'q10', categoryId: 'empathy-over-engagement', text: '你在多大程度上會將失敗和錯誤視為學習的機會？',                            isReversed: false, weight: 1 },
-      { id: 'q11', categoryId: 'empathy-over-engagement', text: '我經常反思自己做過的事情，思考如何能做得更好。',                          isReversed: false, weight: 1 },
-      { id: 'q12', categoryId: 'empathy-over-engagement', text: '你多常會主動嘗試從另一個角度看待事情？',                                  isReversed: false, weight: 1 },
-      { id: 'q13', categoryId: 'self-compassion',         text: '我經常在工作中把自己推出舒適圈。',                                        isReversed: false, weight: 1 },
-      { id: 'q14', categoryId: 'self-compassion',         text: '當我感到情緒上的痛苦時，我會試著善待自己。',                              isReversed: false, weight: 1 },
-      { id: 'q15', categoryId: 'self-compassion',         text: '當你不知道某件事時，你對於提問感到多自在？',                              isReversed: false, weight: 1 }
+      { id: 'q1',  categoryId: 'beginner-mindset',       text: '面對不熟悉的領域時，我可以坦然承認「我現在還不懂，但我願意學」。',                   isReversed: false, weight: 1 },
+      { id: 'q2',  categoryId: 'beginner-mindset',       text: '當有人給我新觀點時，我通常會先好奇地多問幾句，而不是急著反駁。',                    isReversed: false, weight: 1 },
+      { id: 'q3',  categoryId: 'beginner-mindset',       text: '我會主動安排時間嘗試自己完全沒碰過的工具、技能或題材。',                            isReversed: false, weight: 1 },
+      { id: 'q4',  categoryId: 'action-over-perfection', text: '當一個想法 70% 準備好時，我願意先推出「初版」，再透過回饋調整。',                    isReversed: false, weight: 1 },
+      { id: 'q5',  categoryId: 'action-over-perfection', text: '碰到模糊需求時，我傾向先做一個簡單可測試的版本，而不是卡在分析。',                  isReversed: false, weight: 1 },
+      { id: 'q6',  categoryId: 'action-over-perfection', text: '當我拖延太久，我會刻意切出一個可以在一兩天內完成的小任務來打破僵局。',              isReversed: false, weight: 1 },
+      { id: 'q7',  categoryId: 'failure-embracing',      text: '在重要事情上失敗時，我能在合理時間內從自責轉向「下一次我要怎麼做不同」。',          isReversed: false, weight: 1 },
+      { id: 'q8',  categoryId: 'failure-embracing',      text: '我願意分享自己曾經踩雷、失敗的經驗，讓別人也能從中學習。',                          isReversed: false, weight: 1 },
+      { id: 'q9',  categoryId: 'failure-embracing',      text: '當嘗試的新做法沒有成功，我通常會紀錄學到什麼，而不是當作沒發生過。',              isReversed: false, weight: 1 },
+      { id: 'q10', categoryId: 'empathy-collaboration',  text: '當團隊裡有人狀態不佳，我會留意背後可能的壓力或脈絡，而不是只看表現。',            isReversed: false, weight: 1 },
+      { id: 'q11', categoryId: 'empathy-collaboration',  text: '在合作過程中，我會主動詢問對方需要什麼支持或資訊來把事情做好。',                  isReversed: false, weight: 1 },
+      { id: 'q12', categoryId: 'empathy-collaboration',  text: '當衝突發生時，我會試著從對方立場重新理解事件，而不是只堅持自己觀點。',            isReversed: false, weight: 1 },
+      { id: 'q13', categoryId: 'self-care',              text: '當工作或創作量太大時，我會主動調整節奏，而不是硬撐到筋疲力盡。',                  isReversed: false, weight: 1 },
+      { id: 'q14', categoryId: 'self-care',              text: '我能接受自己有狀態不好的日子，不會因為那幾天的表現就全盤否定自己。',              isReversed: false, weight: 1 },
+      { id: 'q15', categoryId: 'self-care',              text: '我會刻意安排休息、運動或興趣時間，視為長期保持敏捷與創造力的必要投資。',          isReversed: false, weight: 1 }
     ],
 
     results: {
       overall: {
-        low:    { headline: '敏捷心態：仍在建立',  body: '你的敏捷心態正在萌芽中。每個起點都是珍貴的學習機會，帶著好奇心繼續探索吧！' },
-        medium: { headline: '敏捷心態：持續成長',  body: '你已具備相當的敏捷心態，並在多數情境下能靈活回應變化。繼續深化這些優勢，你的影響力將更廣泛。' },
-        high:   { headline: '敏捷心態：強項展現',  body: '恭喜！你展現了高度的敏捷心態，能夠擁抱不確定性、從失敗中學習、並以同理心面對自己與他人。' }
+        emerging: { headline: '敏捷心態：建立中',   body: '你正在打底，這是最有機會的階段。每個你願意承認「我還不夠懂」的瞬間，都是真正成長的開始。' },
+        growing:  { headline: '敏捷心態：穩定成長', body: '你已內化了敏捷的核心精神，並在多數情境下能靈活回應。繼續深化，你的影響力還有很大的空間。' },
+        thriving: { headline: '敏捷心態：敏捷強項', body: '你不只理解敏捷，你活出了它。你能在不確定中行動、從失敗中提煉、在協作中感受，這是很難教的素質。' }
       },
       categories: {
         'beginner-mindset': {
-          low:    { feedback: '對新想法保持開放仍需練習。試著在下一次對話中，先完整聽完對方的想法再給意見。' },
-          medium: { feedback: '你能接受多元想法，偶爾仍會受既有框架影響。刻意練習「先問問題」而非急著評判，會有幫助。' },
-          high:   { feedback: '你展現了典型的初學者心態——真誠地將每個想法視為可能性。這是敏捷文化的核心特質之一。' }
+          emerging: { feedback: '面對陌生領域時，承認不知道還不太自然。下次可以試試：先說「我還沒研究過這個」，看看對話會往哪裡走。' },
+          growing:  { feedback: '你能接受自己不知道，有時還是會有點抗拒。刻意練習：把「好奇」當作回應新事物的第一反應。' },
+          thriving: { feedback: '你真的喜歡當新手。這種開放讓你能從每個人、每件事裡學到東西，也讓別人願意跟你分享更多。' }
         },
-        'done-over-perfect': {
-          low:    { feedback: '你可能傾向等到「準備好了」才行動。試著設定一個「夠好就發出去」的標準，從小事開始練習。' },
-          medium: { feedback: '你能夠在不完美的情況下行動，但有時還是會等待更多確定性。持續練習迭代思維！' },
-          high:   { feedback: '你完全內化了「完成勝於完美」的精神——行動優先，從回饋中學習。這讓你的迭代速度遠超他人。' }
+        'action-over-perfection': {
+          emerging: { feedback: '你可能習慣等到準備好再出發。試著定義一個「夠好就發出去」的最低標準，從小事開始練習。' },
+          growing:  { feedback: '你懂得迭代，但有時還是會在分析裡多待一會兒。下次設個 timebox——48 小時內，先做出可測試的版本。' },
+          thriving: { feedback: '你把行動當成學習的方式。這讓你的迭代速度比大多數人快，也能更早看到真實回饋。' }
         },
-        'failure-seeking': {
-          low:    { feedback: '失敗對你來說仍是需要避開的事。試著把下一次的小失誤當作實驗資料，而非個人評價。' },
-          medium: { feedback: '你能夠理性看待失敗，但情緒上仍有些影響。持續練習把「沒做好」和「我不夠好」分開來。' },
-          high:   { feedback: '你真正把失敗視為學習素材，而非威脅。這種心態讓你能冒更聰明的風險，也更能幫助團隊心理安全。' }
+        'failure-embracing': {
+          emerging: { feedback: '失敗對你來說還是有點刺。試著把下一次的小失誤當成實驗資料，記錄下來而不是急著忘掉。' },
+          growing:  { feedback: '你能理性看待失敗，但情緒有時還是會卡住。繼續練習把「這次沒做好」和「我本身不夠好」分開來。' },
+          thriving: { feedback: '你把失敗視為素材，而不是判決。這讓你敢冒更聰明的風險，也讓身邊的人更有安全感去嘗試。' }
         },
-        'empathy-over-engagement': {
-          low:    { feedback: '你在聆聽與換位思考上還有成長空間。試著在下一次對話中，至少問一個「你是怎麼看這件事？」的問題。' },
-          medium: { feedback: '你具備同理心，但有時還是以自身視角為主。有意識地練習「先理解，再回應」的習慣。' },
-          high:   { feedback: '你展現了強烈的同理心與反思能力——這讓你在團隊協作與個人成長上都具備深厚的基礎。' }
+        'empathy-collaboration': {
+          emerging: { feedback: '你在換位思考上還有空間。下次當你要做判斷前，先問一句：「他現在的處境是什麼？」' },
+          growing:  { feedback: '你具備同理心，但有時自己的視角還是會先出來。試著刻意慢一拍——先理解，再回應。' },
+          thriving: { feedback: '你能感受到別人說不出口的狀態，也知道怎麼調整自己來幫助整體往前。這是協作裡最稀缺的能力。' }
         },
-        'self-compassion': {
-          low:    { feedback: '你對自己的批判可能比對他人更嚴格。試著在下一次犯錯時，用對待好朋友的方式對待自己。' },
-          medium: { feedback: '你能夠善待自己，但壓力大時自我批判仍可能浮現。持續練習自我慈悲，讓它成為你的預設反應。' },
-          high:   { feedback: '你能夠在痛苦和挑戰中善待自己——這是敏捷心態最深層的基礎，也是持續成長不可或缺的能量來源。' }
+        'self-care': {
+          emerging: { feedback: '你可能習慣撐過去，而不是調整節奏。下一次感覺快到極限時，試著刻意停下來問：我現在需要什麼？' },
+          growing:  { feedback: '你知道休息重要，但有時還是會覺得放鬆是「偷懶」。記得：可持續的節奏，才是長期敏捷的基礎。' },
+          thriving: { feedback: '你把照顧自己當成一種系統設計。這讓你能長期保持清醒、創造力與穩定，而不是靠衝刺燒完就沒了。' }
         }
       }
     }
@@ -156,7 +157,7 @@
       return;
     }
     target.classList.add('section--active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     // Move focus for accessibility
     var focusTarget = target.querySelector('h1, h2');
@@ -392,8 +393,8 @@
         totalSum += answers[qId] || 0;
       });
 
-      // catScore = (sum of 3 questions / 3) × 10, clamped [0, 100]
-      var catScore = clamp(Math.round((catSum / 3) * 10 * 10) / 10, 0, 100);
+      // catScore = (sum of 3 questions / 30) × 100, clamped [0, 100]
+      var catScore = clamp(Math.round((catSum / 30) * 100 * 10) / 10, 0, 100);
       var catLevel = determineLevel(catScore, config.scoringRules.levels);
       var catFeedback = config.results.categories[category.id][catLevel].feedback;
 
@@ -406,8 +407,8 @@
       });
     });
 
-    // overallScore = (sum of 15 questions / 15) × 10, clamped [0, 100]
-    var overallScore = clamp(Math.round((totalSum / config.meta.totalQuestions) * 10 * 10) / 10, 0, 100);
+    // overallScore = (sum of 15 questions / 150) × 100, clamped [0, 100]
+    var overallScore = clamp(Math.round((totalSum / 150) * 100 * 10) / 10, 0, 100);
     var overallLevel = determineLevel(overallScore, config.scoringRules.levels);
     var overallCopy = config.results.overall[overallLevel];
 
@@ -430,7 +431,7 @@
         return levels[i].id;
       }
     }
-    // Boundary protection: score = 100 → 'high'
+    // Boundary protection: score = 100 → 'thriving'
     return levels[levels.length - 1].id;
   }
 

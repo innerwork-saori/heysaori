@@ -578,15 +578,15 @@ body {
 }
 
 /* Level tint variants */
-.category-card--low {
+.category-card--emerging {
   background: var(--paper-warm);
 }
 
-.category-card--medium {
+.category-card--growing {
   background: var(--paper-mid);
 }
 
-.category-card--high {
+.category-card--thriving {
   background: rgba(139, 111, 71, 0.08);
 }
 
@@ -635,9 +635,9 @@ body {
 }
 
 /* Level badge — shared pill shape */
-.level-badge--low,
-.level-badge--medium,
-.level-badge--high {
+.level-badge--emerging,
+.level-badge--growing,
+.level-badge--thriving {
   display: inline-block;
   border-radius: 20px;
   padding: 0.2rem 0.75rem;
@@ -646,17 +646,17 @@ body {
   margin-bottom: 0.5rem;
 }
 
-.level-badge--low {
+.level-badge--emerging {
   background: var(--paper-mid);
   color: var(--text-mid);
 }
 
-.level-badge--medium {
+.level-badge--growing {
   background: rgba(196, 149, 106, 0.2);
   color: var(--accent2);
 }
 
-.level-badge--high {
+.level-badge--thriving {
   background: rgba(139, 111, 71, 0.15);
   color: var(--accent1);
 }
@@ -755,5 +755,147 @@ body {
     min-height: 44px;
     font-size: 0.85rem;
     padding: 0.4rem 0.3rem;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LANDING PAGE STATIC SECTIONS (v2)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.lp-section {
+  padding: 4rem 2rem;
+  border-bottom: 1px solid var(--paper-mid);
+}
+
+.lp-container {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.lp-section-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.06em;
+}
+
+/* LP-1: Why 區文字 */
+.lp-why-content p {
+  color: var(--text-mid);
+  line-height: 1.9;
+  margin-bottom: 1rem;
+  font-size: 0.92rem;
+}
+
+.lp-why-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* LP-2: 五構面卡片 Grid */
+.lp-dimensions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.lp-dimension-card {
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-mid);
+  border-radius: 8px;
+  padding: 1.2rem 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.lp-dimension-card:hover {
+  border-color: var(--accent2);
+}
+
+.lp-dimension-label {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 600;
+  color: var(--accent1);
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+}
+
+.lp-dimension-desc {
+  font-size: 0.82rem;
+  color: var(--text-mid);
+  line-height: 1.6;
+}
+
+/* LP-3: 結果預覽清單 */
+.lp-preview-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.lp-preview-list li {
+  font-size: 0.9rem;
+  color: var(--text-mid);
+  line-height: 1.6;
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.lp-preview-list li::before {
+  content: "✓";
+  color: var(--accent2);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+/* LP-4: CTA 區 */
+.lp-cta {
+  background: var(--paper-warm);
+  text-align: center;
+}
+
+.lp-cta-inner {
+  text-align: center;
+}
+
+.lp-cta-note {
+  color: var(--text-soft);
+  font-size: 0.82rem;
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.04em;
+}
+
+.lp-btn-start {
+  font-size: 1rem;
+  padding: 0.9rem 2.5rem;
+}
+
+/* LP RWD */
+@media (max-width: 768px) {
+  .lp-section {
+    padding: 3rem 1.5rem;
+  }
+
+  .lp-section-title {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .lp-section {
+    padding: 2.5rem 1.2rem;
+  }
+
+  .lp-dimensions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lp-btn-start {
+    width: 100%;
   }
 }
