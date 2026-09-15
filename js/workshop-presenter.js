@@ -142,7 +142,8 @@ function renderVisual(v, ctx) {
   return '<div class="' + cls + '">' + itemsHtml + '</div>';
 }
 
-function renderImages(images, ctx) {
+function renderImages(images, ctx, opts) {
+  opts = opts || {};
   const cls = ctx === 'stage' ? 'image-row stage-images' : 'image-row';
   const itemsHtml = images.map(function (img) {
     const safeSrc = escapeHtml(img.src);
@@ -150,13 +151,45 @@ function renderImages(images, ctx) {
     const pic = img.link
       ? '<a class="image-link" href="' + escapeHtml(img.link) + '" target="_blank" rel="noopener">' + imgTag + '<span class="image-link-badge">↗ 開啟連結</span></a>'
       : imgTag;
-    return '<figure class="image-item">' +
+    // width: optional CSS width string, e.g. "50%" or "300px" — overrides the default size cap.
+    // Suppressed inside slide-split layouts, where the wrapper column controls width instead
+    // (a percentage on the image itself doesn't resolve reliably inside an auto-sized flex column).
+    const widthStyle = (!opts.suppressWidth && img.width) ? ' style="width:' + escapeHtml(img.width) + ';max-width:' + escapeHtml(img.width) + ';"' : '';
+    return '<figure class="image-item"' + widthStyle + '>' +
       pic +
       '<span class="image-missing-note">📷 圖片待補：' + safeSrc + '</span>' +
       (img.caption ? '<figcaption>' + escapeHtml(img.caption) + '</figcaption>' : '') +
     '</figure>';
   }).join('');
   return '<div class="' + cls + '">' + itemsHtml + '</div>';
+}
+
+function renderBullets(bullets, ctx) {
+  if (!bullets || !bullets.length) return '';
+  const cls = ctx === 'stage' ? ' class="stage-bullets"' : '';
+  return '<ul' + cls + '>' + bullets.map(function (t) { return '<li>' + escapeHtml(t) + '</li>'; }).join('') + '</ul>';
+}
+
+function renderSlideBody(slide, ctx) {
+  const visualHtml = slide.visual ? renderVisual(slide.visual, ctx) : '';
+  const bulletsHtml = renderBullets(slide.bullets, ctx);
+
+  // layout: "image-left" or "image-right" puts images beside the bullet text instead of stacked above it.
+  // The media column's width is set on the wrapper itself (not the image inside), since a percentage
+  // on the image doesn't resolve reliably inside an auto-sized flex column.
+  if ((slide.layout === 'image-left' || slide.layout === 'image-right') && slide.images && slide.images.length) {
+    const dirClass = slide.layout === 'image-right' ? ' slide-split--right' : ' slide-split--left';
+    const mediaWidth = escapeHtml(slide.images[0].width || '40%');
+    const imagesHtml = renderImages(slide.images, ctx, { suppressWidth: true });
+    return visualHtml +
+      '<div class="slide-split' + dirClass + '">' +
+        '<div class="slide-split-media" style="width:' + mediaWidth + ';max-width:' + mediaWidth + ';">' + imagesHtml + '</div>' +
+        '<div class="slide-split-text">' + bulletsHtml + '</div>' +
+      '</div>';
+  }
+
+  const imagesHtml = (slide.images && slide.images.length) ? renderImages(slide.images, ctx) : '';
+  return visualHtml + imagesHtml + bulletsHtml;
 }
 
 function renderChapterView(ch) {
@@ -170,14 +203,9 @@ function renderChapterView(ch) {
 
   const slideHtml = (ch.slides && ch.slides.length)
     ? ch.slides.map(function (slide) {
-        const bulletsHtml = (slide.bullets && slide.bullets.length)
-          ? '<ul>' + slide.bullets.map(function (t) { return '<li>' + escapeHtml(t) + '</li>'; }).join('') + '</ul>'
-          : '';
-        const visualHtml = slide.visual ? renderVisual(slide.visual, 'console') : '';
-        const imagesHtml = (slide.images && slide.images.length) ? renderImages(slide.images, 'console') : '';
         return '<div class="slide-block">' +
           (slide.heading ? '<div class="slide-heading">' + escapeHtml(slide.heading) + '</div>' : '') +
-          visualHtml + imagesHtml + bulletsHtml +
+          renderSlideBody(slide, 'console') +
         '</div>';
       }).join('')
     : '<p class="empty-note">尚無逐頁內容。</p>';
@@ -253,16 +281,11 @@ function renderStageView(stop) {
   const slide = (ch.slides && ch.slides[stop.slideIndex]) || {};
   const eyebrow = (ch.type === 'appendix' ? '附錄' : ('Chapter ' + ch.id)) + ' · ' + escapeHtml(ch.title);
   const titleText = slide.heading || ch.title;
-  const visualHtml = slide.visual ? renderVisual(slide.visual, 'stage') : '';
-  const imagesHtml = (slide.images && slide.images.length) ? renderImages(slide.images, 'stage') : '';
-  const bulletsHtml = (slide.bullets && slide.bullets.length)
-    ? '<ul class="stage-bullets">' + slide.bullets.map(function (t) { return '<li>' + escapeHtml(t) + '</li>'; }).join('') + '</ul>'
-    : '';
 
   el.innerHTML =
     '<div class="stage-eyebrow">' + eyebrow + '</div>' +
     '<h1 class="stage-title">' + escapeHtml(titleText) + '</h1>' +
-    visualHtml + imagesHtml + bulletsHtml;
+    renderSlideBody(slide, 'stage');
 }
 
 document.addEventListener('keydown', function (e) {

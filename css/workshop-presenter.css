@@ -236,6 +236,21 @@ body { overflow-x: hidden; }
 }
 .image-item.image-missing figcaption { margin-top: 0.5rem; font-style: italic; }
 
+/* ── SLIDE SPLIT (image beside text) ── */
+.slide-split {
+  display: flex;
+  gap: 1.6rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin: 0.8rem 0 1rem;
+}
+.slide-split--right { flex-direction: row-reverse; }
+.slide-split-media { flex: 0 0 auto; }
+.slide-split-media .image-row { margin: 0; width: 100%; }
+.slide-split-media .image-row .image-item { width: 100%; max-width: 100%; }
+.slide-split-text { flex: 1 1 240px; min-width: 200px; }
+.slide-split-text ul { margin: 0; }
+
 .timer-block, .notes-block {
   border-top: 1px solid var(--paper-mid);
   padding-top: 1.4rem;
