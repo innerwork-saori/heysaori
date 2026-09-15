@@ -18,6 +18,7 @@
 <nav class="nav">
   <a href="tools.html" class="nav-back">回工具集</a>
   <div class="nav-title">講師主控台</div>
+  <button type="button" class="nav-stage-btn" onclick="toggleStageMode()">🎬 投影模式</button>
   <button type="button" class="nav-links-btn" onclick="openLinksPanel()">🔗 快速連結</button>
 </nav>
 
@@ -37,6 +38,22 @@
       <p class="loading">載入章節資料中…</p>
     </div>
   </main>
+</div>
+
+<!-- STAGE MODE (投影用畫面) -->
+<div id="stageView" class="stage-view" hidden>
+  <div id="stageContent" class="stage-content"></div>
+  <div class="stage-bar">
+    <button type="button" class="stage-btn" onclick="goToStop(-1)" title="上一頁（← 鍵）">‹</button>
+    <span id="stagePosition" class="stage-position"></span>
+    <button type="button" class="stage-btn" onclick="goToStop(1)" title="下一頁（→ 鍵）">›</button>
+    <span class="stage-sep"></span>
+    <button type="button" class="stage-btn" onclick="startTimer(5)" title="5 分鐘倒數">⏱ 5</button>
+    <button type="button" class="stage-btn" onclick="startTimer(10)" title="10 分鐘倒數">⏱ 10</button>
+    <button type="button" class="stage-btn" onclick="openLinksPanel()" title="快速連結">🔗</button>
+    <span class="stage-sep"></span>
+    <button type="button" class="stage-btn stage-exit" onclick="toggleStageMode()" title="退出投影模式（Esc）">✕ 退出投影</button>
+  </div>
 </div>
 
 <!-- TIMER OVERLAY -->

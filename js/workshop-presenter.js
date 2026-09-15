@@ -22,6 +22,9 @@ const QUICK_LINKS = [
 let chapters = [];
 let activeId = null;
 let timerInterval = null;
+let stageMode = false;
+let stops = [];
+let stopPos = 0;
 
 function storageGet(key, fallback) {
   try {
@@ -42,10 +45,14 @@ async function init() {
     const data = await res.json();
     chapters = data.chapters;
   } catch (e) {
-    document.getElementById('chapterView').innerHTML = '<p class="loading">章節資料載入失敗，請確認 data/workshop-chapters.json 存在。</p>';
+    const msg = (location.protocol === 'file:')
+      ? '章節資料載入失敗：瀏覽器不允許用「直接打開檔案」的方式讀取本機 JSON（安全性限制），這不是檔案壞掉。上線到 GitHub Pages 後就會正常，或本機測試時改用一個簡易伺服器打開（例如 VS Code 的 Live Server 擴充套件）。'
+      : '章節資料載入失敗，請確認 data/workshop-chapters.json 存在，且此頁面是透過伺服器（http/https）開啟，而非直接開檔案。';
+    document.getElementById('chapterView').innerHTML = '<p class="loading">' + msg + '</p>';
     return;
   }
 
+  buildStops();
   renderSidebar();
   renderLinksPanel();
 
@@ -97,13 +104,55 @@ function renderSidebar() {
   });
 }
 
-function selectChapter(id) {
+function buildStops() {
+  stops = [];
+  chapters.forEach(function (ch) {
+    if (ch.type === 'break' || !ch.slides || !ch.slides.length) {
+      stops.push({ chapterId: ch.id, slideIndex: null });
+    } else {
+      ch.slides.forEach(function (_, i) {
+        stops.push({ chapterId: ch.id, slideIndex: i });
+      });
+    }
+  });
+}
+
+function setActiveChapter(id) {
   activeId = id;
   storageSet('wsp-active-chapter', id);
   document.querySelectorAll('.chapter-item').forEach(function (li) {
     li.classList.toggle('active', li.dataset.id === id);
   });
   renderChapterView(chapters.find(function (c) { return c.id === id; }));
+}
+
+function selectChapter(id) {
+  setActiveChapter(id);
+}
+
+function renderVisual(v, ctx) {
+  const cls = ctx === 'stage' ? 'visual-row stage-visual' : 'visual-row';
+  const itemsHtml = v.items.map(function (it, i) {
+    const sep = (i < v.items.length - 1 && v.connector)
+      ? '<span class="visual-connector">' + escapeHtml(v.connector) + '</span>'
+      : '';
+    const label = escapeHtml(it.label).replace(/\n/g, '<br>');
+    return '<div class="visual-item"><div class="visual-icon">' + it.icon + '</div><div class="visual-label">' + label + '</div></div>' + sep;
+  }).join('');
+  return '<div class="' + cls + '">' + itemsHtml + '</div>';
+}
+
+function renderImages(images, ctx) {
+  const cls = ctx === 'stage' ? 'image-row stage-images' : 'image-row';
+  const itemsHtml = images.map(function (img) {
+    const safeSrc = escapeHtml(img.src);
+    return '<figure class="image-item">' +
+      '<img src="' + safeSrc + '" alt="' + escapeHtml(img.caption || '') + '" onerror="this.closest(\'figure\').classList.add(\'image-missing\');this.remove();">' +
+      '<span class="image-missing-note">📷 圖片待補：' + safeSrc + '</span>' +
+      (img.caption ? '<figcaption>' + escapeHtml(img.caption) + '</figcaption>' : '') +
+    '</figure>';
+  }).join('');
+  return '<div class="' + cls + '">' + itemsHtml + '</div>';
 }
 
 function renderChapterView(ch) {
@@ -115,9 +164,19 @@ function renderChapterView(ch) {
     return '<a href="' + STUDENT_PAGE + a + '" target="_blank" rel="noopener">🔗 學員頁：' + label + '</a>';
   }).join('');
 
-  const slideHtml = (ch.content && ch.content.length)
-    ? '<ul>' + ch.content.map(function (t) { return '<li>' + escapeHtml(t) + '</li>'; }).join('') + '</ul>'
-    : '<p class="empty-note">尚無逐頁內容（簡報文字稿整理後補上）。</p>';
+  const slideHtml = (ch.slides && ch.slides.length)
+    ? ch.slides.map(function (slide) {
+        const bulletsHtml = (slide.bullets && slide.bullets.length)
+          ? '<ul>' + slide.bullets.map(function (t) { return '<li>' + escapeHtml(t) + '</li>'; }).join('') + '</ul>'
+          : '';
+        const visualHtml = slide.visual ? renderVisual(slide.visual, 'console') : '';
+        const imagesHtml = (slide.images && slide.images.length) ? renderImages(slide.images, 'console') : '';
+        return '<div class="slide-block">' +
+          (slide.heading ? '<div class="slide-heading">' + escapeHtml(slide.heading) + '</div>' : '') +
+          visualHtml + imagesHtml + bulletsHtml +
+        '</div>';
+      }).join('')
+    : '<p class="empty-note">尚無逐頁內容。</p>';
 
   view.innerHTML =
     '<div class="chapter-eyebrow">' + (ch.type === 'break' ? '休息' : ch.type === 'appendix' ? '附錄' : ('Chapter ' + ch.id)) + '</div>' +
@@ -150,6 +209,70 @@ function escapeHtml(s) {
     return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
   });
 }
+
+/* ── STAGE MODE (投影用) ── */
+function toggleStageMode() {
+  stageMode = !stageMode;
+  document.getElementById('stageView').hidden = !stageMode;
+  document.querySelector('.console').style.display = stageMode ? 'none' : '';
+  document.querySelector('.nav').style.display = stageMode ? 'none' : '';
+  if (stageMode) {
+    stopPos = stops.findIndex(function (s) { return s.chapterId === activeId; });
+    if (stopPos < 0) stopPos = 0;
+    renderStageView(stops[stopPos]);
+  }
+}
+
+function goToStop(delta) {
+  const next = stopPos + delta;
+  if (next < 0 || next >= stops.length) return;
+  stopPos = next;
+  const stop = stops[stopPos];
+  if (stop.chapterId !== activeId) setActiveChapter(stop.chapterId);
+  renderStageView(stop);
+}
+
+function renderStageView(stop) {
+  const el = document.getElementById('stageContent');
+  const pos = document.getElementById('stagePosition');
+  if (!stop) { el.innerHTML = ''; return; }
+
+  const ch = chapters.find(function (c) { return c.id === stop.chapterId; });
+  if (!ch) { el.innerHTML = ''; return; }
+  pos.textContent = (stopPos + 1) + ' / ' + stops.length;
+
+  if (ch.type === 'break') {
+    el.innerHTML = '<div class="stage-break">' + escapeHtml(ch.title) + '</div>';
+    return;
+  }
+
+  const slide = (ch.slides && ch.slides[stop.slideIndex]) || {};
+  const eyebrow = (ch.type === 'appendix' ? '附錄' : ('Chapter ' + ch.id)) + ' · ' + escapeHtml(ch.title);
+  const titleText = slide.heading || ch.title;
+  const visualHtml = slide.visual ? renderVisual(slide.visual, 'stage') : '';
+  const imagesHtml = (slide.images && slide.images.length) ? renderImages(slide.images, 'stage') : '';
+  const bulletsHtml = (slide.bullets && slide.bullets.length)
+    ? '<ul class="stage-bullets">' + slide.bullets.map(function (t) { return '<li>' + escapeHtml(t) + '</li>'; }).join('') + '</ul>'
+    : '';
+
+  el.innerHTML =
+    '<div class="stage-eyebrow">' + eyebrow + '</div>' +
+    '<h1 class="stage-title">' + escapeHtml(titleText) + '</h1>' +
+    visualHtml + imagesHtml + bulletsHtml;
+}
+
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') {
+    if (!document.getElementById('qrModal').hidden) { closeQr(); return; }
+    if (!document.getElementById('linksPanel').hidden) { closeLinksPanel(); return; }
+    if (!document.getElementById('timerOverlay').hidden) { cancelTimer(); return; }
+    if (stageMode) toggleStageMode();
+    return;
+  }
+  if (!stageMode) return;
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); goToStop(1); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); goToStop(-1); }
+});
 
 function resetProgress() {
   if (!confirm('確定要重置本頁的完成勾選、備忘稿與計時記錄嗎？（不會影響章節內容資料）')) return;

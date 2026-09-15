@@ -1,7 +1,7 @@
 {
   "workshop_title": "AI 一頁式網站工作坊",
   "student_page": "vibe-workshop-handout.html",
-  "note": "content 欄位已依 121 頁 Canva 逐頁文字稿（2026/08/24 場次版本）整理成講師可直接看的重點條列，不是逐字稿。部分投影片順序跟這裡的章節順序不完全一致（例如「路線A/路線B」兩個 Prompt 產生器示範是交錯出現的），已依主題重新歸類，方便找東西；如果之後場次的簡報改版，這份要重新核對。slide 113-118（軟體開發三大核心／SDD／KIRO／Google Drive同步案例）不屬於原本 15 章節敘事，另外放在 appendix，機動使用。student_anchors 是這一章對應到 vibe-workshop-handout.html 的錨點。",
+  "note": "每章拆成多個 slides（heading + bullets + 選填 visual / images），投影模式一次只顯示一個 slide，避免內容太密。images 目前是「待補」的檔案路徑——實際檔案要由 Saori 提供，存到 images/workshop/ 底下對應檔名，圖片還沒放進去之前投影模式會顯示『圖片待補』提示框，不會顯示壞圖示。visual 是用文字/emoji 畫的簡易示意圖（不是真圖片），方便之後直接改文字。student_anchors 對應 vibe-workshop-handout.html 的錨點。",
   "chapters": [
     {
       "id": "0",
@@ -9,13 +9,23 @@
       "title": "開場",
       "summary": "我是誰、今日大綱、學習目標",
       "student_anchors": [],
-      "content": [
-        "我是誰：15 年軟工經驗、人生設計諮詢師（職涯／人際關係諮詢）、熱愛做網站",
-        "背景亮點：國中自架站＋全國網頁比賽、高中班網、外商開發副理、帶過 APP／電商團隊上線",
-        "延伸連結：IG「蘇格拉底咖啡館」、Podcast「蛤！人生有什麼意義」",
-        "今日大綱：了解 AI 工具／了解網站架構／了解部署工具",
-        "時程參考（僅供排版，現場手動調整）：3:00 入場 → 3:10 工具介紹 → 3:30 實作互動 → 4:00 上架 GitHub → 5:30 優化說明＋開發流程介紹 → 5:50 成果分享",
-        "學習目標（投影片僅標題，口頭補充說明）"
+      "slides": [
+        {
+          "heading": "我是誰",
+          "bullets": [
+            "15 年軟工經驗、人生設計諮詢師（職涯／人際關係諮詢）、熱愛做網站",
+            "背景亮點：國中自架站＋全國網頁比賽、高中班網、外商開發副理、帶過 APP／電商團隊上線",
+            "延伸連結：IG「蘇格拉底咖啡館」、Podcast「蛤！人生有什麼意義」"
+          ]
+        },
+        {
+          "heading": "今日大綱",
+          "bullets": [
+            "了解 AI 工具／了解網站架構／了解部署工具",
+            "時程參考（僅供排版，現場手動調整）：3:00 入場 → 3:10 工具介紹 → 3:30 實作互動 → 4:00 上架 GitHub → 5:30 優化說明＋開發流程介紹 → 5:50 成果分享",
+            "學習目標（投影片僅標題，口頭補充說明）"
+          ]
+        }
       ]
     },
     {
@@ -24,16 +34,46 @@
       "title": "為什麼學這個",
       "summary": "Vibe Coding 概念（Zuckerberg 引言）、可以做什麼、展示成果",
       "student_anchors": [],
-      "content": [
-        "破題：這不是一堂單純「學工具」的課",
-        "對比插畫：一面寫滿 TOO HARD（HTML／CSS／SERVER／DOMAIN／DEPLOY）的高牆 vs 一個發光的 IDEA 就能做出網站",
-        "核心概念 VIBE CODING：腦中有靈感，就可以做出來",
-        "可以做什麼：個人網站、網頁小工具",
-        "3-4 小時可以做出來的範例：生日運勢產生器、學習計劃小助手、行銷貼文企劃",
-        "要不要串 AI 的判斷框架：①判斷內容是固定有限還是無窮無盡？（固定→不用串AI／無窮盡→要串AI動態產生）②需不需要理解語意？（要理解自然語言→要串AI／固定選項或規則套用→不用）",
-        "小示範：午餐吃什麼抽籤機",
-        "展示成果：3 個用今天的方法、10 分鐘做出來的網站（ChatGPT、Claude）",
-        "案例：CYS 職涯諮詢網站；起始成本計算機類的小工具（例如副業啟動成本試算）"
+      "slides": [
+        {
+          "heading": "這不是一堂「學工具」的課",
+          "visual": {
+            "type": "row",
+            "connector": "vs",
+            "items": [
+              { "icon": "😫", "label": "TOO HARD\nHTML／CSS／SERVER／DOMAIN／DEPLOY" },
+              { "icon": "💡", "label": "一個 IDEA\n就能做出網站" }
+            ]
+          },
+          "bullets": [
+            "核心概念 VIBE CODING：腦中有靈感，就可以做出來"
+          ]
+        },
+        {
+          "heading": "可以做什麼",
+          "bullets": [
+            "個人網站、網頁小工具",
+            "3-4 小時可以做出來的範例：生日運勢產生器、學習計劃小助手、行銷貼文企劃"
+          ]
+        },
+        {
+          "heading": "要不要串 AI？判斷框架",
+          "bullets": [
+            "① 判斷內容是固定有限還是無窮無盡？固定 → 不用串AI／無窮盡 → 要串AI動態產生",
+            "② 需不需要理解語意？要理解自然語言 → 要串AI／固定選項或規則套用 → 不用",
+            "小示範：午餐吃什麼抽籤機"
+          ]
+        },
+        {
+          "heading": "展示成果",
+          "bullets": [
+            "3 個用今天的方法、10 分鐘做出來的網站（ChatGPT、Claude）"
+          ],
+          "images": [
+            { "src": "images/workshop/demo-cys.jpg", "caption": "案例：CYS 職涯諮詢網站" },
+            { "src": "images/workshop/demo-cost-calculator.jpg", "caption": "案例：起始成本計算機類小工具" }
+          ]
+        }
       ]
     },
     {
@@ -42,15 +82,39 @@
       "title": "工具介紹",
       "summary": "Git / GitHub / VS Code / AI 助理（Claude、ChatGPT、Gemini、Perplexity）比較、使用建議",
       "student_anchors": ["#tools"],
-      "content": [
-        "AI 工具使用等級總覽：Lv1 瀏覽器聊天（不改檔）→ Lv2 IDE 內嵌（小範圍改）→ Lv3 AI-Native IDE（指揮 agent）→ Lv4 Terminal（會改／debug）→ Lv5 瀏覽器型 IDE（端到端出 App）",
-        "5 個進化層級對應代表工具：ChatGPT/Claude/Gemini/Perplexity → GitHub Copilot/Cursor → Cursor/Windsurf/Google Antigravity/Replit → Claude Code/Codex CLI/Gemini CLI → Bolt.new/Lovable/Manus",
-        "今天用到的工具（全部免費）：Git（網站的存檔紀錄）、GitHub（主機／網址，存放網站檔案）、VS Code（網站編輯器）、Claude／ChatGPT／Gemini／Perplexity（AI 助理，幫你寫出漂亮的網頁程式碼）",
-        "ChatGPT ＝ 想法整理器：適合想內容／寫自介／整理服務內容／優化文字語氣；不適合直接產 HTML（品質不穩）",
-        "Perplexity ＝ 靈感搜尋器：找網站範例／設計風格／文案參考",
-        "Gemini ＝ 補充型助手：查資料／整理資訊／圖片或文件輔助；不建議當主工具，適合搭配其他工具用",
-        "Claude ＝ 今天的主角、網站生成器：生成完整 HTML、結構乾淨、長內容也穩定，一次產出完整頁面",
-        "總結建議：重程式品質與UI還原選 Claude；需要配圖與多元功能選 ChatGPT；重 SEO 與 Google 工具整合選 Gemini；需要查證最新技術細節選 Perplexity；可以交叉搭配（例如 Perplexity 找靈感 + Claude 寫程式 + ChatGPT 生圖）"
+      "slides": [
+        {
+          "heading": "AI 能力五等級",
+          "bullets": [
+            "Lv1 瀏覽器聊天（不改檔）→ Lv2 IDE 內嵌（小範圍改）→ Lv3 AI-Native IDE（指揮 agent）→ Lv4 Terminal（會改／debug）→ Lv5 瀏覽器型 IDE（端到端出 App）",
+            "代表工具對照：ChatGPT/Claude/Gemini/Perplexity → GitHub Copilot/Cursor → Cursor/Windsurf/Antigravity/Replit → Claude Code/Codex CLI/Gemini CLI → Bolt.new/Lovable/Manus"
+          ]
+        },
+        {
+          "heading": "今天用到的工具（全部免費）",
+          "bullets": [
+            "Git（網站的存檔紀錄）",
+            "GitHub（主機／網址，存放網站檔案）",
+            "VS Code（網站編輯器）",
+            "Claude／ChatGPT／Gemini／Perplexity（AI 助理）"
+          ]
+        },
+        {
+          "heading": "四個 AI 助理怎麼選",
+          "bullets": [
+            "ChatGPT ＝ 想法整理器：適合想內容／寫自介／優化文字；不適合直接產 HTML",
+            "Perplexity ＝ 靈感搜尋器：找範例／設計風格／文案參考",
+            "Gemini ＝ 補充型助手：查資料／整理資訊；不建議當主工具",
+            "Claude ＝ 今天的主角、網站生成器：產完整 HTML、結構乾淨、長內容穩定"
+          ]
+        },
+        {
+          "heading": "總結建議",
+          "bullets": [
+            "重程式品質選 Claude／需配圖選 ChatGPT／重 SEO 選 Gemini／需查證選 Perplexity",
+            "可以交叉搭配：Perplexity 找靈感 ＋ Claude 寫程式 ＋ ChatGPT 生圖"
+          ]
+        }
       ]
     },
     {
@@ -59,7 +123,7 @@
       "title": "☕ 休息 #1",
       "summary": "QA & 休息",
       "student_anchors": [],
-      "content": []
+      "slides": []
     },
     {
       "id": "3",
@@ -67,11 +131,30 @@
       "title": "網站架構說明",
       "summary": "Hero / About / Service / Process / Trust / Contact 概念解說",
       "student_anchors": ["#structure"],
-      "content": [
-        "（休息後重新開場）工具主角回顧：腦中有靈感，就可以做出來",
-        "GARBAGE IN → GARBAGE OUT 概念預告：規格講不清楚，AI 做出來的東西也會不清楚（後面 FAQ 會再展開）",
-        "領取 AI Prompt 工具箱：LINE 輸入「工具箱」或「tool」，或直接開 http://to.heysaori.com/saoris_aitools",
-        "網站六大區塊：Hero（第一眼印象，說明你是誰／幫誰解決什麼問題）、About（2-3 段說明為什麼你適合做這件事）、Service（服務項目，你提供什麼、客戶得到什麼）、Process（如何合作，3-4 步降低不確定感）、Trust（客戶推薦／媒體露出／成果數據）、Contact（清楚的 CTA ＋聯絡方式）"
+      "slides": [
+        {
+          "heading": "休息後重新開場",
+          "bullets": [
+            "工具主角回顧：腦中有靈感，就可以做出來",
+            "GARBAGE IN → GARBAGE OUT 概念預告：規格講不清楚，AI 做出來的東西也會不清楚（後面 FAQ 會展開）",
+            "領取 AI Prompt 工具箱：LINE 輸入「工具箱」或「tool」，或開 http://to.heysaori.com/saoris_aitools"
+          ]
+        },
+        {
+          "heading": "網站六大區塊",
+          "visual": {
+            "type": "row",
+            "items": [
+              { "icon": "①", "label": "Hero\n第一眼印象" },
+              { "icon": "②", "label": "About\n關於我" },
+              { "icon": "③", "label": "Service\n服務項目" },
+              { "icon": "④", "label": "Process\n合作流程" },
+              { "icon": "⑤", "label": "Trust\n信任感" },
+              { "icon": "⑥", "label": "Contact\nCTA＋聯絡" }
+            ]
+          },
+          "bullets": []
+        }
       ]
     },
     {
@@ -80,21 +163,53 @@
       "title": "實作時間 #1",
       "summary": "導向「一頁式網站 Prompt 產生器」工具（含工具 Prompt 產生器路線 B）",
       "student_anchors": ["#step1", "#step1-tool"],
-      "content": [
-        "工具入口：AI 工具實驗室（lab.heysaori.com/tools）→ 兩張卡片：網站 Prompt 產生器 / 工具 Prompt 產生器",
-        "【路線 A：網站 Prompt 產生器】走查：填基本介紹 → 目標客戶／痛點／服務 → 信任感元素（客戶推薦／媒體露出） → 聯絡方式 → 設計偏好（風格可多選／配色／自訂風格） → 字型 → 按「產生 Prompt」複製",
-        "設計風格選項：極簡清新／專業科技／雜誌編輯／插畫親切／大膽前衛／復古懷舊／年輕潮流／高級精品／活潑多彩／自訂風格",
-        "配色靈感工具：Coolors、Happy Hues；找色碼：Toodoo、Wibibi 色碼表",
-        "不知道怎麼描述風格或配色時：直接請 AI 幫你反推一段設計描述 Prompt（示範用 ChatGPT）",
-        "產出的 Prompt 會包含：風格、配色 hex 色碼、字型（Google Fonts）、六大區塊版面，並要求輸出單一 HTML 檔＋RWD",
-        "複製 Prompt 後可貼給 Claude／ChatGPT／Gemini／Perplexity 任一個",
-        "沒用產生器時，也可以照 7 個問題手動描述給 AI：關鍵字／核心價值／差異化／目標客群／風格／CTA／文案問題，AI 會引導你補完",
-        "DEMO 示範：AI 對話引導使用者講出服務定位 → 生成範例網站「Xuan Lin」（協助台灣品牌海外落地）",
-        "【路線 B：工具 Prompt 產生器】給想做網站以外小工具的人，7 步走查：01 工具目標（給誰／解決什麼／現況痛點）→ 02 輸入（欄位／型態／範例／限制／預設值／資料來源）→ 03 輸出（結果長相／範例／格式要求／錯誤處理）→ 規則與限制（商業邏輯／不能做什麼）→ 異常情況（edge case）→ 驗收標準（做對／做錯情境）→ 視覺要求與補充",
-        "路線 B 範例情境：設計接案報價試算器（Logo／海報／網頁報價＋修改次數加價）",
-        "複製產生的 Prompt 後可貼給 Manus／Claude／ChatGPT／Gemini／Perplexity",
-        "路線 B 示範產出：design-quote-calculator 報價試算器完整走查",
-        "實作指令：用 Prompt 工具做出自己的 Prompt，欄位不會填可以跳過或跟 AI 討論，完成後貼給 AI 生產，卡住隨時舉手"
+      "slides": [
+        {
+          "heading": "工具入口",
+          "bullets": [
+            "AI 工具實驗室（lab.heysaori.com/tools）→ 兩張卡片：網站 Prompt 產生器 / 工具 Prompt 產生器"
+          ]
+        },
+        {
+          "heading": "路線 A：網站 Prompt 產生器 走查",
+          "bullets": [
+            "填基本介紹 → 目標客戶／痛點／服務 → 信任感元素 → 聯絡方式 → 設計偏好 → 字型 → 按「產生 Prompt」複製",
+            "設計風格選項：極簡清新／專業科技／雜誌編輯／插畫親切／大膽前衛／復古懷舊／年輕潮流／高級精品／活潑多彩／自訂"
+          ]
+        },
+        {
+          "heading": "配色與描述技巧",
+          "bullets": [
+            "配色靈感工具：Coolors、Happy Hues；找色碼：Toodoo、Wibibi",
+            "不知道怎麼描述風格或配色？直接請 AI 幫你反推一段設計描述 Prompt（示範用 ChatGPT）",
+            "產出的 Prompt 會包含：風格、配色 hex 色碼、字型、六大區塊版面，並要求輸出單一 HTML 檔＋RWD"
+          ]
+        },
+        {
+          "heading": "DEMO 示範",
+          "bullets": [
+            "AI 對話引導使用者講出服務定位 → 生成範例網站「Xuan Lin」（協助台灣品牌海外落地）"
+          ],
+          "images": [
+            { "src": "images/workshop/demo-xuanlin.jpg", "caption": "範例網站：Xuan Lin" }
+          ]
+        },
+        {
+          "heading": "路線 B：工具 Prompt 產生器（網站以外的小工具）",
+          "bullets": [
+            "7 步走查：01 工具目標 → 02 輸入 → 03 輸出 → 規則與限制 → 異常情況 → 驗收標準 → 視覺要求與補充",
+            "範例情境：設計接案報價試算器"
+          ],
+          "images": [
+            { "src": "images/workshop/demo-quote-calculator.jpg", "caption": "示範產出：design-quote-calculator" }
+          ]
+        },
+        {
+          "heading": "開始實作",
+          "bullets": [
+            "用 Prompt 工具做出自己的 Prompt，欄位不會填可以跳過或跟 AI 討論，完成後貼給 AI 生產，卡住隨時舉手"
+          ]
+        }
       ]
     },
     {
@@ -103,12 +218,28 @@
       "title": "DEMO & FAQ",
       "summary": "Vibe Coding 常見問題（程式錯誤／邏輯錯誤／規格錯誤 GIGO）",
       "student_anchors": ["#faq"],
-      "content": [
-        "承接上一段的 DEMO 範例網站「Xuan Lin」",
-        "VIBE CODING 常見問題：",
-        "① 程式有錯誤 → 直接把錯誤訊息貼給 AI",
-        "② 邏輯錯誤 → 需要人工檢查，AI 不會自己發現邏輯不合理",
-        "③ 做出來的東西不是你要的 → 規格錯誤（GIGO，Garbage In Garbage Out），回頭把需求講清楚"
+      "slides": [
+        {
+          "heading": "承接 DEMO",
+          "bullets": ["範例網站「Xuan Lin」"]
+        },
+        {
+          "heading": "VIBE CODING 常見問題",
+          "visual": {
+            "type": "flow",
+            "connector": "→",
+            "items": [
+              { "icon": "🗑️", "label": "規格不清楚\nGarbage In" },
+              { "icon": "🤖", "label": "AI 硬做" },
+              { "icon": "❓", "label": "結果也不清楚\nGarbage Out" }
+            ]
+          },
+          "bullets": [
+            "① 程式有錯誤 → 直接把錯誤訊息貼給 AI",
+            "② 邏輯錯誤 → 需要人工檢查，AI 不會自己發現邏輯不合理",
+            "③ 做出來的東西不是你要的 → 規格錯誤（GIGO），回頭把需求講清楚"
+          ]
+        }
       ]
     },
     {
@@ -117,14 +248,24 @@
       "title": "安裝環境",
       "summary": "安裝 Claude Code、安裝 UI/UX 設計技能（frontend-design skill）",
       "student_anchors": ["#install"],
-      "content": [
-        "安裝 Claude Code：需要 Claude Pro／Max／Team 帳號（免費版無法使用）",
-        "Mac／Linux 終端機指令：curl -fsSL https://claude.ai/install.sh | bash",
-        "Windows PowerShell 指令：irm https://claude.ai/install.ps1 | iex",
-        "安裝完成後在終端機輸入 claude 即可開始使用",
-        "安裝 UI/UX 設計技能：先加入官方技能庫 /plugin marketplace add anthropics/skills",
-        "再安裝技能包（frontend-design）：/plugin install example-skills@anthropic-agent-skills",
-        "之後只要說「用 frontend-design 技能幫我優化視覺設計」就會觸發"
+      "slides": [
+        {
+          "heading": "安裝 Claude Code",
+          "bullets": [
+            "需要 Claude Pro／Max／Team 帳號（免費版無法使用）",
+            "Mac／Linux：curl -fsSL https://claude.ai/install.sh | bash",
+            "Windows PowerShell：irm https://claude.ai/install.ps1 | iex",
+            "安裝完成後在終端機輸入 claude 即可開始使用"
+          ]
+        },
+        {
+          "heading": "安裝 UI/UX 設計技能",
+          "bullets": [
+            "先加入官方技能庫：/plugin marketplace add anthropics/skills",
+            "再安裝技能包：/plugin install example-skills@anthropic-agent-skills",
+            "之後說「用 frontend-design 技能幫我優化視覺設計」即可觸發"
+          ]
+        }
       ]
     },
     {
@@ -133,9 +274,14 @@
       "title": "實作時間 #2",
       "summary": "繼續實作",
       "student_anchors": ["#step2"],
-      "content": [
-        "指令跟上一輪一樣：用 Prompt 工具做出 Prompt → 欄位不會填可跳過或跟 AI 討論 → 完成後貼給 AI 生產 → 卡住隨時舉手",
-        "這一輪可以搭配剛裝好的 Claude Code 繼續開發"
+      "slides": [
+        {
+          "heading": "繼續實作",
+          "bullets": [
+            "指令跟上一輪一樣：用 Prompt 工具做出 Prompt → 欄位不會填可跳過或跟 AI 討論 → 完成後貼給 AI 生產 → 卡住隨時舉手",
+            "這一輪可以搭配剛裝好的 Claude Code 繼續開發"
+          ]
+        }
       ]
     },
     {
@@ -144,7 +290,7 @@
       "title": "☕ 休息 #2",
       "summary": "QA & 休息",
       "student_anchors": [],
-      "content": []
+      "slides": []
     },
     {
       "id": "8",
@@ -152,13 +298,38 @@
       "title": "部署方案選擇",
       "summary": "直接發布 vs 複製存檔；零安裝方案 vs 開發者方案",
       "student_anchors": ["#step3", "#install"],
-      "content": [
-        "「網頁好了嗎？」示範：ChatGPT Canvas／多視窗預覽 personal-brand 網站",
-        "方式一：直接發布 — Copy → Download，或用 Publish artifact 部署到永久網址（如 xxx.pplx.app），也可以產生分享連結",
-        "方式二：複製存檔 — 把 AI 輸出的完整 HTML 原始碼存成 index.html，用瀏覽器直接打開即可用（範例：lunch-picker.html）",
-        "網站部署三元素：主機（土地）＋網站（房子）＋域名（路牌地址）",
-        "零安裝方案：不裝任何工具，用 GitHub 網頁版管理檔案，快速建公開網址，適合完全新手／想先體驗 AI 開發流程",
-        "開發者方案：裝 Git＋GitHub CLI＋VS Code，本機編輯＋版本控制＋AI 開發工具整合，適合想持續開發／未來想接案的人"
+      "slides": [
+        {
+          "heading": "網頁好了嗎？",
+          "bullets": ["ChatGPT Canvas／多視窗預覽 personal-brand 網站"]
+        },
+        {
+          "heading": "兩種發布方式",
+          "bullets": [
+            "方式一 直接發布：Copy → Download，或用 Publish artifact 部署到永久網址",
+            "方式二 複製存檔：把 AI 輸出的完整 HTML 存成 index.html，用瀏覽器直接打開即可用"
+          ]
+        },
+        {
+          "heading": "部署三元素",
+          "visual": {
+            "type": "row",
+            "connector": "+",
+            "items": [
+              { "icon": "🏗️", "label": "主機\n（土地）" },
+              { "icon": "🏠", "label": "網站\n（房子）" },
+              { "icon": "📮", "label": "域名\n（路牌地址）" }
+            ]
+          },
+          "bullets": []
+        },
+        {
+          "heading": "零安裝 vs 開發者方案",
+          "bullets": [
+            "零安裝：不裝任何工具，用 GitHub 網頁版管理，適合完全新手",
+            "開發者：裝 Git＋GitHub CLI＋VS Code，本機編輯＋版控，適合想持續開發的人"
+          ]
+        }
       ]
     },
     {
@@ -167,15 +338,47 @@
       "title": "Git & GitHub 設定",
       "summary": "安裝 Git（Windows / Mac 分流步驟）、設定身份、GitHub CLI、授權登入",
       "student_anchors": ["#install"],
-      "content": [
-        "安裝 Git（Windows）：git-scm.com → Install for Windows → 下載 Git for Windows/x64 Setup",
-        "安裝選項：取消勾選「Git GUI 工具」；勾選「check daily for git for windows updates」；預設編輯器選「Use Visual Studio Code as Git's default editor」",
-        "安裝 Git（Mac）：先裝 Homebrew（官網複製安裝指令貼到 Terminal），再執行 brew install git",
-        "設定身份（強烈建議做）：git config --global user.name \"你的名字\" ／ git config --global user.email \"你的信箱\"（信箱要跟 GitHub 帳號一致）",
-        "不設身份的後果：git 操作可能失敗或用系統預設值，GitHub 上的紀錄不會連結到你的帳號頭像（顯示匿名）",
-        "Push 前的認證兩種選擇：① 裝 GitHub CLI（gh）後 gh auth login（較簡單）② 用 Personal Access Token（PAT），第一次 push 時貼上",
-        "GitHub CLI 補充說明：git 是核心版本控制工具，gh 是 GitHub 的附加工具（方便 PR、登入認證），不是必須安裝",
-        "gh auth login 流程：選 HTTPS 協定 → Yes 用 GitHub 帳號認證 → 選瀏覽器登入 → 複製 one-time code → 瀏覽器授權 → Authentication complete"
+      "slides": [
+        {
+          "heading": "安裝 Git（Windows）",
+          "bullets": ["git-scm.com → Install for Windows → 下載 Git for Windows/x64 Setup"],
+          "images": [
+            { "src": "images/workshop/git-install-windows.jpg", "caption": "Git for Windows 安裝畫面" }
+          ]
+        },
+        {
+          "heading": "Windows 安裝選項",
+          "bullets": [
+            "取消勾選「Git GUI 工具」",
+            "勾選「check daily for git for windows updates」",
+            "預設編輯器選「Use Visual Studio Code as Git's default editor」"
+          ]
+        },
+        {
+          "heading": "Mac 安裝 Git",
+          "bullets": [
+            "先裝 Homebrew（官網複製安裝指令貼到 Terminal）",
+            "再執行：brew install git"
+          ]
+        },
+        {
+          "heading": "設定身份",
+          "bullets": [
+            "git config --global user.name \"你的名字\"",
+            "git config --global user.email \"你的信箱\"（要跟 GitHub 帳號一致）",
+            "不設的後果：git 操作可能失敗，GitHub 紀錄不會連結到你的帳號頭像"
+          ]
+        },
+        {
+          "heading": "GitHub CLI 授權登入",
+          "bullets": [
+            "Push 前兩種認證：① 裝 gh 後 gh auth login（較簡單）② 用 Personal Access Token",
+            "流程：選 HTTPS → Yes → 選瀏覽器登入 → 複製 one-time code → 瀏覽器授權"
+          ],
+          "images": [
+            { "src": "images/workshop/gh-auth-login.jpg", "caption": "gh auth login 終端機畫面" }
+          ]
+        }
       ]
     },
     {
@@ -184,14 +387,31 @@
       "title": "上架到 GitHub",
       "summary": "建立 Repo、上傳檔案、修改檔案（含截圖步驟）",
       "student_anchors": ["#step3"],
-      "content": [
-        "網址結構：innerwork-saori.github.io/heysaori/ → 前段是站台名稱，後段是 repository 名稱",
-        "檔案要存成 index.html",
-        "VS Code 操作：開啟資料夾 → Source Control 面板 → Initialize Repository → Publish to GitHub",
-        "登入授權：VS Code 跳出 GitHub 擴充套件登入請求 → Allow → 選帳號",
-        "選 Publish to GitHub public repository → 勾選要上傳的檔案 → 發布完成後可以 Open on GitHub 確認",
-        "三步驟總結：①建立 Repo ②上傳檔案 ③修改檔案",
-        "延伸資源：GitHub 操作說明書；上線後加入 LINE 群組分享作品連結（附一句話介紹自己的作品）"
+      "slides": [
+        {
+          "heading": "網址結構",
+          "bullets": [
+            "innerwork-saori.github.io/heysaori/ → 前段是站台名稱，後段是 repository 名稱",
+            "檔案要存成 index.html"
+          ]
+        },
+        {
+          "heading": "VS Code 操作",
+          "bullets": [
+            "開啟資料夾 → Source Control 面板 → Initialize Repository → Publish to GitHub",
+            "選 Publish to GitHub public repository → 勾選要上傳的檔案 → Open on GitHub 確認"
+          ],
+          "images": [
+            { "src": "images/workshop/vscode-publish.png", "caption": "VS Code Publish to GitHub" }
+          ]
+        },
+        {
+          "heading": "三步驟總結",
+          "bullets": [
+            "①建立 Repo ②上傳檔案 ③修改檔案",
+            "延伸資源：GitHub 操作說明書；上線後加入 LINE 群組分享作品連結"
+          ]
+        }
       ]
     },
     {
@@ -200,12 +420,29 @@
       "title": "優化 Prompt",
       "summary": "導向既有工具內建的「調整視覺風格 / 修改文字內容 / 加入照片」快速範本按鈕",
       "student_anchors": ["#step4"],
-      "content": [
-        "「後續行動」是這一段到結尾（優化／網域／後續建議）的總標題",
-        "調整視覺風格 Prompt 範本：改主色調／Hero 背景／字型調性／按鈕樣式，其他不動，要求輸出完整 HTML",
-        "修改文字內容 Prompt 範本：指定 Hero 標題／About 第一段／Service 項目一怎麼改，其他不動",
-        "加入照片 Prompt 範本：先把照片上傳到 repo 取得網址，再請 AI 放進 Hero 區塊（圓形裁切／寬度 200-250px／手機版移到文字下方）；轉檔工具：CloudConvert（PNG to WEBP）",
-        "繼續優化 Prompt 範本：Service 加價格資訊、新增 FAQ 區塊、Contact 加 Calendly 預約按鈕"
+      "slides": [
+        {
+          "heading": "後續行動",
+          "bullets": ["接下來是優化、設網域、課後建議這一段"]
+        },
+        {
+          "heading": "調整視覺風格 / 修改文字",
+          "bullets": [
+            "調整視覺風格：改主色調／Hero 背景／字型調性／按鈕樣式，其他不動",
+            "修改文字內容：指定 Hero 標題／About 第一段／Service 項目一怎麼改"
+          ]
+        },
+        {
+          "heading": "加入照片",
+          "bullets": [
+            "先把照片上傳到 repo 取得網址，再請 AI 放進 Hero 區塊（圓形裁切／寬度 200-250px／手機版移到下方）",
+            "轉檔工具：CloudConvert（PNG to WEBP）"
+          ]
+        },
+        {
+          "heading": "繼續優化",
+          "bullets": ["Service 加價格資訊、新增 FAQ 區塊、Contact 加 Calendly 預約按鈕"]
+        }
       ]
     },
     {
@@ -214,12 +451,34 @@
       "title": "網域 & PWA",
       "summary": "設定自訂 Domain、PWA 站台說明",
       "student_anchors": [],
-      "content": [
-        "設定自訂網域：GitHub Pages → Settings → Custom domain 輸入網域 → DNS check → TLS certificate 發放（最多等 15 分鐘～1 小時）→ Enforce HTTPS",
-        "GitHub Pages vs Netlify 比較：Pages 適合完全新手／第一個網站／username.github.io 網址；Netlify 適合已有網站想升級／有內建表單／xxxx.netlify.app，且自訂網域較完整",
-        "建議學習順序：①先用 GitHub Pages 上架 → ②再學 Netlify 能多做什麼 → ③進階 Netlify 功能",
-        "PWA 站台說明（投影片為 QR code，現場口頭補充）",
-        "（進階、非必要）Netlify 實際部署走查：選 repo → 設定 build 指令與發布路徑 → 看 Deploy log（含安裝 node/npm 流程）"
+      "slides": [
+        {
+          "heading": "設定自訂網域",
+          "bullets": [
+            "GitHub Pages → Settings → Custom domain → DNS check → TLS certificate（最多等 15 分鐘～1 小時）→ Enforce HTTPS"
+          ],
+          "images": [
+            { "src": "images/workshop/custom-domain.png", "caption": "GitHub Pages 自訂網域設定" }
+          ]
+        },
+        {
+          "heading": "GitHub Pages vs Netlify",
+          "bullets": [
+            "Pages 適合完全新手／第一個網站；Netlify 適合已有網站想升級／有內建表單",
+            "建議順序：①先用 GitHub Pages 上架 → ②再學 Netlify 能多做什麼 → ③進階 Netlify 功能"
+          ]
+        },
+        {
+          "heading": "PWA 站台說明",
+          "bullets": ["口頭補充說明"]
+        },
+        {
+          "heading": "（進階）Netlify 部署走查",
+          "bullets": ["選 repo → 設定 build 指令與發布路徑 → 看 Deploy log"],
+          "images": [
+            { "src": "images/workshop/netlify-deploy.png", "caption": "Netlify 部署流程" }
+          ]
+        }
       ]
     },
     {
@@ -228,10 +487,25 @@
       "title": "後續行動 & 結尾",
       "summary": "課後建議（補推薦語、加照片、設網域等）、填問卷、Thank you",
       "student_anchors": [],
-      "content": [
-        "課後可以繼續做的事：補上真實客戶推薦語（找 3 位過去客戶問一下）、加入真實個人照片、設定自訂網域（每年約 400-500 元）、連結預約頁面（LINE 官方帳號／Calendly／Google 表單）、把網址放到 IG Bio／名片／Email 簽名",
-        "填寫問卷索取簡報及更多資源（QR code）",
-        "THANK YOU（人生探索手札 · heysaori.com）"
+      "slides": [
+        {
+          "heading": "課後可以繼續做的事",
+          "bullets": [
+            "補上真實客戶推薦語（找 3 位過去客戶問一下）",
+            "加入真實個人照片",
+            "設定自訂網域（每年約 400-500 元）",
+            "連結預約頁面（LINE 官方帳號／Calendly／Google 表單）",
+            "把網址放到 IG Bio／名片／Email 簽名"
+          ]
+        },
+        {
+          "heading": "填寫問卷索取簡報及更多資源",
+          "bullets": []
+        },
+        {
+          "heading": "THANK YOU",
+          "bullets": ["人生探索手札 · heysaori.com"]
+        }
       ]
     },
     {
@@ -240,14 +514,33 @@
       "title": "進階附錄（機動使用）",
       "summary": "軟體開發概念延伸：前後端資料庫分工、SDD、KIRO、真實同步功能案例——不屬於核心 15 章節敘事",
       "student_anchors": [],
-      "content": [
-        "軟體開發三大核心：前端（介面／互動／HTML+CSS+JS 或 React、Vue）、後端（商業邏輯／API／系統整合）、資料庫（儲存／管理／安全），三者協同缺一不可",
-        "三種開發路徑：①新手體驗包（AI 前端＋Google Apps Script＋Google Sheet，免費、免架主機）②進階創作者（AI+Next.js＋Supabase＋PostgreSQL，可擴充）③企業級（React/Vue＋.NET/Java＋MSSQL/Oracle，高規格）",
-        "SDD（Spec-driven development）概念：先定義清晰規格再設計／實作／驗證，對齊需求、降低風險、可驗證交付、提升效率",
-        "SDD 開發流程：①定義規格 ②規劃設計 ③實作開發 ④驗證測試 ⑤交付與迭代；對比傳統開發常常「做完才發現問題」，返工成本高",
-        "KIRO 工具介紹：專為 SDD 打造的 AI 開發工具，規格協作撰寫 → 自動生成設計任務 → 智慧開發追蹤 → 規格導向測試驗證 → 迭代視覺化",
-        "案例：ReptileManager PWA 串接 Google Drive 同步功能實作計畫（跨裝置同步、不需要後端伺服器，需先在 Google Cloud Console 設定 OAuth）",
-        "備註：這段是進階／機動內容，視現場時間與提問彈性使用，不算在原本的 15 章節流程裡"
+      "slides": [
+        {
+          "heading": "軟體開發三大核心",
+          "bullets": ["前端（介面／互動）、後端（商業邏輯／API）、資料庫（儲存／管理／安全），三者協同缺一不可"]
+        },
+        {
+          "heading": "三種開發路徑",
+          "bullets": [
+            "①新手體驗包：AI前端＋Google Apps Script＋Google Sheet（免費、免架主機）",
+            "②進階創作者：AI+Next.js＋Supabase＋PostgreSQL（可擴充）",
+            "③企業級：React/Vue＋.NET/Java＋MSSQL/Oracle（高規格）"
+          ]
+        },
+        {
+          "heading": "SDD（規格驅動開發）",
+          "bullets": [
+            "先定義清晰規格再設計／實作／驗證，對齊需求、降低風險、可驗證交付",
+            "流程：①定義規格 ②規劃設計 ③實作開發 ④驗證測試 ⑤交付與迭代"
+          ]
+        },
+        {
+          "heading": "KIRO 與案例",
+          "bullets": [
+            "KIRO：專為 SDD 打造的 AI 開發工具，規格協作 → 自動生成任務 → 追蹤 → 測試驗證 → 迭代視覺化",
+            "案例：ReptileManager PWA 串接 Google Drive 同步功能（不需要後端伺服器）"
+          ]
+        }
       ]
     }
   ]
