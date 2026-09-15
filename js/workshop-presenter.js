@@ -146,8 +146,12 @@ function renderImages(images, ctx) {
   const cls = ctx === 'stage' ? 'image-row stage-images' : 'image-row';
   const itemsHtml = images.map(function (img) {
     const safeSrc = escapeHtml(img.src);
+    const imgTag = '<img src="' + safeSrc + '" alt="' + escapeHtml(img.caption || '') + '" onerror="this.closest(\'figure\').classList.add(\'image-missing\');this.remove();">';
+    const pic = img.link
+      ? '<a class="image-link" href="' + escapeHtml(img.link) + '" target="_blank" rel="noopener">' + imgTag + '<span class="image-link-badge">↗ 開啟連結</span></a>'
+      : imgTag;
     return '<figure class="image-item">' +
-      '<img src="' + safeSrc + '" alt="' + escapeHtml(img.caption || '') + '" onerror="this.closest(\'figure\').classList.add(\'image-missing\');this.remove();">' +
+      pic +
       '<span class="image-missing-note">📷 圖片待補：' + safeSrc + '</span>' +
       (img.caption ? '<figcaption>' + escapeHtml(img.caption) + '</figcaption>' : '') +
     '</figure>';
