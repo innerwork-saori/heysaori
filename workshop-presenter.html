@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>講師主控台 | AI 一頁式網站工作坊</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/saori-base.css">
+<link rel="stylesheet" href="css/workshop-presenter.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="tools.html" class="nav-back">回工具集</a>
+  <div class="nav-title">講師主控台</div>
+  <button type="button" class="nav-links-btn" onclick="openLinksPanel()">🔗 快速連結</button>
+</nav>
+
+<div class="console">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-head">
+      <div class="sidebar-title">章節</div>
+      <button type="button" class="reset-btn" onclick="resetProgress()">🔄 重置</button>
+    </div>
+    <ol id="chapterList" class="chapter-list"></ol>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div id="chapterView" class="chapter-view">
+      <p class="loading">載入章節資料中…</p>
+    </div>
+  </main>
+</div>
+
+<!-- TIMER OVERLAY -->
+<div id="timerOverlay" class="timer-overlay" hidden>
+  <div class="timer-display" id="timerDisplay">00:00</div>
+  <div class="timer-label" id="timerLabel"></div>
+  <button type="button" class="timer-cancel" onclick="cancelTimer()">結束倒數</button>
+</div>
+
+<!-- QUICK LINKS PANEL -->
+<div id="linksPanel" class="links-panel" hidden>
+  <div class="links-backdrop" onclick="closeLinksPanel()"></div>
+  <div class="links-sheet">
+    <div class="links-head">
+      <div class="links-title">快速連結</div>
+      <button type="button" class="links-close" onclick="closeLinksPanel()">✕</button>
+    </div>
+    <div class="links-grid" id="linksGrid"></div>
+  </div>
+</div>
+
+<!-- QR MODAL -->
+<div id="qrModal" class="qr-modal" hidden>
+  <div class="links-backdrop" onclick="closeQr()"></div>
+  <div class="qr-sheet">
+    <button type="button" class="links-close" onclick="closeQr()">✕</button>
+    <div class="qr-title" id="qrTitle"></div>
+    <div id="qrCode" class="qr-code"></div>
+    <div class="qr-url" id="qrUrl"></div>
+  </div>
+</div>
+
+<script src="js/qrcode.min.js"></script>
+<script src="js/workshop-presenter.js"></script>
+</body>
+</html>

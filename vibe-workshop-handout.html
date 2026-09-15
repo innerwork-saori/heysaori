@@ -40,12 +40,25 @@
   <span class="anchor-sep">·</span>
   <a href="#step2" class="anchor-link">Step 2 生成</a>
   <span class="anchor-sep">·</span>
+  <a href="#faq" class="anchor-link">❓ FAQ</a>
+  <span class="anchor-sep">·</span>
   <a href="#step3" class="anchor-link">Step 3 上架</a>
+  <span class="anchor-sep">·</span>
+  <a href="#install" class="anchor-link">⚙️ 安裝環境</a>
   <span class="anchor-sep">·</span>
   <a href="#step4" class="anchor-link">Step 4 優化</a>
   <span class="anchor-sep">·</span>
   <a href="#ref" class="anchor-link">🔧 速查</a>
 </div>
+
+<!-- SEARCH -->
+<div class="search-bar">
+  <form id="searchForm" class="search-form" role="search">
+    <input id="searchInput" class="search-input" type="text" placeholder="找不到助教？搜尋關鍵字，例如：git 安裝" autocomplete="off">
+    <button type="submit" class="search-btn">🔍 搜尋</button>
+  </form>
+</div>
+<div id="searchMsg" class="search-msg">找不到相關內容，試試其他關鍵字，或直接到 LINE 群組發問。</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -369,12 +382,51 @@
     <div class="section-label" style="margin-top:2.5rem;">可選：加入個人照片</div>
     <p class="hint" style="margin-top:0.3rem;margin-bottom:0.8rem;">先用 <a href="https://cloudconvert.com" target="_blank" rel="noopener">CloudConvert</a> 將照片轉成 <code>.webp</code> 格式，上傳到 GitHub 取得網址後，貼以下指令給 Claude：</p>
     <div class="code-block-wrap">
-      <div class="code-label">prompt 範例</div>
+      <div class="code-block-head">
+        <span class="code-label">prompt 範例</span>
+        <button type="button" class="copy-btn" onclick="copyCode(this)">複製</button>
+      </div>
       <pre class="code-block">請在 Hero 區塊加入我的個人照片。
 https://你的帳號.github.io/你的repo名稱/照片.webp
 請把照片放在文字的右側，圓形裁切，寬度約 200–250px，
 在手機版時照片移到文字下方。
 其他內容不變，請輸出完整修改後的 HTML 檔案。</pre>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="ws-section">
+  <div class="container">
+    <div class="section-label">卡關自救</div>
+    <h2 class="section-title">❓ FAQ 常見問題</h2>
+    <div class="section-rule"></div>
+    <p class="section-sub">Vibe Coding 最常卡關的幾個狀況，先看這裡，通常都能自己解決。</p>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">AI 生成的網站出現錯誤畫面，怎麼辦？<span class="faq-arrow">+</span></button>
+        <div class="faq-a">把錯誤訊息或截圖直接貼給 Claude，告訴它「這裡出錯了，請修正」。AI 通常能自己抓出問題，直接給你修正後的完整檔案。</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">做出來的網站跟我想的不一樣？<span class="faq-arrow">+</span></button>
+        <div class="faq-a">這通常是「規格說明不夠清楚」造成的（Garbage In, Garbage Out）。回頭把 Prompt 產生器填得更具體——不要寫「專業一點」，改寫「深藍色、無襯線字體、卡片式排版」，再請 AI 重新輸出。</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">我看不懂程式碼，這樣正常嗎？<span class="faq-arrow">+</span></button>
+        <div class="faq-a">完全正常。這堂課的設計就是你不需要看懂程式碼——你只需要看得懂網站「長什麼樣子」、知道自己要什麼，剩下交給 AI。</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Claude 說「已完成」，但我看不到網站？<span class="faq-arrow">+</span></button>
+        <div class="faq-a">確認你有把 Claude 輸出的完整 HTML 檔案下載下來，檔名存成 <code>index.html</code>，用瀏覽器打開這個檔案，或依 Step 3 上傳到 GitHub 後看線上網址。</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">修改了一次之後，AI 把之前的東西都改掉了？<span class="faq-arrow">+</span></button>
+        <div class="faq-a">每次請 AI 修改時，記得加一句「其他內容不變」，並請它「輸出完整修改後的 HTML 檔案」，避免它只給你片段程式碼蓋掉原本的內容。</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">找不到助教，卡住了怎麼辦？<span class="faq-arrow">+</span></button>
+        <div class="faq-a">先用上面的搜尋框找相關步驟；如果還是卡住，把問題描述清楚（你做了什麼、看到什麼錯誤畫面）貼到 LINE 群組，助教會盡快回覆。</div>
+      </div>
     </div>
   </div>
 </section>
@@ -460,29 +512,50 @@ https://你的帳號.github.io/你的repo名稱/照片.webp
   </div>
 </section>
 
-<!-- STEP 3 ADVANCED -->
-<section class="ws-section">
+<!-- STEP 3 ADVANCED / INSTALL -->
+<section id="install" class="ws-section">
   <div class="container">
     <div class="step-header">
       <div class="step-eyebrow">Step 3 進階</div>
-      <h2 class="section-title">💻 用 VS Code 上架</h2>
+      <h2 class="section-title">💻 安裝環境 + 用 VS Code 上架</h2>
       <div class="section-rule"></div>
     </div>
-    <p class="section-sub">適合想持續開發的同學。</p>
+    <p class="section-sub">適合想持續開發、或想繼續用 AI 開發其他工具的同學。</p>
 
     <div class="substep">
       <div class="substep-title">安裝工具</div>
+
+      <div class="os-tabs" role="tablist" aria-label="作業系統">
+        <button type="button" class="os-tab active" data-os="win" onclick="switchOs('win')">🪟 Windows</button>
+        <button type="button" class="os-tab" data-os="mac" onclick="switchOs('mac')">🍎 Mac</button>
+      </div>
+
       <div class="checklist">
         <label class="check-item">
           <input type="checkbox" class="check-input">
           <div class="check-box"></div>
           <div class="check-text">
             安裝 Git：<a href="https://git-scm.com" target="_blank" rel="noopener">git-scm.com</a>
-            <ul class="sub-notes">
-              <li>取消勾選「Git GUI 工具」</li>
-              <li>勾選「check daily for git for windows updates」</li>
-              <li>編輯器選「Use Visual Studio Code as Git's default editor」</li>
-            </ul>
+            <div class="os-panel" data-os="win">
+              <ul class="sub-notes">
+                <li>取消勾選「Git GUI 工具」</li>
+                <li>勾選「check daily for git for windows updates」</li>
+                <li>編輯器選「Use Visual Studio Code as Git's default editor」</li>
+              </ul>
+            </div>
+            <div class="os-panel os-hidden" data-os="mac">
+              <ul class="sub-notes">
+                <li>大多數 Mac 已內建 Git，終端機輸入 <code>git --version</code> 若跳出安裝提示，點「Install」即可</li>
+                <li>沒有跳出提示的話，改用 Homebrew 安裝（見下方指令）</li>
+              </ul>
+              <div class="code-block-wrap">
+                <div class="code-block-head">
+                  <span class="code-label">終端機指令</span>
+                  <button type="button" class="copy-btn" onclick="copyCode(this)">複製</button>
+                </div>
+                <pre class="code-block">brew install git</pre>
+              </div>
+            </div>
           </div>
         </label>
         <label class="check-item">
@@ -497,9 +570,49 @@ https://你的帳號.github.io/你的repo名稱/照片.webp
         </label>
       </div>
       <div class="code-block-wrap">
+        <div class="code-block-head">
+          <span class="code-label">終端機指令</span>
+          <button type="button" class="copy-btn" onclick="copyCode(this)">複製</button>
+        </div>
         <pre class="code-block">git config --global user.name "你的名字"
 git config --global user.email "你的GitHub信箱"</pre>
       </div>
+    </div>
+
+    <div class="substep">
+      <div class="substep-title">安裝 Claude Code（選用，指令列開發用）</div>
+      <p class="hint" style="margin-bottom:0.8rem;">需先安裝 <a href="https://nodejs.org" target="_blank" rel="noopener">Node.js</a>，安裝好後在終端機輸入：</p>
+      <div class="code-block-wrap">
+        <div class="code-block-head">
+          <span class="code-label">終端機指令</span>
+          <button type="button" class="copy-btn" onclick="copyCode(this)">複製</button>
+        </div>
+        <pre class="code-block">npm install -g @anthropic-ai/claude-code</pre>
+      </div>
+      <p class="hint">安裝完成後，在專案資料夾輸入 <code>claude</code> 啟動，第一次會引導你登入帳號。</p>
+    </div>
+
+    <div class="substep">
+      <div class="substep-title">安裝 GitHub CLI（選用，加速登入授權）</div>
+      <div class="os-panel" data-os="win">
+        <div class="code-block-wrap">
+          <div class="code-block-head">
+            <span class="code-label">Windows 終端機指令</span>
+            <button type="button" class="copy-btn" onclick="copyCode(this)">複製</button>
+          </div>
+          <pre class="code-block">winget install --id GitHub.cli</pre>
+        </div>
+      </div>
+      <div class="os-panel os-hidden" data-os="mac">
+        <div class="code-block-wrap">
+          <div class="code-block-head">
+            <span class="code-label">Mac 終端機指令</span>
+            <button type="button" class="copy-btn" onclick="copyCode(this)">複製</button>
+          </div>
+          <pre class="code-block">brew install gh</pre>
+        </div>
+      </div>
+      <p class="hint">安裝完成後輸入 <code>gh auth login</code>，依畫面指示用瀏覽器登入 GitHub 帳號即可。</p>
     </div>
 
     <div class="substep">
@@ -558,6 +671,10 @@ git config --global user.email "你的GitHub信箱"</pre>
     <div class="optimize-block">
       <div class="optimize-area">調整視覺風格</div>
       <div class="code-block-wrap">
+        <div class="code-block-head">
+          <span class="code-label">Prompt 範本</span>
+          <button type="button" class="copy-btn" onclick="copyCode(this)">複製</button>
+        </div>
         <pre class="code-block">請修改上面的網站設計，調整以下部分：
 1. 主色調改為 [填入顏色，例如：深藍色 #1a3c5e]
 2. Hero 區塊的背景改為 [純色／漸層／圖片]
@@ -570,6 +687,10 @@ git config --global user.email "你的GitHub信箱"</pre>
     <div class="optimize-block">
       <div class="optimize-area">修改文字內容</div>
       <div class="code-block-wrap">
+        <div class="code-block-head">
+          <span class="code-label">Prompt 範本</span>
+          <button type="button" class="copy-btn" onclick="copyCode(this)">複製</button>
+        </div>
         <pre class="code-block">請修改 HTML 中的以下內容，其他都不要動：
 - Hero 標題改為：[填入]
 - About 區塊第一段改為：[填入]
@@ -581,6 +702,10 @@ git config --global user.email "你的GitHub信箱"</pre>
     <div class="optimize-block">
       <div class="optimize-area">新增 / 修改區塊</div>
       <div class="code-block-wrap">
+        <div class="code-block-head">
+          <span class="code-label">Prompt 範本</span>
+          <button type="button" class="copy-btn" onclick="copyCode(this)">複製</button>
+        </div>
         <pre class="code-block">請幫我改善這個網站的以下部分：
 1. Service 區塊加入價格資訊（[填入定價]）
 2. 新增一個 FAQ 區塊，問題如下：
@@ -635,6 +760,11 @@ git config --global user.email "你的GitHub信箱"</pre>
         <div class="ref-name">VS Code</div>
         <div class="ref-url">code.visualstudio.com</div>
       </a>
+      <a href="https://cli.github.com" target="_blank" rel="noopener" class="ref-card">
+        <div class="ref-icon">⌨️</div>
+        <div class="ref-name">GitHub CLI</div>
+        <div class="ref-url">cli.github.com</div>
+      </a>
       <a href="https://www.happyhues.co" target="_blank" rel="noopener" class="ref-card">
         <div class="ref-icon">🎨</div>
         <div class="ref-name">Happy Hues</div>
@@ -664,5 +794,6 @@ git config --global user.email "你的GitHub信箱"</pre>
   </div>
 </footer>
 
+<script src="js/vibe-workshop-handout.js"></script>
 </body>
 </html>
