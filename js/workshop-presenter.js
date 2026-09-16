@@ -164,10 +164,26 @@ function renderImages(images, ctx, opts) {
   return '<div class="' + cls + '">' + itemsHtml + '</div>';
 }
 
+// Turns "...[顯示文字](https://...)..." inside a bullet string into a real link.
+// Everything outside [](...) is still escaped as plain text.
+function linkifyText(text) {
+  const re = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
+  let result = '';
+  let lastIndex = 0;
+  let match;
+  while ((match = re.exec(text)) !== null) {
+    result += escapeHtml(text.slice(lastIndex, match.index));
+    result += '<a href="' + escapeHtml(match[2]) + '" target="_blank" rel="noopener">' + escapeHtml(match[1]) + '</a>';
+    lastIndex = match.index + match[0].length;
+  }
+  result += escapeHtml(text.slice(lastIndex));
+  return result;
+}
+
 function renderBullets(bullets, ctx) {
   if (!bullets || !bullets.length) return '';
   const cls = ctx === 'stage' ? ' class="stage-bullets"' : '';
-  return '<ul' + cls + '>' + bullets.map(function (t) { return '<li>' + escapeHtml(t) + '</li>'; }).join('') + '</ul>';
+  return '<ul' + cls + '>' + bullets.map(function (t) { return '<li>' + linkifyText(t) + '</li>'; }).join('') + '</ul>';
 }
 
 function renderSlideBody(slide, ctx) {

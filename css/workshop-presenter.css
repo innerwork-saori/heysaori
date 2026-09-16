@@ -474,6 +474,12 @@ body { overflow-x: hidden; }
   border-radius: 50%;
   background: var(--accent3);
 }
+.stage-bullets a {
+  color: var(--accent3);
+  text-decoration: underline;
+  text-decoration-color: rgba(212,169,106,0.4);
+}
+.stage-bullets a:hover { text-decoration-color: var(--accent3); }
 .stage-empty {
   font-size: clamp(1rem, 1.6vw, 1.3rem);
   color: rgba(250,247,242,0.4);
