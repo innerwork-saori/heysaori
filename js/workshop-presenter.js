@@ -186,8 +186,27 @@ function renderBullets(bullets, ctx) {
   return '<ul' + cls + '>' + bullets.map(function (t) { return '<li>' + linkifyText(t) + '</li>'; }).join('') + '</ul>';
 }
 
+function renderIntro(intro, ctx) {
+  if (!intro || !intro.length) return '';
+  const cls = ctx === 'stage' ? 'stage-intro' : 'slide-intro';
+  return intro.map(function (t) { return '<p class="' + cls + '">' + linkifyText(t) + '</p>'; }).join('');
+}
+
+function renderTable(table, ctx) {
+  const cls = ctx === 'stage' ? 'data-table stage-table' : 'data-table';
+  const theadHtml = (table.columns && table.columns.length)
+    ? '<thead><tr>' + table.columns.map(function (c) { return '<th>' + escapeHtml(c) + '</th>'; }).join('') + '</tr></thead>'
+    : '';
+  const rowsHtml = table.rows.map(function (row) {
+    return '<tr>' + row.map(function (cell) { return '<td>' + linkifyText(String(cell)) + '</td>'; }).join('') + '</tr>';
+  }).join('');
+  return '<div class="data-table-wrap"><table class="' + cls + '">' + theadHtml + '<tbody>' + rowsHtml + '</tbody></table></div>';
+}
+
 function renderSlideBody(slide, ctx) {
+  const introHtml = renderIntro(slide.intro, ctx);
   const visualHtml = slide.visual ? renderVisual(slide.visual, ctx) : '';
+  const tableHtml = slide.table ? renderTable(slide.table, ctx) : '';
   const bulletsHtml = renderBullets(slide.bullets, ctx);
 
   // layout: "image-left" or "image-right" puts images beside the bullet text instead of stacked above it.
@@ -197,7 +216,7 @@ function renderSlideBody(slide, ctx) {
     const dirClass = slide.layout === 'image-right' ? ' slide-split--right' : ' slide-split--left';
     const mediaWidth = escapeHtml(slide.images[0].width || '40%');
     const imagesHtml = renderImages(slide.images, ctx, { suppressWidth: true });
-    return visualHtml +
+    return introHtml + visualHtml +
       '<div class="slide-split' + dirClass + '">' +
         '<div class="slide-split-media" style="width:' + mediaWidth + ';max-width:' + mediaWidth + ';">' + imagesHtml + '</div>' +
         '<div class="slide-split-text">' + bulletsHtml + '</div>' +
@@ -205,7 +224,7 @@ function renderSlideBody(slide, ctx) {
   }
 
   const imagesHtml = (slide.images && slide.images.length) ? renderImages(slide.images, ctx) : '';
-  return visualHtml + imagesHtml + bulletsHtml;
+  return introHtml + visualHtml + tableHtml + imagesHtml + bulletsHtml;
 }
 
 function renderChapterView(ch) {

@@ -251,6 +251,51 @@ body { overflow-x: hidden; }
 .slide-split-text { flex: 1 1 240px; min-width: 200px; }
 .slide-split-text ul { margin: 0; }
 
+.slide-intro { font-size: 0.85rem; color: var(--text-soft); margin-bottom: 0.8rem; line-height: 1.7; }
+.stage-intro {
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  color: rgba(250,247,242,0.6);
+  margin-bottom: 1.4rem;
+}
+
+/* ── DATA TABLE ── */
+.data-table-wrap { overflow-x: auto; margin: 0.8rem 0 1.2rem; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.data-table th {
+  background: var(--paper-warm);
+  color: var(--accent1);
+  text-align: left;
+  padding: 8px 14px;
+  border-bottom: 2px solid var(--paper-mid);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.data-table td {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--paper-mid);
+  color: var(--text-mid);
+  vertical-align: top;
+  line-height: 1.6;
+}
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:nth-child(even) { background: var(--paper-warm); }
+
+.stage-table {
+  font-size: clamp(0.72rem, 1.15vw, 1rem);
+}
+.stage-table th {
+  background: rgba(250,247,242,0.08);
+  color: var(--accent3);
+  border-bottom: 2px solid rgba(250,247,242,0.15);
+}
+.stage-table td {
+  color: rgba(250,247,242,0.85);
+  border-bottom: 1px solid rgba(250,247,242,0.08);
+}
+.stage-table tbody tr:nth-child(even) { background: rgba(250,247,242,0.04); }
+.stage-table a { color: var(--accent3); text-decoration: underline; text-decoration-color: rgba(212,169,106,0.4); }
+.stage-table a:hover { text-decoration-color: var(--accent3); }
+
 .timer-block, .notes-block {
   border-top: 1px solid var(--paper-mid);
   padding-top: 1.4rem;
