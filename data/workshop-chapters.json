@@ -26,7 +26,8 @@
             "國中：自行架設個人網站",
             "國中：參加全國網頁製作比賽",
             "高中：班網架設",
-            "大學／工作：外商開發副理、帶過 APP／電商團隊上線"
+            "大學：畢業專題第一名（圖書館器材租借系統）",
+            "工作：外商開發副理、帶過 APP／電商團隊上線"
           ]
         },
         {
@@ -56,7 +57,7 @@
       "id": "1",
       "type": "chapter",
       "title": "為什麼學這個",
-      "summary": "Vibe Coding 概念（Zuckerberg 引言）、可以做什麼、展示成果",
+      "summary": "Vibe Coding 概念、可以做什麼、展示成果",
       "student_anchors": [],
       "slides": [
         {
@@ -74,28 +75,44 @@
           ]
         },
         {
-          "heading": "可以做什麼",
+          "heading": "VIBE CODING 是什麼？",
           "bullets": [
-            "個人網站、網頁小工具",
-            "3-4 小時可以做出來的範例：生日運勢產生器、學習計劃小助手、行銷貼文企劃"
+            "腦中有靈感，就可以做出來",
+            "不需要繁瑣的工具與流程",
+            "快速將想法轉化為可上線的網站"
           ]
         },
         {
-          "heading": "要不要串 AI？判斷框架",
+          "heading": "可以做什麼",
+          "bullets": [
+            "個人網站、網頁小工具",
+            "3-4 小時可以做出來的範例：個人服務介紹、Blog 網站、品牌宣傳頁、訂購表單"
+          ]
+        },
+        {
+          "heading": "要不要串 AI？",
           "bullets": [
             "① 判斷內容是固定有限還是無窮無盡？固定 → 不用串AI／無窮盡 → 要串AI動態產生",
-            "② 需不需要理解語意？要理解自然語言 → 要串AI／固定選項或規則套用 → 不用",
-            "小示範：午餐吃什麼抽籤機"
+            "② 需不需要理解語意？要理解自然語言 → 要串AI／固定選項或規則套用 → 不用"
+          ],
+          "images": [
+            { "src": "images/workshop/AIorNot.png", "caption": "AI 或非 AI 判斷框架", "width": "60%" }
+          ]
+        },
+        {
+          "heading": "展示成果",
+          "images": [
+            { "src": "images/workshop/a_atelier_baking_lab.png", "caption": "烘焙坊訂購官網", "width": "60%", "link": "https://atelierbakinglab.netlify.app/" }
           ]
         },
         {
           "heading": "展示成果",
           "bullets": [
-            "3 個用今天的方法、10 分鐘做出來的網站（ChatGPT、Claude）"
+            "用今天的方法，[10 分鐘做出來的網站](https://innerwork-saori.github.io/2026-workshop-examples/)"
           ],
           "images": [
-            { "src": "images/workshop/demo-cys.jpg", "caption": "案例：CYS 職涯諮詢網站" },
-            { "src": "images/workshop/demo-cost-calculator.jpg", "caption": "案例：起始成本計算機類小工具" }
+            { "src": "images/workshop/demo-cys.jpg", "caption": "案例：CYS 職涯諮詢網站", "link": "https://seminia1491.github.io/CYStalktalk/" },
+            { "src": "images/workshop/demo-cost-calculator.jpg", "caption": "案例：起始成本計算機類小工具", "width": "20%", "link": "https://www.perplexity.ai/search/zhi-zuo-yi-ge-html-wang-ye-fu-z19qXlkmTCezSZGr.Iy.6Q?preview=1" }
           ]
         }
       ]
@@ -108,11 +125,32 @@
       "student_anchors": ["#tools"],
       "slides": [
         {
-          "heading": "AI 能力五等級",
-          "bullets": [
-            "Lv1 瀏覽器聊天（不改檔）→ Lv2 IDE 內嵌（小範圍改）→ Lv3 AI-Native IDE（指揮 agent）→ Lv4 Terminal（會改／debug）→ Lv5 瀏覽器型 IDE（端到端出 App）",
-            "代表工具對照：ChatGPT/Claude/Gemini/Perplexity → GitHub Copilot/Cursor → Cursor/Windsurf/Antigravity/Replit → Claude Code/Codex CLI/Gemini CLI → Bolt.new/Lovable/Manus"
-          ]
+          "heading": "AI 工具使用難度總覽",
+          "intro": ["從簡單諮詢到端到端開發，選擇適合你當下需求的使用方式"],
+          "table": {
+            "columns": ["等級", "使用位置", "會不會改檔", "適合任務"],
+            "rows": [
+              ["Lv1 💬", "瀏覽器聊天", "✗ 通常不會", "💡 想清楚問題"],
+              ["Lv2 </>", "IDE 內嵌", "✏️ 小範圍", "</> 寫 code 當下輔助"],
+              ["Lv3 🤖", "AI-Native IDE", "🔗 多步驟", "👤 指揮 agent 開發"],
+              ["Lv4 >_", "Terminal", "✏️ 會", "🐛 本機修 bug／跑測試"],
+              ["Lv5 🌐", "瀏覽器型 IDE", "✅ 會，端到端", "🚀 從描述到可用 App"]
+            ]
+          }
+        },
+        {
+          "heading": "AI 程式開發助手的 5 種定位",
+          "intro": ["從對話到部署：AI 如何一步步成為你的開發夥伴"],
+          "table": {
+            "columns": ["類型", "AI 主要做什麼", "人類主要負責什麼"],
+            "rows": [
+              ["對話型助手", "分析、解釋、提出方案、產生片段程式碼", "判斷方案並手動實作"],
+              ["IDE 協作助手", "補全、修改目前檔案、局部重構", "控制修改範圍並 review"],
+              ["專案型 Agent", "針對需求修改多個檔案、建立 feature", "提供規格、驗證結果"],
+              ["Repository/CLI Agent", "操作 repo、執行命令與測試、修正錯誤", "設定權限、審查 diff 與風險"],
+              ["應用建構平台", "產生原型、全端程式與部署環境", "定義產品、測試品質、處理正式上線"]
+            ]
+          }
         },
         {
           "heading": "今天用到的工具（全部免費）",
@@ -121,22 +159,6 @@
             "GitHub（主機／網址，存放網站檔案）",
             "VS Code（網站編輯器）",
             "Claude／ChatGPT／Gemini／Perplexity（AI 助理）"
-          ]
-        },
-        {
-          "heading": "四個 AI 助理怎麼選",
-          "bullets": [
-            "ChatGPT ＝ 想法整理器：適合想內容／寫自介／優化文字；不適合直接產 HTML",
-            "Perplexity ＝ 靈感搜尋器：找範例／設計風格／文案參考",
-            "Gemini ＝ 補充型助手：查資料／整理資訊；不建議當主工具",
-            "Claude ＝ 今天的主角、網站生成器：產完整 HTML、結構乾淨、長內容穩定"
-          ]
-        },
-        {
-          "heading": "總結建議",
-          "bullets": [
-            "重程式品質選 Claude／需配圖選 ChatGPT／重 SEO 選 Gemini／需查證選 Perplexity",
-            "可以交叉搭配：Perplexity 找靈感 ＋ Claude 寫程式 ＋ ChatGPT 生圖"
           ]
         }
       ]
