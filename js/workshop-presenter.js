@@ -99,6 +99,13 @@ function renderSidebar() {
     title.textContent = ch.title;
     li.appendChild(title);
 
+    if (ch.tag) {
+      const tag = document.createElement('span');
+      tag.className = 'chapter-tag';
+      tag.textContent = ch.tag;
+      li.appendChild(tag);
+    }
+
     li.addEventListener('click', function () { selectChapter(ch.id); });
     list.appendChild(li);
   });
@@ -247,7 +254,7 @@ function renderChapterView(ch) {
 
   view.innerHTML =
     '<div class="chapter-eyebrow">' + (ch.type === 'break' ? '休息' : ch.type === 'appendix' ? '附錄' : ('Chapter ' + ch.id)) + '</div>' +
-    '<h1>' + escapeHtml(ch.title) + '</h1>' +
+    '<h1>' + escapeHtml(ch.title) + (ch.tag ? ' <span class="chapter-tag chapter-tag--inline">' + escapeHtml(ch.tag) + '</span>' : '') + '</h1>' +
     (ch.summary ? '<p class="chapter-summary">' + escapeHtml(ch.summary) + '</p>' : '') +
     (anchorsHtml ? '<div class="anchor-links">' + anchorsHtml + '</div>' : '') +
     '<div class="slide-content">' + slideHtml + '</div>' +
@@ -314,7 +321,8 @@ function renderStageView(stop) {
   }
 
   const slide = (ch.slides && ch.slides[stop.slideIndex]) || {};
-  const eyebrow = (ch.type === 'appendix' ? '附錄' : ('Chapter ' + ch.id)) + ' · ' + escapeHtml(ch.title);
+  const eyebrow = (ch.type === 'appendix' ? '附錄' : ('Chapter ' + ch.id)) + ' · ' + escapeHtml(ch.title) +
+    (ch.tag ? ' <span class="chapter-tag chapter-tag--stage">' + escapeHtml(ch.tag) + '</span>' : '');
   const titleText = slide.heading || ch.title;
 
   el.innerHTML =
