@@ -153,12 +153,10 @@
           }
         },
         {
-          "heading": "今天用到的工具（全部免費）",
+          "heading": "今天需要安裝的工具（全部免費）",
           "bullets": [
             "Git（網站的存檔紀錄）",
-            "GitHub（主機／網址，存放網站檔案）",
-            "VS Code（網站編輯器）",
-            "Claude／ChatGPT／Gemini／Perplexity（AI 助理）"
+            "VS Code（網站編輯器）／Claude Code／Codex （三擇一）"
           ]
         }
       ]
@@ -182,8 +180,8 @@
           "heading": "休息後重新開場",
           "bullets": [
             "工具主角回顧：腦中有靈感，就可以做出來",
-            "GARBAGE IN → GARBAGE OUT 概念預告：規格講不清楚，AI 做出來的東西也會不清楚（後面 FAQ 會展開）",
-            "領取 AI Prompt 工具箱：LINE 輸入「工具箱」或「tool」，或開 http://to.heysaori.com/saoris_aitools"
+            "GARBAGE IN → GARBAGE OUT 概念：規格講不清楚，AI 做出來的東西也會不清楚",
+            "領取 AI 工作坊學習單：LINE 輸入「AI」或「tool」，或直接在瀏覽器輸入 https://lab.heysaori.com/vibe-workshop-handout.html"
           ]
         },
         {
@@ -213,7 +211,7 @@
         {
           "heading": "工具入口",
           "bullets": [
-            "AI 工具實驗室（lab.heysaori.com/tools）→ 兩張卡片：網站 Prompt 產生器 / 工具 Prompt 產生器"
+            "[AI 工具實驗室](https://lab.heysaori.com/tools) → 兩張卡片：網站 Prompt 產生器 / 工具 Prompt 產生器"
           ]
         },
         {
@@ -224,24 +222,39 @@
           ]
         },
         {
-          "heading": "配色與描述技巧",
+          "heading": "配色與描述技巧 I",
           "bullets": [
             "配色靈感工具：Coolors、Happy Hues；找色碼：Toodoo、Wibibi",
-            "不知道怎麼描述風格或配色？直接請 AI 幫你反推一段設計描述 Prompt（示範用 ChatGPT）",
-            "產出的 Prompt 會包含：風格、配色 hex 色碼、字型、六大區塊版面，並要求輸出單一 HTML 檔＋RWD"
+            "不知道怎麼描述風格或配色？直接請 AI 幫你反推一段設計描述 Prompt（示範用 ChatGPT）"
+          ],
+          "layout": "image-right",
+          "images": [
+            { "src": "images/workshop/prompt_style.png", "caption": "配色與描述技巧示意" }
+          ]
+        },
+        {
+          "heading": "配色與描述技巧 II",
+          "bullets": [
+            "不知道怎麼描述風格或配色？直接請 AI 幫你反推一段設計描述 Prompt（示範用 ChatGPT）"
+          ],
+          "layout": "image-right",
+          "images": [
+            { "src": "images/workshop/prompt_style02.png", "caption": "配色與描述技巧示意" }
           ]
         },
         {
           "heading": "DEMO 示範",
+          "layout": "image-left",
           "bullets": [
             "AI 對話引導使用者講出服務定位 → 生成範例網站「Xuan Lin」（協助台灣品牌海外落地）"
           ],
           "images": [
-            { "src": "images/workshop/demo-xuanlin.jpg", "caption": "範例網站：Xuan Lin" }
+            { "src": "images/workshop/demo-xuanlin.jpg", "caption": "範例網站：Xuan Lin", "link": "https://iamxuanlin.github.io/XuanLin/index.html"  }
           ]
         },
         {
           "heading": "路線 B：工具 Prompt 產生器（網站以外的小工具）",
+          "layout": "image-right",
           "bullets": [
             "7 步走查：01 工具目標 → 02 輸入 → 03 輸出 → 規則與限制 → 異常情況 → 驗收標準 → 視覺要求與補充",
             "範例情境：設計接案報價試算器"
@@ -266,10 +279,6 @@
       "student_anchors": ["#faq"],
       "slides": [
         {
-          "heading": "承接 DEMO",
-          "bullets": ["範例網站「Xuan Lin」"]
-        },
-        {
           "heading": "VIBE CODING 常見問題",
           "visual": {
             "type": "flow",
@@ -285,6 +294,16 @@
             "② 邏輯錯誤 → 需要人工檢查，AI 不會自己發現邏輯不合理",
             "③ 做出來的東西不是你要的 → 規格錯誤（GIGO），回頭把需求講清楚"
           ]
+        },
+        {
+          "heading": "程式有錯誤 / 邏輯錯誤",
+          "layout": "image-right",
+          "bullets": [
+            "直接把錯誤訊息貼給 AI"
+          ],
+          "images": [
+            { "src": "images/workshop/debug01.png", "caption": "程式有錯誤示意", "width": "70%" }
+          ]
         }
       ]
     },
@@ -292,13 +311,25 @@
       "id": "6",
       "type": "chapter",
       "title": "安裝環境",
+      "tag": "💳 付費限定",
       "summary": "安裝 Claude Code、安裝 UI/UX 設計技能（frontend-design skill）",
       "student_anchors": ["#install"],
       "slides": [
         {
-          "heading": "安裝 Claude Code",
+          "heading": "安裝 Claude Code（桌面版 App）",
+          "intro": ["新手推薦：不用碰終端機，跟安裝一般軟體一樣，下載、打開、登入"],
           "bullets": [
-            "需要 Claude Pro／Max／Team 帳號（免費版無法使用）",
+            "① 開 [claude.com/download](https://claude.com/download)，選 Mac 或 Windows 版下載",
+            "② 打開安裝檔，跑完安裝流程",
+            "③ 開啟 App，用 Claude 帳號登入",
+            "④ 點畫面正上方的「Code」分頁，就是 Claude Code",
+            "需要 Claude Pro／Max／Team／Enterprise 帳號（免費版可以裝 App，但 Code 分頁要付費方案才能用）"
+          ]
+        },
+        {
+          "heading": "安裝 Claude Code（指令列版）",
+          "intro": ["進階：想用終端機操作、或已經很熟工具的人可以選這個"],
+          "bullets": [
             "Mac／Linux：curl -fsSL https://claude.ai/install.sh | bash",
             "Windows PowerShell：irm https://claude.ai/install.ps1 | iex",
             "安裝完成後在終端機輸入 claude 即可開始使用"
@@ -315,22 +346,6 @@
       ]
     },
     {
-      "id": "7",
-      "type": "chapter",
-      "title": "實作時間 #2",
-      "summary": "繼續實作",
-      "student_anchors": ["#step2"],
-      "slides": [
-        {
-          "heading": "繼續實作",
-          "bullets": [
-            "指令跟上一輪一樣：用 Prompt 工具做出 Prompt → 欄位不會填可跳過或跟 AI 討論 → 完成後貼給 AI 生產 → 卡住隨時舉手",
-            "這一輪可以搭配剛裝好的 Claude Code 繼續開發"
-          ]
-        }
-      ]
-    },
-    {
       "id": "break2",
       "type": "break",
       "title": "☕ 休息 #2",
@@ -339,7 +354,7 @@
       "slides": []
     },
     {
-      "id": "8",
+      "id": "7",
       "type": "chapter",
       "title": "部署方案選擇",
       "summary": "直接發布 vs 複製存檔；零安裝方案 vs 開發者方案",
@@ -379,7 +394,7 @@
       ]
     },
     {
-      "id": "9",
+      "id": "8",
       "type": "chapter",
       "title": "Git & GitHub 設定",
       "summary": "安裝 Git（Windows / Mac 分流步驟）、設定身份、GitHub CLI、授權登入",
@@ -428,7 +443,7 @@
       ]
     },
     {
-      "id": "10",
+      "id": "9",
       "type": "chapter",
       "title": "上架到 GitHub",
       "summary": "建立 Repo、上傳檔案、修改檔案（含截圖步驟）",
@@ -461,7 +476,7 @@
       ]
     },
     {
-      "id": "11",
+      "id": "10",
       "type": "chapter",
       "title": "優化 Prompt",
       "summary": "導向既有工具內建的「調整視覺風格 / 修改文字內容 / 加入照片」快速範本按鈕",
@@ -492,7 +507,7 @@
       ]
     },
     {
-      "id": "12",
+      "id": "11",
       "type": "chapter",
       "title": "網域 & PWA",
       "summary": "設定自訂 Domain、PWA 站台說明",
@@ -528,7 +543,7 @@
       ]
     },
     {
-      "id": "13",
+      "id": "12",
       "type": "chapter",
       "title": "後續行動 & 結尾",
       "summary": "課後建議（補推薦語、加照片、設網域等）、填問卷、Thank you",
