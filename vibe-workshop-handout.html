@@ -580,16 +580,92 @@ git config --global user.email "你的GitHub信箱"</pre>
     </div>
 
     <div class="substep">
-      <div class="substep-title">安裝 Claude Code（選用，指令列開發用）</div>
-      <p class="hint" style="margin-bottom:0.8rem;">需先安裝 <a href="https://nodejs.org" target="_blank" rel="noopener">Node.js</a>，安裝好後在終端機輸入：</p>
+      <div class="substep-title">安裝 Claude Code（選用，需付費方案）</div>
+      <p class="hint" style="margin-bottom:0.8rem;">新手推薦桌面版 App，不用碰終端機，跟安裝一般軟體一樣：</p>
+      <div class="checklist">
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">開 <a href="https://claude.com/download" target="_blank" rel="noopener">claude.com/download</a>，選 Mac 或 Windows 版下載</div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">打開安裝檔，跑完安裝流程</div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">開啟 App，用 Claude 帳號登入</div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">點畫面正上方的「<strong>Code</strong>」分頁，就是 Claude Code</div>
+        </label>
+      </div>
+      <p class="hint">需要 Claude Pro／Max／Team／Enterprise 帳號。免費版可以裝 App，但 Code 分頁要付費方案才能用。</p>
+
+      <p class="hint" style="margin-top:1.4rem;margin-bottom:0.8rem;"><strong>進階：指令列版</strong>（已經習慣用終端機的人）</p>
+      <div class="os-panel" data-os="win">
+        <div class="code-block-wrap">
+          <div class="code-block-head">
+            <span class="code-label">Windows PowerShell 指令</span>
+            <button type="button" class="copy-btn" onclick="copyCode(this)">複製</button>
+          </div>
+          <pre class="code-block">irm https://claude.ai/install.ps1 | iex</pre>
+        </div>
+      </div>
+      <div class="os-panel os-hidden" data-os="mac">
+        <div class="code-block-wrap">
+          <div class="code-block-head">
+            <span class="code-label">Mac 終端機指令</span>
+            <button type="button" class="copy-btn" onclick="copyCode(this)">複製</button>
+          </div>
+          <pre class="code-block">curl -fsSL https://claude.ai/install.sh | bash</pre>
+        </div>
+      </div>
+      <p class="hint">安裝完成後，在終端機輸入 <code>claude</code> 即可開始使用，第一次會引導你登入帳號。</p>
+    </div>
+
+    <div class="substep">
+      <div class="substep-title">安裝 UI/UX 設計技能 frontend-design（選用）</div>
+      <p class="hint" style="margin-bottom:0.8rem;">讓 Claude 做出來的網頁設計更有質感。不裝也能完成今天的工作坊。桌面版 App 不用終端機，下載一個檔案丟給 Claude 就好：</p>
+      <div class="checklist">
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">開 <a href="https://github.com/anthropics/claude-code/blob/main/plugins/frontend-design/skills/frontend-design/SKILL.md" target="_blank" rel="noopener">frontend-design 的 SKILL.md</a>，按檔案頁面右上角的「<strong>Download raw file</strong>」下載，檔名要是 <code>SKILL.md</code></div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">在桌面版 <strong>Code</strong> 分頁，把檔案拖進輸入框（或「<strong>＋ → Add files or photos</strong>」）</div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">對 Claude 說下面這句話（可以直接複製），等它完成</div>
+        </label>
+      </div>
+      <div class="code-block-wrap">
+        <div class="code-block-head">
+          <span class="code-label">對 Claude 說</span>
+          <button type="button" class="copy-btn" onclick="copyCode(this)">複製</button>
+        </div>
+        <pre class="code-block">請把這個檔案安裝成技能，放到我專案資料夾的 .claude/skills/frontend-design/SKILL.md</pre>
+      </div>
+      <p class="hint">放在專案資料夾內，Claude 不用碰資料夾以外的位置，比較不會跳出權限詢問。裝好後，請 Claude 做網頁時它會自動使用。</p>
+
+      <p class="hint" style="margin-top:1.4rem;margin-bottom:0.8rem;"><strong>進階：指令列版</strong>（已經裝好指令列版 Claude Code、習慣用終端機的人）。打開終端機（不是在 Claude 裡面），貼上這一行：</p>
       <div class="code-block-wrap">
         <div class="code-block-head">
           <span class="code-label">終端機指令</span>
           <button type="button" class="copy-btn" onclick="copyCode(this)">複製</button>
         </div>
-        <pre class="code-block">npm install -g @anthropic-ai/claude-code</pre>
+        <pre class="code-block">claude plugin install frontend-design@claude-plugins-official</pre>
       </div>
-      <p class="hint">安裝完成後，在專案資料夾輸入 <code>claude</code> 啟動，第一次會引導你登入帳號。</p>
+      <p class="hint">也可以到 <a href="https://claude.com/plugins/frontend-design" target="_blank" rel="noopener">claude.com/plugins/frontend-design</a>，按「Install in Claude Code」自動複製這行指令。裝好後下次啟動 <code>claude</code> 就會生效。</p>
     </div>
 
     <div class="substep">
