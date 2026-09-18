@@ -336,11 +336,26 @@
           ]
         },
         {
-          "heading": "安裝 UI/UX 設計技能",
+          "heading": "安裝 UI/UX 設計技能 frontend-design（桌面版 App）",
+          "intro": ["新手推薦：不用終端機，下載一個檔案、丟給 Claude 就好（選用，不裝也能完成今天的工作坊）"],
           "bullets": [
-            "先加入官方技能庫：/plugin marketplace add anthropics/skills",
-            "再安裝技能包：/plugin install example-skills@anthropic-agent-skills",
-            "之後說「用 frontend-design 技能幫我優化視覺設計」即可觸發"
+            "① 開 [frontend-design 的 SKILL.md](https://github.com/anthropics/claude-code/blob/main/plugins/frontend-design/skills/frontend-design/SKILL.md)，按檔案頁面右上角的「Download raw file」下載，檔名要是 SKILL.md",
+            "② 在桌面版 Code 分頁，把檔案拖進輸入框（或「＋ → Add files or photos」）",
+            "③ 然後對 Claude 說：「請把這個檔案安裝成技能，放到我專案資料夾的 .claude/skills/frontend-design/SKILL.md」",
+            "放在專案資料夾內，Claude 不用碰資料夾以外的位置，比較不會跳出權限詢問"
+          ]
+        },
+        {
+          "heading": "安裝 UI/UX 設計技能 frontend-design（指令列版）",
+          "intro": ["進階：已經裝好指令列版 Claude Code、習慣用終端機的人"],
+          "layout": "image-right",
+          "bullets": [
+            "打開終端機（不是在 Claude 裡面），貼上：claude plugin install frontend-design@claude-plugins-official",
+            "也可以到 [claude.com/plugins/frontend-design](https://claude.com/plugins/frontend-design)，按「Install in Claude Code」自動複製這行指令",
+            "裝好後下次啟動 claude 就會生效；之後請 Claude 做網頁時，它會自動使用"
+          ],
+          "images": [
+            { "src": "images/workshop/CC_FrontendDesign.png", "caption": "安裝 frontend-design 技能" }
           ]
         }
       ]
