@@ -90,18 +90,12 @@ body { overflow-x: hidden; }
   background: var(--paper-mid);
   margin: 0.6rem 0.7rem;
 }
-.chapter-item .chapter-check {
-  width: 15px; height: 15px;
-  flex-shrink: 0;
-  accent-color: var(--accent2);
-}
 .chapter-item .chapter-num {
   font-family: 'EB Garamond', serif;
   color: var(--accent2);
   min-width: 1.4em;
   flex-shrink: 0;
 }
-.chapter-item.done .chapter-title-text { text-decoration: line-through; opacity: 0.6; }
 .chapter-tag {
   font-family: 'Noto Sans TC', sans-serif;
   font-size: 0.68rem;

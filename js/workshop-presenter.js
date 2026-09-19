@@ -83,18 +83,6 @@ function renderSidebar() {
     li.dataset.id = ch.id;
 
     if (ch.type !== 'break') {
-      const check = document.createElement('input');
-      check.type = 'checkbox';
-      check.className = 'chapter-check';
-      check.checked = storageGet('wsp-done-' + ch.id, '') === '1';
-      check.addEventListener('click', function (e) { e.stopPropagation(); });
-      check.addEventListener('change', function () {
-        storageSet('wsp-done-' + ch.id, check.checked ? '1' : '0');
-        li.classList.toggle('done', check.checked);
-      });
-      li.appendChild(check);
-      if (check.checked) li.classList.add('done');
-
       const num = document.createElement('span');
       num.className = 'chapter-num';
       num.textContent = ch.type === 'appendix' ? '📎' : ch.id;
@@ -454,9 +442,8 @@ document.addEventListener('click', function (e) {
 });
 
 function resetProgress() {
-  if (!confirm('確定要重置本頁的完成勾選、備忘稿與計時記錄嗎？（不會影響章節內容資料）')) return;
+  if (!confirm('確定要重置本頁的備忘稿與計時記錄嗎？（不會影響章節內容資料）')) return;
   chapters.forEach(function (ch) {
-    storageRemove('wsp-done-' + ch.id);
     storageRemove('wsp-notes-' + ch.id);
   });
   storageRemove('wsp-active-chapter');
