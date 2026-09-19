@@ -377,13 +377,30 @@
       "slides": [
         {
           "heading": "網頁好了嗎？",
-          "bullets": ["ChatGPT Canvas／多視窗預覽 personal-brand 網站"]
+          "bullets": ["網頁版 AI 工具，做好網頁後，可以下載網頁檔案。"],
+          "layout": "image-right",
+          "images": [
+            { "src": "images/workshop/webpageview.png", "caption": "預覽網站", "width": "60%" }
+          ]
         },
         {
-          "heading": "兩種發布方式",
+          "heading": "兩種發布方式 I",
+          "layout": "image-right",
           "bullets": [
-            "方式一 直接發布：Copy → Download，或用 Publish artifact 部署到永久網址",
+            "方式一 直接發布：Copy / Download，或用 Publish artifact 部署到永久網址"
+          ],
+          "images": [
+            { "src": "images/workshop/publishartifact.png", "caption": "部署到永久網址", "width": "40%" }
+          ]
+        },
+        {
+          "heading": "兩種發布方式 II",
+          "layout": "image-right",
+          "bullets": [
             "方式二 複製存檔：把 AI 輸出的完整 HTML 存成 index.html，用瀏覽器直接打開即可用"
+          ],
+          "images": [
+            { "src": "images/workshop/downloadhtmlfile.png", "caption": "下載 HTML 檔案", "width": "50%" }
           ]
         },
         {
@@ -397,7 +414,11 @@
               { "icon": "📮", "label": "域名\n（路牌地址）" }
             ]
           },
-          "bullets": []
+          "bullets": [
+            "主機：提供網站運行的環境，例如虛擬主機或雲端伺服器",
+            "網站：存放網頁檔案的地方",
+            "域名：用來訪問網站的地址"
+          ]
         },
         {
           "heading": "零安裝 vs 開發者方案",
@@ -411,7 +432,168 @@
     {
       "id": "8",
       "type": "chapter",
+      "title": "零安裝：GitHub 網頁版上架",
+      "tag": "🌱 零安裝方案",
+      "summary": "不裝任何工具，用 GitHub 網頁版建立 Repo、上傳檔案、開啟 Pages，以及之後怎麼新增、修改檔案",
+      "student_anchors": ["#step3"],
+      "slides": [
+        {
+          "heading": "初次建立：新增 Repository",
+          "layout": "image-right",
+          "bullets": [
+            "① 登入 [GitHub](https://github.com)",
+            "② 點右上角「＋」→ New repository",
+            "③ Repository name 填入站台名稱（限英文、數字）",
+            "④ 選 Public，勾選「Add a README file」，按 Create repository"
+          ],
+          "images": [
+            { "src": "images/workshop/gh-web/01-new-repo.png", "caption": "新增 Repository", "width": "34%" }
+          ]
+        },
+        {
+          "heading": "上傳網站檔案",
+          "layout": "image-right",
+          "bullets": [
+            "① 進入 repository 後，點「Add file」→「Upload files」",
+            "② 把 index.html 拖曳上傳，若有 photo.jpg 也一起上傳"
+          ],
+          "images": [
+            { "src": "images/workshop/gh-web/02-add-file-upload.png", "caption": "Add file → Upload files", "width": "50%" }
+          ]
+        },
+        {
+          "heading": "確認上傳（Commit changes）",
+          "bullets": [
+            "① 下方 Commit changes 直接按綠色按鈕確認",
+            "② 等待上傳完成"
+          ],
+          "images": [
+            { "src": "images/workshop/gh-web/03-commit-changes.png", "caption": "按綠色按鈕確認", "width": "44%" },
+            { "src": "images/workshop/gh-web/04-uploading.png", "caption": "等待上傳完成", "width": "44%" }
+          ]
+        },
+        {
+          "heading": "上傳完成",
+          "layout": "image-right",
+          "bullets": [
+            "看到這個畫面，表示檔案已經上傳到 repository"
+          ],
+          "images": [
+            { "src": "images/workshop/gh-web/05-upload-done.png", "caption": "上傳完成畫面", "width": "50%" }
+          ]
+        },
+        {
+          "heading": "開啟 GitHub Pages I：Settings",
+          "bullets": [
+            "打開 repository 的 Settings"
+          ],
+          "images": [
+            { "src": "images/workshop/gh-web/06-settings.png", "caption": "Settings", "width": "80%" }
+          ]
+        },
+        {
+          "heading": "開啟 GitHub Pages II：Pages",
+          "layout": "image-right",
+          "bullets": [
+            "在左邊選單點選 Pages"
+          ],
+          "images": [
+            { "src": "images/workshop/gh-web/07-pages.png", "caption": "Pages", "width": "21%" }
+          ]
+        },
+        {
+          "heading": "選擇 Branch 並儲存",
+          "bullets": [
+            "① 在 Branch 下拉選單中選擇 main，再點選 Save",
+            "② 畫面顯示「網站建置中」"
+          ],
+          "images": [
+            { "src": "images/workshop/gh-web/08-branch-main-save.png", "caption": "Branch 選 main → Save", "width": "40%" },
+            { "src": "images/workshop/gh-web/09-building.png", "caption": "網站建置中", "width": "40%" }
+          ]
+        },
+        {
+          "heading": "網站上線",
+          "layout": "image-right",
+          "bullets": [
+            "等待約 1–3 分鐘後，打開 https://你的帳號名稱.github.io/repo名稱"
+          ],
+          "images": [
+            { "src": "images/workshop/gh-web/10-open-site.png", "caption": "打開你的網站", "width": "50%" }
+          ]
+        },
+        {
+          "heading": "之後新增檔案",
+          "bullets": [
+            "① 進入 repository 後，點「Add file」→「Upload files」",
+            "② 把目標檔案拖曳上傳，Commit changes 按綠色按鈕確認",
+            "③ 橘色點點表示自動部署進行中，部署完成會出現完成畫面"
+          ],
+          "images": [
+            { "src": "images/workshop/gh-web/11-deploying-dot.png", "caption": "橘色點點：部署進行中", "width": "48%" },
+            { "src": "images/workshop/gh-web/05-upload-done.png", "caption": "部署完成", "width": "48%" }
+          ]
+        },
+        {
+          "heading": "修改檔案 I：進入編輯模式",
+          "bullets": [
+            "① 在 Code 頁籤直接點選你要修改的檔案",
+            "② 點選右手邊的鉛筆",
+            "③ 進入 Edit 模式"
+          ],
+          "images": [
+            { "src": "images/workshop/gh-web/12-edit-click-file.png", "caption": "點選要修改的檔案", "width": "29%" },
+            { "src": "images/workshop/gh-web/13-edit-pencil.png", "caption": "點鉛筆", "width": "29%" },
+            { "src": "images/workshop/gh-web/14-edit-mode.png", "caption": "Edit 模式", "width": "29%" }
+          ]
+        },
+        {
+          "heading": "修改檔案 II：貼上並儲存",
+          "layout": "image-right",
+          "bullets": [
+            "① 將 AI 幫你改好的檔案內容全選，直接貼上覆蓋",
+            "② 完成後，點選右手邊的綠色按鈕 commit changes"
+          ],
+          "images": [
+            { "src": "images/workshop/gh-web/15-edit-commit-btn.png", "caption": "commit changes", "width": "50%" }
+          ]
+        },
+        {
+          "heading": "修改檔案 III：填寫說明並完成",
+          "bullets": [
+            "① 可以輸入說明當作修改記錄，再按右下綠色按鈕 commit changes",
+            "② 回到檔案頁面，表示修改完成"
+          ],
+          "images": [
+            { "src": "images/workshop/gh-web/16-edit-commit-dialog.png", "caption": "輸入說明再 commit", "width": "24%" },
+            { "src": "images/workshop/gh-web/17-edit-done.png", "caption": "修改完成", "width": "42%" }
+          ]
+        },
+        {
+          "heading": "✅ 成功確認清單",
+          "bullets": [
+            "網址可以正常打開",
+            "姓名和服務說明正確顯示",
+            "在手機上看版面沒有跑掉",
+            "聯絡方式 Email 可以點擊",
+            "頁面沒有明顯錯字",
+            "都確認好了，把網址貼到 LINE 群組分享你的作品"
+          ]
+        },
+        {
+          "heading": "若遇到 404 頁面",
+          "bullets": [
+            "通常是因為 repository 名稱格式不對，或是檔案還沒處理完",
+            "等 3 分鐘後重新整理，通常就好了"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "type": "chapter",
       "title": "Git & GitHub 設定",
+      "tag": "🛠 開發者方案",
       "summary": "安裝 Git（Windows / Mac 分流步驟）、設定身份、GitHub CLI、授權登入",
       "student_anchors": ["#install"],
       "slides": [
@@ -458,9 +640,10 @@
       ]
     },
     {
-      "id": "9",
+      "id": "10",
       "type": "chapter",
       "title": "上架到 GitHub",
+      "tag": "🛠 開發者方案",
       "summary": "建立 Repo、上傳檔案、修改檔案（含截圖步驟）",
       "student_anchors": ["#step3"],
       "slides": [
@@ -491,7 +674,7 @@
       ]
     },
     {
-      "id": "10",
+      "id": "11",
       "type": "chapter",
       "title": "優化 Prompt",
       "summary": "導向既有工具內建的「調整視覺風格 / 修改文字內容 / 加入照片」快速範本按鈕",
@@ -522,7 +705,7 @@
       ]
     },
     {
-      "id": "11",
+      "id": "12",
       "type": "chapter",
       "title": "網域 & PWA",
       "summary": "設定自訂 Domain、PWA 站台說明",
@@ -558,7 +741,7 @@
       ]
     },
     {
-      "id": "12",
+      "id": "13",
       "type": "chapter",
       "title": "後續行動 & 結尾",
       "summary": "課後建議（補推薦語、加照片、設網域等）、填問卷、Thank you",
