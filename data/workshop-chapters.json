@@ -387,7 +387,7 @@
           "heading": "兩種發布方式 I",
           "layout": "image-right",
           "bullets": [
-            "方式一 直接發布：Copy / Download，或用 Publish artifact 部署到永久網址"
+            "方式一 直接發布：用 Publish artifact 部署到永久網址"
           ],
           "images": [
             { "src": "images/workshop/publishartifact.png", "caption": "部署到永久網址", "width": "40%" }
@@ -397,7 +397,7 @@
           "heading": "兩種發布方式 II",
           "layout": "image-right",
           "bullets": [
-            "方式二 複製存檔：把 AI 輸出的完整 HTML 存成 index.html，用瀏覽器直接打開即可用"
+            "方式二 Copy / Download 複製存檔：把 AI 輸出的完整 HTML 存成 index.html，用瀏覽器直接打開即可用"
           ],
           "images": [
             { "src": "images/workshop/downloadhtmlfile.png", "caption": "下載 HTML 檔案", "width": "50%" }
@@ -418,6 +418,13 @@
             "主機：提供網站運行的環境，例如虛擬主機或雲端伺服器",
             "網站：存放網頁檔案的地方",
             "域名：用來訪問網站的地址"
+          ]
+        },
+        {
+          "heading": "網址結構",
+          "bullets": [
+            "innerwork-saori.github.io/heysaori/ → 前段是站台名稱，後段是 repository 名稱",
+            "檔案要存成 index.html"
           ]
         },
         {
@@ -531,7 +538,7 @@
           ],
           "images": [
             { "src": "images/workshop/gh-web/11-deploying-dot.png", "caption": "橘色點點：部署進行中", "width": "48%" },
-            { "src": "images/workshop/gh-web/05-upload-done.png", "caption": "部署完成", "width": "48%" }
+            { "src": "images/workshop/gh-web/11-deploying-dot02.png", "caption": "部署完成", "width": "48%" }
           ]
         },
         {
@@ -601,7 +608,8 @@
           "heading": "安裝 Git（Windows）",
           "bullets": ["git-scm.com → Install for Windows → 下載 Git for Windows/x64 Setup"],
           "images": [
-            { "src": "images/workshop/git-install-windows.jpg", "caption": "Git for Windows 安裝畫面" }
+            { "src": "images/workshop/git-install-windows.jpg", "caption": "Git for Windows 安裝畫面" },
+            { "src": "images/workshop/git-install-windows-02.png", "caption": "Git for Windows 安裝畫面" }
           ]
         },
         {
@@ -610,6 +618,10 @@
             "取消勾選「Git GUI 工具」",
             "勾選「check daily for git for windows updates」",
             "預設編輯器選「Use Visual Studio Code as Git's default editor」"
+          ],
+          "images": [
+            { "src": "images/workshop/gitsetup01.png", "caption": "Windows 安裝選項" },
+            { "src": "images/workshop/gitsetup02.png", "caption": "Windows 安裝選項" }
           ]
         },
         {
@@ -617,6 +629,9 @@
           "bullets": [
             "先裝 Homebrew（官網複製安裝指令貼到 Terminal）",
             "再執行：brew install git"
+          ],
+          "images": [
+            { "src": "images/workshop/Mac_git.png", "caption": "Mac 安裝 Git" }
           ]
         },
         {
@@ -634,7 +649,7 @@
             "流程：選 HTTPS → Yes → 選瀏覽器登入 → 複製 one-time code → 瀏覽器授權"
           ],
           "images": [
-            { "src": "images/workshop/gh-auth-login.jpg", "caption": "gh auth login 終端機畫面" }
+            { "src": "images/workshop/gh-auth-login.png", "caption": "gh auth login 終端機畫面" }
           ]
         }
       ]
@@ -648,27 +663,21 @@
       "student_anchors": ["#step3"],
       "slides": [
         {
-          "heading": "網址結構",
-          "bullets": [
-            "innerwork-saori.github.io/heysaori/ → 前段是站台名稱，後段是 repository 名稱",
-            "檔案要存成 index.html"
-          ]
-        },
-        {
           "heading": "VS Code 操作",
           "bullets": [
             "開啟資料夾 → Source Control 面板 → Initialize Repository → Publish to GitHub",
             "選 Publish to GitHub public repository → 勾選要上傳的檔案 → Open on GitHub 確認"
           ],
           "images": [
-            { "src": "images/workshop/vscode-publish.png", "caption": "VS Code Publish to GitHub" }
+            { "src": "images/workshop/vscode-publish.png", "caption": "VS Code Publish to GitHub" },
+            { "src": "images/workshop/vscode-publish01.png", "caption": "VS Code Publish to GitHub" },
+            { "src": "images/workshop/vscode-publish02.png", "caption": "VS Code Publish to GitHub" }
           ]
         },
         {
           "heading": "三步驟總結",
           "bullets": [
-            "①建立 Repo ②上傳檔案 ③修改檔案",
-            "延伸資源：GitHub 操作說明書；上線後加入 LINE 群組分享作品連結"
+            "①建立 Repo ②上傳檔案 ③修改檔案"
           ]
         }
       ]
