@@ -22,7 +22,7 @@ const QUICK_LINKS = [
   { name: '工具 Prompt 產生器', url: 'Tool_prompt_generator.html' },
   { name: 'GitHub 說明書', url: 'https://hackmd.io/@Socrates/rJvFgZMhbe' },
   { name: 'LINE 群組', url: 'https://line.me/ti/g/eJ9lnlPpD6' },
-  { name: '課後問卷', url: null }
+  { name: '課後問卷', url: 'https://forms.gle/BL2t1Vfg8G2zs4cC9' }
 ];
 
 let chapters = [];
@@ -46,6 +46,7 @@ function storageRemove(key) {
 }
 
 async function init() {
+  initStageTheme();
   try {
     const res = await fetch('data/workshop-chapters.json');
     const data = await res.json();
@@ -303,6 +304,68 @@ function toggleStageMode() {
   }
 }
 
+/* ── STAGE THEME（投影配色；色值定義在 CSS 的 STAGE THEMES 區塊）── */
+const STAGE_THEMES = [
+  { id: 'ink', name: '墨夜' },
+  { id: 'paper', name: '紙本' },
+  { id: 'forest', name: '深林' },
+  { id: 'dusk', name: '暮藍' },
+  { id: 'contrast', name: '高對比' }
+];
+let stageThemeId = STAGE_THEMES[0].id;
+
+function renderThemeMenu() {
+  const menu = document.getElementById('themeMenu');
+  if (!menu) return;
+  menu.innerHTML = STAGE_THEMES.map(function (t) {
+    return '<button type="button" class="theme-option" role="menuitemradio" aria-checked="false" data-theme-id="' + t.id + '">' +
+      '<span class="theme-swatch" data-theme="' + t.id + '" aria-hidden="true">Aa</span>' +
+      '<span>' + t.name + '</span></button>';
+  }).join('');
+  menu.addEventListener('click', function (e) {
+    const opt = e.target.closest('.theme-option');
+    if (!opt) return;
+    applyStageTheme(opt.dataset.themeId);
+    closeThemeMenu();
+  });
+}
+
+function applyStageTheme(id) {
+  const theme = STAGE_THEMES.find(function (t) { return t.id === id; }) || STAGE_THEMES[0];
+  stageThemeId = theme.id;
+  document.documentElement.setAttribute('data-stage-theme', theme.id);
+  storageSet('wsp-stage-theme', theme.id);
+  const nameEl = document.getElementById('themeName');
+  if (nameEl) nameEl.textContent = theme.name;
+  document.querySelectorAll('.theme-option').forEach(function (opt) {
+    opt.setAttribute('aria-checked', opt.dataset.themeId === theme.id ? 'true' : 'false');
+  });
+}
+
+function cycleStageTheme() {
+  const i = STAGE_THEMES.findIndex(function (t) { return t.id === stageThemeId; });
+  applyStageTheme(STAGE_THEMES[(i + 1) % STAGE_THEMES.length].id);
+}
+
+function initStageTheme() {
+  renderThemeMenu();
+  applyStageTheme(storageGet('wsp-stage-theme', STAGE_THEMES[0].id));
+}
+
+function toggleThemeMenu() {
+  const menu = document.getElementById('themeMenu');
+  if (!menu) return;
+  const open = menu.hidden;
+  menu.hidden = !open;
+  document.getElementById('themeBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+function closeThemeMenu() {
+  const menu = document.getElementById('themeMenu');
+  if (!menu || menu.hidden) return;
+  menu.hidden = true;
+  document.getElementById('themeBtn').setAttribute('aria-expanded', 'false');
+}
+
 function goToStop(delta) {
   const next = stopPos + delta;
   if (next < 0 || next >= stops.length) return;
@@ -375,12 +438,19 @@ document.addEventListener('keydown', function (e) {
     if (!document.getElementById('qrModal').hidden) { closeQr(); return; }
     if (!document.getElementById('linksPanel').hidden) { closeLinksPanel(); return; }
     if (!document.getElementById('timerOverlay').hidden) { cancelTimer(); return; }
+    if (!document.getElementById('themeMenu').hidden) { closeThemeMenu(); return; }
     if (stageMode) toggleStageMode();
     return;
   }
   if (!stageMode) return;
   if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); goToStop(1); }
   else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); goToStop(-1); }
+  else if ((e.key === 't' || e.key === 'T') && !e.ctrlKey && !e.metaKey && !e.altKey) { cycleStageTheme(); }
+});
+
+// Clicking anywhere outside the theme menu closes it.
+document.addEventListener('click', function (e) {
+  if (!e.target.closest('.stage-theme-wrap')) closeThemeMenu();
 });
 
 function resetProgress() {

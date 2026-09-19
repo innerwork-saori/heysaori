@@ -52,6 +52,10 @@
     <button type="button" class="stage-btn" onclick="startTimer(5)" title="5 分鐘倒數">⏱ 5</button>
     <button type="button" class="stage-btn" onclick="startTimer(10)" title="10 分鐘倒數">⏱ 10</button>
     <button type="button" class="stage-btn" onclick="openLinksPanel()" title="快速連結">🔗</button>
+    <span class="stage-theme-wrap">
+      <button type="button" id="themeBtn" class="stage-btn" onclick="toggleThemeMenu()" aria-haspopup="true" aria-expanded="false" aria-controls="themeMenu" title="切換配色（T 鍵）">🎨 <span id="themeName">墨夜</span></button>
+      <div id="themeMenu" class="theme-menu" role="menu" aria-label="投影配色" hidden></div>
+    </span>
     <span class="stage-sep"></span>
     <button type="button" class="stage-btn stage-exit" onclick="toggleStageMode()" title="退出投影模式（Esc）">✕ 退出投影</button>
   </div>
