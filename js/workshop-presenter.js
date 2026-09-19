@@ -6,8 +6,14 @@ const ANCHOR_LABELS = {
   '#step1-tool': 'Step 1 工具',
   '#step2': 'Step 2 生成',
   '#faq': '❓ FAQ',
+  '#paths': '🧭 選路線',
   '#step3': 'Step 3 上架',
   '#install': '⚙️ 安裝環境',
+  '#install-tools': '⚙️ 安裝環境 › 安裝工具',
+  '#install-claude': '⚙️ 安裝環境 › Claude Code',
+  '#install-skill': '⚙️ 安裝環境 › 設計技能',
+  '#install-gh': '⚙️ 安裝環境 › GitHub CLI',
+  '#install-publish': '⚙️ 安裝環境 › 上傳網站',
   '#step4': 'Step 4 優化'
 };
 
@@ -240,8 +246,8 @@ function renderChapterView(ch) {
 
   const anchorsHtml = (ch.student_anchors || []).map(function (a) {
     const label = ANCHOR_LABELS[a] || a;
-    return '<a href="' + STUDENT_PAGE + a + '" target="_blank" rel="noopener">🔗 學員頁：' + label + '</a>';
-  }).join('');
+    return '<a href="' + STUDENT_PAGE + a + '" target="_blank" rel="noopener">🔗 學習單：' + label + '</a>';
+  }).join('') || (ch.handout_note ? '<span class="handout-note">📄 ' + escapeHtml(ch.handout_note) + '</span>' : '');
 
   const slideHtml = (ch.slides && ch.slides.length)
     ? ch.slides.map(function (slide) {
@@ -306,6 +312,13 @@ function goToStop(delta) {
   renderStageView(stop);
 }
 
+// Tells the audience which part of the student handout matches this chapter.
+function handoutText(ch) {
+  const labels = (ch.student_anchors || []).map(function (a) { return ANCHOR_LABELS[a] || a; });
+  if (labels.length) return '📄 學習單：' + labels.join('、');
+  return ch.handout_note ? '📄 ' + ch.handout_note : '';
+}
+
 function renderStageView(stop) {
   const el = document.getElementById('stageContent');
   const pos = document.getElementById('stagePosition');
@@ -321,8 +334,10 @@ function renderStageView(stop) {
   }
 
   const slide = (ch.slides && ch.slides[stop.slideIndex]) || {};
+  const handout = handoutText(ch);
   const eyebrow = (ch.type === 'appendix' ? '附錄' : ('Chapter ' + ch.id)) + ' · ' + escapeHtml(ch.title) +
-    (ch.tag ? ' <span class="chapter-tag chapter-tag--stage">' + escapeHtml(ch.tag) + '</span>' : '');
+    (ch.tag ? ' <span class="chapter-tag chapter-tag--stage">' + escapeHtml(ch.tag) + '</span>' : '') +
+    (handout ? ' <span class="stage-handout">' + escapeHtml(handout) + '</span>' : '');
   const titleText = slide.heading || ch.title;
 
   el.innerHTML =

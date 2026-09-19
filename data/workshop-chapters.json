@@ -206,7 +206,7 @@
       "type": "chapter",
       "title": "實作時間 #1",
       "summary": "導向「一頁式網站 Prompt 產生器」工具（含工具 Prompt 產生器路線 B）",
-      "student_anchors": ["#step1", "#step1-tool"],
+      "student_anchors": ["#step1", "#step1-tool", "#step2"],
       "slides": [
         {
           "heading": "工具入口",
@@ -218,7 +218,7 @@
           "heading": "路線 A：網站 Prompt 產生器 走查",
           "bullets": [
             "填基本介紹 → 目標客戶／痛點／服務 → 信任感元素 → 聯絡方式 → 設計偏好 → 字型 → 按「產生 Prompt」複製",
-            "設計風格選項：極簡清新／專業科技／雜誌編輯／插畫親切／大膽前衛／復古懷舊／年輕潮流／高級精品／活潑多彩／自訂"
+            "設計風格選項：極簡清新／專業科技／雜誌編輯／插畫親切／大膽前衛／復古懷舊／年輕潮流／高級精品／活潑多彩／柔角新粗獷／自訂"
           ]
         },
         {
@@ -313,7 +313,7 @@
       "title": "安裝環境",
       "tag": "💳 付費限定",
       "summary": "安裝 Claude Code、安裝 UI/UX 設計技能（frontend-design skill）",
-      "student_anchors": ["#install"],
+      "student_anchors": ["#install-claude", "#install-skill"],
       "slides": [
         {
           "heading": "安裝 Claude Code（桌面版 App）",
@@ -373,7 +373,7 @@
       "type": "chapter",
       "title": "部署方案選擇",
       "summary": "直接發布 vs 複製存檔；零安裝方案 vs 開發者方案",
-      "student_anchors": ["#step3", "#install"],
+      "student_anchors": ["#paths"],
       "slides": [
         {
           "heading": "網頁好了嗎？",
@@ -423,7 +423,7 @@
         {
           "heading": "網址結構",
           "bullets": [
-            "innerwork-saori.github.io/heysaori/ → 前段是站台名稱，後段是 repository 名稱",
+            "innerwork-saori.github.io/heysaori/ → 前段是你的 GitHub 帳號名稱，後段是 repository 名稱（建立 Repo 時自己取）",
             "檔案要存成 index.html"
           ]
         },
@@ -450,7 +450,7 @@
           "bullets": [
             "① 登入 [GitHub](https://github.com)",
             "② 點右上角「＋」→ New repository",
-            "③ Repository name 填入站台名稱（限英文、數字）",
+            "③ Repository name 填入 repository 名稱（限英文、數字，會變成網址的後段）",
             "④ 選 Public，勾選「Add a README file」，按 Create repository"
           ],
           "images": [
@@ -602,7 +602,7 @@
       "title": "Git & GitHub 設定",
       "tag": "🛠 開發者方案",
       "summary": "安裝 Git（Windows / Mac 分流步驟）、設定身份、GitHub CLI、授權登入",
-      "student_anchors": ["#install"],
+      "student_anchors": ["#install-tools", "#install-gh"],
       "slides": [
         {
           "heading": "安裝 Git（Windows）",
@@ -627,11 +627,11 @@
         {
           "heading": "Mac 安裝 Git",
           "bullets": [
-            "先裝 Homebrew（官網複製安裝指令貼到 Terminal）",
-            "再執行：brew install git"
+            "大多數 Mac 已內建 Git：打開終端機輸入 git --version，若跳出安裝提示，點「Install」即可",
+            "沒有跳出提示的話，改用 Homebrew（下圖）：先裝 Homebrew（官網複製安裝指令貼到 Terminal），再執行 brew install git"
           ],
           "images": [
-            { "src": "images/workshop/Mac_git.png", "caption": "Mac 安裝 Git" }
+            { "src": "images/workshop/Mac_git.png", "caption": "備案：用 Homebrew 安裝 Git" }
           ]
         },
         {
@@ -660,7 +660,7 @@
       "title": "上架到 GitHub",
       "tag": "🛠 開發者方案",
       "summary": "建立 Repo、上傳檔案、修改檔案（含截圖步驟）",
-      "student_anchors": ["#step3"],
+      "student_anchors": ["#install-publish"],
       "slides": [
         {
           "heading": "VS Code 操作",
@@ -719,6 +719,7 @@
       "title": "網域 & PWA",
       "summary": "設定自訂 Domain、PWA 站台說明",
       "student_anchors": [],
+      "handout_note": "課堂講解，不在學習單",
       "slides": [
         {
           "heading": "設定自訂網域",
@@ -755,6 +756,7 @@
       "title": "後續行動 & 結尾",
       "summary": "課後建議（補推薦語、加照片、設網域等）、填問卷、Thank you",
       "student_anchors": [],
+      "handout_note": "課堂講解，不在學習單",
       "slides": [
         {
           "heading": "課後可以繼續做的事",
