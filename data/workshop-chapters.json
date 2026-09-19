@@ -722,30 +722,39 @@
       "handout_note": "課堂講解，不在學習單",
       "slides": [
         {
+          "heading": "GitHub Pages vs Netlify (I)",
+          "layout": "image-right",
+          "bullets": [
+            "Pages 適合完全新手／第一個網站；Netlify 適合已有網站想升級／有內建表單"
+          ],
+          "images": [
+            { "src": "images/workshop/githubpage_netlify.png", "caption": "GitHub Pages vs Netlify 比較", "width": "60%" }
+          ]
+        },
+        {
+          "heading": "GitHub Pages vs Netlify (II)",
+          "bullets": [
+            "建議順序：①先用 GitHub Pages 上架 → ②再學 Netlify 能多做什麼 → ③進階 Netlify 功能"
+          ],
+          "images": [
+            { "src": "images/workshop/githubpage_netlify02.png", "caption": "GitHub Pages vs Netlify", "width": "80%" }
+          ]
+        },
+        {
           "heading": "設定自訂網域",
           "bullets": [
             "GitHub Pages → Settings → Custom domain → DNS check → TLS certificate（最多等 15 分鐘～1 小時）→ Enforce HTTPS"
           ],
           "images": [
-            { "src": "images/workshop/custom-domain.png", "caption": "GitHub Pages 自訂網域設定" }
+            { "src": "images/workshop/custom-domain.png", "caption": "GitHub Pages 自訂網域設定", "width": "60%"  }
           ]
         },
         {
-          "heading": "GitHub Pages vs Netlify",
+          "heading": "什麼是 PWA？",
           "bullets": [
-            "Pages 適合完全新手／第一個網站；Netlify 適合已有網站想升級／有內建表單",
-            "建議順序：①先用 GitHub Pages 上架 → ②再學 Netlify 能多做什麼 → ③進階 Netlify 功能"
-          ]
-        },
-        {
-          "heading": "PWA 站台說明",
-          "bullets": ["口頭補充說明"]
-        },
-        {
-          "heading": "（進階）Netlify 部署走查",
-          "bullets": ["選 repo → 設定 build 指令與發布路徑 → 看 Deploy log"],
-          "images": [
-            { "src": "images/workshop/netlify-deploy.png", "caption": "Netlify 部署流程" }
+            "Progressive Web App（PWA）是一種可以像原生應用程式一樣安裝到裝置上的網站，具備離線使用、推播通知等功能",
+            "安裝 PWA 後，使用者可以像使用原生 App 一樣從主畫面啟動網站，並在離線或網路不穩定的情況下仍能使用部分功能",
+            "PWA 的核心特性包括：離線使用、推播通知、安裝到主畫面、快速響應等，使網站體驗更接近原生應用程式"
           ]
         }
       ]
