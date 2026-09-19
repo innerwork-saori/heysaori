@@ -153,10 +153,27 @@
           }
         },
         {
-          "heading": "今天需要安裝的工具（全部免費）",
+          "heading": "今天可能需要安裝的工具",
           "bullets": [
-            "Git（網站的存檔紀錄）",
-            "VS Code（網站編輯器）／Claude Code／Codex （三擇一）"
+            "零安裝路線：不用裝任何東西",
+            "開發者路線（免費）：Git（網站的存檔紀錄）、VS Code（網站編輯器）",
+            "AI 開發工具（選用，需付費方案）：Claude Code／Codex，沒有也不影響今天的課"
+          ]
+        },
+        {
+          "heading": "先選路線：你今天走哪一條？",
+          "visual": {
+            "type": "row",
+            "connector": "vs",
+            "items": [
+              { "icon": "🌱", "label": "零安裝\n免費・網頁版・新手推薦" },
+              { "icon": "🛠", "label": "開發者\nGit＋VS Code・想持續開發" }
+            ]
+          },
+          "bullets": [
+            "領取 AI 工作坊學習單：LINE 輸入「AI」或「tool」，或直接在瀏覽器輸入 [https://lab.heysaori.com/vibe-workshop-handout.html](https://lab.heysaori.com/vibe-workshop-handout.html#paths)，看「先選路線」",
+            "開發者路線：休息時間、實作等 AI 生成時，照學習單「安裝環境」先裝好",
+            "裝超過 10 分鐘還卡住 → 退回零安裝，先把網站上線"
           ]
         }
       ]
@@ -165,7 +182,7 @@
       "id": "break1",
       "type": "break",
       "title": "☕ 休息 #1",
-      "summary": "QA & 休息",
+      "summary": "QA & 休息（開發者路線：照學習單裝 Git、VS Code）",
       "student_anchors": [],
       "slides": []
     },
@@ -312,9 +329,18 @@
       "type": "chapter",
       "title": "安裝環境",
       "tag": "💳 付費限定",
-      "summary": "安裝 Claude Code、安裝 UI/UX 設計技能（frontend-design skill）",
+      "summary": "講一張帶過，其餘投影片留作備查：安裝 Claude Code、UI/UX 設計技能（frontend-design skill）",
       "student_anchors": ["#install-claude", "#install-skill"],
       "slides": [
+        {
+          "heading": "Claude Code 安裝（選用）",
+          "bullets": [
+            "需要 Claude 付費方案；沒有也不影響今天的課",
+            "安裝步驟都在學習單「安裝環境」，休息時間自己裝就好",
+            "裝不起來：退回零安裝路線，先把網站上線",
+            "後面幾張是安裝步驟與指令，需要時再回來查"
+          ]
+        },
         {
           "heading": "安裝 Claude Code（桌面版 App）",
           "intro": ["新手推薦：不用碰終端機，跟安裝一般軟體一樣，下載、打開、登入"],
@@ -364,7 +390,7 @@
       "id": "break2",
       "type": "break",
       "title": "☕ 休息 #2",
-      "summary": "QA & 休息",
+      "summary": "QA & 休息（開發者路線：照學習單裝 Claude Code，選用）",
       "student_anchors": [],
       "slides": []
     },
