@@ -28,8 +28,10 @@
   <div class="nav-title">AI 一頁式網站工作坊</div>
 </nav>
 
-<!-- ANCHOR NAV -->
-<div class="anchor-nav">
+<!-- STICKY TOOLBAR: 章節錨點 + 搜尋 -->
+<div class="page-tools" id="pageTools">
+<div class="tools-row">
+<nav class="anchor-nav" id="anchorNav" aria-label="學習單章節">
   <a href="#tools" class="anchor-link">🧰 工具準備</a>
   <span class="anchor-sep">·</span>
   <a href="#structure" class="anchor-link">📋 架構</a>
@@ -42,6 +44,8 @@
   <span class="anchor-sep">·</span>
   <a href="#faq" class="anchor-link">❓ FAQ</a>
   <span class="anchor-sep">·</span>
+  <a href="#paths" class="anchor-link">🧭 選路線</a>
+  <span class="anchor-sep">·</span>
   <a href="#step3" class="anchor-link">Step 3 上架</a>
   <span class="anchor-sep">·</span>
   <a href="#install" class="anchor-link">⚙️ 安裝環境</a>
@@ -49,16 +53,19 @@
   <a href="#step4" class="anchor-link">Step 4 優化</a>
   <span class="anchor-sep">·</span>
   <a href="#ref" class="anchor-link">🔧 速查</a>
+</nav>
+<button type="button" id="searchToggle" class="search-toggle" aria-expanded="false" aria-controls="searchBar" aria-label="搜尋學習單">🔍<span class="search-toggle-text"> 搜尋</span></button>
 </div>
 
-<!-- SEARCH -->
-<div class="search-bar">
+<!-- SEARCH（點右上「搜尋」展開，浮在內容上方） -->
+<div id="searchBar" class="search-bar">
   <form id="searchForm" class="search-form" role="search">
     <input id="searchInput" class="search-input" type="text" placeholder="找不到助教？搜尋關鍵字，例如：git 安裝" autocomplete="off">
     <button type="submit" class="search-btn">🔍 搜尋</button>
   </form>
+  <div id="searchMsg" class="search-msg">找不到相關內容，試試其他關鍵字，或直接到 LINE 群組發問。</div>
 </div>
-<div id="searchMsg" class="search-msg">找不到相關內容，試試其他關鍵字，或直接到 LINE 群組發問。</div>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -324,11 +331,37 @@
         <div class="style-desc">輕鬆・有品牌個性<br>插畫主視覺、柔和配色</div>
       </div>
       <div class="style-card">
+        <div class="style-area">bold</div>
+        <div class="style-name">大膽前衛風</div>
+        <div class="style-desc">強烈・吸睛・有設計感<br>粗字體、強對比、故意不那麼工整</div>
+      </div>
+      <div class="style-card">
         <div class="style-area">retro</div>
         <div class="style-name">復古懷舊風</div>
-        <div class="style-desc">溫暖・有年代感<br>復古配色、褪色質感裝飾</div>
+        <div class="style-desc">溫暖・有年代感<br>復古配色、襯線字、舊感材質裝飾</div>
+      </div>
+      <div class="style-card">
+        <div class="style-area">trendy</div>
+        <div class="style-name">年輕潮流風</div>
+        <div class="style-desc">年輕・亮眼・偏流行感<br>金屬感、亮色、高反差、未來感</div>
+      </div>
+      <div class="style-card">
+        <div class="style-area">luxury</div>
+        <div class="style-name">高級精品風</div>
+        <div class="style-desc">高級・精緻・質感導向<br>大圖、細緻字體、節制配色</div>
+      </div>
+      <div class="style-card">
+        <div class="style-area">colorful</div>
+        <div class="style-name">活潑多彩風</div>
+        <div class="style-desc">友善・熱鬧・適合活動或教育<br>多色系、圓角、明亮插圖</div>
+      </div>
+      <div class="style-card">
+        <div class="style-area">soft neo-brutalism</div>
+        <div class="style-name">柔角新粗獷風</div>
+        <div class="style-desc">大膽但不刺眼・有個性有溫度<br>粗黑邊框＋圓角、錯位陰影、高對比</div>
       </div>
     </div>
+    <p class="hint" style="margin-top:1.4rem;">以上都不合適，Prompt 產生器裡可以選「自訂風格」，用自己的話描述。</p>
   </div>
 </section>
 
@@ -344,6 +377,8 @@
       <span class="url-label">工具網址</span>
       <a href="https://claude.ai" target="_blank" rel="noopener" class="url-link">claude.ai</a>
     </div>
+
+    <p class="hint" style="margin-bottom:1.2rem;">💡 用 ChatGPT、Gemini 等其他 AI 也可以：步驟一樣，貼上 Prompt 後請它輸出完整 HTML，再存成 <code>index.html</code>。下面以 Claude 示範。</p>
 
     <div class="checklist">
       <label class="check-item">
@@ -379,19 +414,7 @@
       <div class="note-item"><span class="note-q">做出來不是想要的？</span>確認規格說明是否夠清楚（Garbage In, Garbage Out）</div>
     </div>
 
-    <div class="section-label" style="margin-top:2.5rem;">可選：加入個人照片</div>
-    <p class="hint" style="margin-top:0.3rem;margin-bottom:0.8rem;">先用 <a href="https://cloudconvert.com" target="_blank" rel="noopener">CloudConvert</a> 將照片轉成 <code>.webp</code> 格式，上傳到 GitHub 取得網址後，貼以下指令給 Claude：</p>
-    <div class="code-block-wrap">
-      <div class="code-block-head">
-        <span class="code-label">prompt 範例</span>
-        <button type="button" class="copy-btn" onclick="copyCode(this)">複製</button>
-      </div>
-      <pre class="code-block">請在 Hero 區塊加入我的個人照片。
-https://你的帳號.github.io/你的repo名稱/照片.webp
-請把照片放在文字的右側，圓形裁切，寬度約 200–250px，
-在手機版時照片移到文字下方。
-其他內容不變，請輸出完整修改後的 HTML 檔案。</pre>
-    </div>
+    <p class="hint" style="margin-top:1.5rem;">想加個人照片？要先上架、取得照片網址後才能加，請到下面 <a href="#step4">Step 4</a> 的「加入個人照片」。</p>
   </div>
 </section>
 
@@ -431,6 +454,21 @@ https://你的帳號.github.io/你的repo名稱/照片.webp
   </div>
 </section>
 
+<!-- PATHS -->
+<section id="paths" class="ws-section">
+  <div class="container">
+    <div class="section-label">先選路線</div>
+    <h2 class="section-title">🧭 你今天走哪一條？</h2>
+    <div class="section-rule"></div>
+    <p class="section-sub">Step 1、2 大家都一樣；從上架開始，依你的路線往下走：</p>
+    <div class="note-box">
+      <div class="note-item"><span class="note-q">🌱 零安裝方案（推薦新手）</span>免費、不用裝任何軟體，全程用網頁完成。接著看 <a href="#step3">Step 3 上架</a>，再到 <a href="#step4">Step 4 優化</a>。</div>
+      <div class="note-item"><span class="note-q">🛠 開發者方案</span>想持續開發的同學，安裝 Git、VS Code，用本機上架。改看 <a href="#install">安裝環境</a>。</div>
+      <div class="note-item"><span class="note-q">💳 Claude Code（選用）</span>需要 Claude 付費方案。沒有付費方案完全不影響今天的工作坊，看 <a href="#install">安裝環境</a> 的 Claude Code。</div>
+    </div>
+  </div>
+</section>
+
 <!-- STEP 3 BASIC -->
 <section id="step3" class="ws-section warm">
   <div class="container">
@@ -453,12 +491,12 @@ https://你的帳號.github.io/你的repo名稱/照片.webp
       <label class="check-item">
         <input type="checkbox" class="check-input">
         <div class="check-box"></div>
-        <div class="check-text">新增 Repository（命名為你想要的網址名稱）</div>
+        <div class="check-text">右上角「＋」→ <strong>New repository</strong>。<strong>repository 名稱</strong>限英文、數字（會變成網址的後段），選 <strong>Public</strong>，勾選「Add a README file」</div>
       </label>
       <label class="check-item">
         <input type="checkbox" class="check-input">
         <div class="check-box"></div>
-        <div class="check-text">上傳 <code>index.html</code> 檔案到 Repository</div>
+        <div class="check-text">點「Add file」→「Upload files」，把 <code>index.html</code> 拖曳上傳（有照片也一起），按綠色 <strong>Commit changes</strong></div>
       </label>
       <label class="check-item">
         <input type="checkbox" class="check-input">
@@ -473,20 +511,53 @@ https://你的帳號.github.io/你的repo名稱/照片.webp
       <label class="check-item">
         <input type="checkbox" class="check-input">
         <div class="check-box"></div>
-        <div class="check-text">稍等片刻，網站上線！</div>
+        <div class="check-text">等約 1–3 分鐘，網站上線！</div>
       </label>
     </div>
 
     <div class="result-box">
       <div class="result-label">你的網址</div>
-      <div class="result-url">你的帳號.github.io/repo名稱</div>
+      <div class="result-url">你的帳號.github.io/repository名稱</div>
+    </div>
+    <p class="hint">打開是 404？通常是 repository 名稱格式不對，或檔案還沒處理完。等 3 分鐘後重新整理，通常就好了。</p>
+
+    <div class="substep" style="margin-top:2rem;">
+      <div class="substep-title">之後要更新網站：新增／修改檔案</div>
+      <div class="checklist">
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">新增檔案：進入 Repository →「Add file」→「Upload files」，拖曳檔案，按 <strong>Commit changes</strong></div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">修改檔案：在 <strong>Code</strong> 頁籤點要修改的檔案（例如 <code>index.html</code>），點右邊的<strong>鉛筆</strong>進入 Edit 模式</div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">把 Claude 幫你改好的完整內容<strong>全選、貼上覆蓋</strong></div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">點右上綠色 <strong>Commit changes</strong>，可寫一句修改說明，再按一次 Commit changes</div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input">
+          <div class="check-box"></div>
+          <div class="check-text">等約 1–3 分鐘，重新整理你的網址，看到更新就完成了</div>
+        </label>
+      </div>
     </div>
 
     <div style="margin-top:1.5rem;text-align:center;">
       <a href="https://hackmd.io/@Socrates/rJvFgZMhbe" target="_blank" rel="noopener"
         style="display:inline-flex;align-items:center;gap:0.5rem;border:1.5px solid var(--accent2);color:var(--accent2);font-size:0.9rem;font-weight:500;padding:0.6rem 1.5rem;border-radius:999px;text-decoration:none;font-family:'Noto Sans TC',sans-serif;letter-spacing:0.04em;transition:background 0.15s,color 0.15s;">
-        📄 詳細 GitHub 操作說明 →
+        📄 完整圖文步驟（HackMD）→
       </a>
+      <p class="hint" style="margin-top:0.8rem;">每一步的畫面截圖，也可以對照課堂投影片。</p>
     </div>
   </div>
 </section>
@@ -520,9 +591,9 @@ https://你的帳號.github.io/你的repo名稱/照片.webp
       <h2 class="section-title">💻 安裝環境 + 用 VS Code 上架</h2>
       <div class="section-rule"></div>
     </div>
-    <p class="section-sub">適合想持續開發、或想繼續用 AI 開發其他工具的同學。</p>
+    <p class="section-sub"><strong>🛠 開發者方案</strong>：適合想持續開發、或想繼續用 AI 開發其他工具的同學。其中 Claude Code 需要 <strong>💳 付費方案</strong>。<br>只想先把網站上線的同學，可以跳過這一區，用上面 Step 3 的零安裝方案就好。</p>
 
-    <div class="substep">
+    <div class="substep" id="install-tools">
       <div class="substep-title">安裝工具</div>
 
       <div class="os-tabs" role="tablist" aria-label="作業系統">
@@ -579,7 +650,7 @@ git config --global user.email "你的GitHub信箱"</pre>
       </div>
     </div>
 
-    <div class="substep">
+    <div class="substep" id="install-claude">
       <div class="substep-title">安裝 Claude Code（選用，需付費方案）</div>
       <p class="hint" style="margin-bottom:0.8rem;">新手推薦桌面版 App，不用碰終端機，跟安裝一般軟體一樣：</p>
       <div class="checklist">
@@ -628,7 +699,7 @@ git config --global user.email "你的GitHub信箱"</pre>
       <p class="hint">安裝完成後，在終端機輸入 <code>claude</code> 即可開始使用，第一次會引導你登入帳號。</p>
     </div>
 
-    <div class="substep">
+    <div class="substep" id="install-skill">
       <div class="substep-title">安裝 UI/UX 設計技能 frontend-design（選用）</div>
       <p class="hint" style="margin-bottom:0.8rem;">讓 Claude 做出來的網頁設計更有質感。不裝也能完成今天的工作坊。桌面版 App 不用終端機，下載一個檔案丟給 Claude 就好：</p>
       <div class="checklist">
@@ -668,7 +739,7 @@ git config --global user.email "你的GitHub信箱"</pre>
       <p class="hint">也可以到 <a href="https://claude.com/plugins/frontend-design" target="_blank" rel="noopener">claude.com/plugins/frontend-design</a>，按「Install in Claude Code」自動複製這行指令。裝好後下次啟動 <code>claude</code> 就會生效。</p>
     </div>
 
-    <div class="substep">
+    <div class="substep" id="install-gh">
       <div class="substep-title">安裝 GitHub CLI（選用，加速登入授權）</div>
       <div class="os-panel" data-os="win">
         <div class="code-block-wrap">
@@ -689,9 +760,10 @@ git config --global user.email "你的GitHub信箱"</pre>
         </div>
       </div>
       <p class="hint">安裝完成後輸入 <code>gh auth login</code>，依畫面指示用瀏覽器登入 GitHub 帳號即可。</p>
+      <p class="hint">不想裝 gh 也可以改用 Personal Access Token（PAT）當密碼登入，做法請看 <a href="https://hackmd.io/@Socrates/rJvFgZMhbe" target="_blank" rel="noopener">HackMD 說明</a>。</p>
     </div>
 
-    <div class="substep">
+    <div class="substep" id="install-publish">
       <div class="substep-title">上傳網站到 GitHub</div>
       <div class="checklist">
         <label class="check-item">
@@ -742,7 +814,7 @@ git config --global user.email "你的GitHub信箱"</pre>
       <h2 class="section-title">✨ 優化網站</h2>
       <div class="section-rule"></div>
     </div>
-    <p class="section-sub">上架後，繼續請 Claude 幫你改進。複製以下 Prompt 範本，填入你的需求後貼給 Claude：</p>
+    <p class="section-sub">上架後，繼續請 Claude 幫你改進。複製以下 Prompt 範本，填入你的需求後貼給 Claude。拿到 Claude 改好的完整 HTML 後，照 <a href="#step3">Step 3</a> 的「修改檔案」貼上覆蓋，網站就更新了：</p>
 
     <div class="optimize-block">
       <div class="optimize-area">調整視覺風格</div>
@@ -791,6 +863,28 @@ git config --global user.email "你的GitHub信箱"</pre>
 請輸出完整修改後的 HTML 檔案。</pre>
       </div>
     </div>
+
+    <div class="optimize-block">
+      <div class="optimize-area">加入個人照片</div>
+      <p class="hint" style="margin-top:0;margin-bottom:0.8rem;">
+        ① 先用 <a href="https://cloudconvert.com" target="_blank" rel="noopener">CloudConvert</a> 將照片轉成 <code>.webp</code><br>
+        ② 照 Step 3 的「新增檔案」，把照片上傳到你的 Repository<br>
+        ③ 照片網址就是 <code>https://你的帳號.github.io/repository名稱/照片.webp</code>，貼到下面的指令裡給 Claude
+      </p>
+      <div class="code-block-wrap">
+        <div class="code-block-head">
+          <span class="code-label">Prompt 範本</span>
+          <button type="button" class="copy-btn" onclick="copyCode(this)">複製</button>
+        </div>
+        <pre class="code-block">請在 Hero 區塊加入我的個人照片。
+https://你的帳號.github.io/repository名稱/照片.webp
+請把照片放在文字的右側，圓形裁切，寬度約 200–250px，
+在手機版時照片移到文字下方。
+其他內容不變，請輸出完整修改後的 HTML 檔案。</pre>
+      </div>
+    </div>
+
+    <p class="hint" style="margin-top:2rem;">🎓 自訂網域、PWA、課後可以繼續做的事：課堂講解，不在學習單。</p>
   </div>
 </section>
 

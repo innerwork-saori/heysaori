@@ -14,22 +14,39 @@ code {
 /* ── LAYOUT ── */
 .container { max-width: 860px; margin: 0 auto; padding: 0 2rem; }
 
-/* ── ANCHOR NAV ── */
-.anchor-nav {
+/* ── STICKY TOOLBAR（錨點列 + 搜尋按鈕）── */
+/* top 略小於固定 .nav 高度（約 62px），避免兩者之間露出縫隙 */
+.page-tools {
+  position: sticky;
+  top: 3.8rem;
+  z-index: 90;
+  margin-top: 4.2rem;
   background: var(--paper-warm);
   border-bottom: 1px solid var(--paper-mid);
-  margin-top: 4.2rem;
-  padding: 0.6rem 2rem;
+}
+.tools-row { display: flex; align-items: stretch; }
+
+/* 點錨點跳轉、搜尋跳轉時，章節不被固定導覽列 + 錨點列蓋住 */
+.ws-section[id] { scroll-margin-top: 7rem; }
+.substep[id] { scroll-margin-top: 8.5rem; }
+
+/* ── ANCHOR NAV ── */
+.anchor-nav {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  padding: 0.6rem 1rem;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0;
   flex-wrap: nowrap;
   overflow-x: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 .anchor-nav::-webkit-scrollbar { display: none; }
+/* 內容放得下就置中；放不下就從左邊開始橫向捲動（justify-content:center 會把左邊切掉） */
+.anchor-nav > :first-child { margin-left: auto; }
+.anchor-nav > :last-child { margin-right: auto; }
 .anchor-link {
   font-family: 'EB Garamond', serif;
   font-style: italic;
@@ -38,9 +55,13 @@ code {
   color: var(--text-soft);
   padding: 0.25rem 0.7rem;
   white-space: nowrap;
-  transition: color 0.2s;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
 }
 .anchor-link:hover { color: var(--accent2); }
+.anchor-link.active { color: var(--accent1); border-bottom-color: var(--accent2); }
+.anchor-link:focus-visible,
+.search-toggle:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
 .anchor-sep { color: var(--paper-mid); font-size: 0.8rem; }
 
 /* ── HERO ── */
@@ -557,14 +578,38 @@ footer .inner { max-width: 600px; margin: 0 auto; }
 .footer-link:hover { color: var(--accent3); border-color: var(--accent3); }
 .footer-copy { margin-top: 1.2rem; font-size: 0.68rem; color: rgba(250,247,242,0.3); letter-spacing: 0.06em; }
 
-/* ── SEARCH BAR ── */
+/* ── SEARCH ── */
+.search-toggle {
+  flex-shrink: 0;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: var(--text-mid);
+  background: none;
+  border: none;
+  border-left: 1px solid var(--paper-mid);
+  padding: 0 1.2rem;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+.search-toggle:hover,
+.search-toggle[aria-expanded="true"] { color: var(--accent1); background: var(--paper-mid); }
+
+/* 浮在內容上方（不佔版面，不會推動頁面） */
 .search-bar {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  flex-direction: column;
+  align-items: center;
   background: var(--paper);
   border-bottom: 1px solid var(--paper-mid);
+  box-shadow: 0 10px 24px rgba(28,26,23,0.1);
   padding: 0.9rem 2rem;
-  display: flex;
-  justify-content: center;
 }
+.search-bar.open { display: flex; }
 .search-form {
   width: 100%;
   max-width: 480px;
@@ -601,8 +646,7 @@ footer .inner { max-width: 600px; margin: 0 auto; }
   text-align: center;
   font-size: 0.78rem;
   color: var(--text-soft);
-  padding: 0.6rem 2rem 0;
-  background: var(--paper);
+  padding: 0.6rem 0 0;
   display: none;
 }
 .search-msg.show { display: block; }
@@ -674,13 +718,16 @@ footer .inner { max-width: 600px; margin: 0 auto; }
   .ws-section.ink { padding: 3.5rem 1.5rem 4rem; }
   .hero { padding: 7rem 1.5rem 4rem; }
   .search-bar { padding: 0.8rem 1.5rem; }
-  .search-msg { padding: 0.6rem 1.5rem 0; }
+  .search-toggle { padding: 0 1rem; }
+  .search-toggle-text { display: none; }
   .os-tabs { flex-wrap: wrap; }
 }
 
 /* ── PRINT ── */
 @media print {
   .nav { position: relative; }
+  .page-tools { position: static; margin-top: 0; }
+  .search-toggle { display: none; }
   .ws-section { padding: 2rem 0; break-inside: avoid; }
   .hero { padding: 2rem 0; }
   .code-block { font-size: 0.72rem; }

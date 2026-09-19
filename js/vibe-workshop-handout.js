@@ -86,20 +86,131 @@ function runSearch(query) {
     target.classList.remove('search-hit');
     requestAnimationFrame(function () { target.classList.add('search-hit'); });
     setTimeout(function () { target.classList.remove('search-hit'); }, 1600);
-  } else if (msg) {
-    msg.classList.add('show');
+    return true;
   }
+  if (msg) msg.classList.add('show');
+  return false;
+}
+
+function setSearchOpen(open) {
+  const bar = document.getElementById('searchBar');
+  const toggle = document.getElementById('searchToggle');
+  const input = document.getElementById('searchInput');
+  if (!bar || !toggle) return;
+  bar.classList.toggle('open', open);
+  toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (open && input) input.focus();
+}
+
+function initSearchToggle() {
+  const bar = document.getElementById('searchBar');
+  const toggle = document.getElementById('searchToggle');
+  if (!bar || !toggle) return;
+
+  toggle.addEventListener('click', function () {
+    setSearchOpen(!bar.classList.contains('open'));
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && bar.classList.contains('open')) {
+      setSearchOpen(false);
+      toggle.focus();
+    }
+  });
+  document.addEventListener('click', function (e) {
+    if (bar.classList.contains('open') && !e.target.closest('#pageTools')) setSearchOpen(false);
+  });
+}
+
+// 捲動時，錨點列標出目前讀到的章節，並把它捲到橫向列的中間（手機上列表放不下）
+function initAnchorSpy() {
+  const row = document.getElementById('anchorNav');
+  const tools = document.getElementById('pageTools');
+  if (!row || !tools) return;
+
+  const topNav = document.querySelector('.nav');
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const items = [];
+  row.querySelectorAll('.anchor-link').forEach(function (link) {
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) items.push({ link: link, target: target });
+  });
+  if (!items.length) return;
+
+  let current = null;
+  let locked = false;
+  let lockTimer = null;
+  let ticking = false;
+
+  function setCurrent(item) {
+    if (item === current) return;
+    if (current) {
+      current.link.classList.remove('active');
+      current.link.removeAttribute('aria-current');
+    }
+    current = item;
+    if (!item) return;
+    item.link.classList.add('active');
+    item.link.setAttribute('aria-current', 'true');
+    if (row.scrollWidth > row.clientWidth) {
+      const left = item.link.offsetLeft - (row.clientWidth - item.link.offsetWidth) / 2;
+      row.scrollTo({ left: left, behavior: reduceMotion ? 'auto' : 'smooth' });
+    }
+  }
+
+  function update() {
+    ticking = false;
+    if (locked) return;
+    const line = (topNav ? topNav.offsetHeight : 0) + tools.offsetHeight + 40;
+    let found = null;
+    items.forEach(function (it) {
+      if (it.target.getBoundingClientRect().top <= line) found = it;
+    });
+    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+    if (atBottom) found = items[items.length - 1];
+    setCurrent(found);
+  }
+
+  // 點錨點後的平滑捲動期間不跟著中途經過的章節跳動，捲完（150ms 沒有新捲動）再更新
+  function lockUntilScrollEnds(ms) {
+    locked = true;
+    clearTimeout(lockTimer);
+    lockTimer = setTimeout(function () { locked = false; update(); }, ms);
+  }
+
+  window.addEventListener('scroll', function () {
+    if (locked) {
+      lockUntilScrollEnds(150);
+      return;
+    }
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+  }, { passive: true });
+
+  row.addEventListener('click', function (e) {
+    const link = e.target.closest('.anchor-link');
+    if (!link) return;
+    const item = items.find(function (it) { return it.link === link; });
+    if (!item) return;
+    setCurrent(item);
+    lockUntilScrollEnds(1200);
+  });
+
+  update();
 }
 
 document.addEventListener('DOMContentLoaded', function () {
   restoreOs();
+  initSearchToggle();
+  initAnchorSpy();
 
   const form = document.getElementById('searchForm');
   const input = document.getElementById('searchInput');
   if (form && input) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      runSearch(input.value);
+      if (runSearch(input.value)) setSearchOpen(false);
     });
   }
 });
