@@ -331,7 +331,31 @@ function renderStageView(stop) {
     renderSlideBody(slide, 'stage');
 }
 
+/* ── IMAGE LIGHTBOX ── */
+function openLightbox(src, caption) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightboxCaption').textContent = caption || '';
+  document.getElementById('lightbox').hidden = false;
+}
+function closeLightbox() {
+  document.getElementById('lightbox').hidden = true;
+  document.getElementById('lightboxImg').removeAttribute('src');
+}
+
+// Images with a "link" keep opening that link; the rest zoom in.
+document.addEventListener('click', function (e) {
+  if (!document.getElementById('lightbox').hidden) { closeLightbox(); return; }
+  const img = e.target.closest ? e.target.closest('.image-item img') : null;
+  if (!img || img.closest('a.image-link')) return;
+  openLightbox(img.currentSrc || img.src, img.getAttribute('alt'));
+});
+
 document.addEventListener('keydown', function (e) {
+  if (!document.getElementById('lightbox').hidden) {
+    if (e.key === 'Escape') closeLightbox();
+    e.preventDefault();
+    return;
+  }
   if (e.key === 'Escape') {
     if (!document.getElementById('qrModal').hidden) { closeQr(); return; }
     if (!document.getElementById('linksPanel').hidden) { closeLinksPanel(); return; }
