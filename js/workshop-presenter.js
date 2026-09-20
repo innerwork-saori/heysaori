@@ -18,10 +18,11 @@ const ANCHOR_LABELS = {
 };
 
 const QUICK_LINKS = [
+  { name: 'Saori 的官方 Line', url: 'https://lin.ee/9yGEPHH' },
   { name: '網站 Prompt 產生器', url: 'Page_prompt_generator.html' },
   { name: '工具 Prompt 產生器', url: 'Tool_prompt_generator.html' },
   { name: 'GitHub 說明書', url: 'https://hackmd.io/@Socrates/rJvFgZMhbe' },
-  { name: 'LINE 群組', url: 'https://line.me/ti/g/eJ9lnlPpD6' },
+  { name: '架站工作坊 LINE 群組', url: 'https://line.me/ti/g/eJ9lnlPpD6' },
   { name: '課後問卷', url: 'https://forms.gle/BL2t1Vfg8G2zs4cC9' }
 ];
 
