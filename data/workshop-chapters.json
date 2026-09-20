@@ -14,10 +14,11 @@
           "heading": "我是誰",
           "bullets": [
             "15 年軟工經驗、人生設計諮詢師（職涯／人際關係諮詢）、熱愛做網站",
-            "延伸連結：IG「蘇格拉底咖啡館」、Podcast「蛤！人生有什麼意義」"
+            "IG「蘇格拉底咖啡館」、Podcast「蛤！人生有什麼意義」"
           ],
           "images": [
-            { "src": "images/workshop/Saori.png", "caption": "我是 Saori", "width": "60%" }
+            { "src": "images/workshop/Saori.png", "caption": "我是 Saori", "width": "60%" },
+            { "src": "images/workshop/podcast.png", "caption": "Podcast：蛤！人生有什麼意義", "width": "20%" }
           ]
         },
         {
@@ -86,7 +87,7 @@
           "heading": "可以做什麼",
           "bullets": [
             "個人網站、網頁小工具",
-            "3-4 小時可以做出來的範例：個人服務介紹、Blog 網站、品牌宣傳頁、訂購表單"
+            "一個下午可以做出來的範例：個人服務介紹、Blog 網站、品牌宣傳頁、訂購表單"
           ]
         },
         {
@@ -97,6 +98,15 @@
           ],
           "images": [
             { "src": "images/workshop/AIorNot.png", "caption": "AI 或非 AI 判斷框架", "width": "60%" }
+          ]
+        },
+        {
+          "heading": "今天可能無法做甚麼？",
+          "bullets": [
+            "生日運勢產生器：需要串接 AI 並理解自然語言",
+            "複雜的互動式網站（例如：社群平台、即時通訊、多人遊戲）",
+            "需要大量資料庫操作的網站（例如：電商平台、線上課程平台）",
+            "需要高安全性或高性能的網站（例如：金融交易平台、醫療系統）"
           ]
         },
         {
@@ -171,7 +181,7 @@
             ]
           },
           "bullets": [
-            "領取 AI 工作坊學習單：LINE 輸入「AI」或「tool」，或直接在瀏覽器輸入 [http://to.heysaori.com/aitool](https://lab.heysaori.com/vibe-workshop-handout.html)，看「先選路線」",
+            "領取 AI 工作坊學習單：LINE 輸入「AI」或「tool」，或直接在瀏覽器輸入 [http://to.heysaori.com/aitool](https://lab.heysaori.com/vibe-workshop-handout.html)",
             "開發者路線：休息時間、實作等 AI 生成時，照學習單「安裝環境」先裝好",
             "裝超過 10 分鐘還卡住 → 退回零安裝，先把網站上線"
           ]
