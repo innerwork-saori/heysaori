@@ -38,13 +38,7 @@ const i18n = {
     footerRole: '軟體工程師・系統分析師・生涯諮詢師',
     toast: '✓ 已複製至剪貼簿',
     phName: '例：謝孟娟',
-    phTitle: '例：職涯諮詢師',
     phBg: '簡短介紹你的經歷、專長與信念……',
-    phClient: '例：想轉職的工程師',
-    phPain: '例：不知道方向、資歷難以呈現',
-    phService: '例：一對一職涯諮詢、履歷健檢',
-    phMethod: '例：蘇格拉底式提問、正念引導',
-    phGain: '例：清晰的職涯方向與具體行動計畫',
     phTrust: '如尚無推薦，填「暫無」即可，AI 將提示位置留空',
     phOther: '例：LINE ID、Instagram',
     phCustomColor: '例：奶茶米色 + 深棕色字體',
@@ -167,13 +161,7 @@ https://xxx.github.io/ooo/zzz.webp
     footerRole: 'Software Engineer · Systems Analyst · Career Coach',
     toast: '✓ Copied to clipboard',
     phName: 'e.g. Jane Smith',
-    phTitle: 'e.g. Career Coach',
     phBg: 'Brief intro about your background, expertise, and values…',
-    phClient: 'e.g. Engineers looking to switch careers',
-    phPain: 'e.g. Unclear direction, hard to showcase experience',
-    phService: 'e.g. 1-on-1 career coaching, resume review',
-    phMethod: 'e.g. Socratic questioning, mindfulness-based guidance',
-    phGain: 'e.g. A clear career direction and concrete action plan',
     phTrust: 'If none yet, type "None" — AI will leave a placeholder',
     phOther: 'e.g. LinkedIn, Instagram',
     phCustomColor: 'e.g. Warm beige + dark brown text',
@@ -262,6 +250,69 @@ Place the photo to the right of the text, cropped in a circle, approximately 200
 Keep all other content unchanged. Please output the complete modified HTML file.`,
   }
 };
+
+
+/* ── Placeholder examples: one profession picked at random per page load ── */
+const placeholderExamples = [
+  {
+    zh: {
+      phTitle: '例：軟體工程師',
+      phClient: '例：想把流程數位化的中小企業',
+      phPain: '例：還在用 Excel 手動對帳、系統之間資料不互通',
+      phService: '例：客製化網站、內部管理系統、自動化串接',
+      phMethod: '例：先訪談釐清需求、小步交付快速驗證',
+      phGain: '例：省下重複工作的時間，資料一目了然',
+    },
+    en: {
+      phTitle: 'e.g. Software Engineer',
+      phClient: 'e.g. Small businesses going digital',
+      phPain: 'e.g. Manual spreadsheet work, systems that don\'t talk to each other',
+      phService: 'e.g. Custom websites, internal tools, workflow automation',
+      phMethod: 'e.g. Requirement interviews first, small iterative releases',
+      phGain: 'e.g. Hours saved on repetitive work and data you can actually see',
+    },
+  },
+  {
+    zh: {
+      phTitle: '例：瑜伽老師',
+      phClient: '例：久坐、肩頸緊繃的上班族',
+      phPain: '例：身體僵硬、壓力大、睡不好',
+      phService: '例：小班瑜伽課、一對一私人課',
+      phMethod: '例：呼吸引導、溫和的體位調整',
+      phGain: '例：身體放鬆、睡得更好，有自己的練習習慣',
+    },
+    en: {
+      phTitle: 'e.g. Yoga Teacher',
+      phClient: 'e.g. Desk workers with tight shoulders',
+      phPain: 'e.g. Stiff body, high stress, poor sleep',
+      phService: 'e.g. Small-group classes, private sessions',
+      phMethod: 'e.g. Breathwork, gentle alignment cues',
+      phGain: 'e.g. A relaxed body, better sleep, and a steady home practice',
+    },
+  },
+  {
+    zh: {
+      phTitle: '例：接案插畫家',
+      phClient: '例：想建立品牌形象的小店',
+      phPain: '例：視覺沒有辨識度、不知道怎麼跟設計師溝通',
+      phService: '例：品牌插畫、包裝設計',
+      phMethod: '例：手繪水彩風格、先草圖再定稿的合作流程',
+      phGain: '例：讓客人一眼記住的品牌形象',
+    },
+    en: {
+      phTitle: 'e.g. Freelance Illustrator',
+      phClient: 'e.g. Small shops building their brand',
+      phPain: 'e.g. Forgettable visuals, unsure how to brief a designer',
+      phService: 'e.g. Brand illustration, packaging design',
+      phMethod: 'e.g. Hand-painted watercolor, sketch-first workflow',
+      phGain: 'e.g. A brand image customers remember at a glance',
+    },
+  },
+];
+
+const pickedExample = placeholderExamples[Math.floor(Math.random() * placeholderExamples.length)];
+Object.assign(i18n.zh, pickedExample.zh);
+Object.assign(i18n.en, pickedExample.en);
 
 let currentLang = localStorage.getItem('ppg_lang') || 'zh';
 
