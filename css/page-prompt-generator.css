@@ -132,6 +132,13 @@ label .req {
   font-size: 0.62rem;
   letter-spacing: 0.05em;
 }
+.field-hint {
+  margin: -2px 0 8px;
+  font-size: 0.72rem;
+  line-height: 1.6;
+  color: var(--text-soft);
+  opacity: 0.8;
+}
 
 input, select, textarea {
   width: 100%;
