@@ -112,6 +112,7 @@
 .grid-design {
   grid-template-columns: 2fr 1fr;
 }
+.grid-layout { margin-bottom: 1.4rem; }
 .full { grid-column: 1 / -1; }
 
 /* Field */

@@ -3,7 +3,7 @@
 const i18n = {
   zh: {
     pageTitle: '網站 Prompt 產生器 · Saori',
-    heroTitle: '一頁式網站<br>Prompt 產生器',
+    heroTitle: '網站<br>Prompt 產生器',
     heroDesc: '填入你的品牌資訊，自動生成可交給 AI 設計網站的完整 Prompt',
     sec1Title: '關於你',
     sec2Title: '目標客戶與服務',
@@ -28,6 +28,11 @@ const i18n = {
     labelEmail: 'Email <span class="req">必填</span>',
     labelOther: '其他聯絡方式',
     labelStyle: '風格（按住 shift 不放，滑鼠點選即可多選）',
+    labelLayout: '網站架構',
+    hintLayout: '不確定就選「讓 AI 建議」。一頁式適合內容精簡、一路往下滑就看完；多頁式適合服務項目或內容比較多。',
+    layoutOptSingle: '一頁式（所有內容放在同一頁）',
+    layoutOptMulti: '多頁式（分成多個頁面）',
+    layoutOptAi: '讓 AI 建議',
     labelColor: '配色',
     colorOpt0: '（不指定，讓 AI 決定）',
     colorOpt1: '柔和藍綠色調',
@@ -53,19 +58,34 @@ const i18n = {
     errTooEmpty: '欸呀～資訊太少啦！再多給我一些線索，我才能幫你變出厲害的網站內容喔',
     errCustomColor: '選了自訂配色，請填寫你喜歡的配色描述 🎨',
     smartFallback: '（請反問我問題協助我釐清之後再開始生成網頁）',
-    promptHeader: '你是一位專業的網頁設計師。請遵循網頁 UX 原則幫我設計一個一頁式個人品牌網站的完整 HTML 檔案，檔名為 index.html。請使用 frontend-design skill 來設計。',
+    // 依「網站架構」選項組出 prompt 開頭、版面說明、輸出格式
+    layoutPrompts: {
+      single: {
+        header: '你是一位專業的網頁設計師。請遵循網頁 UX 原則幫我設計一個一頁式個人品牌網站的完整 HTML 檔案，檔名為 index.html。請使用 frontend-design skill 來設計。',
+        note: '- 版面：一頁式，包含以下六個區塊：Hero、About、Service、Process、Trust、Contact',
+        footer: '請輸出一個完整的單一 HTML 檔案，CSS 和 JavaScript 都嵌入在同一個檔案內。\n頁面要能在手機上正常顯示（RWD）。',
+      },
+      multi: {
+        header: '你是一位專業的網頁設計師。請遵循網頁 UX 原則幫我設計一個多頁式個人品牌網站，首頁檔名為 index.html。請使用 frontend-design skill 來設計。',
+        note: '- 版面：多頁式。內容需涵蓋 Hero、About、Service、Process、Trust、Contact。開始寫程式前，請先依我提供的內容提出頁面規劃（有哪些頁面、每頁放哪些區塊、各自的檔名），等我確認後再產生檔案。每一頁都要有一致的導覽列與頁尾。',
+        footer: '請把每一頁輸出成獨立的 HTML 檔案，所有頁面共用一個 style.css；如需 JavaScript，請放在共用的 script.js。\n頁面要能在手機上正常顯示（RWD）。',
+      },
+      ai: {
+        header: '你是一位專業的網頁設計師。請遵循網頁 UX 原則幫我設計一個個人品牌網站，首頁檔名為 index.html。請使用 frontend-design skill 來設計。',
+        note: '- 版面：請依我提供的內容量，建議採用一頁式或多頁式並說明理由（多頁式請一併列出頁面規劃與檔名），等我確認後再開始產生檔案。內容需涵蓋 Hero、About、Service、Process、Trust、Contact。',
+        footer: '若採一頁式：請輸出一個完整的單一 HTML 檔案（index.html），CSS 和 JavaScript 都嵌入在同一個檔案內。\n若採多頁式：每一頁輸出成獨立的 HTML 檔案，所有頁面共用一個 style.css；如需 JavaScript，請放在共用的 script.js。\n頁面要能在手機上正常顯示（RWD）。',
+      },
+    },
     promptAbout: '【關於我】',
     promptAudience: '【目標客戶與服務】',
     promptBgSection: '【我的背景】',
     promptTrustSection: '【客戶推薦/心得分享】',
     promptContact: '【聯絡方式】',
     promptDesign: '【設計要求】',
-    promptFooter: '請輸出一個完整的單一 HTML 檔案，CSS 和 JavaScript 都嵌入在同一個檔案內。\n頁面要能在手機上正常顯示（RWD）。',
     styleDefault: '專業、溫暖、值得信賴',
     colorDefault: '（不指定，請依風格自行搭配）',
     fontDefault: 'Noto Sans TC',
     fontNote: '，請使用 Google Fonts，標題用粗體',
-    layoutNote: '- 版面：包含以下六個區塊：Hero、About、Service、Process、Trust、Contact',
     styleDetailsSummary: '▸ 風格參考說明',
     colorDetailsSummary: '▸ 配色靈感參考',
     styleOptions: [
@@ -131,7 +151,7 @@ https://xxx.github.io/ooo/zzz.webp
   },
   en: {
     pageTitle: 'Website Prompt Generator · Saori',
-    heroTitle: 'One-Page Website<br>Prompt Generator',
+    heroTitle: 'Website<br>Prompt Generator',
     heroDesc: 'Fill in your brand info and instantly generate a complete AI prompt for your website design.',
     sec1Title: 'About You',
     sec2Title: 'Target Audience & Services',
@@ -156,6 +176,11 @@ https://xxx.github.io/ooo/zzz.webp
     labelEmail: 'Email <span class="req">required</span>',
     labelOther: 'Other Contact',
     labelStyle: 'Style (hold Shift to select multiple)',
+    labelLayout: 'Site Structure',
+    hintLayout: 'Not sure? Pick "Let AI recommend". Single-page suits concise content people can scroll through; multi-page suits more services or content.',
+    layoutOptSingle: 'Single page (everything on one page)',
+    layoutOptMulti: 'Multi-page (split into several pages)',
+    layoutOptAi: 'Let AI recommend',
     labelColor: 'Color Palette',
     colorOpt0: '(No preference — let AI decide)',
     colorOpt1: 'Soft Blue-Green',
@@ -181,19 +206,33 @@ https://xxx.github.io/ooo/zzz.webp
     errTooEmpty: 'Not enough info yet! Give me a few more details so I can craft a great prompt.',
     errCustomColor: 'You selected Custom Color — please describe your preferred palette 🎨',
     smartFallback: '(Please ask me clarifying questions before generating the page)',
-    promptHeader: 'You are a professional web designer. Please follow web UX principles and create a complete single-page personal brand website as a full HTML file named index.html. Please use the frontend-design skill for the design.',
+    layoutPrompts: {
+      single: {
+        header: 'You are a professional web designer. Please follow web UX principles and create a complete single-page personal brand website as a full HTML file named index.html. Please use the frontend-design skill for the design.',
+        note: '- Layout: single page, with these six sections: Hero, About, Service, Process, Trust, Contact',
+        footer: 'Output a complete single HTML file with all CSS and JavaScript embedded.\nThe page must be fully responsive (mobile-friendly).',
+      },
+      multi: {
+        header: 'You are a professional web designer. Please follow web UX principles and create a multi-page personal brand website, with the home page named index.html. Please use the frontend-design skill for the design.',
+        note: '- Layout: multi-page. The content should cover Hero, About, Service, Process, Trust, Contact. Before writing any code, propose a page plan based on my content (which pages, which sections on each page, and file names), and wait for my confirmation before generating files. Every page needs a consistent navigation bar and footer.',
+        footer: 'Output each page as its own HTML file, all sharing one style.css; put any JavaScript in a shared script.js.\nThe pages must be fully responsive (mobile-friendly).',
+      },
+      ai: {
+        header: 'You are a professional web designer. Please follow web UX principles and create a personal brand website, with the home page named index.html. Please use the frontend-design skill for the design.',
+        note: '- Layout: based on how much content I have, recommend either a single-page or multi-page site and explain why (for multi-page, also list the page plan and file names). Wait for my confirmation before generating files. The content should cover Hero, About, Service, Process, Trust, Contact.',
+        footer: 'If single-page: output one complete HTML file (index.html) with all CSS and JavaScript embedded.\nIf multi-page: output each page as its own HTML file, all sharing one style.css; put any JavaScript in a shared script.js.\nThe pages must be fully responsive (mobile-friendly).',
+      },
+    },
     promptAbout: '[About Me]',
     promptAudience: '[Target Audience & Services]',
     promptBgSection: '[My Background]',
     promptTrustSection: '[Testimonials / Reviews]',
     promptContact: '[Contact]',
     promptDesign: '[Design Requirements]',
-    promptFooter: 'Output a complete single HTML file with all CSS and JavaScript embedded.\nThe page must be fully responsive (mobile-friendly).',
     styleDefault: 'professional, warm, trustworthy',
     colorDefault: '(No preference — let AI decide based on style)',
     fontDefault: 'Inter',
     fontNote: ', loaded from Google Fonts; use bold for headings',
-    layoutNote: '- Layout: include these six sections: Hero, About, Service, Process, Trust, Contact',
     styleDetailsSummary: '▸ Style Reference Guide',
     colorDetailsSummary: '▸ Color Inspiration',
     styleOptions: [
@@ -532,8 +571,10 @@ function gen() {
     return opt ? opt.dataset.fontName : L.fontDefault;
   };
 
+  const LP = L.layoutPrompts[vals('layout')] || L.layoutPrompts.single;
+
   const t =
-`${L.promptHeader}
+`${LP.header}
 
 ${L.promptAbout}
 - ${currentLang === 'zh' ? '姓名' : 'Name'}：${smartVal('name')}
@@ -568,9 +609,9 @@ ${L.promptDesign}
   })()}
 - ${currentLang === 'zh' ? '配色' : 'Color Palette'}：${pickedColor() || L.colorDefault}
 - ${currentLang === 'zh' ? '字型' : 'Font'}：${getFontName() ? `${getFontName()}${L.fontNote}` : (currentLang === 'zh' ? '（不指定，請依風格自行搭配）' : '(No preference — let AI decide based on style)')}
-${L.layoutNote}
+${LP.note}
 
-${L.promptFooter}`;
+${LP.footer}`;
 
   showOutput(t);
 }
@@ -590,7 +631,7 @@ function copyText() {
 }
 
 /* ── Persistence ── */
-const FIELDS = ['name','title','client','pain','service','method','gain','bg','trust','email','other','color','customColor','font','customFont','customStyle'];
+const FIELDS = ['layout','name','title','client','pain','service','method','gain','bg','trust','email','other','color','customColor','font','customFont','customStyle'];
 
 function saveAll() {
   FIELDS.forEach(id => {

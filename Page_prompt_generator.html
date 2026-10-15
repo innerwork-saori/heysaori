@@ -44,7 +44,7 @@
   </div>
   <div class="hero-inner">
     <div class="hero-label">website prompt generator</div>
-    <h1 class="hero-title" data-i18n="heroTitle">一頁式網站<br>Prompt 產生器</h1>
+    <h1 class="hero-title" data-i18n="heroTitle">網站<br>Prompt 產生器</h1>
     <div class="hero-divider"></div>
     <p class="hero-desc" data-i18n="heroDesc">填入你的品牌資訊，自動生成可交給 AI 設計網站的完整 Prompt</p>
   </div>
@@ -169,6 +169,17 @@
     <div class="section-label">design preference</div>
     <h2 class="section-title" data-i18n="sec5Title">設計偏好</h2>
     <div class="section-rule"></div>
+    <div class="grid grid-layout">
+      <div class="field">
+        <label data-i18n="labelLayout">網站架構</label>
+        <p class="field-hint" data-i18n="hintLayout">不確定就選「讓 AI 建議」。一頁式適合內容精簡、一路往下滑就看完；多頁式適合服務項目或內容比較多。</p>
+        <select id="layout">
+          <option value="single" data-i18n="layoutOptSingle">一頁式（所有內容放在同一頁）</option>
+          <option value="multi" data-i18n="layoutOptMulti">多頁式（分成多個頁面）</option>
+          <option value="ai" data-i18n="layoutOptAi">讓 AI 建議</option>
+        </select>
+      </div>
+    </div>
     <div class="grid grid-design">
       <div class="field">
         <label data-i18n="labelStyle">風格（按住 shift 不放，滑鼠點選即可多選）</label>
