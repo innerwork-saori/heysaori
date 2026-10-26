@@ -79,4 +79,10 @@
     <priority>0.5</priority>
   </url>
 
+  <url>
+    <loc>https://lab.heysaori.com/links.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
 </urlset>
