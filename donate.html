@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hey Saori · 給 Saori 喝杯飲料吧</title>
+  <meta name="description" content="如果 Saori 的內容對你有幫助，歡迎用轉帳或街口支付請 Saori 喝杯飲料。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/saori-base.css">
+<link rel="stylesheet" href="css/links.css">
+<link rel="stylesheet" href="css/donate.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JZJ4RQTVK1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JZJ4RQTVK1');
+</script>
+</head>
+<body>
+
+<!-- ══════════ PROFILE ══════════ -->
+<header class="profile">
+  <div class="profile-bg"></div>
+  <div class="profile-inner">
+    <img class="profile-avatar" src="https://heysaori.com/wp-content/uploads/2025/12/photo_2025-12-07_21-22-15.webp" alt="Saori 謝孟娟" width="112" height="112">
+    <h1 class="profile-name">Buy Saori a Drink</h1>
+    <div class="profile-role">給 Saori 喝杯飲料吧</div>
+    <p class="profile-bio">
+      如果你很想斗內 Saori，就請 Saori 喝杯飲料吧～<br>
+      你可以看好任何一家店的 menu，要請 Saori 喝多少價位的都可以喔～<br>
+      歡迎直接增加數量來達到你想要的數字～
+    </p>
+  </div>
+</header>
+
+
+<!-- ══════════ DONATE ══════════ -->
+<!-- QR code 圖檔在 images/bankQRcode/，換帳號時圖檔與下方帳號要一起改 -->
+<main class="links">
+
+  <!-- 飲料價錢改這裡：data-price 是金額，畫面上的 NT$ 也要一起改 -->
+  <section class="link-group">
+    <h2 class="group-label">① Pick a Drink <span>選一杯，或好幾杯</span></h2>
+
+    <ul class="drink-list">
+      <li class="drink-item" data-price="50">
+        <span class="drink-emoji" aria-hidden="true">🧋</span>
+        <span class="drink-text">
+          <span class="drink-name">可不可春梅冰茶</span>
+          <span class="drink-price">NT$50</span>
+        </span>
+        <span class="drink-stepper">
+          <button type="button" class="drink-btn" data-step="-1" aria-label="可不可春梅冰茶 減一杯">−</button>
+          <span class="drink-qty" aria-live="polite">0</span>
+          <button type="button" class="drink-btn" data-step="1" aria-label="可不可春梅冰茶 加一杯">+</button>
+        </span>
+      </li>
+      <li class="drink-item" data-price="80">
+        <span class="drink-emoji" aria-hidden="true">🥛</span>
+        <span class="drink-text">
+          <span class="drink-name">麻古芝芝阿華田</span>
+          <span class="drink-price">NT$80</span>
+        </span>
+        <span class="drink-stepper">
+          <button type="button" class="drink-btn" data-step="-1" aria-label="麻古芝芝阿華田 減一杯">−</button>
+          <span class="drink-qty" aria-live="polite">0</span>
+          <button type="button" class="drink-btn" data-step="1" aria-label="麻古芝芝阿華田 加一杯">+</button>
+        </span>
+      </li>
+      <li class="drink-item" data-price="140">
+        <span class="drink-emoji" aria-hidden="true">☕</span>
+        <span class="drink-text">
+          <span class="drink-name">星巴克拿鐵</span>
+          <span class="drink-price">NT$140</span>
+        </span>
+        <span class="drink-stepper">
+          <button type="button" class="drink-btn" data-step="-1" aria-label="星巴克拿鐵 減一杯">−</button>
+          <span class="drink-qty" aria-live="polite">0</span>
+          <button type="button" class="drink-btn" data-step="1" aria-label="星巴克拿鐵 加一杯">+</button>
+        </span>
+      </li>
+      <li class="drink-item" data-price="160">
+        <span class="drink-emoji" aria-hidden="true">☕</span>
+        <span class="drink-text">
+          <span class="drink-name">星巴克焦糖瑪奇朵</span>
+          <span class="drink-price">NT$160</span>
+        </span>
+        <span class="drink-stepper">
+          <button type="button" class="drink-btn" data-step="-1" aria-label="星巴克焦糖瑪奇朵 減一杯">−</button>
+          <span class="drink-qty" aria-live="polite">0</span>
+          <button type="button" class="drink-btn" data-step="1" aria-label="星巴克焦糖瑪奇朵 加一杯">+</button>
+        </span>
+      </li>
+    </ul>
+
+    <label class="custom-amount">
+      <span>或自己填金額</span>
+      <span class="custom-input">
+        NT$ <input type="number" id="customAmount" inputmode="numeric" min="1" step="1" placeholder="例如 100">
+      </span>
+    </label>
+    <p class="custom-hint">有填金額的話，會以你填的數字為準。</p>
+
+    <div class="donate-total">
+      <div class="donate-total-row">
+        <span class="donate-total-label">合計</span>
+        <span class="donate-total-amount">NT$<span id="totalAmount">0</span></span>
+      </div>
+      <p class="donate-total-note" id="totalNote" aria-live="polite">先選一杯飲料，或自己填金額</p>
+      <button type="button" class="donate-copy" id="copyAmount" disabled>複製金額</button>
+    </div>
+  </section>
+
+  <section class="link-group">
+    <h2 class="group-label">② Send to Saori <span>選一個你方便的方式</span></h2>
+    <p class="donate-tip">QR code 不會帶入金額，掃碼後請在 APP 輸入上面的合計金額。<br>用手機看這頁的話，按「複製帳號」再到銀行 APP 轉帳最快；也可以點 QR code 開大圖存下來。</p>
+
+    <article class="donate-card">
+      <a class="donate-qr" href="images/bankQRcode/CTBC.png" target="_blank" rel="noopener">
+        <img src="images/bankQRcode/CTBC.png" alt="中國信託轉帳 QR code" width="1179" height="1545" loading="lazy">
+      </a>
+      <div class="donate-info">
+        <h3 class="donate-bank">中國信託 <span>822</span></h3>
+        <p class="donate-account">4065-404-23136</p>
+        <button type="button" class="donate-copy" data-account="406540423136">複製帳號</button>
+      </div>
+    </article>
+
+    <article class="donate-card">
+      <a class="donate-qr" href="images/bankQRcode/CATHAY.jpg" target="_blank" rel="noopener">
+        <img src="images/bankQRcode/CATHAY.jpg" alt="國泰世華轉帳 QR code" width="890" height="1230" loading="lazy">
+      </a>
+      <div class="donate-info">
+        <h3 class="donate-bank">國泰世華 <span>013</span></h3>
+        <p class="donate-account">007-5060-93478</p>
+        <button type="button" class="donate-copy" data-account="007506093478">複製帳號</button>
+      </div>
+    </article>
+
+    <article class="donate-card">
+      <a class="donate-qr" href="images/bankQRcode/JKO.jpg" target="_blank" rel="noopener">
+        <img src="images/bankQRcode/JKO.jpg" alt="街口支付 QR code" width="1800" height="2700" loading="lazy">
+      </a>
+      <div class="donate-info">
+        <h3 class="donate-bank">街口支付 <span>396</span></h3>
+        <p class="donate-account">9005-22895</p>
+        <button type="button" class="donate-copy" data-account="900522895">複製帳號</button>
+      </div>
+    </article>
+  </section>
+
+  <a class="donate-back" href="links.html">← 回到所有連結</a>
+
+</main>
+
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="links-footer">
+  <a href="https://heysaori.com">© Saori · 謝孟娟 · heysaori.com</a>
+</footer>
+
+<script src="js/donate.js"></script>
+</body>
+</html>

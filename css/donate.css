@@ -1,0 +1,247 @@
+/* donate.html：版面沿用 links.css，這裡只補 QR code 卡片 */
+
+/* ── ① 飲料菜單 ── */
+.drink-list { list-style: none; }
+.drink-item {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-mid);
+  border-radius: 14px;
+  transition: border-color 0.2s, background 0.2s, opacity 0.2s;
+}
+.drink-item + .drink-item { margin-top: 0.6rem; }
+.drink-item.is-selected {
+  border-color: var(--accent2);
+  background: #fff;
+}
+.drink-emoji { font-size: 1.6rem; line-height: 1; }
+.drink-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.drink-name { font-size: 0.95rem; color: var(--text-main); }
+.drink-price {
+  font-family: 'EB Garamond', serif;
+  font-size: 0.95rem;
+  color: var(--accent1);
+  letter-spacing: 0.04em;
+}
+.drink-stepper {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.drink-btn {
+  width: 34px; height: 34px;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--paper-mid);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.drink-btn:hover,
+.drink-btn:focus-visible { border-color: var(--accent2); background: #fff; }
+.drink-btn:disabled { opacity: 0.35; cursor: default; }
+.drink-qty {
+  min-width: 1.4em;
+  text-align: center;
+  font-family: 'EB Garamond', serif;
+  font-size: 1.1rem;
+}
+
+/* 有填自訂金額時，菜單淡掉，表示目前不計入 */
+.drink-list.is-inactive .drink-item { opacity: 0.45; }
+
+.custom-amount {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px dashed var(--accent2);
+  border-radius: 14px;
+  font-size: 0.9rem;
+  color: var(--text-mid);
+}
+.custom-input {
+  font-family: 'EB Garamond', serif;
+  color: var(--accent1);
+}
+.custom-input input {
+  width: 7em;
+  margin-left: 0.3rem;
+  padding: 0.35rem 0.6rem;
+  font-family: 'EB Garamond', serif;
+  font-size: 1rem;
+  color: var(--text-main);
+  background: #fff;
+  border: 1px solid var(--paper-mid);
+  border-radius: 8px;
+}
+.custom-input input:focus { outline: none; border-color: var(--accent2); }
+.custom-hint {
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  text-align: right;
+}
+
+/* 合計 */
+.donate-total {
+  margin-top: 1.2rem;
+  padding: 1.1rem 1.2rem;
+  background: var(--ink);
+  border-radius: 14px;
+  color: var(--paper);
+  text-align: center;
+}
+.donate-total-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.8rem;
+}
+.donate-total-label {
+  font-size: 0.85rem;
+  color: rgba(250,247,242,0.6);
+  letter-spacing: 0.1em;
+}
+.donate-total-amount {
+  font-family: 'EB Garamond', serif;
+  font-size: 2rem;
+  color: var(--accent3);
+  letter-spacing: 0.04em;
+}
+.donate-total-note {
+  margin-top: 0.2rem;
+  font-size: 0.82rem;
+  color: rgba(250,247,242,0.75);
+  line-height: 1.7;
+}
+.donate-total .donate-copy {
+  margin-top: 0.7rem;
+  color: var(--ink);
+  background: var(--accent3);
+  border-color: var(--accent3);
+}
+.donate-total .donate-copy:hover,
+.donate-total .donate-copy:focus-visible { background: var(--accent2); border-color: var(--accent2); }
+.donate-total .donate-copy:disabled { opacity: 0.4; cursor: default; }
+
+/* ── ② 轉帳資訊 ── */
+.donate-tip {
+  font-size: 0.82rem;
+  color: var(--text-mid);
+  line-height: 1.8;
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+
+.donate-card {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1rem;
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-mid);
+  border-radius: 14px;
+}
+.donate-card + .donate-card { margin-top: 0.9rem; }
+
+/* QR 圖：點開是原圖，方便手機存圖 */
+.donate-qr {
+  flex-shrink: 0;
+  display: block;
+  width: 132px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--paper-mid);
+}
+.donate-qr img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.donate-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  min-width: 0;
+}
+.donate-bank {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-main);
+}
+.donate-bank span {
+  font-family: 'EB Garamond', serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--accent1);
+  margin-left: 0.3rem;
+}
+.donate-account {
+  font-family: 'EB Garamond', serif;
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
+  color: var(--text-main);
+  word-break: break-all;
+}
+.donate-copy {
+  margin-top: 0.3rem;
+  padding: 0.4rem 1rem;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.8rem;
+  color: var(--paper);
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.donate-copy:hover,
+.donate-copy:focus-visible {
+  background: var(--ink-soft);
+  border-color: var(--accent3);
+}
+.donate-copy.is-copied {
+  background: var(--accent1);
+  border-color: var(--accent1);
+}
+
+.donate-back {
+  display: block;
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: var(--accent1);
+  text-align: center;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+}
+.donate-back:hover,
+.donate-back:focus-visible { text-decoration: underline; }
+
+/* 很窄的手機：QR 放上面，資訊放下面 */
+@media (max-width: 380px) {
+  .donate-card { flex-direction: column; text-align: center; }
+  .donate-qr { width: 180px; }
+  .donate-info { align-items: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .donate-copy, .drink-item, .drink-btn { transition: none; }
+}
