@@ -87,10 +87,19 @@
   padding: 0 2rem;
 }
 .intro-video-frame {
-  aspect-ratio: 16 / 9;
+  max-width: 300px;
+  margin: 0 auto;
+  aspect-ratio: 9 / 16;
   background: var(--ink-soft);
   border: 1px solid rgba(196,149,106,0.35);
   box-shadow: 0 24px 48px rgba(28,26,23,0.22);
+}
+.intro-video-caption {
+  margin-top: 0.9rem;
+  text-align: center;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: var(--text-soft);
 }
 .intro-video-frame iframe {
   width: 100%;
