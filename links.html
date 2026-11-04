@@ -58,6 +58,17 @@
         </a>
       </li>
     </ul>
+
+    <section class="page-qr" aria-label="分享本頁">
+      <button class="page-qr-toggle" type="button" aria-expanded="false" aria-controls="page-qr-panel">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h3v3h-3zM19 14v3M14 19h3M19 19h2v2h-2z"/></svg>
+        <span>顯示本頁 QR Code</span>
+      </button>
+      <div class="page-qr-panel" id="page-qr-panel" hidden>
+        <img class="page-qr-image" alt="本頁網址的 QR Code" width="180" height="180">
+        <p>掃描 QR Code 開啟這個連結頁</p>
+      </div>
+    </section>
   </div>
 </header>
 
@@ -226,6 +237,23 @@
   <a href="https://heysaori.com">© Saori · 謝孟娟 · heysaori.com</a>
   <div class="links-credit">Photos from <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a></div>
 </footer>
+
+<script>
+  const qrToggle = document.querySelector('.page-qr-toggle');
+  const qrPanel = document.querySelector('#page-qr-panel');
+  const qrImage = document.querySelector('.page-qr-image');
+
+  qrToggle.addEventListener('click', () => {
+    const isExpanded = qrToggle.getAttribute('aria-expanded') === 'true';
+    qrToggle.setAttribute('aria-expanded', String(!isExpanded));
+    qrPanel.hidden = isExpanded;
+
+    if (!isExpanded && !qrImage.src) {
+      const pageUrl = encodeURIComponent(window.location.href);
+      qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${pageUrl}`;
+    }
+  });
+</script>
 
 </body>
 </html>

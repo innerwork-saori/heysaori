@@ -187,6 +187,51 @@
 .link-note:hover,
 .link-note:focus-visible { color: var(--accent1); text-decoration: underline; }
 
+/* ── PAGE QR CODE ── */
+.page-qr {
+  margin-top: 1.25rem;
+  text-align: center;
+}
+.page-qr-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0.75rem;
+  border: 0;
+  background: transparent;
+  color: rgba(250,247,242,0.7);
+  font: inherit;
+  cursor: pointer;
+}
+.page-qr-toggle:hover,
+.page-qr-toggle:focus-visible,
+.page-qr-toggle[aria-expanded="true"] { color: var(--accent3); }
+.page-qr-toggle svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.page-qr-panel { padding-top: 0.75rem; }
+.page-qr-image {
+  display: block;
+  width: 180px;
+  height: 180px;
+  margin: 0 auto;
+  padding: 0.5rem;
+  background: #fff;
+  border: 1px solid var(--paper-mid);
+  border-radius: 8px;
+}
+.page-qr-panel p {
+  margin: 0.5rem 0 0;
+  color: rgba(250,247,242,0.7);
+  font-size: 0.8rem;
+}
+
 /* 主要 CTA：預約諮詢 */
 .link-card--primary {
   background: var(--ink);
