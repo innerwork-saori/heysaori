@@ -44,6 +44,11 @@ body { background: var(--wan-paper); color: var(--wan-ink); }
 .outputs-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
 .outputs-grid .disclaimer { grid-column: 1 / -1; margin: -.35rem 0 0; }
 .wanan-card h2 { margin: 0; font: 500 1.3rem/1.5 'Noto Serif TC', serif; }
+.model-note { margin-top: 1rem; padding: .85rem 1rem; border-left: 3px solid #526d7a; background: #edf0ed; color: #454a47; }
+.model-note-title { margin: 0 0 .25rem; color: #354b54; font-size: .88rem; font-weight: 500; }
+.model-note p:not(.model-note-title) { margin: 0; font-size: .82rem; line-height: 1.75; overflow-wrap: anywhere; }
+.model-note code { font-size: .78rem; }
+.model-note a { display: inline-block; margin-top: .35rem; color: #405e6a; font-size: .8rem; text-underline-offset: 3px; }
 .wanan-card label { display: block; margin: 1.15rem 0 .4rem; color: #595a53; font-size: .9rem; }
 .wanan-card select, .wanan-card textarea, .wanan-card input {
   width: 100%; padding: .78rem .85rem; border: 1px solid #c9c5b9; border-radius: 2px;
@@ -57,6 +62,9 @@ body { background: var(--wan-paper); color: var(--wan-ink); }
 .key-details { margin: 1.1rem 0; padding: .8rem 0; border-top: 1px solid var(--wan-rule); border-bottom: 1px solid var(--wan-rule); }
 .key-details summary { color: var(--wan-seal); cursor: pointer; font-size: .9rem; }
 .key-help-link { margin-top: .65rem; padding: 0; border: 0; background: transparent; color: #62645c; font: inherit; font-size: .82rem; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.key-security-note { margin-top: .85rem; padding: .8rem .9rem; border-left: 3px solid var(--wan-seal); background: #f3f0e8; }
+.key-security-note p { margin: .25rem 0 0; color: #55574f; font-size: .8rem; line-height: 1.7; }
+.key-security-note .key-security-title { margin: 0; color: var(--wan-ink); font-size: .84rem; font-weight: 500; }
 .key-help-dialog { position: fixed; inset: 0; width: min(460px, calc(100% - 2rem)); max-width: none; max-height: min(90dvh, 640px); margin: auto; padding: clamp(1.4rem, 5vw, 2rem); border: 1px solid #b8b1a3; background: var(--wan-sheet); color: var(--wan-ink); box-shadow: 0 22px 70px rgba(15,17,14,.3); overflow: auto; }
 .key-help-dialog::backdrop { background: rgba(25,27,24,.68); backdrop-filter: blur(3px); }
 .key-help-topline { display: flex; align-items: center; justify-content: space-between; padding-bottom: .75rem; border-bottom: 1px solid var(--wan-rule); color: var(--wan-seal); font-size: .72rem; letter-spacing: .08em; }
