@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>萬安體產生器 · Saori 謝孟娟</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/saori-base.css">
+  <link rel="stylesheet" href="css/wan-an-generator.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="tools.html" class="nav-back">AI 工具集</a>
+    <div class="nav-title">萬安體產生器</div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-inner">
+      <div class="hero-label">by Saori · language experiment</div>
+      <h1 class="hero-title">萬安體產生器</h1>
+      <div class="hero-divider"></div>
+      <p class="hero-desc">把問題說得四平八穩，看看資訊密度還剩多少。<br>純屬語體模仿與戲謔創作，並非任何政治人物原話。</p>
+    </div>
+  </section>
+
+  <main class="wanan-main">
+    <section class="wanan-card" aria-labelledby="form-title">
+      <h2 id="form-title">開始轉換</h2>
+      <label for="mode">生成模式</label>
+      <select id="mode">
+        <option value="convert">萬安轉換</option>
+        <option value="press">記者會模擬</option>
+        <option value="analyze">萬安指數分析</option>
+        <option value="decode">反向解碼</option>
+        <option value="extreme">萬安語體極限模式</option>
+      </select>
+      <label for="sourceText">輸入文字或問題</label>
+      <textarea id="sourceText" rows="7" placeholder="例如：這項工程什麼時候會完工？"></textarea>
+
+      <details class="key-details">
+        <summary>設定 OpenRouter API Key</summary>
+        <button class="key-help-link" id="openKeyHelp" type="button">還沒有 Key？看申請方式</button>
+        <p>Key 只在這個分頁記憶體中使用，重新整理或關閉頁面就會清除。瀏覽器直接呼叫 API 時，金鑰仍可能被使用者透過開發者工具查看；請勿在公用或不信任的裝置使用。正式公開給他人使用時，建議改由自有後端代呼叫。</p>
+        <label for="apiKey">API Key</label>
+        <input id="apiKey" type="password" autocomplete="off" placeholder="sk-or-v1-…">
+      </details>
+
+      <button id="generateButton" type="button">產生回應</button>
+      <p id="status" class="wanan-status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="wanan-card output-card" aria-labelledby="output-title">
+      <div class="output-heading">
+        <h2 id="output-title">生成結果</h2>
+        <button id="copyButton" class="copy-button" type="button" disabled>複製</button>
+      </div>
+      <div id="result" class="wanan-result" aria-live="polite">結果會顯示在這裡。</div>
+      <p class="disclaimer">本工具模仿一種公共發言語體，不代表真實政策、事實或承諾。</p>
+    </section>
+  </main>
+
+  <dialog class="key-help-dialog" id="keyHelpDialog" aria-labelledby="keyHelpTitle">
+    <div class="key-help-topline"><span>OPENROUTER 使用小抄</span><button class="key-help-close" id="closeKeyHelp" type="button" aria-label="關閉說明">×</button></div>
+    <h2 id="keyHelpTitle">三步取得 API Key</h2>
+    <ol class="key-help-steps">
+      <li><span>01</span><div>建立帳戶<small>前往 OpenRouter 註冊或登入。</small></div></li>
+      <li><span>02</span><div>新增金鑰<small>打開帳戶設定中的 Keys 頁面，建立一組 API Key。</small></div></li>
+      <li><span>03</span><div>貼回這裡<small>複製新金鑰，回到產生器貼入 API Key 欄位。</small></div></li>
+    </ol>
+    <p class="key-help-note">請妥善保管金鑰。模型供應與免費額度依 OpenRouter 當下方案為準。</p>
+    <a class="key-help-visit" href="https://openrouter.ai/" target="_blank" rel="noopener noreferrer">前往 OpenRouter 官網 ↗</a>
+  </dialog>
+
+  <footer><div class="inner"><div class="footer-copy">© Saori · 謝孟娟 · heysaori.com</div></div></footer>
+  <script src="js/wan-an-generator.js"></script>
+</body>
+</html>

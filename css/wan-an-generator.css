@@ -1,0 +1,100 @@
+:root {
+  --wan-ink: #252722;
+  --wan-paper: #f4f1e9;
+  --wan-sheet: #fbfaf6;
+  --wan-rule: #d8d3c7;
+  --wan-seal: #a34636;
+}
+
+body { background: var(--wan-paper); color: var(--wan-ink); }
+.nav { background: var(--wan-ink); }
+.nav-back, .nav-title { color: rgba(251,250,246,.78); }
+
+.hero {
+  position: relative;
+  min-height: 330px;
+  padding: 118px max(1.25rem, calc((100vw - 1040px) / 2)) 3rem;
+  overflow: hidden;
+  background: var(--wan-ink);
+  color: var(--wan-sheet);
+}
+.hero::after {
+  content: "答";
+  position: absolute;
+  right: max(1.5rem, calc((100vw - 1040px) / 2));
+  bottom: -5.8rem;
+  color: rgba(251,250,246,.045);
+  font: 700 clamp(15rem, 34vw, 27rem)/1 'Noto Serif TC', serif;
+  pointer-events: none;
+}
+.hero-inner { position: relative; z-index: 1; max-width: 760px; }
+.hero-label { margin-bottom: .8rem; color: #d1b2a5; font-size: .85rem; letter-spacing: .08em; }
+.hero-title { margin: 0; color: var(--wan-sheet); font: 600 clamp(2.5rem, 7vw, 4.5rem)/1.2 'Noto Serif TC', serif; letter-spacing: .02em; }
+.hero-divider { width: 3.25rem; height: 3px; margin: 1.2rem 0 1rem; background: var(--wan-seal); }
+.hero-desc { max-width: 38rem; color: rgba(251,250,246,.76); font-size: .98rem; line-height: 1.9; }
+
+.wanan-main {
+  width: min(1040px, calc(100% - 2.5rem));
+  margin: 2.5rem auto 5rem;
+  display: grid;
+  grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+  gap: 1px;
+  background: var(--wan-rule);
+  border: 1px solid var(--wan-rule);
+  align-items: stretch;
+}
+.wanan-card { min-width: 0; padding: clamp(1.2rem, 3vw, 2.25rem); background: var(--wan-sheet); }
+.wanan-card h2 { margin: 0; font: 500 1.3rem/1.5 'Noto Serif TC', serif; }
+.wanan-card label { display: block; margin: 1.15rem 0 .4rem; color: #595a53; font-size: .9rem; }
+.wanan-card select, .wanan-card textarea, .wanan-card input {
+  width: 100%; padding: .78rem .85rem; border: 1px solid #c9c5b9; border-radius: 2px;
+  background: #fff; color: var(--wan-ink); font: inherit;
+}
+.wanan-card textarea { min-height: 190px; resize: vertical; line-height: 1.8; }
+.wanan-card select:focus, .wanan-card textarea:focus, .wanan-card input:focus,
+#generateButton:focus-visible, .copy-button:focus-visible, .key-details summary:focus-visible {
+  outline: 3px solid rgba(163,70,54,.35); outline-offset: 2px; border-color: var(--wan-seal);
+}
+.key-details { margin: 1.1rem 0; padding: .8rem 0; border-top: 1px solid var(--wan-rule); border-bottom: 1px solid var(--wan-rule); }
+.key-details summary { color: var(--wan-seal); cursor: pointer; font-size: .9rem; }
+.key-help-link { margin-top: .65rem; padding: 0; border: 0; background: transparent; color: #62645c; font: inherit; font-size: .82rem; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.key-help-dialog { position: fixed; inset: 0; width: min(460px, calc(100% - 2rem)); max-width: none; max-height: min(90dvh, 640px); margin: auto; padding: clamp(1.4rem, 5vw, 2rem); border: 1px solid #b8b1a3; background: var(--wan-sheet); color: var(--wan-ink); box-shadow: 0 22px 70px rgba(15,17,14,.3); overflow: auto; }
+.key-help-dialog::backdrop { background: rgba(25,27,24,.68); backdrop-filter: blur(3px); }
+.key-help-topline { display: flex; align-items: center; justify-content: space-between; padding-bottom: .75rem; border-bottom: 1px solid var(--wan-rule); color: var(--wan-seal); font-size: .72rem; letter-spacing: .08em; }
+.key-help-close { width: 2rem; height: 2rem; border: 1px solid var(--wan-rule); background: transparent; color: var(--wan-ink); font: 1.4rem/1 'Noto Sans TC', sans-serif; cursor: pointer; }
+.key-help-dialog h2 { margin: 1rem 0 1.2rem; font: 500 1.5rem/1.4 'Noto Serif TC', serif; }
+.key-help-steps { display: grid; gap: .9rem; margin: 0; padding: 0; list-style: none; }
+.key-help-steps li { display: grid; grid-template-columns: 2.2rem 1fr; gap: .65rem; align-items: start; }
+.key-help-steps li > span { color: var(--wan-seal); font: italic 1.1rem 'EB Garamond', serif; }
+.key-help-steps li div { font-weight: 500; }
+.key-help-steps small { display: block; margin-top: .12rem; color: #62645c; font-size: .84rem; font-weight: 300; line-height: 1.7; }
+.key-help-note { margin: 1.1rem 0; padding: .7rem .8rem; border-left: 2px solid var(--wan-seal); background: #f0ede5; color: #55574f; font-size: .8rem; line-height: 1.65; }
+.key-help-visit { display: inline-block; color: var(--wan-seal); font-size: .9rem; text-underline-offset: 4px; }
+.key-details p, .disclaimer { margin-top: .6rem; color: #686960; font-size: .82rem; line-height: 1.75; }
+#generateButton { border: 0; border-radius: 2px; padding: .8rem 1.2rem; background: var(--wan-seal); color: white; font: 500 1rem 'Noto Sans TC', sans-serif; cursor: pointer; }
+#generateButton:hover { background: #83382c; }
+#generateButton:disabled { opacity: .65; cursor: wait; }
+.wanan-status { min-height: 1.6rem; margin: .65rem 0 0; color: #5e6057; font-size: .88rem; overflow-wrap: anywhere; }
+.output-card { display: flex; flex-direction: column; }
+.output-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-bottom: .85rem; border-bottom: 1px solid var(--wan-rule); }
+.copy-button { padding: .35rem .75rem; border: 1px solid #aaa69a; border-radius: 2px; background: transparent; color: var(--wan-ink); font: inherit; cursor: pointer; }
+.copy-button:disabled { opacity: .45; cursor: default; }
+.wanan-result { flex: 1; min-height: 290px; margin-top: 1rem; padding: 1.1rem 1rem; border-left: 3px solid var(--wan-seal); background: #f3f0e8; color: #33352f; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.9; }
+.disclaimer { margin-top: 1rem; }
+footer { background: var(--wan-ink); }
+footer .footer-copy { color: rgba(251,250,246,.6); }
+
+@media (max-width: 720px) {
+  .hero { min-height: 0; padding: 108px 1.25rem 2.5rem; }
+  .hero::after { right: -.75rem; bottom: -3.2rem; font-size: 14rem; }
+  .hero-title { font-size: clamp(2.3rem, 11vw, 3.5rem); }
+  .hero-desc { font-size: .92rem; }
+  .wanan-main { width: calc(100% - 1.5rem); margin: 1rem auto 3rem; grid-template-columns: 1fr; }
+  .wanan-card { padding: 1.15rem; }
+  .wanan-card textarea { min-height: 150px; }
+  .wanan-result { min-height: 200px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
