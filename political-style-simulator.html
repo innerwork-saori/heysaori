@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>萬安體產生器 · Saori 謝孟娟</title>
+  <title>台灣政治語體模擬器 · Saori 謝孟娟</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
@@ -14,30 +14,22 @@
 <body>
   <nav class="nav">
     <a href="tools.html" class="nav-back">AI 工具集</a>
-    <div class="nav-title">萬安體產生器</div>
+    <div class="nav-title">政治語體模擬器</div>
   </nav>
 
   <section class="hero">
     <div class="hero-bg"></div>
     <div class="hero-inner">
       <div class="hero-label">by Saori · language experiment</div>
-      <h1 class="hero-title">萬安體產生器</h1>
+      <h1 class="hero-title">政治語體模擬器</h1>
       <div class="hero-divider"></div>
-      <p class="hero-desc">把問題說得四平八穩，看看資訊密度還剩多少。<br>純屬語體模仿與戲謔創作，並非任何政治人物原話。</p>
+      <p class="hero-desc">同一個問題，兩種截然不同的答法。<br>以下為語體特徵的戲仿創作，並非任何政治人物原話。</p>
     </div>
   </section>
 
   <main class="wanan-main">
-    <section class="wanan-card" aria-labelledby="form-title">
+    <section class="wanan-card input-card" aria-labelledby="form-title">
       <h2 id="form-title">開始轉換</h2>
-      <label for="mode">生成模式</label>
-      <select id="mode">
-        <option value="convert">萬安轉換</option>
-        <option value="press">記者會模擬</option>
-        <option value="analyze">萬安指數分析</option>
-        <option value="decode">反向解碼</option>
-        <option value="extreme">萬安語體極限模式</option>
-      </select>
       <label for="sourceText">輸入文字或問題</label>
       <textarea id="sourceText" rows="7" placeholder="例如：這項工程什麼時候會完工？"></textarea>
 
@@ -49,18 +41,44 @@
         <input id="apiKey" type="password" autocomplete="off" placeholder="sk-or-v1-…">
       </details>
 
-      <button id="generateButton" type="button">產生回應</button>
+      <button id="generateButton" type="button">同時產生兩種語體</button>
       <p id="status" class="wanan-status" role="status" aria-live="polite"></p>
     </section>
 
-    <section class="wanan-card output-card" aria-labelledby="output-title">
-      <div class="output-heading">
-        <h2 id="output-title">生成結果</h2>
-        <button id="copyButton" class="copy-button" type="button" disabled>複製</button>
-      </div>
-      <div id="result" class="wanan-result" aria-live="polite">結果會顯示在這裡。</div>
-      <p class="disclaimer">本工具模仿一種公共發言語體，不代表真實政策、事實或承諾。</p>
-    </section>
+    <div class="outputs-grid">
+      <section class="wanan-card output-card wan-an-output" aria-labelledby="wanAnTitle">
+        <div class="output-heading">
+          <div><p class="style-kicker">穩健型・程序回應</p><h2 id="wanAnTitle">萬安體</h2></div>
+          <button class="copy-button" data-copy-target="wanAnResult" type="button" disabled>複製</button>
+        </div>
+        <label for="wanAnMode">生成模式</label>
+        <select id="wanAnMode">
+          <option value="convert">萬安轉換</option>
+          <option value="press">記者會模擬</option>
+          <option value="analyze">萬安指數分析</option>
+          <option value="decode">反向解碼</option>
+          <option value="extreme">萬安語體極限模式</option>
+        </select>
+        <div id="wanAnResult" class="wanan-result" aria-live="polite">輸入內容後，按「同時產生兩種語體」。</div>
+      </section>
+
+      <section class="wanan-card output-card bo-yang-output" aria-labelledby="boYangTitle">
+        <div class="output-heading">
+          <div><p class="style-kicker">論證型・知識拆解</p><h2 id="boYangTitle">伯洋體</h2></div>
+          <button class="copy-button" data-copy-target="boYangResult" type="button" disabled>複製</button>
+        </div>
+        <label for="boYangMode">生成模式</label>
+        <select id="boYangMode">
+          <option value="transform">伯洋式轉換</option>
+          <option value="counter">伯洋式反問</option>
+          <option value="expand">伯洋式知識展開</option>
+          <option value="debate">伯洋式辯論</option>
+          <option value="analyze">伯洋指數分析</option>
+        </select>
+        <div id="boYangResult" class="wanan-result" aria-live="polite">同一段輸入會在這裡改寫成拆解論述。</div>
+      </section>
+      <p class="disclaimer">「萬安體」依公共發言中的程序化、穩健語氣特徵進行戲仿，不代表真實政策、事實或任何人物原話。「伯洋體」依你提供的公開論述特徵進行戲仿，不代表沈伯洋本人發言；內容不會虛構研究、數據或引言。</p>
+    </div>
   </main>
 
   <dialog class="key-help-dialog" id="keyHelpDialog" aria-labelledby="keyHelpTitle">
@@ -75,7 +93,15 @@
     <a class="key-help-visit" href="https://openrouter.ai/" target="_blank" rel="noopener noreferrer">前往 OpenRouter 官網 ↗</a>
   </dialog>
 
-  <footer><div class="inner"><div class="footer-copy">© Saori · 謝孟娟 · heysaori.com</div></div></footer>
+  <footer>
+    <div class="inner">
+      <div class="footer-links">
+        <a href="tools.html">AI 工具集</a>
+        <a href="https://heysaori.com">heysaori.com</a>
+      </div>
+      <div class="footer-copy">© Saori · 謝孟娟 · heysaori.com</div>
+    </div>
+  </footer>
   <script src="js/wan-an-generator.js"></script>
 </body>
 </html>
