@@ -96,6 +96,10 @@ body { background: var(--wan-paper); color: var(--wan-ink); }
 .key-help-link { margin-top: .65rem; padding: 0; border: 0; background: transparent; color: #62645c; font: inherit; font-size: .82rem; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .key-security-note { margin-top: .85rem; padding: .8rem .9rem; border-left: 3px solid var(--wan-seal); background: #f3f0e8; }
 .key-security-note p { margin: .25rem 0 0; color: #55574f; font-size: .8rem; line-height: 1.7; }
+.key-security-note ul { margin: .45rem 0 0; padding-left: 1.1rem; color: #55574f; font-size: .82rem; line-height: 1.75; }
+.key-security-note li + li { margin-top: .3rem; }
+.key-security-note li strong { color: var(--wan-ink); font-weight: 500; }
+.key-help-steps small strong { color: var(--wan-seal); font-weight: 600; }
 .key-security-note .key-security-title { margin: 0; color: var(--wan-ink); font-size: .84rem; font-weight: 500; }
 .key-help-dialog { position: fixed; inset: 0; width: min(460px, calc(100% - 2rem)); max-width: none; max-height: min(90dvh, 640px); margin: auto; padding: clamp(1.4rem, 5vw, 2rem); border: 1px solid #b8b1a3; background: var(--wan-sheet); color: var(--wan-ink); box-shadow: 0 22px 70px rgba(15,17,14,.3); overflow: auto; }
 .key-help-dialog::backdrop { background: rgba(25,27,24,.68); backdrop-filter: blur(3px); }
