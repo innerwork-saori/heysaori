@@ -88,6 +88,8 @@ body { background: var(--wan-paper); color: var(--wan-ink); }
 .style-option input:checked + .style-option-box::after { transform: rotate(45deg) scale(1); }
 .style-option input:checked ~ .style-option-text strong { color: var(--style-color); }
 .style-option input:focus-visible + .style-option-box { outline: 3px solid rgba(163,70,54,.35); outline-offset: 3px; }
+.style-choice { min-width: 0; }
+.wanan-card .style-mode label { margin: .7rem 0 .3rem; font-size: .84rem; }
 .style-picker-warning { margin: .55rem 0 0; color: var(--wan-seal); font-size: .85rem; }
 .outputs-grid.is-single { grid-template-columns: minmax(0, 1fr); }
 .outputs-grid [hidden] { display: none; }
@@ -125,6 +127,15 @@ body { background: var(--wan-paper); color: var(--wan-ink); }
 .bo-yang-output .style-kicker { color: #526d7a; }
 .wanan-card select { margin-top: .2rem; }
 .bo-yang-output .wanan-result { border-color: #526d7a; }
+.output-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5rem; }
+.regen-button { padding: .35rem .75rem; border: 1px solid var(--wan-seal); border-radius: 2px; background: transparent; color: var(--wan-seal); font: inherit; cursor: pointer; }
+.bo-yang-output .regen-button { border-color: #526d7a; color: #526d7a; }
+.regen-button:hover:not(:disabled) { background: #f6ebe6; }
+.bo-yang-output .regen-button:hover:not(:disabled) { background: #e9eff1; }
+.regen-button:disabled { opacity: .4; cursor: default; }
+.regen-button:focus-visible { outline: 3px solid rgba(163,70,54,.35); outline-offset: 2px; }
+.output-mode { margin: .85rem 0 0; color: #686960; font-size: .84rem; }
+.output-mode span { color: var(--wan-ink); font-weight: 500; }
 .copy-button { padding: .35rem .75rem; border: 1px solid #aaa69a; border-radius: 2px; background: transparent; color: var(--wan-ink); font: inherit; cursor: pointer; }
 .copy-button:disabled { opacity: .45; cursor: default; }
 .wanan-result { flex: 1; min-height: 290px; margin-top: 1rem; padding: 1.1rem 1rem; border-left: 3px solid var(--wan-seal); background: #f3f0e8; color: #33352f; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.9; }

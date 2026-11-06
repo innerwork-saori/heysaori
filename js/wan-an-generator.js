@@ -9,6 +9,10 @@
   const outputsGrid = document.getElementById('outputsGrid');
   const styleCards = { wanAn: document.getElementById('wanAnCard'), boYang: document.getElementById('boYangCard') };
   const styleNames = { wanAn: '萬安體', boYang: '伯洋體' };
+  const modeSelects = { wanAn: document.getElementById('wanAnMode'), boYang: document.getElementById('boYangMode') };
+  const modeFields = { wanAn: document.getElementById('wanAnModeField'), boYang: document.getElementById('boYangModeField') };
+  const regenButtons = document.querySelectorAll('.regen-button');
+  let isBusy = false;
 
   function getSelectedStyles() {
     return Array.from(styleBoxes).filter((box) => box.checked).map((box) => box.value);
@@ -24,17 +28,28 @@
     const selected = getSelectedStyles();
     Object.entries(styleCards).forEach(([style, card]) => {
       if (card) card.hidden = !selected.includes(style);
+      if (modeFields[style]) modeFields[style].hidden = !selected.includes(style);
     });
     if (outputsGrid) outputsGrid.classList.toggle('is-single', selected.length === 1);
     if (pickerWarning) pickerWarning.hidden = selected.length > 0;
-    if (!generateButton.dataset.busy) {
-      generateButton.textContent = getButtonLabel(selected);
-      generateButton.disabled = selected.length === 0;
-    }
+    generateButton.textContent = getButtonLabel(selected);
+    generateButton.disabled = isBusy || selected.length === 0;
+    regenButtons.forEach((button) => {
+      button.disabled = isBusy || !styleCards[button.dataset.regen]?.dataset.generated;
+    });
+  }
+
+  function syncModeLabels() {
+    Object.entries(modeSelects).forEach(([style, select]) => {
+      const label = document.querySelector(`[data-mode-label="${style}"]`);
+      if (select && label) label.textContent = select.options[select.selectedIndex].text;
+    });
   }
 
   styleBoxes.forEach((box) => box.addEventListener('change', syncStylePicker));
+  Object.values(modeSelects).forEach((select) => select?.addEventListener('change', syncModeLabels));
   syncStylePicker();
+  syncModeLabels();
 
   document.getElementById('openKeyHelp').addEventListener('click', (event) => {
     event.preventDefault();
@@ -97,26 +112,33 @@
     });
   });
 
-  generateButton.addEventListener('click', async () => {
+  async function runStyles(styles) {
     const apiKey = keyInput.value.trim();
     const source = sourceInput.value.trim();
-    const selected = getSelectedStyles();
-    if (!selected.length) { status.textContent = '請至少勾選一種語體。'; return; }
-    if (!apiKey) { status.textContent = '請先輸入 OpenRouter API Key。'; keyInput.focus(); return; }
+    if (!styles.length) { status.textContent = '請至少勾選一種語體。'; return; }
+    if (!apiKey) {
+      status.textContent = '請先輸入 OpenRouter API Key。';
+      document.querySelector('.key-details').open = true;
+      keyInput.focus();
+      return;
+    }
     if (!source) { status.textContent = '請先輸入要處理的文字或問題。'; sourceInput.focus(); return; }
 
-    const wanAnResult = document.getElementById('wanAnResult');
-    const boYangResult = document.getElementById('boYangResult');
-    const wanAnCopy = document.querySelector('[data-copy-target="wanAnResult"]');
-    const boYangCopy = document.querySelector('[data-copy-target="boYangResult"]');
     const allTasks = {
-      wanAn: { result: wanAnResult, copy: wanAnCopy, model: document.getElementById('wanAnMode').value, instructions: wanAnModes, system: wanAnSystem, name: '萬安體' },
-      boYang: { result: boYangResult, copy: boYangCopy, model: document.getElementById('boYangMode').value, instructions: boYangModes, system: boYangSystem, name: '伯洋體' }
+      wanAn: { instructions: wanAnModes, system: wanAnSystem },
+      boYang: { instructions: boYangModes, system: boYangSystem }
     };
-    const tasks = selected.map((style) => allTasks[style]);
+    const tasks = styles.map((style) => ({
+      ...allTasks[style],
+      style,
+      name: styleNames[style],
+      mode: modeSelects[style].value,
+      result: document.getElementById(`${style}Result`),
+      copy: document.querySelector(`[data-copy-target="${style}Result"]`)
+    }));
 
-    generateButton.dataset.busy = 'true';
-    generateButton.disabled = true;
+    isBusy = true;
+    syncStylePicker();
     tasks.forEach(({ result, copy }) => { result.textContent = '生成中…'; copy.disabled = true; });
     status.textContent = tasks.length === 2 ? '正在同時生成兩種語體…' : `正在生成${tasks[0].name}…`;
 
@@ -127,13 +149,15 @@
           source,
           model: 'nvidia/nemotron-3-ultra-550b-a55b:free',
           system: task.system,
-          instruction: task.instructions[task.model]
+          instruction: task.instructions[task.mode]
         });
         task.copy.disabled = false;
         return { name: task.name, ok: true };
       } catch (error) {
         task.result.textContent = `生成失敗：${error.message}`;
         return { name: task.name, ok: false };
+      } finally {
+        styleCards[task.style].dataset.generated = 'true';
       }
     }));
 
@@ -141,7 +165,12 @@
     const failed = outcomes.filter(({ ok }) => !ok).map(({ name }) => `${name}生成失敗`);
     if (!failed.length) status.textContent = tasks.length === 2 ? '兩種語體都已完成。' : `${done[0]}已完成。`;
     else status.textContent = `${done.length ? `${done.join('、')}完成；` : ''}${failed.join('、')}。`;
-    delete generateButton.dataset.busy;
+    isBusy = false;
     syncStylePicker();
+  }
+
+  generateButton.addEventListener('click', () => runStyles(getSelectedStyles()));
+  regenButtons.forEach((button) => {
+    button.addEventListener('click', () => runStyles([button.dataset.regen]));
   });
 })();

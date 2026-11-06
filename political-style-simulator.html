@@ -48,18 +48,42 @@
 
       <fieldset class="style-picker">
         <legend>要產生哪一種語體？</legend>
-        <p class="style-picker-hint">可以只選一種，也可以兩種都勾。</p>
+        <p class="style-picker-hint">可以只選一種，也可以兩種都勾；勾選後再挑生成模式。</p>
         <div class="style-picker-options">
-          <label class="style-option style-option-wan-an">
-            <input type="checkbox" name="styles" value="wanAn" checked>
-            <span class="style-option-box" aria-hidden="true"></span>
-            <span class="style-option-text"><strong>萬安體</strong><small>穩健型・程序回應</small></span>
-          </label>
-          <label class="style-option style-option-bo-yang">
-            <input type="checkbox" name="styles" value="boYang" checked>
-            <span class="style-option-box" aria-hidden="true"></span>
-            <span class="style-option-text"><strong>伯洋體</strong><small>論證型・知識拆解</small></span>
-          </label>
+          <div class="style-choice">
+            <label class="style-option style-option-wan-an">
+              <input type="checkbox" name="styles" value="wanAn" checked>
+              <span class="style-option-box" aria-hidden="true"></span>
+              <span class="style-option-text"><strong>萬安體</strong><small>穩健型・程序回應</small></span>
+            </label>
+            <div class="style-mode" id="wanAnModeField">
+              <label for="wanAnMode">萬安體生成模式</label>
+              <select id="wanAnMode">
+                <option value="convert">萬安轉換</option>
+                <option value="press">記者會模擬</option>
+                <option value="analyze">萬安指數分析</option>
+                <option value="decode">反向解碼</option>
+                <option value="extreme">萬安語體極限模式</option>
+              </select>
+            </div>
+          </div>
+          <div class="style-choice">
+            <label class="style-option style-option-bo-yang">
+              <input type="checkbox" name="styles" value="boYang" checked>
+              <span class="style-option-box" aria-hidden="true"></span>
+              <span class="style-option-text"><strong>伯洋體</strong><small>論證型・知識拆解</small></span>
+            </label>
+            <div class="style-mode" id="boYangModeField">
+              <label for="boYangMode">伯洋體生成模式</label>
+              <select id="boYangMode">
+                <option value="transform">伯洋式轉換</option>
+                <option value="counter">伯洋式反問</option>
+                <option value="expand">伯洋式知識展開</option>
+                <option value="debate">伯洋式辯論</option>
+                <option value="analyze">伯洋指數分析</option>
+              </select>
+            </div>
+          </div>
         </div>
         <p id="pickerWarning" class="style-picker-warning" hidden>請至少勾選一種語體。</p>
       </fieldset>
@@ -89,32 +113,24 @@
       <section class="wanan-card output-card wan-an-output" id="wanAnCard" aria-labelledby="wanAnTitle">
         <div class="output-heading">
           <div><p class="style-kicker">穩健型・程序回應</p><h2 id="wanAnTitle">萬安體</h2></div>
-          <button class="copy-button" data-copy-target="wanAnResult" type="button" disabled>複製</button>
+          <div class="output-actions">
+            <button class="regen-button" data-regen="wanAn" type="button" disabled aria-label="只重新產生萬安體">重新產生</button>
+            <button class="copy-button" data-copy-target="wanAnResult" type="button" disabled>複製</button>
+          </div>
         </div>
-        <label for="wanAnMode">生成模式</label>
-        <select id="wanAnMode">
-          <option value="convert">萬安轉換</option>
-          <option value="press">記者會模擬</option>
-          <option value="analyze">萬安指數分析</option>
-          <option value="decode">反向解碼</option>
-          <option value="extreme">萬安語體極限模式</option>
-        </select>
+        <p class="output-mode">目前模式：<span data-mode-label="wanAn"></span></p>
         <div id="wanAnResult" class="wanan-result" aria-live="polite">輸入內容並勾選萬安體後，按下產生按鈕。</div>
       </section>
 
       <section class="wanan-card output-card bo-yang-output" id="boYangCard" aria-labelledby="boYangTitle">
         <div class="output-heading">
           <div><p class="style-kicker">論證型・知識拆解</p><h2 id="boYangTitle">伯洋體</h2></div>
-          <button class="copy-button" data-copy-target="boYangResult" type="button" disabled>複製</button>
+          <div class="output-actions">
+            <button class="regen-button" data-regen="boYang" type="button" disabled aria-label="只重新產生伯洋體">重新產生</button>
+            <button class="copy-button" data-copy-target="boYangResult" type="button" disabled>複製</button>
+          </div>
         </div>
-        <label for="boYangMode">生成模式</label>
-        <select id="boYangMode">
-          <option value="transform">伯洋式轉換</option>
-          <option value="counter">伯洋式反問</option>
-          <option value="expand">伯洋式知識展開</option>
-          <option value="debate">伯洋式辯論</option>
-          <option value="analyze">伯洋指數分析</option>
-        </select>
+        <p class="output-mode">目前模式：<span data-mode-label="boYang"></span></p>
         <div id="boYangResult" class="wanan-result" aria-live="polite">勾選伯洋體後，同一段輸入會在這裡改寫成拆解論述。</div>
       </section>
       <p class="disclaimer">「萬安體」依公共發言中的程序化、穩健語氣特徵進行戲仿，不代表真實政策、事實或任何人物原話。「伯洋體」依你提供的公開論述特徵進行戲仿，不代表沈伯洋本人發言；內容不會虛構研究、數據或引言。</p>
