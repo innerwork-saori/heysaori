@@ -40,7 +40,7 @@ body { background: var(--wan-paper); color: var(--wan-ink); }
   gap: 1.25rem;
 }
 .wanan-card { min-width: 0; padding: clamp(1.2rem, 3vw, 2.25rem); border: 1px solid var(--wan-rule); background: var(--wan-sheet); }
-.input-card { max-width: 820px; width: 100%; margin-inline: auto; }
+.input-card { width: 100%; }
 .outputs-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
 .outputs-grid .disclaimer { grid-column: 1 / -1; margin: -.35rem 0 0; }
 .wanan-card h2 { margin: 0; font: 500 1.3rem/1.5 'Noto Serif TC', serif; }
