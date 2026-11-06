@@ -40,11 +40,29 @@
       <h2 id="form-title">開始轉換</h2>
       <aside class="model-note" aria-label="模型與費用說明">
         <p class="model-note-title">模型與費用</p>
-        <p>兩種語體目前都使用 <strong>NVIDIA Nemotron 3 Ultra（免費版）</strong>，模型代碼為 <code>nvidia/nemotron-3-ultra-550b-a55b:free</code>。模型價格為 $0，不需先購買或儲值點數。免費端點仍有使用額度與速率限制；每次同時產生兩種結果會送出兩個請求。</p>
+        <p>兩種語體目前都使用 <strong>NVIDIA Nemotron 3 Ultra（免費版）</strong>，模型代碼為 <code>nvidia/nemotron-3-ultra-550b-a55b:free</code>。模型價格為 $0，不需先購買或儲值點數。免費端點仍有使用額度與速率限制；勾選兩種語體時，每次會送出兩個請求。</p>
         <a href="https://openrouter.ai/nvidia/nemotron-3-ultra-550b-a55b:free/pricing" target="_blank" rel="noopener noreferrer">查看 OpenRouter 模型與價格</a>
       </aside>
       <label for="sourceText">輸入文字或問題</label>
       <textarea id="sourceText" rows="7" placeholder="例如：這項工程什麼時候會完工？"></textarea>
+
+      <fieldset class="style-picker">
+        <legend>要產生哪一種語體？</legend>
+        <p class="style-picker-hint">可以只選一種，也可以兩種都勾。</p>
+        <div class="style-picker-options">
+          <label class="style-option style-option-wan-an">
+            <input type="checkbox" name="styles" value="wanAn" checked>
+            <span class="style-option-box" aria-hidden="true"></span>
+            <span class="style-option-text"><strong>萬安體</strong><small>穩健型・程序回應</small></span>
+          </label>
+          <label class="style-option style-option-bo-yang">
+            <input type="checkbox" name="styles" value="boYang" checked>
+            <span class="style-option-box" aria-hidden="true"></span>
+            <span class="style-option-text"><strong>伯洋體</strong><small>論證型・知識拆解</small></span>
+          </label>
+        </div>
+        <p id="pickerWarning" class="style-picker-warning" hidden>請至少勾選一種語體。</p>
+      </fieldset>
 
       <details class="key-details">
         <summary>設定 OpenRouter API Key</summary>
@@ -62,8 +80,8 @@
       <p id="status" class="wanan-status" role="status" aria-live="polite"></p>
     </section>
 
-    <div class="outputs-grid">
-      <section class="wanan-card output-card wan-an-output" aria-labelledby="wanAnTitle">
+    <div class="outputs-grid" id="outputsGrid">
+      <section class="wanan-card output-card wan-an-output" id="wanAnCard" aria-labelledby="wanAnTitle">
         <div class="output-heading">
           <div><p class="style-kicker">穩健型・程序回應</p><h2 id="wanAnTitle">萬安體</h2></div>
           <button class="copy-button" data-copy-target="wanAnResult" type="button" disabled>複製</button>
@@ -76,10 +94,10 @@
           <option value="decode">反向解碼</option>
           <option value="extreme">萬安語體極限模式</option>
         </select>
-        <div id="wanAnResult" class="wanan-result" aria-live="polite">輸入內容後，按「同時產生兩種語體」。</div>
+        <div id="wanAnResult" class="wanan-result" aria-live="polite">輸入內容並勾選萬安體後，按下產生按鈕。</div>
       </section>
 
-      <section class="wanan-card output-card bo-yang-output" aria-labelledby="boYangTitle">
+      <section class="wanan-card output-card bo-yang-output" id="boYangCard" aria-labelledby="boYangTitle">
         <div class="output-heading">
           <div><p class="style-kicker">論證型・知識拆解</p><h2 id="boYangTitle">伯洋體</h2></div>
           <button class="copy-button" data-copy-target="boYangResult" type="button" disabled>複製</button>
@@ -92,7 +110,7 @@
           <option value="debate">伯洋式辯論</option>
           <option value="analyze">伯洋指數分析</option>
         </select>
-        <div id="boYangResult" class="wanan-result" aria-live="polite">同一段輸入會在這裡改寫成拆解論述。</div>
+        <div id="boYangResult" class="wanan-result" aria-live="polite">勾選伯洋體後，同一段輸入會在這裡改寫成拆解論述。</div>
       </section>
       <p class="disclaimer">「萬安體」依公共發言中的程序化、穩健語氣特徵進行戲仿，不代表真實政策、事實或任何人物原話。「伯洋體」依你提供的公開論述特徵進行戲仿，不代表沈伯洋本人發言；內容不會虛構研究、數據或引言。</p>
     </div>

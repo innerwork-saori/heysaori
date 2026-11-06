@@ -4,6 +4,37 @@
   const generateButton = document.getElementById('generateButton');
   const status = document.getElementById('status');
   const keyHelpDialog = document.getElementById('keyHelpDialog');
+  const styleBoxes = document.querySelectorAll('input[name="styles"]');
+  const pickerWarning = document.getElementById('pickerWarning');
+  const outputsGrid = document.getElementById('outputsGrid');
+  const styleCards = { wanAn: document.getElementById('wanAnCard'), boYang: document.getElementById('boYangCard') };
+  const styleNames = { wanAn: '萬安體', boYang: '伯洋體' };
+
+  function getSelectedStyles() {
+    return Array.from(styleBoxes).filter((box) => box.checked).map((box) => box.value);
+  }
+
+  function getButtonLabel(selected) {
+    if (selected.length === 2) return '同時產生兩種語體';
+    if (selected.length === 1) return `產生${styleNames[selected[0]]}`;
+    return '請先勾選語體';
+  }
+
+  function syncStylePicker() {
+    const selected = getSelectedStyles();
+    Object.entries(styleCards).forEach(([style, card]) => {
+      if (card) card.hidden = !selected.includes(style);
+    });
+    if (outputsGrid) outputsGrid.classList.toggle('is-single', selected.length === 1);
+    if (pickerWarning) pickerWarning.hidden = selected.length > 0;
+    if (!generateButton.dataset.busy) {
+      generateButton.textContent = getButtonLabel(selected);
+      generateButton.disabled = selected.length === 0;
+    }
+  }
+
+  styleBoxes.forEach((box) => box.addEventListener('change', syncStylePicker));
+  syncStylePicker();
 
   document.getElementById('openKeyHelp').addEventListener('click', (event) => {
     event.preventDefault();
@@ -69,6 +100,8 @@
   generateButton.addEventListener('click', async () => {
     const apiKey = keyInput.value.trim();
     const source = sourceInput.value.trim();
+    const selected = getSelectedStyles();
+    if (!selected.length) { status.textContent = '請至少勾選一種語體。'; return; }
     if (!apiKey) { status.textContent = '請先輸入 OpenRouter API Key。'; keyInput.focus(); return; }
     if (!source) { status.textContent = '請先輸入要處理的文字或問題。'; sourceInput.focus(); return; }
 
@@ -76,14 +109,16 @@
     const boYangResult = document.getElementById('boYangResult');
     const wanAnCopy = document.querySelector('[data-copy-target="wanAnResult"]');
     const boYangCopy = document.querySelector('[data-copy-target="boYangResult"]');
-    const tasks = [
-      { result: wanAnResult, copy: wanAnCopy, model: document.getElementById('wanAnMode').value, instructions: wanAnModes, system: wanAnSystem, name: '萬安體' },
-      { result: boYangResult, copy: boYangCopy, model: document.getElementById('boYangMode').value, instructions: boYangModes, system: boYangSystem, name: '伯洋體' }
-    ];
+    const allTasks = {
+      wanAn: { result: wanAnResult, copy: wanAnCopy, model: document.getElementById('wanAnMode').value, instructions: wanAnModes, system: wanAnSystem, name: '萬安體' },
+      boYang: { result: boYangResult, copy: boYangCopy, model: document.getElementById('boYangMode').value, instructions: boYangModes, system: boYangSystem, name: '伯洋體' }
+    };
+    const tasks = selected.map((style) => allTasks[style]);
 
+    generateButton.dataset.busy = 'true';
     generateButton.disabled = true;
     tasks.forEach(({ result, copy }) => { result.textContent = '生成中…'; copy.disabled = true; });
-    status.textContent = '正在同時生成兩種語體…';
+    status.textContent = tasks.length === 2 ? '正在同時生成兩種語體…' : `正在生成${tasks[0].name}…`;
 
     const outcomes = await Promise.all(tasks.map(async (task) => {
       try {
@@ -102,10 +137,11 @@
       }
     }));
 
-    const failed = outcomes.filter(({ ok }) => !ok);
-    status.textContent = failed.length
-      ? `${outcomes.filter(({ ok }) => ok).map(({ name }) => name).join('、') || '兩種語體'}完成；${failed.map(({ name }) => `${name}生成失敗`).join('、')}。`
-      : '兩種語體都已完成。';
-    generateButton.disabled = false;
+    const done = outcomes.filter(({ ok }) => ok).map(({ name }) => name);
+    const failed = outcomes.filter(({ ok }) => !ok).map(({ name }) => `${name}生成失敗`);
+    if (!failed.length) status.textContent = tasks.length === 2 ? '兩種語體都已完成。' : `${done[0]}已完成。`;
+    else status.textContent = `${done.length ? `${done.join('、')}完成；` : ''}${failed.join('、')}。`;
+    delete generateButton.dataset.busy;
+    syncStylePicker();
   });
 })();
