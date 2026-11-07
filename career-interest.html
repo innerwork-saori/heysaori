@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>職業興趣探索 · Saori 謝孟娟</title>
-  <meta name="description" content="從 100 個職業中挑出讓你熱血亢奮的工作，排出前 10 名並寫下原因。">
+  <meta name="description" content="從 100 個職業中挑出讓你熱血亢奮的工作，分辨真心喜歡的是哪些，排出名次、寫下原因，再看看你的興趣類型。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
@@ -29,7 +29,7 @@
 
 <header class="ci-hero">
   <h1 class="ci-hero-title">哪些工作，<br>光是想像<span class="ci-nowrap">就讓你熱血亢奮？</span></h1>
-  <p class="ci-hero-desc">從 100 個職業裡挑出最多 15 個、排出前 10 名，再寫下它們吸引你的原因。大約需要 20–30 分鐘，進度會自動存在這台裝置上，中途離開也能回來繼續。</p>
+  <p class="ci-hero-desc">從 100 個職業裡挑出 10–15 個，分辨哪些是真心喜歡，排出前 10 名、寫下原因，最後看看你的興趣類型。大約需要 30–40 分鐘，進度會自動存在這台裝置上，中途離開也能回來繼續。</p>
 </header>
 
 <!-- 全程提示：使用者要求每一步都明顯看得到 -->
@@ -40,10 +40,12 @@
 <main class="ci-main">
 
   <ol class="ci-steps" id="ci-steps" aria-label="進度">
-    <li data-step="1"><button type="button"><span class="ci-step-num">1</span>填寫註冊名稱</button></li>
+    <li data-step="1"><button type="button"><span class="ci-step-num">1</span>註冊名稱</button></li>
     <li data-step="2"><button type="button"><span class="ci-step-num">2</span>挑選職業</button></li>
-    <li data-step="3"><button type="button"><span class="ci-step-num">3</span>排出前 10 名</button></li>
-    <li data-step="4"><button type="button"><span class="ci-step-num">4</span>寫下原因</button></li>
+    <li data-step="3"><button type="button"><span class="ci-step-num">3</span>分類動機</button></li>
+    <li data-step="4"><button type="button"><span class="ci-step-num">4</span>排出名次</button></li>
+    <li data-step="5"><button type="button"><span class="ci-step-num">5</span>寫下原因</button></li>
+    <li data-step="6"><button type="button"><span class="ci-step-num">6</span>統計反思</button></li>
   </ol>
 
   <p class="ci-resume" id="ci-resume" hidden>
@@ -68,7 +70,7 @@
   <!-- ── Step 2：挑選職業 ── -->
   <section class="ci-panel" id="panel-2" data-panel="2" hidden>
     <h2 class="ci-panel-title">挑選讓你熱血亢奮的職業</h2>
-    <p class="ci-panel-desc">憑直覺點選，至少 10 個、最多 15 個。再點一次可以取消。</p>
+    <p class="ci-panel-desc">憑直覺點選，至少 10 個、最多 15 個。再點一次可以取消。不確定某個職業在做什麼，點右下角的 ⓘ 看說明。</p>
     <div class="ci-search">
       <label for="ci-search" class="ci-visually-hidden">搜尋職業</label>
       <input type="search" id="ci-search" class="ci-input" placeholder="搜尋職業，例如：設計、engineer">
@@ -77,32 +79,62 @@
     <p class="ci-empty" id="ci-jobs-empty" hidden>找不到符合的職業，換個關鍵字試試。</p>
   </section>
 
-  <!-- ── Step 3：排序 ── -->
+  <!-- ── Step 3：分類動機 ── -->
   <section class="ci-panel" id="panel-3" data-panel="3" hidden>
-    <h2 class="ci-panel-title">排出你的前 10 名</h2>
-    <p class="ci-panel-desc">從候選職業中依序點選，第 1 名是最讓你熱血亢奮的工作。排好後可以用箭頭調整順序。</p>
+    <h2 class="ci-panel-title">再看一次：它真正吸引你的是什麼？</h2>
+    <p class="ci-panel-desc">挑的時候很難完全不受別人或自己能力的影響。誠實地替每個職業選一個最接近的原因，至少要有 5 個「純粹喜歡」才能繼續。</p>
+    <dl class="ci-cls-legend">
+      <div><dt>純粹喜歡</dt><dd>不管別人怎麼想、自己會不會，光想像就開心</dd></div>
+      <div><dt>他人期望</dt><dd>家人、老師或社會覺得好，你才把它列進來</dd></div>
+      <div><dt>僅是有能力做</dt><dd>你做得到，但想到它並不會特別興奮</dd></div>
+    </dl>
+    <ul class="ci-cls-list" id="ci-cls-list"></ul>
+  </section>
+
+  <!-- ── Step 4：排序 ── -->
+  <section class="ci-panel" id="panel-4" data-panel="4" hidden>
+    <h2 class="ci-panel-title">排出你的名次</h2>
+    <p class="ci-panel-desc" id="ci-rank-desc">從「純粹喜歡」的職業中依序點選，第 1 名是最讓你熱血亢奮的工作。排好後可以用箭頭調整順序。</p>
     <div class="ci-rank-layout">
-      <ol class="ci-ladder" id="ci-ladder" aria-label="前 10 名"></ol>
+      <ol class="ci-ladder" id="ci-ladder" aria-label="名次"></ol>
       <div class="ci-pool-wrap">
         <h3 class="ci-pool-title">候選職業</h3>
         <ul class="ci-pool" id="ci-pool"></ul>
-        <p class="ci-empty" id="ci-pool-empty" hidden>候選都排進去了。</p>
+        <p class="ci-empty" id="ci-pool-empty" hidden>都排進去了。</p>
       </div>
     </div>
   </section>
 
-  <!-- ── Step 4：原因 ── -->
-  <section class="ci-panel" id="panel-4" data-panel="4" hidden>
+  <!-- ── Step 5：原因與洞察 ── -->
+  <section class="ci-panel" id="panel-5" data-panel="5" hidden>
     <h2 class="ci-panel-title">寫下它們吸引你的原因</h2>
     <p class="ci-panel-desc">想像自己正在做這份工作：哪個畫面讓你興奮？為什麼它排在這個名次？幾句話就好。</p>
     <ol class="ci-reasons" id="ci-reasons"></ol>
+
+    <div class="ci-insights" id="ci-insights-wrap" hidden>
+      <h3 class="ci-sub-title">其他職業，你看見了什麼？（可留空）</h3>
+      <p class="ci-panel-desc">這些職業被你列進來，卻不是純粹喜歡。寫下你的發現，例如這份期望來自誰、做得到卻不興奮是少了什麼。</p>
+      <ul class="ci-insight-list" id="ci-insights"></ul>
+    </div>
+  </section>
+
+  <!-- ── Step 6：統計與反思 ── -->
+  <section class="ci-panel" id="panel-6" data-panel="6" hidden>
+    <h2 class="ci-panel-title">你的興趣類型</h2>
+    <p class="ci-panel-desc" id="ci-stats-desc"></p>
+    <ol class="ci-stats" id="ci-stats" aria-label="六大類分布"></ol>
+
+    <h3 class="ci-sub-title">反思問題（可留空）</h3>
+    <p class="ci-panel-desc">想到什麼就寫什麼，諮詢時我們會從這裡聊起。</p>
+    <ol class="ci-reflections" id="ci-reflections"></ol>
   </section>
 
   <!-- ── 送出前確認 ── -->
   <section class="ci-panel" id="panel-review" data-panel="review" hidden>
-    <h2 class="ci-panel-title">送出前，再看一次你的清單</h2>
-    <p class="ci-panel-desc">這是 Saori 會收到的內容。想調整哪一則原因，點旁邊的「修改」；確認沒問題就按下方的送出。</p>
+    <h2 class="ci-panel-title">送出前，再看一次你的內容</h2>
+    <p class="ci-panel-desc">這是 Saori 會收到的內容。想調整哪一則，點旁邊的「修改」；確認沒問題就按下方的送出。</p>
     <ol class="ci-review" id="ci-review-list"></ol>
+    <div id="ci-review-extra"></div>
     <p class="ci-msg" id="ci-submit-msg" role="status" aria-live="polite"></p>
   </section>
 
@@ -110,6 +142,7 @@
   <section class="ci-panel ci-done" id="panel-done" data-panel="done" hidden>
     <h2 class="ci-panel-title">已送出給 Saori</h2>
     <p class="ci-panel-desc" id="ci-done-desc">謝謝你花時間認真想像。諮詢時我們會一起看這份清單，找出這些職業背後共同的興趣線索。</p>
+    <p class="ci-done-type" id="ci-done-type"></p>
     <ol class="ci-done-list" id="ci-done-list"></ol>
     <div class="ci-done-actions">
       <button type="button" class="ci-btn ci-btn-ghost" id="ci-edit-again">修改後重新送出</button>
@@ -128,8 +161,25 @@
   </div>
 </div>
 
+<!-- 職業說明彈窗 -->
+<dialog class="ci-dialog" id="ci-dialog" aria-labelledby="ci-dialog-title">
+  <div class="ci-dialog-head">
+    <h2 class="ci-dialog-title" id="ci-dialog-title"></h2>
+    <p class="ci-dialog-code" id="ci-dialog-code"></p>
+    <button type="button" class="ci-dialog-close" id="ci-dialog-close" aria-label="關閉說明">✕</button>
+  </div>
+  <div class="ci-dialog-body">
+    <p id="ci-dialog-desc"></p>
+    <h3>典型工作內容</h3>
+    <ul id="ci-dialog-work"></ul>
+    <h3>適合的人格特質</h3>
+    <ul id="ci-dialog-traits"></ul>
+  </div>
+</dialog>
+
 <div class="ci-toast" id="ci-toast" role="status" aria-live="polite"></div>
 
+<script src="js/career-jobs-detail.js"></script>
 <script src="js/career-interest.js"></script>
 </body>
 </html>

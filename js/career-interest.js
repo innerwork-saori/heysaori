@@ -1,5 +1,6 @@
-/* career-interest.js — 職業興趣探索
- * 流程：1 註冊名稱（需對應到試算表分頁）→ 2 挑選 10–15 個職業 → 3 排出前 10 → 4 寫原因 → 送出到 GAS
+/* career-interest.js — 職業興趣探索（已合併舊版 career-card 熱情探索工具）
+ * 流程：1 註冊名稱（需對應到試算表分頁）→ 2 挑選 10–15 個職業 → 3 分類動機
+ *      → 4 從挑選的職業排出前 10 名（純粹喜歡排在候選最前面）→ 5 寫原因與洞察 → 6 統計與反思 → 送出到 GAS
  * 進度存在 localStorage，中斷後回來可繼續。
  */
 
@@ -8,10 +9,32 @@
 const CI_GAS_URL = 'https://script.google.com/macros/s/AKfycbxLfhnN5YeFRTyS-wnmlLYnRnXNsf1RTiIwEBehRdverOWS_lNQNRDwEhzGVkyrF7hS/exec';
 const CI_TOKEN   = 'saori-ci-2026-hT4qW'; // ← 需與 GAS 中的 TOKEN 相同
 
-const STATE_KEY  = 'career-interest-state-v1';
+const STATE_KEY  = 'career-interest-state-v1'; // 沿用舊 key：舊版進度載入時會補上新欄位
 const PICK_MIN   = 10;
 const PICK_MAX   = 15;
-const RANK_SIZE  = 10;
+const PURE_MIN   = 5;   // 「純粹喜歡」至少幾個才能排序
+const RANK_SIZE  = 10;  // 一律排 10 名：純粹喜歡不足 10 個時，從其他挑選的職業補上
+
+// 動機分類（值會送到 GAS，需與 GAS 的 CLS_LABELS 相同）
+const CLS_LABELS = { pure: '純粹喜歡', others: '他人期望', capable: '僅是有能力做' };
+
+const INSIGHT_PLACEHOLDERS = {
+  others: '例如：這是誰的期望？如果沒有這份期望，你還會想做嗎？',
+  capable: '例如：做得到卻不興奮，是少了什麼？'
+};
+
+// Holland 六大類（R/I/A/S/E/C 固定順序，並列時依此排）
+const HOLLAND_ORDER  = ['R', 'I', 'A', 'S', 'E', 'C'];
+const HOLLAND_LABELS = { R: '實用型', I: '研究型', A: '藝術型', S: '社會型', E: '企業型', C: '事務型' };
+
+// 反思問題：{type} 會換成主要類型名稱
+const REFLECTION_QUESTIONS = [
+  '在你「純粹喜歡」的工作中，你注意到哪些共同的主題或模式？',
+  '你的主要類型是「{type}」，這個結果讓你感到意外嗎？為什麼？',
+  '如果不考慮薪資、能力或他人期望，你最想從事哪一份工作？是什麼吸引你？',
+  '你的「{type}」傾向，在目前的生活或工作中有哪些地方已經得到滿足？',
+  '看完這份探索結果，你想對未來的自己說什麼？'
+];
 
 // 職業資料：來源為「職業卡.xlsx」，sn 對應試算表 A 欄（SN）
 // code（Holland Code）不顯示給使用者，避免影響直覺選擇，只隨資料一起送出
@@ -121,7 +144,16 @@ const JOB_BY_SN = new Map(JOBS.map(j => [j.sn, j]));
 
 // ─── 狀態 ────────────────────────────────────────────────────────────────────
 function emptyState() {
-  return { name: '', step: 1, picks: [], ranking: [], reasons: {}, submittedAt: null };
+  return {
+    name: '', step: 1,
+    picks: [],          // 挑選的 sn
+    cls: {},            // { sn: 'pure' | 'others' | 'capable' }
+    ranking: [],        // 純粹喜歡的名次（sn）
+    reasons: {},        // { sn: 原因 }（只送出有名次的）
+    insights: {},       // { sn: 洞察 }（他人期望 / 僅是有能力做）
+    reflections: [],    // 反思回答，index 對應 REFLECTION_QUESTIONS
+    submittedAt: null
+  };
 }
 
 let state = loadState() || emptyState();
@@ -133,9 +165,21 @@ function loadState() {
     const s = JSON.parse(raw);
     if (!s || typeof s !== 'object' || !Array.isArray(s.picks)) return null;
     // 過濾掉不存在的 sn，避免資料版本不同時出錯
-    s.picks   = s.picks.filter(sn => JOB_BY_SN.has(sn)).slice(0, PICK_MAX);
+    s.picks = s.picks.filter(sn => JOB_BY_SN.has(sn)).slice(0, PICK_MAX);
+    const cls = {};
+    if (!s.cls) {
+      // 舊版（合併前）進度沒有分類：舊版只挑熱血亢奮的職業，視為全部「純粹喜歡」，保留原本的名次與原因
+      s.picks.forEach(sn => { cls[sn] = 'pure'; });
+    } else {
+      Object.entries(s.cls).forEach(([sn, c]) => {
+        if (s.picks.includes(Number(sn)) && CLS_LABELS[c]) cls[sn] = c;
+      });
+    }
+    s.cls = cls;
     s.ranking = (s.ranking || []).filter(sn => s.picks.includes(sn)).slice(0, RANK_SIZE);
     s.reasons = s.reasons || {};
+    s.insights = s.insights || {};
+    s.reflections = Array.isArray(s.reflections) ? s.reflections : [];
     return Object.assign(emptyState(), s);
   } catch (e) {
     return null;
@@ -151,20 +195,59 @@ function clearState() {
   state = emptyState();
 }
 
-// ─── 步驟規則 ────────────────────────────────────────────────────────────────
-function picksValid()   { return state.picks.length >= PICK_MIN && state.picks.length <= PICK_MAX; }
-function rankingValid() { return state.ranking.length === RANK_SIZE; }
+// ─── 資料推導（不碰 DOM）─────────────────────────────────────────────────────
+function picksValid()    { return state.picks.length >= PICK_MIN && state.picks.length <= PICK_MAX; }
+function pureList()      { return state.picks.filter(sn => state.cls[sn] === 'pure'); }
+function classifiedCount() { return state.picks.filter(sn => state.cls[sn]).length; }
+function allClassified() { return classifiedCount() === state.picks.length; }
+function rankingValid()  { return state.ranking.length === RANK_SIZE; }
+/** 沒排進前 10 名的「他人期望／僅是有能力做」：這些才需要寫洞察 */
+function unrankedNonPure(c) {
+  return state.picks.filter(sn => state.cls[sn] && state.cls[sn] !== 'pure' &&
+    (!c || state.cls[sn] === c) && !state.ranking.includes(sn));
+}
+/** 候選排序：純粹喜歡 → 他人期望 → 僅是有能力做 */
+const CLS_ORDER = { pure: 0, others: 1, capable: 2 };
+function clsTag(sn) {
+  const c = state.cls[sn];
+  return c && c !== 'pure' ? el('span', { class: 'ci-cls-tag', text: CLS_LABELS[c] }) : null;
+}
 function reasonsFilled() {
   return state.ranking.filter(sn => (state.reasons[sn] || '').trim() !== '').length;
+}
+
+/** 依「純粹喜歡」職業的代碼字母計數，例如 AER 的 A、E、R 各算 1 次 */
+function hollandStats() {
+  const count = { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 };
+  pureList().forEach(sn => {
+    for (const ch of JOB_BY_SN.get(sn).code) if (ch in count) count[ch]++;
+  });
+  const ranked = HOLLAND_ORDER
+    .map(code => ({ code, label: HOLLAND_LABELS[code], count: count[code] }))
+    .sort((a, b) => b.count - a.count || HOLLAND_ORDER.indexOf(a.code) - HOLLAND_ORDER.indexOf(b.code));
+  const top = ranked[0].count;
+  const primary = top > 0 ? ranked.filter(r => r.count === top) : [];
+  return { ranked, top, primary };
+}
+
+function primaryTypeText(stats) {
+  return stats.primary.map(r => r.label).join('、') || '—';
+}
+
+function reflectionQuestions() {
+  const type = primaryTypeText(hollandStats());
+  return REFLECTION_QUESTIONS.map(q => q.replaceAll('{type}', type));
 }
 
 /** 某一步是否可以進入（前面的條件都已完成） */
 function canEnter(step) {
   if (step === 1) return true;
   if (step === 2) return !!state.name;
-  if (step === 3) return !!state.name && picksValid();
-  if (step === 4) return !!state.name && picksValid() && rankingValid();
-  if (step === 'review') return canEnter(4) && reasonsFilled() === RANK_SIZE;
+  if (step === 3) return canEnter(2) && picksValid();
+  if (step === 4) return canEnter(3) && allClassified() && pureList().length >= PURE_MIN;
+  if (step === 5) return canEnter(4) && rankingValid();
+  if (step === 6) return canEnter(5) && reasonsFilled() === state.ranking.length;
+  if (step === 'review') return canEnter(6);
   return false;
 }
 
@@ -214,16 +297,18 @@ function render() {
   renderSteps();
   if (step === 1) renderStep1();
   if (step === 2) renderJobs();
-  if (step === 3) renderRanking();
-  if (step === 4) renderReasons();
+  if (step === 3) renderClassify();
+  if (step === 4) renderRanking();
+  if (step === 5) renderReasons();
+  if (step === 6) renderStatsAndReflections();
   if (step === 'review') renderReview();
   if (step === 'done') renderDone();
   renderBar();
 }
 
 function renderSteps() {
-  // 送出前確認屬於第 4 步，進度條仍標在「寫下原因」
-  const current = state.step === 'review' ? 4 : state.step;
+  // 送出前確認屬於第 6 步，進度條仍標在「統計與反思」
+  const current = state.step === 'review' ? 6 : state.step;
   document.querySelectorAll('#ci-steps li').forEach(li => {
     const s = Number(li.dataset.step);
     const isCurrent = s === current;
@@ -241,6 +326,7 @@ function renderStep1() {
   if (input && !input.value) input.value = state.name || '';
 }
 
+// Step 2：挑選。挑選鈕與說明鈕是兩個並排的按鈕（按鈕不能包按鈕）
 function renderJobs() {
   const wrap = $('ci-jobs');
   const q = ($('ci-search').value || '').trim().toLowerCase();
@@ -250,22 +336,54 @@ function renderJobs() {
   JOBS.forEach(job => {
     if (q && !(job.zh.toLowerCase().includes(q) || job.en.toLowerCase().includes(q))) return;
     const picked = state.picks.includes(job.sn);
-    wrap.appendChild(el('button', {
-      type: 'button',
-      class: 'ci-job',
-      'data-sn': job.sn,
-      'aria-pressed': picked ? 'true' : 'false',
-      disabled: !picked && full
-    }, [
-      el('span', { class: 'ci-job-zh', text: job.zh }),
-      el('span', { class: 'ci-job-en', text: job.en })
+    wrap.appendChild(el('div', { class: 'ci-job-wrap' }, [
+      el('button', {
+        type: 'button',
+        class: 'ci-job',
+        'data-sn': job.sn,
+        'aria-pressed': picked ? 'true' : 'false',
+        disabled: !picked && full
+      }, [
+        el('span', { class: 'ci-job-zh', text: job.zh }),
+        el('span', { class: 'ci-job-en', text: job.en })
+      ]),
+      JOB_DETAILS[job.sn]
+        ? el('button', { type: 'button', class: 'ci-job-info', 'data-info': job.sn, 'aria-label': `看「${job.zh}」的說明`, text: 'ⓘ' })
+        : null
     ]));
     shown++;
   });
   $('ci-jobs-empty').hidden = shown > 0;
 }
 
+// Step 3：分類動機（每個職業一組單選）
+function renderClassify() {
+  const list = $('ci-cls-list');
+  list.innerHTML = '';
+  state.picks.forEach(sn => {
+    const job = JOB_BY_SN.get(sn);
+    const name = 'ci-cls-' + sn;
+    const options = Object.entries(CLS_LABELS).map(([value, label]) =>
+      el('label', { class: 'ci-cls-opt' }, [
+        el('input', { type: 'radio', name, value, 'data-sn': sn, checked: state.cls[sn] === value }),
+        el('span', { text: label })
+      ])
+    );
+    list.appendChild(el('li', { class: 'ci-cls-item' + (state.cls[sn] ? ' is-set' : '') }, [
+      el('fieldset', {}, [
+        el('legend', { class: 'ci-cls-name' }, [document.createTextNode(job.zh), el('small', { text: job.en })]),
+        el('div', { class: 'ci-cls-opts' }, options)
+      ])
+    ]));
+  });
+}
+
 function renderRanking() {
+  const pure = pureList().length;
+  $('ci-rank-desc').textContent = pure < RANK_SIZE
+    ? `你有 ${pure} 個「純粹喜歡」的職業，先把它們排進去，再從其他職業補滿 10 名。第 1 名是最讓你熱血亢奮的工作，排好後可以用箭頭調整順序。`
+    : '從你挑選的職業中排出前 10 名，第 1 名是最讓你熱血亢奮的工作。排好後可以用箭頭調整順序。';
+
   const ladder = $('ci-ladder');
   ladder.innerHTML = '';
   for (let i = 0; i < RANK_SIZE; i++) {
@@ -279,6 +397,7 @@ function renderRanking() {
       li.appendChild(el('div', { class: 'ci-rung-name' }, [
         el('span', { class: 'ci-visually-hidden', text: `第 ${i + 1} 名 ` }),
         document.createTextNode(job.zh),
+        clsTag(sn),
         el('small', { text: job.en })
       ]));
       li.appendChild(el('div', { class: 'ci-rung-actions' }, [
@@ -287,7 +406,7 @@ function renderRanking() {
         el('button', { type: 'button', 'data-act': 'remove', 'data-i': i, 'aria-label': `把${job.zh}移回候選`, text: '✕' })
       ]));
     } else {
-      li.appendChild(el('span', { class: 'ci-rung-placeholder', text: isNext ? '點選候選職業放進這裡' : '' }));
+      li.appendChild(el('span', { class: 'ci-rung-placeholder', text: isNext ? '點選右邊的職業放進這裡' : '' }));
       li.appendChild(el('span'));
     }
     ladder.appendChild(li);
@@ -295,10 +414,15 @@ function renderRanking() {
 
   const pool = $('ci-pool');
   pool.innerHTML = '';
-  const rest = state.picks.filter(sn => !state.ranking.includes(sn));
+  const rest = state.picks
+    .filter(sn => !state.ranking.includes(sn))
+    .sort((a, b) => CLS_ORDER[state.cls[a]] - CLS_ORDER[state.cls[b]]);
   rest.forEach(sn => {
     pool.appendChild(el('li', {}, [
-      el('button', { type: 'button', 'data-sn': sn, disabled: rankingValid(), text: JOB_BY_SN.get(sn).zh })
+      el('button', { type: 'button', 'data-sn': sn, disabled: rankingValid() }, [
+        document.createTextNode(JOB_BY_SN.get(sn).zh),
+        clsTag(sn)
+      ])
     ]));
   });
   const empty = $('ci-pool-empty');
@@ -340,6 +464,7 @@ function shuffled(arr) {
 
 const reasonExamples = shuffled(REASON_EXAMPLES); // 同一次瀏覽內固定，來回切換步驟不會一直換
 
+// Step 5：名次的原因（必填）＋其他職業的洞察（選填）
 function renderReasons() {
   const list = $('ci-reasons');
   list.innerHTML = '';
@@ -347,7 +472,7 @@ function renderReasons() {
     const job = JOB_BY_SN.get(sn);
     const id = 'ci-reason-' + sn;
     const placeholder = '例如：' + reasonExamples[i % reasonExamples.length];
-    const ta = el('textarea', { id, class: 'ci-input', 'data-sn': sn, rows: 3, maxlength: 1000, placeholder });
+    const ta = el('textarea', { id, class: 'ci-input', 'data-sn': sn, 'data-kind': 'reason', rows: 3, maxlength: 1000, placeholder });
     ta.value = state.reasons[sn] || '';
     list.appendChild(el('li', { class: 'ci-reason' }, [
       el('span', { class: 'ci-rung-num', 'aria-hidden': 'true', text: String(i + 1) }),
@@ -357,6 +482,73 @@ function renderReasons() {
       ])
     ]));
   });
+
+  const others = unrankedNonPure();
+  $('ci-insights-wrap').hidden = others.length === 0;
+  const ins = $('ci-insights');
+  ins.innerHTML = '';
+  others.forEach(sn => {
+    const job = JOB_BY_SN.get(sn);
+    const c = state.cls[sn];
+    const id = 'ci-insight-' + sn;
+    const ta = el('textarea', { id, class: 'ci-input', 'data-sn': sn, 'data-kind': 'insight', rows: 2, maxlength: 1000, placeholder: INSIGHT_PLACEHOLDERS[c] });
+    ta.value = state.insights[sn] || '';
+    ins.appendChild(el('li', { class: 'ci-insight' }, [
+      el('label', { for: id }, [
+        document.createTextNode(job.zh),
+        el('span', { class: 'ci-cls-tag', text: CLS_LABELS[c] })
+      ]),
+      ta
+    ]));
+  });
+}
+
+// Step 6：六大類統計＋反思
+function renderStatsAndReflections() {
+  const stats = hollandStats();
+  const n = pureList().length;
+  $('ci-stats-desc').textContent =
+    `依你「純粹喜歡」的 ${n} 個職業計算：每個職業的興趣代碼可能有 2–3 個字母，每個字母各算一次。出現最多的是你的主要類型：${primaryTypeText(stats)}。`;
+
+  const list = $('ci-stats');
+  list.innerHTML = '';
+  stats.ranked.forEach(r => {
+    const isTop = stats.primary.includes(r);
+    const pct = stats.top > 0 ? Math.round(r.count / stats.top * 100) : 0;
+    const bar = el('span', { class: 'ci-stat-bar' }, [el('span', { class: 'ci-stat-fill' })]);
+    bar.firstChild.style.width = pct + '%';
+    list.appendChild(el('li', { class: 'ci-stat' + (isTop ? ' is-top' : '') }, [
+      el('span', { class: 'ci-stat-label' }, [
+        el('span', { class: 'ci-stat-code', text: r.code }),
+        document.createTextNode(r.label)
+      ]),
+      bar,
+      el('span', { class: 'ci-stat-count', text: `${r.count} 次` })
+    ]));
+  });
+
+  const qs = reflectionQuestions();
+  const rl = $('ci-reflections');
+  rl.innerHTML = '';
+  qs.forEach((q, i) => {
+    const id = 'ci-reflect-' + i;
+    const ta = el('textarea', { id, class: 'ci-input', 'data-i': i, rows: 3, maxlength: 1000 });
+    ta.value = state.reflections[i] || '';
+    rl.appendChild(el('li', { class: 'ci-reflection' }, [el('label', { for: id, text: q }), ta]));
+  });
+}
+
+function reviewBlock(title, editStep, rows) {
+  return el('section', { class: 'ci-review-block' }, [
+    el('div', { class: 'ci-review-head' }, [
+      el('h3', { class: 'ci-sub-title', text: title }),
+      el('button', { type: 'button', class: 'ci-link', 'data-goto': editStep, 'aria-label': `修改${title}`, text: '修改' })
+    ]),
+    el('dl', { class: 'ci-review-dl' }, rows.flatMap(([k, v]) => [
+      el('dt', { text: k }),
+      el('dd', { text: v || '（未填寫）', class: v ? '' : 'is-empty' })
+    ]))
+  ]);
 }
 
 function renderReview() {
@@ -370,6 +562,7 @@ function renderReview() {
         el('p', { class: 'ci-review-name' }, [
           el('span', { class: 'ci-visually-hidden', text: `第 ${i + 1} 名 ` }),
           document.createTextNode(job.zh),
+          clsTag(sn),
           el('small', { text: job.en })
         ]),
         el('p', { class: 'ci-review-reason', text: (state.reasons[sn] || '').trim() })
@@ -377,11 +570,26 @@ function renderReview() {
       el('button', { type: 'button', class: 'ci-link', 'data-sn': sn, 'aria-label': `修改${job.zh}的原因`, text: '修改' })
     ]));
   });
+
+  const extra = $('ci-review-extra');
+  extra.innerHTML = '';
+  ['others', 'capable'].forEach(c => {
+    const sns = unrankedNonPure(c);
+    if (sns.length) {
+      extra.appendChild(reviewBlock(CLS_LABELS[c], 5,
+        sns.map(sn => [JOB_BY_SN.get(sn).zh, (state.insights[sn] || '').trim()])));
+    }
+  });
+  const stats = hollandStats();
+  extra.appendChild(reviewBlock('興趣類型與反思', 6, [
+    ['主要類型', primaryTypeText(stats)],
+    ...reflectionQuestions().map((q, i) => [q, (state.reflections[i] || '').trim()])
+  ]));
 }
 
-/** 回到第 4 步並把焦點放在指定職業的原因欄 */
+/** 回到第 5 步並把焦點放在指定職業的原因欄 */
 function editReason(sn) {
-  goTo(4);
+  goTo(5);
   const ta = $('ci-reason-' + sn);
   if (ta) {
     ta.scrollIntoView({ block: 'center' });
@@ -390,6 +598,9 @@ function editReason(sn) {
 }
 
 function renderDone() {
+  $('ci-done-type').textContent = pureList().length
+    ? `你的主要類型：${primaryTypeText(hollandStats())}`
+    : '';
   const list = $('ci-done-list');
   list.innerHTML = '';
   state.ranking.forEach(sn => {
@@ -417,18 +628,58 @@ function renderBar() {
     count.innerHTML = `已選 <b>${n}</b> / ${PICK_MAX}` + (n < PICK_MIN ? `<br>至少再選 ${PICK_MIN - n} 個` : '');
     next.disabled = !picksValid();
   } else if (step === 3) {
+    const pure = pureList().length;
+    const left = state.picks.length - classifiedCount();
+    count.innerHTML = `純粹喜歡 <b>${pure}</b> 個` +
+      (left > 0 ? `<br>還有 ${left} 個沒分類` : pure < PURE_MIN ? `<br>至少要 ${PURE_MIN} 個，可回上一步多挑幾個` : '');
+    next.disabled = !canEnter(4);
+  } else if (step === 4) {
     count.innerHTML = `已排 <b>${state.ranking.length}</b> / ${RANK_SIZE}`;
     next.disabled = !rankingValid();
-  } else if (step === 4) {
+  } else if (step === 5) {
     const n = reasonsFilled();
-    count.innerHTML = `已寫 <b>${n}</b> / ${RANK_SIZE}`;
+    count.innerHTML = `已寫 <b>${n}</b> / ${state.ranking.length}`;
+    next.disabled = n < state.ranking.length;
+  } else if (step === 6) {
+    count.textContent = '反思可以留空';
     next.textContent = '檢查內容';
-    next.disabled = n < RANK_SIZE;
+    next.disabled = false;
   } else if (step === 'review') {
     count.textContent = '確認無誤再送出';
     next.textContent = submitting ? '送出中…' : (state.submittedAt ? '確認重新送出' : '確認送出給 Saori');
     next.disabled = submitting;
   }
+}
+
+// ─── 職業說明彈窗 ────────────────────────────────────────────────────────────
+// 不顯示興趣代碼：挑選時看到代碼會影響直覺選擇
+function openJobInfo(sn) {
+  const job = JOB_BY_SN.get(sn);
+  const d = JOB_DETAILS[sn];
+  const dialog = $('ci-dialog');
+  if (!job || !d || !dialog || typeof dialog.showModal !== 'function') return;
+  $('ci-dialog-title').textContent = job.zh;
+  $('ci-dialog-code').textContent = job.en;
+  $('ci-dialog-desc').textContent = d.desc;
+  const fill = (id, items) => {
+    const ul = $(id);
+    ul.innerHTML = '';
+    items.forEach(t => ul.appendChild(el('li', { text: t })));
+  };
+  fill('ci-dialog-work', d.work);
+  fill('ci-dialog-traits', d.traits);
+  dialog.dataset.sn = sn;
+  dialog.showModal();
+}
+
+function closeJobInfo() {
+  const dialog = $('ci-dialog');
+  if (!dialog || !dialog.open) return;
+  const sn = dialog.dataset.sn;
+  dialog.close();
+  // 焦點回到原本的說明鈕
+  const back = document.querySelector(`.ci-job-info[data-info="${sn}"]`);
+  if (back) back.focus();
 }
 
 // ─── Step 1：驗證註冊名稱 ───────────────────────────────────────────────────
@@ -497,7 +748,8 @@ function togglePick(sn) {
   const i = state.picks.indexOf(sn);
   if (i >= 0) {
     state.picks.splice(i, 1);
-    state.ranking = state.ranking.filter(x => x !== sn); // 取消挑選時同步移出排名
+    delete state.cls[sn];
+    state.ranking = state.ranking.filter(x => x !== sn); // 取消挑選時同步移出名次
   } else {
     if (state.picks.length >= PICK_MAX) {
       showToast(`最多選 ${PICK_MAX} 個，先取消一個再選。`);
@@ -512,7 +764,16 @@ function togglePick(sn) {
   if (again) again.focus();
 }
 
-// ─── Step 3：排序 ────────────────────────────────────────────────────────────
+// ─── Step 3：分類 ────────────────────────────────────────────────────────────
+function setClass(sn, c) {
+  state.cls[sn] = c;
+  saveState();
+  const item = document.querySelector(`input[name="ci-cls-${sn}"]`);
+  if (item) item.closest('.ci-cls-item').classList.add('is-set');
+  renderBar();
+}
+
+// ─── Step 4：排序 ────────────────────────────────────────────────────────────
 function addToRanking(sn) {
   if (rankingValid() || state.ranking.includes(sn)) return;
   state.ranking.push(sn);
@@ -538,19 +799,34 @@ function onLadderAction(act, i) {
   }
 }
 
-// ─── Step 4：送出 ────────────────────────────────────────────────────────────
-let reasonSaveTimer = null;
+// ─── 送出 ────────────────────────────────────────────────────────────────────
+let textSaveTimer = null;
+function saveSoon() {
+  clearTimeout(textSaveTimer);
+  textSaveTimer = setTimeout(saveState, 400);
+}
 
 function buildPayload() {
   const reasons = {};
   state.ranking.forEach(sn => { reasons[sn] = (state.reasons[sn] || '').trim(); });
+  const classifications = {};
+  const insights = {};
+  state.picks.forEach(sn => {
+    classifications[sn] = state.cls[sn];
+    const t = (state.insights[sn] || '').trim();
+    if (state.cls[sn] !== 'pure' && !state.ranking.includes(sn) && t) insights[sn] = t;
+  });
+  const reflections = reflectionQuestions().map((q, i) => ({ q, a: (state.reflections[i] || '').trim() }));
   return {
     token: CI_TOKEN,
     action: 'submit',
     name: state.name,
     picks: state.picks,
+    classifications,
     ranking: state.ranking,
     reasons,
+    insights,
+    reflections,
     // 分頁是空白時，GAS 會用這份清單補上完整表格
     jobs: JOBS.map(j => [j.sn, `${j.zh} (${j.en})`, j.code])
   };
@@ -559,8 +835,8 @@ function buildPayload() {
 async function submit() {
   const msg = $('ci-submit-msg');
   msg.classList.remove('is-error');
-  if (reasonsFilled() < RANK_SIZE) {
-    msg.textContent = '每一個職業都寫下原因後才能送出。';
+  if (!canEnter('review')) {
+    msg.textContent = '還有步驟沒完成，請確認每個名次都寫下原因後再送出。';
     msg.classList.add('is-error');
     return;
   }
@@ -617,8 +893,20 @@ function bindEvents() {
 
   $('ci-search').addEventListener('input', renderJobs);
   $('ci-jobs').addEventListener('click', e => {
+    const info = e.target.closest('.ci-job-info');
+    if (info) { openJobInfo(Number(info.dataset.info)); return; }
     const btn = e.target.closest('.ci-job');
     if (btn && !btn.disabled) togglePick(Number(btn.dataset.sn));
+  });
+
+  $('ci-dialog-close').addEventListener('click', closeJobInfo);
+  $('ci-dialog').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeJobInfo(); // 點背景關閉
+  });
+
+  $('ci-cls-list').addEventListener('change', e => {
+    const r = e.target.closest('input[type="radio"][data-sn]');
+    if (r) setClass(Number(r.dataset.sn), r.value);
   });
 
   $('ci-pool').addEventListener('click', e => {
@@ -630,27 +918,38 @@ function bindEvents() {
     if (btn && !btn.disabled) onLadderAction(btn.dataset.act, Number(btn.dataset.i));
   });
 
-  $('ci-reasons').addEventListener('input', e => {
+  $('panel-5').addEventListener('input', e => {
     const ta = e.target.closest('textarea[data-sn]');
     if (!ta) return;
-    state.reasons[ta.dataset.sn] = ta.value;
+    const bucket = ta.dataset.kind === 'insight' ? state.insights : state.reasons;
+    bucket[ta.dataset.sn] = ta.value;
     renderBar();
-    clearTimeout(reasonSaveTimer);
-    reasonSaveTimer = setTimeout(saveState, 400);
+    saveSoon();
+  });
+
+  $('ci-reflections').addEventListener('input', e => {
+    const ta = e.target.closest('textarea[data-i]');
+    if (!ta) return;
+    state.reflections[Number(ta.dataset.i)] = ta.value;
+    saveSoon();
   });
 
   $('ci-review-list').addEventListener('click', e => {
     const btn = e.target.closest('button[data-sn]');
     if (btn) editReason(Number(btn.dataset.sn));
   });
+  $('ci-review-extra').addEventListener('click', e => {
+    const btn = e.target.closest('button[data-goto]');
+    if (btn) goTo(Number(btn.dataset.goto));
+  });
 
   $('ci-prev').addEventListener('click', () => {
-    if (state.step === 'review') goTo(4);
+    if (state.step === 'review') goTo(6);
     else if (typeof state.step === 'number' && state.step > 1) goTo(state.step - 1);
   });
   $('ci-next').addEventListener('click', () => {
     if (state.step === 'review') submit();
-    else if (state.step === 4) goTo('review');
+    else if (state.step === 6) goTo('review');
     else if (typeof state.step === 'number') goTo(state.step + 1);
   });
 
@@ -664,7 +963,7 @@ function bindEvents() {
     if (window.confirm('確定要清除這台裝置上的所有進度，從頭開始嗎？')) resetAll();
   });
 
-  $('ci-edit-again').addEventListener('click', () => goTo(4));
+  $('ci-edit-again').addEventListener('click', () => goTo(5));
   $('ci-clear-done').addEventListener('click', () => {
     if (!window.confirm('清除後，這台裝置上就看不到這份清單了，已送出的資料不受影響。確定清除嗎？')) return;
     resetAll();
@@ -675,7 +974,11 @@ function bindEvents() {
 // ─── Init ────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   bindEvents();
-  if (state.step !== 'done' && !canEnter(state.step)) state.step = 1;
+  // 進度不完整時（例如舊版進度還沒分類），退回到最後一個可進入的步驟
+  if (state.step === 'review' && !canEnter('review')) state.step = 6;
+  if (typeof state.step === 'number') {
+    while (state.step > 1 && !canEnter(state.step)) state.step--;
+  }
   // 有未完成進度時，提示並提供重新開始
   if (state.step !== 1 && state.step !== 'done') $('ci-resume').hidden = false;
   render();

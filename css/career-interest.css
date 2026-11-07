@@ -80,7 +80,7 @@ body { padding-bottom: 6rem; }
 .ci-steps {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 0.5rem;
   margin-bottom: 2rem;
 }
@@ -238,6 +238,157 @@ body { padding-bottom: 6rem; }
 .ci-job:disabled { opacity: 0.4; cursor: not-allowed; }
 .ci-job:disabled:hover { border-color: var(--line); }
 
+/* 挑選鈕＋說明鈕並排疊放（按鈕不能包按鈕） */
+.ci-job-wrap { position: relative; display: flex; }
+.ci-job-wrap .ci-job { flex: 1; }
+.ci-job-en { padding-right: 1.6rem; }
+.ci-job-info {
+  position: absolute;
+  right: 0.3rem;
+  bottom: 0.3rem;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 1.05rem;
+  line-height: 1;
+  color: var(--text-soft);
+  cursor: pointer;
+}
+.ci-job-info:hover { color: var(--accent1); background: var(--paper-warm); }
+.ci-job-info:focus-visible { outline: 2px solid var(--heat); outline-offset: 0; }
+
+/* ── 職業說明彈窗 ── */
+.ci-dialog {
+  width: min(34rem, calc(100% - 2rem));
+  max-height: calc(100% - 3rem);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 1rem 3rem rgba(28,26,23,0.25);
+}
+.ci-dialog::backdrop { background: rgba(28,26,23,0.55); }
+.ci-dialog-head {
+  position: sticky;
+  top: 0;
+  padding: 1.25rem 3.5rem 1rem 1.5rem;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+.ci-dialog-title { font-family: 'Noto Serif TC', serif; font-size: 1.3rem; font-weight: 600; letter-spacing: 0.04em; }
+.ci-dialog-code { font-family: 'EB Garamond', serif; color: var(--text-soft); }
+.ci-dialog-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--text-mid);
+  cursor: pointer;
+}
+.ci-dialog-close:hover { color: var(--ink); border-color: var(--accent1); }
+.ci-dialog-close:focus-visible { outline: 2px solid var(--heat); outline-offset: 2px; }
+.ci-dialog-body { padding: 1.25rem 1.5rem 1.75rem; line-height: 1.85; }
+.ci-dialog-body h3 { font-size: 0.9rem; font-weight: 500; color: var(--text-mid); margin: 1.25rem 0 0.4rem; }
+.ci-dialog-body ul { padding-left: 1.2rem; color: var(--text-mid); font-size: 0.92rem; }
+
+/* ── Step 3：分類動機 ── */
+.ci-cls-legend {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem 1.5rem;
+  max-width: 48rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+}
+.ci-cls-legend dt { font-weight: 500; }
+.ci-cls-legend dd { color: var(--text-mid); line-height: 1.6; }
+@media (max-width: 640px) { .ci-cls-legend { grid-template-columns: 1fr; } }
+
+.ci-cls-list { list-style: none; max-width: 48rem; border-top: 1px solid var(--line); }
+.ci-cls-item { border-bottom: 1px solid var(--line); }
+.ci-cls-item fieldset {
+  border: 0;
+  padding: 0.8rem 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+.ci-cls-name { float: left; font-weight: 500; line-height: 1.4; padding: 0; }
+.ci-cls-name small { display: block; font-family: 'EB Garamond', serif; font-weight: 400; color: var(--text-soft); }
+.ci-cls-opts { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+.ci-cls-opt input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.ci-cls-opt span {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #d6ccba;
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.88rem;
+  color: var(--text-mid);
+  cursor: pointer;
+}
+.ci-cls-opt span:hover { border-color: var(--accent1); color: var(--ink); }
+.ci-cls-opt input:checked + span { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.ci-cls-opt input[value="pure"]:checked + span { background: var(--heat); border-color: var(--heat); }
+.ci-cls-opt input:focus-visible + span { outline: 2px solid var(--heat); outline-offset: 2px; }
+@media (max-width: 560px) {
+  .ci-cls-item fieldset { grid-template-columns: 1fr; }
+}
+
+/* 子標題（第 5、6 步與確認頁共用） */
+.ci-sub-title { font-family: 'Noto Serif TC', serif; font-size: 1.1rem; font-weight: 600; letter-spacing: 0.04em; }
+
+/* ── Step 5：洞察 ── */
+.ci-insights { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--line); max-width: 44rem; }
+.ci-insights .ci-panel-desc { margin-bottom: 1.25rem; }
+.ci-insight-list { list-style: none; display: grid; gap: 1.1rem; }
+.ci-insight label { display: flex; align-items: center; gap: 0.6rem; font-weight: 500; margin-bottom: 0.35rem; }
+.ci-insight textarea { min-height: 4rem; resize: vertical; line-height: 1.7; }
+.ci-cls-tag {
+  font-size: 0.75rem;
+  font-weight: 400;
+  padding: 0.1rem 0.55rem;
+  border: 1px solid #d6ccba;
+  border-radius: 999px;
+  color: var(--text-mid);
+}
+/* 名次、候選、確認頁中標示「不是純粹喜歡」的職業 */
+.ci-rung-name .ci-cls-tag,
+.ci-pool .ci-cls-tag,
+.ci-review-name .ci-cls-tag { margin-left: 0.45rem; vertical-align: 0.1em; }
+
+/* ── Step 6：統計與反思 ── */
+.ci-stats { list-style: none; max-width: 40rem; margin-bottom: 3rem; }
+.ci-stat {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr 3rem;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.45rem 0;
+  font-size: 0.92rem;
+  color: var(--text-mid);
+}
+.ci-stat-code { font-family: 'EB Garamond', serif; font-size: 1.15rem; margin-right: 0.4rem; color: var(--text-soft); }
+.ci-stat-bar { height: 0.7rem; background: var(--paper-warm); border-radius: 2px; overflow: hidden; }
+.ci-stat-fill { display: block; height: 100%; background: var(--accent3); }
+.ci-stat-count { text-align: right; font-variant-numeric: tabular-nums; }
+.ci-stat.is-top { color: var(--ink); font-weight: 500; }
+.ci-stat.is-top .ci-stat-code { color: var(--heat); }
+.ci-stat.is-top .ci-stat-fill { background: var(--heat); }
+
+.ci-reflections { list-style: none; display: grid; gap: 1.25rem; max-width: 44rem; }
+.ci-reflection label { display: block; font-weight: 500; line-height: 1.6; margin-bottom: 0.35rem; }
+.ci-reflection textarea { min-height: 5rem; resize: vertical; line-height: 1.7; }
+
 /* ── Step 3：排序 ── */
 .ci-rank-layout {
   display: grid;
@@ -328,6 +479,15 @@ body { padding-bottom: 6rem; }
 .ci-review-name small { font-family: 'EB Garamond', serif; font-weight: 400; color: var(--text-soft); margin-left: 0.4rem; }
 .ci-review-reason { margin-top: 0.35rem; line-height: 1.8; color: var(--text-mid); white-space: pre-wrap; overflow-wrap: anywhere; }
 .ci-review-item .ci-link { font-size: 0.88rem; align-self: start; padding-top: 0.15rem; }
+
+.ci-review-block { max-width: 44rem; margin-top: 2.5rem; }
+.ci-review-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--line); }
+.ci-review-head .ci-link { font-size: 0.88rem; }
+.ci-review-dl dt { font-weight: 500; margin-top: 0.9rem; line-height: 1.6; }
+.ci-review-dl dd { color: var(--text-mid); line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
+.ci-review-dl dd.is-empty { color: var(--text-soft); }
+
+.ci-done-type { font-family: 'Noto Serif TC', serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 1.5rem; }
 
 /* ── 完成 ── */
 .ci-done-list { margin: 0 0 2rem 1.5rem; max-width: 44rem; }
