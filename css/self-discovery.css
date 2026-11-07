@@ -138,34 +138,41 @@
       width: 100%;
     }
 
-    /* 工具裝飾數字 */
-    .tool-number {
-      position: absolute;
-      top: 1.6rem; right: 2rem;
-      font-family: 'EB Garamond', serif;
-      font-size: 3.5rem;
-      color: rgba(0,0,0,0.04);
-      line-height: 1;
-      font-weight: 400;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .tool-category {
-      font-family: 'EB Garamond', serif;
-      font-style: italic;
-      font-size: 0.72rem;
-      letter-spacing: 0.22em;
-      color: var(--accent2);
-      margin-bottom: 0.6rem;
-    }
-    .tool-name {
+    /* 區塊標題：用痛點切入 */
+    .tools-heading {
       font-family: 'Noto Serif TC', serif;
-      font-size: 1.15rem;
+      font-size: clamp(1.3rem, 3.5vw, 1.6rem);
       font-weight: 600;
       color: var(--text-main);
       letter-spacing: 0.06em;
-      margin-bottom: 0.4rem;
+      text-align: center;
+    }
+    .tools-lead {
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      text-align: center;
+      letter-spacing: 0.04em;
+      margin: 0.6rem 0 2.2rem;
+    }
+
+    /* 卡片主標題：使用者心裡的那句話 */
+    .tool-pain {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-main);
+      letter-spacing: 0.04em;
+      line-height: 1.6;
+      margin: 0 0 1.4rem -0.5em; /* 讓開頭的「」懸掛，文字左緣對齊下方內容 */
+    }
+    /* 工具名稱退為第二層，告訴使用者「這個工具能幫你」 */
+    .tool-name {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--accent1);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.2rem;
       line-height: 1.4;
     }
     .tool-subtitle {
@@ -385,5 +392,10 @@
       .nav-title { display: none; }
       .about-inner { grid-template-columns: 1fr; text-align: center; gap: 1.5rem; }
       .about-portrait { margin: 0 auto; }
+    }
+    @media (max-width: 480px) {
+      .tools-section { padding-left: 1rem; padding-right: 1rem; }
+      .tool-card { padding: 2.2rem 1.6rem; }
+      .tool-pain { font-size: 1.1rem; }
     }
   
