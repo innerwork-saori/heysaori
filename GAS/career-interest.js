@@ -7,6 +7,7 @@
  * 分頁格式（與「職業卡.xlsx」相同，第一列為標題）：
  *   A: SN   B: 職業名稱   C: 興趣代碼 (Holland Code)
  *   D: 挑選（勾選 TRUE）   E: 排名（1–10）   F: 挑選、排序的原因
+ *   G1: 送出時間紀錄（每次送出加一行，保留全部歷史）
  * 若分頁是空白的，送出時會自動補上標題與 100 個職業列。
  *
  * API
@@ -61,16 +62,15 @@ function doPost(e) {
     // 避免同時送出互相覆蓋
     const lock = LockService.getScriptLock();
     lock.waitLock(20000);
+    const submittedAt = Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy-MM-dd HH:mm');
     try {
       writeSubmission(sheet, data, body.jobs);
+      logSubmitTime(sheet, submittedAt);
     } finally {
       lock.releaseLock();
     }
 
-    return json({
-      ok: true,
-      submittedAt: Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy-MM-dd HH:mm')
-    });
+    return json({ ok: true, submittedAt });
   } catch (err) {
     Logger.log('doPost error: ' + err.message);
     return json({ ok: false, error: 'server_error', detail: err.message });
@@ -142,6 +142,25 @@ function writeSubmission(sheet, data, jobs) {
     ];
   });
   sheet.getRange(2, 4, values.length, 3).setValues(values);
+
+  // 排序 A:F（第 2 列以下）：D 有勾的在前 → E 名次 1→10 → C 興趣代碼 A→Z
+  // 列的順序改變不影響重新送出：上面是依 A 欄 SN 對應列，不是依列號
+  sheet.getRange(2, 1, values.length, 6).sort([
+    { column: 4, ascending: false },
+    { column: 5, ascending: true },
+    { column: 3, ascending: true }
+  ]);
+}
+
+// ─── 送出紀錄：G1 保留每一次送出的時間（舊的在上、最新在下）──────────────────
+const SUBMIT_LOG_TITLE = '送出時間';
+
+function logSubmitTime(sheet, submittedAt) {
+  const cell = sheet.getRange(1, 7);
+  const prev = String(cell.getValue() || '');
+  const lines = prev.indexOf(SUBMIT_LOG_TITLE) === 0 ? prev.split('\n') : [SUBMIT_LOG_TITLE];
+  lines.push(`第 ${lines.length} 次　${submittedAt}`);
+  cell.setValue(lines.join('\n')).setFontWeight('bold').setWrap(true);
 }
 
 // ─── 空白分頁：補上標題與 100 個職業列 ──────────────────────────────────────
