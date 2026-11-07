@@ -31,7 +31,7 @@
     <h1 class="profile-name">Book a Session</h1>
     <div class="profile-role">預約諮詢</div>
     <p class="profile-bio">
-      下面六件事沒有先後順序，全部完成就預約成功了。做完一件就打個勾，這台裝置會記得你的進度。
+      先選你的狀況，下面會列出要做的事。沒有先後順序，全部完成就預約成功了。做完一件就打個勾，這台裝置會記得你的進度。
     </p>
 
     <!-- 進度：數字由 js/booking.js 依打勾數更新 -->
@@ -44,14 +44,39 @@
 
 
 <!-- ══════════ CHECKLIST ══════════ -->
-<!-- 每一項的 data-task 是記錄打勾狀態用的 key，改文案不用動它 -->
+<!-- 每一項的 data-task 是記錄打勾狀態用的 key，改文案不用動它
+     data-modes：哪些狀況要做這件事（first 第一次／credits 還有次數／renew 重新購買）
+     data-optional：哪些狀況下這件事可做可不做（不算進進度） -->
 <main class="links booking">
+
+  <!-- 選狀況：value 要跟上面 data-modes 用的名稱一致；data-hint 是選了之後顯示的說明 -->
+  <fieldset class="visit-type">
+    <legend class="visit-legend">你是第幾次來諮詢？</legend>
+    <div class="visit-options">
+      <label class="visit-option">
+        <input type="radio" name="visit" value="first" checked
+               data-hint="第一次諮詢，下面六件事都要完成。">
+        <span>第一次諮詢</span>
+      </label>
+      <label class="visit-option">
+        <input type="radio" name="visit" value="credits"
+               data-hint="方案次數還沒用完，只要選時間就好。">
+        <span>再次諮詢<small>方案還有次數</small></span>
+      </label>
+      <label class="visit-option">
+        <input type="radio" name="visit" value="renew"
+               data-hint="初談表單和同意書沿用上次的，不用再交。履歷有更新再上傳就好。">
+        <span>再次諮詢<small>次數用完，要重新購買</small></span>
+      </label>
+    </div>
+    <p class="visit-hint" id="visitHint" aria-live="polite">第一次諮詢，下面六件事都要完成。</p>
+  </fieldset>
 
   <section class="link-group">
     <h2 class="group-label">Forms &amp; Files <span>表單與文件</span></h2>
     <ul class="task-list">
 
-      <li class="task" data-task="form">
+      <li class="task" data-task="form" data-modes="first">
         <input class="task-check" type="checkbox" id="task-form">
         <div class="task-body">
           <label class="task-title" for="task-form">填寫初談表單</label>
@@ -62,10 +87,10 @@
         </div>
       </li>
 
-      <li class="task" data-task="resume">
+      <li class="task" data-task="resume" data-modes="first renew" data-optional="renew">
         <input class="task-check" type="checkbox" id="task-resume">
         <div class="task-body">
-          <label class="task-title" for="task-resume">提供履歷／簡歷</label>
+          <label class="task-title" for="task-resume">提供履歷／簡歷 <span class="task-optional">有更新再交</span></label>
           <p class="task-desc">上傳到 Dropbox，或直接傳 LINE 給 Saori 都可以。</p>
           <div class="task-actions">
             <a class="task-link" href="https://www.dropbox.com/request/rJuLakmxnsD76h7wTThX" target="_blank" rel="noopener">上傳履歷</a>
@@ -73,7 +98,7 @@
         </div>
       </li>
 
-      <li class="task" data-task="consent">
+      <li class="task" data-task="consent" data-modes="first">
         <input class="task-check" type="checkbox" id="task-consent">
         <div class="task-body">
           <label class="task-title" for="task-consent">簽署諮詢同意書</label>
@@ -92,7 +117,7 @@
     <h2 class="group-label">Time &amp; Plan <span>時間與方案</span></h2>
     <ul class="task-list">
 
-      <li class="task" data-task="order">
+      <li class="task" data-task="order" data-modes="first renew">
         <input class="task-check" type="checkbox" id="task-order">
         <div class="task-body">
           <label class="task-title" for="task-order">下訂諮詢方案</label>
@@ -103,7 +128,7 @@
         </div>
       </li>
 
-      <li class="task" data-task="time">
+      <li class="task" data-task="time" data-modes="first credits renew">
         <input class="task-check" type="checkbox" id="task-time">
         <div class="task-body">
           <label class="task-title" for="task-time">選諮詢時間</label>
@@ -125,7 +150,7 @@
     <h2 class="group-label">On LINE <span>在 LINE 上</span></h2>
     <ul class="task-list">
 
-      <li class="task" data-task="payment">
+      <li class="task" data-task="payment" data-modes="first renew">
         <input class="task-check" type="checkbox" id="task-payment">
         <div class="task-body">
           <label class="task-title" for="task-payment">回報轉帳資訊</label>

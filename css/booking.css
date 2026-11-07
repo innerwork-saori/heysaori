@@ -33,8 +33,87 @@
 }
 .booking-progress.is-complete .progress-text { color: var(--accent3); }
 
+/* ── 選狀況：第一次／還有次數／重新購買 ── */
+.visit-type {
+  border: 0;
+  margin: 0 0 2.4rem;
+  padding: 0;
+  min-width: 0;
+}
+.visit-legend {
+  width: 100%;
+  margin-bottom: 0.9rem;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--ink);
+  text-align: center;
+}
+.visit-options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+.visit-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 0.6rem 0.8rem;
+  text-align: center;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  color: var(--text-main);
+  background: #fff;
+  border: 1px solid var(--paper-mid);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.visit-option small {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.75rem;
+  color: var(--text-soft);
+}
+/* 原生 radio 藏起來但保留鍵盤操作 */
+.visit-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.visit-option:hover { border-color: var(--accent2); }
+.visit-option:has(input:checked) {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+.visit-option:has(input:checked) small { color: var(--accent3); }
+.visit-option:has(input:focus-visible) {
+  outline: 2px solid var(--accent1);
+  outline-offset: 2px;
+}
+.visit-hint {
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+  color: var(--text-mid);
+  text-align: center;
+}
+
+/* 這次不用做的項目和整組：.task 是 grid，要明確蓋掉 display */
+.task[hidden],
+.link-group[hidden] { display: none; }
+/* 被藏起來的組後面那組，不要再多一段間距 */
+.booking .link-group[hidden] + .link-group { margin-top: 0; }
+
 /* ── 待辦清單 ── */
-.task-list { list-style: none; }
+.task-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
 .task {
   display: grid;
   grid-template-columns: 28px 1fr;
@@ -45,7 +124,6 @@
   border-radius: 14px;
   transition: background 0.2s, border-color 0.2s;
 }
-.task + .task { margin-top: 0.7rem; }
 
 /* 打勾方框：用原生 checkbox，鍵盤與螢幕報讀都能用 */
 .task-check {
@@ -92,6 +170,21 @@
   line-height: 1.5;
   cursor: pointer;
 }
+/* 可選項目的小標籤，只在 .is-optional 時出現 */
+.task-optional {
+  display: none;
+  margin-left: 0.4rem;
+  padding: 0.05rem 0.55rem;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--accent1);
+  border: 1px solid var(--accent2);
+  border-radius: 999px;
+  vertical-align: 0.15em;
+}
+.task.is-optional .task-optional { display: inline-block; }
+
 .task-desc {
   margin-top: 0.15rem;
   font-size: 0.85rem;
@@ -147,6 +240,9 @@
 .booking-back:focus-visible { color: var(--accent1); }
 
 /* ── RWD ── */
+@media (min-width: 560px) {
+  .visit-options { grid-template-columns: repeat(3, 1fr); }
+}
 /* 手機：卡片內距收窄一點 */
 @media (max-width: 559px) {
   .task { padding: 0.9rem 0.9rem; gap: 0 0.75rem; }
