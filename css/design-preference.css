@@ -1,0 +1,115 @@
+/* ── 設計偏好共用模組（搭配 js/design-preference.js） ──
+ * 使用頁面：Page_prompt_generator.html、shoppage_prompt_generator.html、Tool_prompt_generator.html
+ * 所有規則都限定在 .dp 之內，不影響頁面其他欄位。
+ * 基本的 label / input / select 樣式沿用各頁 CSS；這裡只處理模組內需要一致的部分。
+ */
+
+.dp-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.4rem 2rem;
+}
+.dp-font-field { margin-top: 1.4rem; }
+
+.dp .dp-custom { margin-top: 8px; }
+.dp .dp-custom label { margin-bottom: 4px; }
+.dp .dp-req { color: var(--accent-rose); }
+.dp .dp-custom textarea { min-height: 60px; }
+
+/* 多選清單：統一成 Page 生成器的樣式（Tool 頁原本是瀏覽器預設外觀） */
+.dp select[multiple] {
+  padding: 0;
+  min-height: 0;
+  line-height: normal;
+  appearance: none;
+  background: var(--paper-warm);
+}
+.dp select[multiple] option {
+  padding: 9px 13px;
+  border-bottom: 1px solid var(--paper-mid);
+  border-radius: 0;
+}
+.dp select[multiple] option:checked {
+  background: rgba(196,149,106,0.12);
+  color: var(--accent1);
+}
+
+/* 展開說明 */
+.dp .dp-details { margin-top: 8px; }
+.dp .dp-details summary {
+  font-size: 0.72rem;
+  color: var(--accent2);
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 0;
+}
+.dp .dp-details summary::-webkit-details-marker { display: none; }
+
+/* 風格參考表 */
+.dp-table-wrap {
+  margin-top: 8px;
+  border: 1px solid var(--paper-mid);
+  border-radius: 2px;
+  overflow-x: auto;
+  font-size: 0.75rem;
+}
+.dp-table { width: 100%; border-collapse: collapse; }
+.dp-table th {
+  padding: 6px 10px;
+  text-align: left;
+  color: var(--text-mid);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  background: var(--paper-warm);
+  border-bottom: 1px solid var(--paper-mid);
+}
+.dp-table td {
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--paper-mid);
+  color: var(--text-soft);
+}
+.dp-table td:first-child { color: var(--text-main); }
+.dp-table td:nth-child(2) { color: var(--text-mid); }
+.dp-table tbody tr:nth-child(even) { background: var(--paper-warm); }
+.dp-table tbody tr:last-child td { border-bottom: none; }
+
+/* 配色靈感連結 */
+.dp-links {
+  margin-top: 8px;
+  font-size: 0.75rem;
+  line-height: 2;
+  color: var(--text-mid);
+}
+.dp-links-title {
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+  color: var(--text-soft);
+  letter-spacing: 0.08em;
+}
+.dp-links-title:not(:first-child) { margin-top: 0.6rem; }
+.dp-links a {
+  color: var(--accent1);
+  text-decoration: none;
+  border-bottom: 1px solid var(--paper-mid);
+}
+
+/* 字型預覽 */
+.dp-font-preview {
+  margin-top: 8px;
+  padding: 10px 13px;
+  border: 1px dashed var(--paper-mid);
+  border-radius: 2px;
+  font-size: 0.88rem;
+  color: var(--text-soft);
+  background: transparent;
+  letter-spacing: 0.04em;
+  min-height: 42px;
+}
+
+@media (max-width: 620px) {
+  .dp-grid { grid-template-columns: 1fr; }
+}

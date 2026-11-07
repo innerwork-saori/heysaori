@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Zen+Maru+Gothic:wght@400;700&family=Shippori+Mincho:wght@400;700&family=Kiwi+Maru:wght@400;700&family=Kosugi+Maru&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=Lora:ital,wght@0,400;0,600;1,400&family=Raleway:wght@300;400;600&family=Merriweather:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/saori-base.css">
 <link rel="stylesheet" href="css/page-prompt-generator.css">
+<link rel="stylesheet" href="css/design-preference.css">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JZJ4RQTVK1"></script>
 <script>
@@ -227,61 +228,8 @@
     <div class="section-label">design preference</div>
     <h2 class="section-title" data-i18n="sec5Title">設計偏好</h2>
     <div class="section-rule"></div>
-    <div class="grid grid-design">
-      <div class="field">
-        <label data-i18n="labelStyle">風格（按住 shift 不放，滑鼠點選即可多選）</label>
-        <select id="style" multiple size="5" onchange="toggleCustomStyle()">
-          <!-- options injected by setLang() -->
-        </select>
-        <details id="styleDetails" style="margin-top:8px;">
-          <summary style="font-size:0.72rem;color:var(--accent2);cursor:pointer;letter-spacing:0.08em;list-style:none;display:inline-flex;align-items:center;gap:4px;">
-            <span data-i18n="styleDetailsSummary">▸ 風格參考說明</span>
-          </summary>
-          <div id="styleDetailsBody" style="margin-top:8px;border:1px solid var(--paper-mid);border-radius:2px;overflow:hidden;font-size:0.75rem;">
-            <!-- injected by setLang() -->
-          </div>
-        </details>
-        <div id="customStyleWrap" style="display:none;margin-top:8px;">
-          <label style="margin-bottom:4px;" data-i18n="labelCustomStyle">自訂風格描述 <span style="color:var(--accent-rose)">*必填</span></label>
-          <textarea id="customStyle" data-i18n-ph="phCustomStyle" placeholder="例：日系喫茶店感、像選物店一樣乾淨安靜……"></textarea>
-        </div>
-      </div>
-      <div class="field">
-        <label data-i18n="labelColor">配色</label>
-        <select id="color" onchange="toggleCustomColor()">
-          <option value="" data-i18n="colorOpt0">（不指定，讓 AI 決定）</option>
-          <option data-i18n="colorOpt1">柔和藍綠色調</option>
-          <option data-i18n="colorOpt2">暖橙色調</option>
-          <option data-i18n="colorOpt3">莫蘭迪中性色</option>
-          <option data-i18n="colorOpt4">黑白極簡</option>
-          <option data-i18n="colorOpt5">自訂配色（請填下方）</option>
-        </select>
-        <div id="customColorWrap" style="display:none;margin-top:8px;">
-          <label style="margin-bottom:4px;" data-i18n="labelCustomColor">自訂配色 <span style="color:var(--accent-rose)">*必填</span></label>
-          <textarea id="customColor" data-i18n-ph="phCustomColor" placeholder="例：奶油白、深木色、抹茶綠"></textarea>
-        </div>
-        <details style="margin-top:8px;">
-          <summary style="font-size:0.72rem;color:var(--accent2);cursor:pointer;letter-spacing:0.08em;list-style:none;display:inline-flex;align-items:center;gap:4px;">
-            <span data-i18n="colorDetailsSummary">▸ 配色靈感參考</span>
-          </summary>
-          <div id="colorDetailsBody" style="margin-top:8px;font-size:0.75rem;line-height:2;color:var(--text-mid);">
-            <!-- injected by setLang() -->
-          </div>
-        </details>
-      </div>
-    </div>
+    <div id="designPref"></div>
     <div class="grid" style="margin-top:1.4rem;">
-      <div class="field">
-        <label data-i18n="labelFont">字型</label>
-        <select id="font" onchange="previewFont()">
-          <!-- options injected by setLang() -->
-        </select>
-        <div id="customFontWrap" style="display:none;margin-top:8px;">
-          <label style="margin-bottom:4px;" data-i18n="labelCustomFont">自訂字型名稱 <span style="color:var(--accent-rose)">*必填</span></label>
-          <input id="customFont" data-i18n-ph="phCustomFont" placeholder="例：Nunito、Source Han Sans、思源黑體">
-        </div>
-        <div id="fontPreview" class="font-preview-box" data-i18n="fontPreviewText">字型預覽：品牌感從文字開始</div>
-      </div>
       <div class="field">
         <label data-i18n="labelWebsiteGoal">網站主要目標 <span class="req">必填</span></label>
         <input id="websiteGoal" data-i18n-ph="phWebsiteGoal" placeholder="例：吸引來店、提升訂位、展示菜單、建立品牌感">
@@ -341,6 +289,7 @@
   </div>
 </footer>
 
+<script src="js/design-preference.js"></script>
 <script src="js/shoppage-prompt-generator.js"></script>
 </body>
 </html>

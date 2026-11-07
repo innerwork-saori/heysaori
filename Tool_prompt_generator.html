@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Zen+Maru+Gothic:wght@400;700&family=Shippori+Mincho:wght@400;700&family=Kiwi+Maru:wght@400;700&family=Kosugi+Maru&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/saori-base.css">
 <link rel="stylesheet" href="css/tool-prompt-generator.css">
+<link rel="stylesheet" href="css/design-preference.css">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JZJ4RQTVK1"></script>
 <script>
@@ -49,9 +50,8 @@
 
   <!-- 說明 -->
   <div class="intro-note">
-    💡 <strong>給不懂程式的你：</strong>這份表單會引導你把「想做一個什麼工具」說清楚。<br>
-    你不需要懂技術，只要像跟人說話一樣，把工具的目的、使用方式、限制說明白，<br>
-    AI 就能幫你做出來。每個欄位都有說明與範例，不確定時可以先填看看。
+    💡 <strong>給不懂程式的你：</strong>只要回答最上面 4 題，就能產生 Prompt。<br>
+    像跟人說話一樣寫就好，不用懂技術。下面的細節都是選填，沒寫到的部分 AI 會先問你。
   </div>
 
   <!-- 範例 Prompt 展示 -->
@@ -86,15 +86,15 @@
     </div>
   </div>
 
-  <!-- ① 目標 -->
+  <!-- 精簡版：回答 4 題就能產生 -->
   <div class="form-block">
-    <div class="section-label">01 · goal</div>
-    <h2 class="section-title">工具目標</h2>
+    <div class="section-label">quick start</div>
+    <h2 class="section-title">先回答這 4 題</h2>
     <div class="section-rule"></div>
-    <p class="section-desc">先想清楚「這工具是給誰用、解決什麼問題」，這是最重要的一步。<br>說清楚了，後面 AI 才知道方向。</p>
+    <p class="section-desc">填完這 4 題就能產生 Prompt。沒寫到的部分，AI 會在動手做之前先問你。</p>
     <div class="grid">
-      <div class="field">
-        <label>工具類型 <span class="req">必填</span></label>
+      <div class="field full">
+        <label>1. 你想做哪一種工具？<span class="req">必填</span></label>
         <div class="tool-type-group" id="toolTypePills">
           <span class="tool-pill" onclick="togglePill(this,'網頁工具')">🌐 網頁工具</span>
           <span class="tool-pill" onclick="togglePill(this,'Chrome 外掛')">🔌 Chrome 外掛</span>
@@ -103,333 +103,224 @@
           <span class="tool-pill" onclick="togglePill(this,'桌面應用程式')">🖥 桌面應用程式</span>
           <span class="tool-pill" onclick="togglePill(this,'其他')">✏️ 其他</span>
         </div>
-        <input id="toolTypeOther" placeholder="若選「其他」，請在這裡說明" style="margin-top:8px;">
-        <div class="field-hint">不確定選哪個？選「網頁工具」最容易讓 AI 做出來。</div>
-      </div>
-      <div class="field">
-        <label>工具名稱（或暫定名稱）<span class="req">必填</span></label>
-        <input id="toolName" placeholder="例：客戶報價試算器、會議摘要產生器">
-        <div class="field-hint">還沒想好也可以先填描述性的名字，例如「幫我計算運費的工具」。</div>
+        <input id="toolTypeOther" placeholder="選了「其他」的話，在這裡說明是什麼" style="margin-top:8px;">
+        <div class="field-hint">不確定就選「網頁工具」，最容易讓 AI 做出來。</div>
       </div>
       <div class="field full">
-        <label>這工具幫誰、解決什麼問題？<span class="req">必填</span></label>
-        <textarea id="goalWho" placeholder="例：幫我（一個接案設計師）快速計算每張報價單的金額與稅費，不用再開 Excel 手動算。"></textarea>
-        <div class="field-hint">「幫誰」可以是你自己、你的客戶、你的同事。問題說得越具體越好。</div>
+        <label for="goalWho">2. 這工具給誰用、幫他解決什麼麻煩？<span class="req">必填</span></label>
+        <textarea id="goalWho" placeholder="例：幫我（接案設計師）快速算出報價單的金額和稅，不用再開 Excel 手動算。"></textarea>
+        <div class="field-hint">「誰」可以是你自己、你的客戶或同事。麻煩說得越具體越好。</div>
       </div>
       <div class="field full">
-        <label>現在你是怎麼處理這件事的？（現況痛點）</label>
-        <textarea id="goalPain" placeholder="例：每次都要打開 Excel，複製上次的格式，手動輸入，很容易算錯，還要重新確認稅率……"></textarea>
-        <div class="field-hint">說明現在的做法哪裡麻煩、容易出錯，幫助 AI 理解你真正想改善什麼。</div>
+        <label for="inputFields">3. 使用的人要輸入或提供什麼？<span class="req">必填</span></label>
+        <textarea id="inputFields" placeholder="例：商品名稱、單價、數量、是否含稅"></textarea>
+        <div class="field-hint">想像打開工具後要填什麼、上傳什麼。一行寫一項，不用寫得很完整。</div>
+      </div>
+      <div class="field full">
+        <label for="outputFormat">4. 按下去之後，會看到什麼結果？<span class="req">必填</span></label>
+        <textarea id="outputFormat" placeholder="例：顯示小計、稅金、總計，還有一個「複製結果」按鈕"></textarea>
+        <div class="field-hint">可以是一段文字、一張表格，或一個可以下載的檔案。</div>
       </div>
     </div>
   </div>
 
   <hr class="form-sep">
 
-  <!-- ② Input -->
+  <!-- 細節：全部選填 -->
   <div class="form-block">
-    <div class="section-label">02 · input</div>
-    <h2 class="section-title">使用者輸入什麼？</h2>
+    <div class="section-label">more details</div>
+    <h2 class="section-title">想讓結果更精準？</h2>
     <div class="section-rule"></div>
-    <p class="section-desc">「Input」就是使用者在工具裡要填的東西，或是工具需要的原始資料。<br>想像一下，你打開這個工具，第一步要輸入什麼？</p>
-    <div class="grid">
-      <div class="field full">
-        <label>使用者需要輸入哪些欄位？<span class="req">必填</span></label>
-        <textarea id="inputFields" placeholder="例：
-- 商品名稱（文字）
-- 單價（數字，例如 1200）
-- 數量（數字，例如 3）
-- 是否含稅（是 / 否）"></textarea>
-        <div class="field-hint">每個欄位一行，說明是文字、數字、選項、還是日期。不確定可以先列出你覺得需要的，不用太完整。</div>
-      </div>
-      <div class="field full">
-        <label>有沒有具體的填寫範例？</label>
-        <textarea id="inputExample" placeholder="例：
-商品名稱：品牌 Logo 設計
-單價：8000
-數量：1
-是否含稅：否"></textarea>
-        <div class="field-hint">提供一個真實的例子，幫助 AI 更準確理解每個欄位的樣子。</div>
+    <p class="section-desc">下面每一塊都可以跳過。填得越多，AI 要問你的就越少。</p>
+    <div class="more-list">
+    <details class="more-block" data-more="name">
+      <summary>
+        <span class="more-text">
+          <span class="more-title">工具名稱與現在的做法</span>
+          <span class="more-sub">還沒取名也沒關係，AI 可以幫你想</span>
+        </span>
+        <span class="more-count"></span>
+      </summary>
+      <div class="more-body">
+      <div class="grid">
+      <div class="field">
+        <label for="toolName">工具名稱</label>
+        <input id="toolName" placeholder="例：報價試算器（空著的話 AI 會建議）">
+        <div class="field-hint">先寫描述性的名字也可以，例如「幫我算運費的工具」。</div>
       </div>
       <div class="field">
-        <label>欄位有沒有合法值的限制？</label>
-        <textarea id="inputValidation" placeholder="例：
-- 單價必須是正整數
-- 數量最少 1，最多 999
-- 是否含稅只能選「是」或「否」" style="min-height:110px;"></textarea>
-        <div class="field-hint">比如：「年齡只能填數字」、「日期格式要 YYYY/MM/DD」，沒有限制就不用填。</div>
+        <label for="goalPain">現在你是怎麼處理這件事的？</label>
+        <textarea id="goalPain" placeholder="例：每次都開 Excel 複製上次的格式，很容易算錯"></textarea>
+        <div class="field-hint">說說現在的做法哪裡麻煩、容易出錯，AI 會更懂你想改善什麼。</div>
+      </div>
+      </div>
+      </div>
+    </details>
+    <details class="more-block" data-more="input">
+      <summary>
+        <span class="more-text">
+          <span class="more-title">輸入的細節</span>
+          <span class="more-sub">範例、限制、沒填時怎麼辦</span>
+        </span>
+        <span class="more-count"></span>
+      </summary>
+      <div class="more-body">
+      <div class="grid">
+      <div class="field full">
+        <label for="inputExample">舉一個實際的填寫例子</label>
+        <textarea id="inputExample" placeholder="例：商品名稱：Logo 設計／單價：8000／數量：1"></textarea>
+        <div class="field-hint">給一個真實的例子，AI 會更準確理解每一項長什麼樣子。</div>
       </div>
       <div class="field">
-        <label>如果使用者沒有填某個欄位，怎麼處理？</label>
-        <textarea id="inputMissing" placeholder="例：
-- 商品名稱空白：顯示錯誤「請填寫商品名稱」
-- 數量空白：自動帶入 1
-- 是否含稅空白：預設為「否」" style="min-height:110px;"></textarea>
-        <div class="field-hint">每個空白欄位的處理方式可能不同，有些要報錯、有些可以給預設值。</div>
+        <label for="inputValidation">每一項有沒有限制？</label>
+        <textarea id="inputValidation" placeholder="例：單價只能填正整數"></textarea>
+        <div class="field-hint">例如「只能填數字」、「日期要寫成 2026/01/31」。沒有限制就跳過。</div>
       </div>
-      <div class="field full">
-        <label>資料從哪裡來？（輸入來源）</label>
-        <textarea id="inputSource" placeholder="例：使用者直接在網頁表單手動輸入。
-或：從上傳的 Excel 檔案讀取。
-或：從網頁上複製貼上文字。" style="min-height:70px;"></textarea>
-        <div class="field-hint">大部分情況是「使用者在畫面上輸入」。如果是要讀取檔案或其他來源，請說明。</div>
-      </div>
-    </div>
-  </div>
-
-  <hr class="form-sep">
-
-  <!-- ③ Output -->
-  <div class="form-block">
-    <div class="section-label">03 · output</div>
-    <h2 class="section-title">工具輸出什麼？</h2>
-    <div class="section-rule"></div>
-    <p class="section-desc">「Output」就是工具處理完之後，使用者會看到什麼結果。<br>想像一下，按下送出之後，畫面上會出現什麼？</p>
-    <div class="grid">
-      <div class="field full">
-        <label>輸出結果長什麼樣子？<span class="req">必填</span></label>
-        <textarea id="outputFormat" placeholder="例：
-在頁面下方顯示一個結果區塊，包含：
-- 小計金額：8,000 元
-- 稅金（5%）：400 元
-- 總計：8,400 元
-
-並有一個「複製結果」按鈕。"></textarea>
-        <div class="field-hint">盡量描述你「希望看到的畫面」，例如是表格、文字、還是可以下載的檔案？</div>
+      <div class="field">
+        <label for="inputMissing">沒填某一項時，要怎麼處理？</label>
+        <textarea id="inputMissing" placeholder="例：數量沒填就自動帶 1"></textarea>
+        <div class="field-hint">有些要提醒使用者，有些可以直接給預設值。</div>
       </div>
       <div class="field full">
-        <label>有沒有結果的具體範例？</label>
-        <textarea id="outputExample" placeholder="例：
-=== 報價結果 ===
-商品：品牌 Logo 設計 × 1
-小計：8,000 元
-稅金：0 元（未稅）
-總計：8,000 元"></textarea>
-        <div class="field-hint">像這樣把你理想的輸出直接寫出來，AI 就能照著做。</div>
+        <label for="inputSource">資料從哪裡來？</label>
+        <textarea id="inputSource" placeholder="例：使用者在網頁上手動輸入"></textarea>
+        <div class="field-hint">大多是「在畫面上輸入」。如果要讀檔案、貼文字，請寫出來。</div>
       </div>
-      <div class="field">
-        <label>精準度或格式要求</label>
-        <textarea id="outputPrecision" placeholder="例：
-- 金額要加千分位逗號（8,000）
-- 小數點到整數位即可（不要出現 8000.00）
-- 幣別固定顯示「元」" style="min-height:100px;"></textarea>
-        <div class="field-hint">有特別的數字格式、日期格式、文字樣式，請在這裡說明。</div>
       </div>
-      <div class="field">
-        <label>如果計算失敗或出錯，要怎麼回應？</label>
-        <textarea id="outputError" placeholder="例：
-- 輸入了文字但欄位要數字：顯示「請輸入數字金額」
-- 計算結果為負數：顯示「金額有誤，請重新檢查」" style="min-height:100px;"></textarea>
-        <div class="field-hint">錯誤訊息要讓不懂技術的人也能看得懂，所以用白話說清楚。</div>
       </div>
-    </div>
-  </div>
-
-  <hr class="form-sep">
-
-  <!-- ④ Rules -->
-  <div class="form-block">
-    <div class="section-label">04 · rules</div>
-    <h2 class="section-title">規則與限制</h2>
-    <div class="section-rule"></div>
-    <p class="section-desc">這個區塊是放「商業邏輯」或「不能做的事」。<br>想想你的工具有沒有什麼固定算法、規定，或特別要注意的事。</p>
-    <div class="grid">
+    </details>
+    <details class="more-block" data-more="output">
+      <summary>
+        <span class="more-text">
+          <span class="more-title">結果的細節</span>
+          <span class="more-sub">結果範例、格式、出錯時顯示什麼</span>
+        </span>
+        <span class="more-count"></span>
+      </summary>
+      <div class="more-body">
+      <div class="grid">
       <div class="field full">
-        <label>有哪些固定的計算規則或商業邏輯？</label>
-        <textarea id="rulesBiz" placeholder="例：
-- 稅率固定為 5%（不可讓使用者修改）
-- 數量超過 10 件，單價打 9 折
-- 國際訂單要另加運費 300 元
-- 每張報價單最多 20 項商品"></textarea>
-        <div class="field-hint">任何「固定算法」或「規定」都可以寫在這裡，例如折扣規則、費率、上限等。</div>
+        <label for="outputExample">把你想看到的結果直接寫出來</label>
+        <textarea id="outputExample" placeholder="例：小計 8,000 元，總計 8,400 元"></textarea>
+        <div class="field-hint">照你理想的樣子寫，AI 就能照著做。</div>
       </div>
+      <div class="field">
+        <label for="outputPrecision">數字或格式有沒有特別要求？</label>
+        <textarea id="outputPrecision" placeholder="例：金額加千分位，不要小數點"></textarea>
+        <div class="field-hint">數字、日期、文字的寫法有要求就寫在這裡。</div>
+      </div>
+      <div class="field">
+        <label for="outputError">出錯時要顯示什麼？</label>
+        <textarea id="outputError" placeholder="例：填了文字就提示「請輸入數字」"></textarea>
+        <div class="field-hint">用白話寫，讓不懂技術的人也看得懂。</div>
+      </div>
+      </div>
+      </div>
+    </details>
+    <details class="more-block" data-more="rules">
+      <summary>
+        <span class="more-text">
+          <span class="more-title">規則與限制</span>
+          <span class="more-sub">固定的算法、工具不能做的事</span>
+        </span>
+        <span class="more-count"></span>
+      </summary>
+      <div class="more-body">
+      <div class="grid">
       <div class="field full">
-        <label>工具不能做什麼、不能顯示什麼？</label>
-        <textarea id="rulesNot" placeholder="例：
-- 不能讓使用者修改稅率
-- 不能儲存任何個人資料
-- 結果不能直接發送 Email（只能手動複製）
-- 不顯示小數點後的金額"></textarea>
-        <div class="field-hint">有沒有哪些功能「看起來合理，但你不想要」？先說清楚，AI 才不會自作主張。</div>
-      </div>
-    </div>
-  </div>
-
-  <hr class="form-sep">
-
-  <!-- ⑤ Edge Cases -->
-  <div class="form-block">
-    <div class="section-label">05 · edge cases</div>
-    <h2 class="section-title">異常情況怎麼處理？</h2>
-    <div class="section-rule"></div>
-    <p class="section-desc">「Edge case」是指少見但可能發生的特殊情況。<br>這些如果沒想清楚，工具做出來可能會在奇怪的地方出錯。</p>
-    <div class="grid">
-      <div class="field">
-        <label>使用者什麼都沒填，直接送出怎麼辦？</label>
-        <textarea id="edgeEmpty" placeholder="例：
-顯示提示訊息「請先填寫商品名稱與單價」，
-並把空白的欄位標示為紅色，不執行計算。" style="min-height:100px;"></textarea>
-        <div class="field-hint">大部分工具都需要處理這個情況，說明你希望怎麼提示使用者。</div>
-      </div>
-      <div class="field">
-        <label>輸入了奇怪的值怎麼辦？（例如負數、超大數字、中文）</label>
-        <textarea id="edgeInvalid" placeholder="例：
-- 單價填了「abc」：提示「請輸入數字」
-- 數量填了 -5：提示「數量不能為負數」
-- 數量填了 99999：提示「數量上限為 999」" style="min-height:100px;"></textarea>
-        <div class="field-hint">這些「不正常的輸入」如果沒有定義，工具可能會當掉或算出奇怪的結果。</div>
-      </div>
-      <div class="field">
-        <label>有沒有可能出現「資料衝突」的狀況？</label>
-        <textarea id="edgeConflict" placeholder="例：
-- 同時選了「含稅」又填了「稅率 0%」→ 以稅率欄位為主
-- 同時選了「海外訂單」又填了「台灣地址」→ 顯示提醒讓使用者確認" style="min-height:100px;"></textarea>
-        <div class="field-hint">如果你的工具有多個欄位互相關聯，可能會有衝突。不確定的話可以跳過。</div>
-      </div>
-      <div class="field">
-        <label>有沒有模糊情境、難以判斷的情況？</label>
-        <textarea id="edgeAmbiguous" placeholder="例：
-- 使用者在「商品名稱」欄位輸入了表情符號：正常顯示，不需阻擋
-- 貼上的文字包含換行：自動移除換行，合併成一行" style="min-height:100px;"></textarea>
-        <div class="field-hint">你預期使用者可能會做些奇怪的事嗎？提前說清楚，AI 就能提前處理。</div>
-      </div>
-    </div>
-  </div>
-
-  <hr class="form-sep">
-
-  <!-- ⑥ Design Preference -->
-  <div class="form-block">
-    <div class="section-label">06 · design preference</div>
-    <h2 class="section-title">設計偏好</h2>
-    <div class="section-rule"></div>
-    <p class="section-desc">告訴 AI 你希望工具長什麼感覺，它就能幫你做出更符合期待的視覺風格。<br>不確定的話可以跳過，AI 會依常識給你一個乾淨的預設樣式。</p>
-    <div class="grid">
-      <div class="field">
-        <label>風格（可多選，按住 Shift 點選）</label>
-        <select id="designStyle" multiple size="5">
-          <option>極簡清新風</option>
-          <option>專業科技風</option>
-          <option>雜誌編輯風</option>
-          <option>插畫親切風</option>
-          <option>大膽前衛風</option>
-          <option>復古懷舊風</option>
-          <option>年輕潮流風</option>
-          <option>高級精品風</option>
-          <option>活潑多彩風</option>
-          <option>柔角新粗獷風（Soft Neo-Brutalism）</option>
-        </select>
-        <details style="margin-top:8px;">
-          <summary>▸ 風格參考說明</summary>
-          <div style="margin-top:8px;border:1px solid var(--paper-mid);border-radius:2px;overflow:hidden;font-size:0.75rem;">
-            <table style="width:100%;border-collapse:collapse;">
-              <thead>
-                <tr style="background:var(--paper-warm);">
-                  <th style="padding:6px 10px;text-align:left;color:var(--text-mid);font-weight:500;letter-spacing:0.06em;border-bottom:1px solid var(--paper-mid);">風格</th>
-                  <th style="padding:6px 10px;text-align:left;color:var(--text-mid);font-weight:500;letter-spacing:0.06em;border-bottom:1px solid var(--paper-mid);">感覺</th>
-                  <th style="padding:6px 10px;text-align:left;color:var(--text-mid);font-weight:500;letter-spacing:0.06em;border-bottom:1px solid var(--paper-mid);">常見特徵</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-main);">極簡清新風</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-mid);">乾淨、留白多、耐看</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-soft);">白底、簡單排版、少量強調色</td></tr>
-                <tr style="background:var(--paper-warm);"><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-main);">專業科技風</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-mid);">理性、俐落、像新創官網</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-soft);">深色或中性色、卡片區塊、清楚 CTA</td></tr>
-                <tr><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-main);">雜誌編輯風</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-mid);">有質感、重排版</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-soft);">大標題、強字體對比、留白節奏明顯</td></tr>
-                <tr style="background:var(--paper-warm);"><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-main);">插畫親切風</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-mid);">輕鬆、親切、有品牌個性</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-soft);">插畫主視覺、柔和配色、活潑</td></tr>
-                <tr><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-main);">大膽前衛風</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-mid);">強烈、吸睛、有設計感</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-soft);">粗字體、強對比、故意不那麼工整</td></tr>
-                <tr style="background:var(--paper-warm);"><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-main);">復古懷舊風</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-mid);">溫暖、有年代感</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-soft);">復古配色、襯線字、舊感材質裝飾</td></tr>
-                <tr><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-main);">年輕潮流風</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-mid);">年輕、亮眼、偏流行感</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-soft);">金屬感、亮色、高反差、未來感元素</td></tr>
-                <tr style="background:var(--paper-warm);"><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-main);">高級精品風</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-mid);">高級、精緻、質感導向</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-soft);">大圖、細緻字體、節制配色、重視氣氛</td></tr>
-                <tr><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-main);">活潑多彩風</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-mid);">友善、熱鬧、適合活動或教育</td><td style="padding:5px 10px;border-bottom:1px solid var(--paper-mid);color:var(--text-soft);">多色系、圓角、明亮插圖或圖塊</td></tr>
-                <tr style="background:var(--paper-warm);"><td style="padding:5px 10px;color:var(--text-main);">柔角新粗獷風</td><td style="padding:5px 10px;color:var(--text-mid);">大膽但不刺眼、有個性有溫度</td><td style="padding:5px 10px;color:var(--text-soft);">粗黑邊框 + 圓角、錯位陰影、高對比配色、幾何區塊感</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </details>
-      </div>
-      <div class="field">
-        <label>配色</label>
-        <select id="designColor" onchange="toggleCustomColor()">
-          <option value="">（不指定，讓 AI 決定）</option>
-          <option>柔和藍綠色調</option>
-          <option>暖橙色調</option>
-          <option>莫蘭迪中性色</option>
-          <option>黑白極簡</option>
-          <option>自訂配色（請填下方）</option>
-        </select>
-        <div id="customColorWrap" style="display:none;margin-top:8px;">
-          <textarea id="designCustomColor" placeholder="例：奶茶米色 + 深棕色字體" style="min-height:60px;"></textarea>
-        </div>
-        <details style="margin-top:8px;">
-          <summary>▸ 配色靈感參考</summary>
-          <div style="margin-top:8px;font-size:0.75rem;line-height:2;color:var(--text-mid);">
-            <div style="margin-bottom:0.4rem;font-weight:500;color:var(--text-soft);letter-spacing:0.08em;">配色工具</div>
-            <div>· <a href="https://coolors.co/" target="_blank" style="color:var(--accent1);text-decoration:none;border-bottom:1px solid var(--paper-mid);">Coolors</a> — 快速產生配色組合</div>
-            <div>· <a href="https://www.happyhues.co/palettes/15" target="_blank" style="color:var(--accent1);text-decoration:none;border-bottom:1px solid var(--paper-mid);">Happy Hues</a> — 看配色實際套在頁面上的效果</div>
-            <div style="margin-top:0.6rem;margin-bottom:0.4rem;font-weight:500;color:var(--text-soft);letter-spacing:0.08em;">找色碼</div>
-            <div>· <a href="https://www.toodoo.com/db/color.html" target="_blank" style="color:var(--accent1);text-decoration:none;border-bottom:1px solid var(--paper-mid);">色碼表 (Toodoo)</a></div>
-            <div>· <a href="https://www.wibibi.com/info.php?tid=372" target="_blank" style="color:var(--accent1);text-decoration:none;border-bottom:1px solid var(--paper-mid);">色碼表 (Wibibi)</a></div>
-          </div>
-        </details>
+        <label for="rulesBiz">有沒有固定的算法或規定？</label>
+        <textarea id="rulesBiz" placeholder="例：稅率固定 5%，滿 10 件打 9 折"></textarea>
+        <div class="field-hint">折扣、費率、上限這類固定的規定都可以寫。</div>
       </div>
       <div class="field full">
-        <label>字型</label>
-        <select id="designFont" onchange="previewFont()">
-          <option value="'Noto Sans TC', sans-serif">Noto Sans TC（清晰通用）</option>
-          <option value="'Zen Maru Gothic', sans-serif">Zen Maru Gothic（圓潤親和）</option>
-          <option value="'Shippori Mincho', serif">Shippori Mincho（質感明體）</option>
-          <option value="'Kiwi Maru', serif">Kiwi Maru（可愛溫暖）</option>
-          <option value="'Kosugi Maru', sans-serif">Kosugi Maru（簡潔圓體）</option>
-        </select>
-        <div id="fontPreview" class="font-preview-box">字型預覽：品牌感從文字開始</div>
+        <label for="rulesNot">有什麼是工具不能做的？</label>
+        <textarea id="rulesNot" placeholder="例：不能儲存任何個人資料"></textarea>
+        <div class="field-hint">有沒有「看起來合理，但你不想要」的功能？先說，AI 才不會自作主張。</div>
       </div>
-    </div>
-  </div>
-
-  <hr class="form-sep">
-
-  <!-- ⑦ Acceptance Criteria -->
-  <div class="form-block">
-    <div class="section-label">07 · acceptance criteria</div>
-    <h2 class="section-title">怎樣算做完、做對？</h2>
-    <div class="section-rule"></div>
-    <p class="section-desc">這是讓 AI 知道「你的驗收標準」。<br>想像工具做好了，你會怎麼測試它？哪些情況下你會說「這樣對了」？</p>
-    <div class="grid">
-      <div class="field full">
-        <label>「做對了」的情境是什麼？<span class="req">必填</span></label>
-        <textarea id="acCorrect" placeholder="例：
-✓ 輸入商品名稱「Logo 設計」、單價 8000、數量 1、未稅，
-  按下計算，顯示：小計 8,000 元、稅金 0 元、總計 8,000 元
-
-✓ 輸入數量 15 件，系統自動套用 9 折，顯示折扣後金額
-
-✓ 點擊「複製結果」，成功複製到剪貼簿"></textarea>
-        <div class="field-hint">像這樣描述「我這樣操作、應該看到這個結果」，越具體越好。可以多寫幾個情境。</div>
       </div>
-      <div class="field full">
-        <label>「做錯了」的情境是什麼？</label>
-        <textarea id="acWrong" placeholder="例：
-✗ 輸入非數字金額，沒有顯示錯誤訊息就直接計算
-✗ 稅率可以被使用者手動修改
-✗ 計算結果出現小數點（例如 8400.0 元）
-✗ 空白送出後沒有任何提示"></textarea>
-        <div class="field-hint">哪些情況下你會說「這不對」？說清楚，AI 才不會把 bug 當作功能交給你。</div>
+      </div>
+    </details>
+    <details class="more-block" data-more="edge">
+      <summary>
+        <span class="more-text">
+          <span class="more-title">沒填、填錯或少見的情況</span>
+          <span class="more-sub">先想好，工具比較不會在奇怪的地方出錯</span>
+        </span>
+        <span class="more-count"></span>
+      </summary>
+      <div class="more-body">
+      <div class="grid">
+      <div class="field">
+        <label for="edgeEmpty">什麼都沒填就按下去，要怎麼辦？</label>
+        <textarea id="edgeEmpty" placeholder="例：提示「請先填寫商品名稱」，不執行計算"></textarea>
+        <div class="field-hint">說說你希望怎麼提醒使用者。</div>
       </div>
       <div class="field">
-        <label>有沒有視覺或體驗上的要求？</label>
-        <textarea id="acUX" placeholder="例：
-- 手機上也要能正常使用
-- 計算結果要明顯顯示，不要藏在頁面底部
-- 按鈕要夠大，手指點得到" style="min-height:100px;"></textarea>
-        <div class="field-hint">有時候功能對了但體驗不好，這裡可以提出你的期待。</div>
+        <label for="edgeInvalid">填了奇怪的值怎麼辦？</label>
+        <textarea id="edgeInvalid" placeholder="例：數量填負數，提示「數量不能為負數」"></textarea>
+        <div class="field-hint">例如負數、超大的數字、在數字欄填中文。</div>
       </div>
       <div class="field">
-        <label>有沒有其他補充說明或參考？</label>
-        <textarea id="acExtra" placeholder="例：
-- 參考這個網站的計算邏輯：https://...
-- 風格希望簡單乾淨，不要太花
-- 先做最基本的版本就好，不需要登入功能" style="min-height:100px;"></textarea>
-        <div class="field-hint">任何你覺得重要但上面沒提到的都可以補充在這裡。</div>
+        <label for="edgeConflict">兩個欄位互相矛盾時，以哪個為主？</label>
+        <textarea id="edgeConflict" placeholder="例：選了含稅又填稅率 0%，以稅率為主"></textarea>
+        <div class="field-hint">欄位之間沒有關聯的話可以跳過。</div>
       </div>
+      <div class="field">
+        <label for="edgeAmbiguous">還有沒有其他少見、但可能發生的情況？</label>
+        <textarea id="edgeAmbiguous" placeholder="例：貼上的文字有換行，自動合併成一行"></textarea>
+        <div class="field-hint">你猜使用者可能會做什麼奇怪的事？先講好，AI 就能先處理。</div>
+      </div>
+      </div>
+      </div>
+    </details>
+    <details class="more-block" data-more="design">
+      <summary>
+        <span class="more-text">
+          <span class="more-title">設計偏好</span>
+          <span class="more-sub">風格、配色、字型</span>
+        </span>
+        <span class="more-count"></span>
+      </summary>
+      <div class="more-body">
+      <p class="more-desc">告訴 AI 你希望工具長什麼感覺，它就能幫你做出更符合期待的視覺風格。<br>不確定的話可以跳過，AI 會依常識給你一個乾淨的預設樣式。</p>
+      <div class="grid">
+      <div id="designPref" class="full"></div>
+      </div>
+      </div>
+    </details>
+    <details class="more-block" data-more="ac">
+      <summary>
+        <span class="more-text">
+          <span class="more-title">怎樣算做對了？</span>
+          <span class="more-sub">你會怎麼測試做好的工具</span>
+        </span>
+        <span class="more-count"></span>
+      </summary>
+      <div class="more-body">
+      <div class="grid">
+      <div class="field full">
+        <label for="acCorrect">怎樣算「做對了」？</label>
+        <textarea id="acCorrect" placeholder="例：輸入單價 8000、數量 1，總計顯示 8,000 元"></textarea>
+        <div class="field-hint">寫成「我這樣操作，應該看到這個結果」。可以寫好幾個。</div>
+      </div>
+      <div class="field full">
+        <label for="acWrong">怎樣算「做錯了」？</label>
+        <textarea id="acWrong" placeholder="例：填了文字沒有任何提示就直接計算"></textarea>
+        <div class="field-hint">說清楚哪些情況不對，AI 才不會把 bug 當成功能交給你。</div>
+      </div>
+      <div class="field">
+        <label for="acUX">畫面或操作上有沒有要求？</label>
+        <textarea id="acUX" placeholder="例：手機上也能正常使用"></textarea>
+        <div class="field-hint">功能對了但不好用，也可以在這裡提出期待。</div>
+      </div>
+      <div class="field">
+        <label for="acExtra">其他補充或參考</label>
+        <textarea id="acExtra" placeholder="例：先做最基本的版本，不需要登入"></textarea>
+        <div class="field-hint">上面沒提到、但你覺得重要的都可以寫。</div>
+      </div>
+      </div>
+      </div>
+    </details>
     </div>
   </div>
 
@@ -471,6 +362,7 @@
   </div>
 </footer>
 
+<script src="js/design-preference.js"></script>
 <script src="js/tool-prompt-generator.js"></script>
 <button class="save-fab" onclick="manualSave()" title="暫存">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

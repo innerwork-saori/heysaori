@@ -28,7 +28,6 @@ const i18n = {
     labelBrandStory: '品牌故事／創店理念',
     labelReviews: '顧客評價 ／ 心得分享',
     labelMediaMention: '媒體報導 ／ 合作經歷',
-    labelPhotoFocus: '建議呈現的照片內容 <span class="req">必填</span>',
     labelFaq: '常見問題',
     labelAddress: '地址 <span class="req">必填</span>',
     labelBusinessHours: '營業時間 <span class="req">必填</span>',
@@ -39,16 +38,6 @@ const i18n = {
     labelEmail: 'Email',
     labelMapLink: 'Google Maps 連結',
     labelSocialLinks: '社群連結',
-    labelStyle: '風格（按住 shift 不放，滑鼠點選即可多選）',
-    labelColor: '配色',
-    colorOpt0: '（不指定，讓 AI 決定）',
-    colorOpt1: '柔和藍綠色調',
-    colorOpt2: '暖橙色調',
-    colorOpt3: '莫蘭迪中性色',
-    colorOpt4: '黑白極簡',
-    colorOpt5: '自訂配色（請填下方）',
-    labelCustomColor: '自訂配色 <span style="color:var(--accent-rose)">*必填</span>',
-    labelFont: '字型',
     labelWebsiteGoal: '網站主要目標 <span class="req">必填</span>',
     labelReferenceSites: '參考網站／品牌',
     btnGen: '產生 Prompt',
@@ -73,7 +62,6 @@ const i18n = {
     phBrandStory: '例：希望在快節奏的城市裡，提供一個讓人慢下來喝杯咖啡的地方。',
     phReviews: '如尚無評價，填「暫無」即可，AI 將提示位置留空',
     phMediaMention: '例：曾被在地咖啡地圖推薦；如無可填「暫無」',
-    phPhotoFocus: '例：店門口、內部座位區、招牌甜點、咖啡沖煮過程、服務成品照',
     phFaq: '例：是否可訂位、是否有低消、是否可帶寵物、是否接受刷卡',
     phAddress: '例：台北市大安區 xx 路 xx 號',
     phBusinessHours: '例：週二至週日 12:00–19:00',
@@ -87,12 +75,9 @@ const i18n = {
     phWebsiteGoal: '例：吸引來店、提升訂位、展示菜單、建立品牌感',
     phReferenceSites: '例：想參考 Blue Bottle、% Arabica、某間日系美甲店 IG',
     errRequired: '這幾個欄位不能缺席喔：店名、店家類型、一句定位、品牌簡介、所在區域，請先填寫 ✨',
-    errRequired2: '還缺幾個必填：主要客群、招牌品項、氛圍關鍵字、消費方式、地址、營業時間、預約方式、聯絡方式、照片內容、網站目標 ✨',
+    errRequired2: '還缺幾個必填：主要客群、招牌品項、氛圍關鍵字、消費方式、地址、營業時間、預約方式、聯絡方式、網站目標 ✨',
     errNeedOrProduct: '至少告訴我一件事：顧客來的原因 或 主要商品，二選一即可 😎',
     errFeatureOrGain: '還差一點點！請填「店家特色」或「顧客來店能獲得」其中一項，我比較好發揮 🚀',
-    errCustomColor: '選了自訂配色，請填寫你喜歡的配色描述 🎨',
-    errCustomStyle: '選了自訂風格，請填寫你的風格描述 ✏️',
-    errCustomFont: '選了自訂字型，請填寫字型名稱 🔤',
     smartFallback: '（請反問我問題協助我釐清之後再開始生成網頁）',
     promptHeader: '你是一位專業的網頁設計師。請遵循網頁 UX 原則幫我設計一個實體店家的一頁式品牌網站，輸出完整 HTML 檔案。',
     promptShopSection: '【關於這家店】',
@@ -106,42 +91,7 @@ const i18n = {
     fontDefault: 'Noto Sans TC',
     fontNote: '，請使用 Google Fonts，標題用粗體',
     layoutNote: '- 版面：包含以下區塊：Hero、About、Menu/Service、Social Proof、Visit Info、Contact',
-    styleDetailsSummary: '▸ 風格參考說明',
-    colorDetailsSummary: '▸ 配色靈感參考',
-    styleOptions: [
-      { label: '極簡清新風', vibe: '乾淨、留白多、耐看',         traits: '白底、簡單排版、少量強調色' },
-      { label: '專業科技風', vibe: '理性、俐落、像新創官網',      traits: '深色或中性色、卡片區塊、清楚 CTA' },
-      { label: '雜誌編輯風', vibe: '有質感、重排版',             traits: '大標題、強字體對比、留白節奏明顯' },
-      { label: '插畫親切風', vibe: '輕鬆、親切、有品牌個性',     traits: '插畫主視覺、柔和配色、活潑' },
-      { label: '大膽前衛風', vibe: '強烈、吸睛、有設計感',       traits: '粗字體、強對比、故意不那麼工整' },
-      { label: '復古懷舊風', vibe: '溫暖、有年代感',             traits: '復古配色、襯線字、舊感材質裝飾' },
-      { label: '年輕潮流風', vibe: '年輕、亮眼、偏流行感',       traits: '金屬感、亮色、高反差、未來感元素' },
-      { label: '高級精品風', vibe: '高級、精緻、質感導向',       traits: '大圖、細緻字體、節制配色、重視氣氛' },
-      { label: '活潑多彩風', vibe: '友善、熱鬧、適合活動或教育', traits: '多色系、圓角、明亮插圖或圖塊' },
-      { label: '自訂風格（請填下方）', special: 'custom' },
-    ],
-    labelCustomStyle: '自訂風格描述 <span style="color:var(--accent-rose)">*必填</span>',
     phCustomStyle: '例：日系喫茶店感、像選物店一樣乾淨安靜、手繪感溫柔……',
-    styleTableHead: ['風格', '感覺', '常見特徵'],
-    colorDetailsHtml: `
-      <div style="margin-bottom:0.4rem;font-weight:500;color:var(--text-soft);letter-spacing:0.08em;">配色工具</div>
-      <div>· <a href="https://coolors.co/" target="_blank" style="color:var(--accent1);text-decoration:none;border-bottom:1px solid var(--paper-mid);">Coolors</a> — 快速產生配色組合</div>
-      <div>· <a href="https://www.happyhues.co/palettes/15" target="_blank" style="color:var(--accent1);text-decoration:none;border-bottom:1px solid var(--paper-mid);">Happy Hues</a> — 看配色實際套在頁面上的效果</div>
-      <div style="margin-top:0.6rem;margin-bottom:0.4rem;font-weight:500;color:var(--text-soft);letter-spacing:0.08em;">找色碼</div>
-      <div>· <a href="https://www.toodoo.com/db/color.html" target="_blank" style="color:var(--accent1);text-decoration:none;border-bottom:1px solid var(--paper-mid);">色碼表 (Toodoo)</a></div>
-      <div>· <a href="https://www.wibibi.com/info.php?tid=372" target="_blank" style="color:var(--accent1);text-decoration:none;border-bottom:1px solid var(--paper-mid);">色碼表 (Wibibi)</a></div>`,
-    fontPreviewText: '字型預覽：品牌感從文字開始',
-    fontOptions: [
-      { value: '__none__',        label: '（不設定，讓 AI 決定）',      serif: false, special: 'none'   },
-      { value: 'Noto Sans TC',    label: 'Noto Sans TC（清晰通用）',    serif: false },
-      { value: 'Zen Maru Gothic', label: 'Zen Maru Gothic（圓潤親和）', serif: false },
-      { value: 'Shippori Mincho', label: 'Shippori Mincho（質感明體）', serif: true  },
-      { value: 'Kiwi Maru',       label: 'Kiwi Maru（可愛溫暖）',      serif: false },
-      { value: 'Kosugi Maru',     label: 'Kosugi Maru（簡潔圓體）',    serif: false },
-      { value: '__custom__',      label: '自訂字型（請填下方）',         serif: false, special: 'custom' },
-    ],
-    labelCustomFont: '自訂字型名稱 <span style="color:var(--accent-rose)">*必填</span>',
-    phCustomFont: '例：Nunito、Source Han Sans、思源黑體',
     snippetGroupLabel: '快速指令範本',
     snippetStyleBtn: '調整視覺風格',
     snippetTextBtn: '修改文字內容',
@@ -193,7 +143,6 @@ https://xxx.github.io/ooo/zzz.webp
     labelBrandStory: 'Brand Story / Founding Story',
     labelReviews: 'Customer Reviews / Testimonials',
     labelMediaMention: 'Press / Collaborations',
-    labelPhotoFocus: 'Recommended Photo Content <span class="req">required</span>',
     labelFaq: 'FAQ',
     labelAddress: 'Address <span class="req">required</span>',
     labelBusinessHours: 'Business Hours <span class="req">required</span>',
@@ -204,16 +153,6 @@ https://xxx.github.io/ooo/zzz.webp
     labelEmail: 'Email',
     labelMapLink: 'Google Maps Link',
     labelSocialLinks: 'Social Media Links',
-    labelStyle: 'Style (hold Shift to select multiple)',
-    labelColor: 'Color Palette',
-    colorOpt0: '(No preference — let AI decide)',
-    colorOpt1: 'Soft Blue-Green',
-    colorOpt2: 'Warm Orange',
-    colorOpt3: 'Muted Neutral (Morandi)',
-    colorOpt4: 'Black & White Minimal',
-    colorOpt5: 'Custom (fill in below)',
-    labelCustomColor: 'Custom Color <span style="color:var(--accent-rose)">*required</span>',
-    labelFont: 'Font',
     labelWebsiteGoal: 'Website Goal <span class="req">required</span>',
     labelReferenceSites: 'Reference Websites / Brands',
     btnGen: 'Generate Prompt',
@@ -238,7 +177,6 @@ https://xxx.github.io/ooo/zzz.webp
     phBrandStory: 'e.g. We wanted to create a place in the city where people can slow down and enjoy a cup of coffee.',
     phReviews: 'If none yet, type "None" — AI will leave a placeholder',
     phMediaMention: 'e.g. Featured in a local coffee map; collaborated with a local brand. Type "None" if not applicable.',
-    phPhotoFocus: 'e.g. Storefront, seating area, signature dessert, coffee brewing process, finished nail work',
     phFaq: 'e.g. Reservations available? Minimum spend? Pet-friendly? Card payments accepted?',
     phAddress: 'e.g. 123 Example Street, Da\'an District, Taipei',
     phBusinessHours: 'e.g. Tue–Sun 12:00–19:00',
@@ -252,12 +190,9 @@ https://xxx.github.io/ooo/zzz.webp
     phWebsiteGoal: 'e.g. Drive foot traffic, increase reservations, showcase menu, build brand identity',
     phReferenceSites: 'e.g. Blue Bottle, % Arabica, a Japanese nail studio on Instagram',
     errRequired: 'Please fill in the required fields: Shop Name, Type, Positioning, Description, and Area ✨',
-    errRequired2: 'A few more required fields: Target Customers, Signature Items, Atmosphere Keywords, Service Type, Address, Hours, Booking Method, Contact, Photo Content, and Website Goal ✨',
+    errRequired2: 'A few more required fields: Target Customers, Signature Items, Atmosphere Keywords, Service Type, Address, Hours, Booking Method, Contact, and Website Goal ✨',
     errNeedOrProduct: 'Please fill in at least one: Why Customers Come or Main Products/Services 😎',
     errFeatureOrGain: 'Almost there! Fill in either "Shop Specialty" or "What Customers Get" 🚀',
-    errCustomColor: 'You selected Custom Color — please describe your preferred palette 🎨',
-    errCustomStyle: 'You selected Custom Style — please describe your preferred style ✏️',
-    errCustomFont: 'You selected Custom Font — please enter the font name 🔤',
     smartFallback: '(Please ask me clarifying questions before generating the page)',
     promptHeader: 'You are a professional web designer. Please follow web UX principles and create a complete one-page brand website for a physical shop as a full HTML file.',
     promptShopSection: '[About the Shop]',
@@ -271,44 +206,7 @@ https://xxx.github.io/ooo/zzz.webp
     fontDefault: 'Inter',
     fontNote: ', loaded from Google Fonts; use bold for headings',
     layoutNote: '- Layout: include these sections: Hero, About, Menu/Service, Social Proof, Visit Info, Contact',
-    styleDetailsSummary: '▸ Style Reference Guide',
-    colorDetailsSummary: '▸ Color Inspiration',
-    styleOptions: [
-      { label: 'Clean Minimal',      vibe: 'Airy, spacious, timeless',          traits: 'White background, simple layout, subtle accent color' },
-      { label: 'Tech Professional',  vibe: 'Rational, sharp, startup-like',      traits: 'Dark or neutral tones, card layout, clear CTA' },
-      { label: 'Editorial',          vibe: 'Polished, typography-driven',        traits: 'Large headlines, strong font contrast, deliberate whitespace' },
-      { label: 'Illustrative',       vibe: 'Friendly, approachable, branded',    traits: 'Illustration hero, soft palette, playful feel' },
-      { label: 'Bold & Avant-garde', vibe: 'Striking, design-forward',           traits: 'Heavy type, high contrast, intentionally asymmetric' },
-      { label: 'Retro / Vintage',    vibe: 'Warm, nostalgic',                    traits: 'Vintage palette, serif fonts, aged textures' },
-      { label: 'Trendy & Youthful',  vibe: 'Fresh, vibrant, pop-culture feel',   traits: 'Metallic accents, bright colors, futuristic elements' },
-      { label: 'Luxury',             vibe: 'Premium, refined, atmosphere-first', traits: 'Full-bleed imagery, delicate type, restrained palette' },
-      { label: 'Colorful & Playful', vibe: 'Welcoming, lively, great for events', traits: 'Multi-color, rounded corners, bright illustrations' },
-      { label: 'Custom Style (fill in below)', special: 'custom' },
-    ],
-    styleTableHead: ['Style', 'Vibe', 'Common Traits'],
-    labelCustomStyle: 'Custom Style Description <span style="color:var(--accent-rose)">*required</span>',
     phCustomStyle: 'e.g. Japanese kissaten feel, clean like a concept store, soft hand-drawn aesthetic…',
-    colorDetailsHtml: `
-      <div style="margin-bottom:0.4rem;font-weight:500;color:var(--text-soft);letter-spacing:0.08em;">Color Tools</div>
-      <div>· <a href="https://coolors.co/" target="_blank" style="color:var(--accent1);text-decoration:none;border-bottom:1px solid var(--paper-mid);">Coolors</a> — Generate palette combinations instantly</div>
-      <div>· <a href="https://www.happyhues.co/palettes/15" target="_blank" style="color:var(--accent1);text-decoration:none;border-bottom:1px solid var(--paper-mid);">Happy Hues</a> — See palettes applied to real UI</div>
-      <div style="margin-top:0.6rem;margin-bottom:0.4rem;font-weight:500;color:var(--text-soft);letter-spacing:0.08em;">Find Color Codes</div>
-      <div>· <a href="https://htmlcolorcodes.com/" target="_blank" style="color:var(--accent1);text-decoration:none;border-bottom:1px solid var(--paper-mid);">HTML Color Codes</a></div>
-      <div>· <a href="https://www.colorhexa.com/" target="_blank" style="color:var(--accent1);text-decoration:none;border-bottom:1px solid var(--paper-mid);">ColorHexa</a></div>`,
-    fontPreviewText: 'Font Preview: Your brand starts with typography',
-    fontOptions: [
-      { value: '__none__',          label: '(No preference — let AI decide)',    serif: false, special: 'none'   },
-      { value: 'Inter',             label: 'Inter（clean & modern）',            serif: false },
-      { value: 'DM Sans',           label: 'DM Sans（friendly & minimal）',      serif: false },
-      { value: 'Raleway',           label: 'Raleway（elegant sans-serif）',      serif: false },
-      { value: 'Playfair Display',  label: 'Playfair Display（editorial）',      serif: true  },
-      { value: 'Lora',              label: 'Lora（warm & literary）',            serif: true  },
-      { value: 'Merriweather',      label: 'Merriweather（readable serif）',     serif: true  },
-      { value: 'EB Garamond',       label: 'EB Garamond（classic & refined）',   serif: true  },
-      { value: '__custom__',        label: 'Custom font (fill in below)',         serif: false, special: 'custom' },
-    ],
-    labelCustomFont: 'Custom Font Name <span style="color:var(--accent-rose)">*required</span>',
-    phCustomFont: 'e.g. Nunito, Outfit, Josefin Sans',
     snippetGroupLabel: 'Quick Template Prompts',
     snippetStyleBtn: 'Adjust Visual Style',
     snippetTextBtn: 'Edit Text Content',
@@ -358,61 +256,7 @@ function setLang(lang) {
 
   document.getElementById('toast').textContent = i18n[lang].toast;
 
-  const colorSel = document.getElementById('color');
-  if (colorSel) {
-    [...colorSel.options].forEach(opt => {
-      const key = opt.getAttribute('data-i18n');
-      if (key && i18n[lang][key] !== undefined) opt.textContent = i18n[lang][key];
-    });
-  }
-
-  const styleSel = document.getElementById('style');
-  if (styleSel) {
-    styleSel.innerHTML = '';
-    i18n[lang].styleOptions.forEach(opt => {
-      const el = document.createElement('option');
-      el.value = opt.label;
-      el.textContent = opt.label;
-      el.dataset.styleKey = opt.label;
-      if (opt.special) el.dataset.special = opt.special;
-      styleSel.appendChild(el);
-    });
-    toggleCustomStyle();
-  }
-
-  const styleBody = document.getElementById('styleDetailsBody');
-  if (styleBody) {
-    const L = i18n[lang];
-    const [h1, h2, h3] = L.styleTableHead;
-    const rows = L.styleOptions.filter(opt => !opt.special).map((opt, i, arr) => {
-      const bg = i % 2 === 1 ? ' style="background:var(--paper-warm);"' : '';
-      const last = i === arr.length - 1;
-      const border = last ? '' : 'border-bottom:1px solid var(--paper-mid);';
-      return `<tr${bg}><td style="padding:5px 10px;${border}color:var(--text-main);">${opt.label}</td><td style="padding:5px 10px;${border}color:var(--text-mid);">${opt.vibe}</td><td style="padding:5px 10px;${border}color:var(--text-soft);">${opt.traits}</td></tr>`;
-    }).join('');
-    styleBody.innerHTML = `<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:var(--paper-warm);"><th style="padding:6px 10px;text-align:left;color:var(--text-mid);font-weight:500;letter-spacing:0.06em;border-bottom:1px solid var(--paper-mid);">${h1}</th><th style="padding:6px 10px;text-align:left;color:var(--text-mid);font-weight:500;letter-spacing:0.06em;border-bottom:1px solid var(--paper-mid);">${h2}</th><th style="padding:6px 10px;text-align:left;color:var(--text-mid);font-weight:500;letter-spacing:0.06em;border-bottom:1px solid var(--paper-mid);">${h3}</th></tr></thead><tbody>${rows}</tbody></table>`;
-  }
-
-  const colorBody = document.getElementById('colorDetailsBody');
-  if (colorBody) colorBody.innerHTML = i18n[lang].colorDetailsHtml;
-
-  const fontSel = document.getElementById('font');
-  if (fontSel) {
-    const prevVal = fontSel.options[fontSel.selectedIndex]?.dataset.fontName || '';
-    fontSel.innerHTML = '';
-    i18n[lang].fontOptions.forEach(opt => {
-      const el = document.createElement('option');
-      el.value = opt.label;
-      el.textContent = opt.label;
-      el.dataset.fontName = opt.value;
-      el.dataset.serif = opt.serif ? '1' : '0';
-      if (opt.special) el.dataset.special = opt.special;
-      fontSel.appendChild(el);
-    });
-    const match = [...fontSel.options].find(o => o.dataset.fontName === prevVal);
-    if (match) match.selected = true;
-    previewFont();
-  }
+  DesignPref.setLang(lang);
 
   document.getElementById('out').value = '';
   document.getElementById('outputWrap').style.display = 'none';
@@ -422,44 +266,6 @@ function setLang(lang) {
 
 function vals(id) { return document.getElementById(id).value.trim(); }
 function smart(id) { const v = vals(id); return v || i18n[currentLang].smartFallback; }
-
-function previewFont() {
-  const sel = document.getElementById('font');
-  const selectedOpt = sel.options[sel.selectedIndex];
-  const special = selectedOpt ? selectedOpt.dataset.special : '';
-  const previewEl = document.getElementById('fontPreview');
-  const customWrap = document.getElementById('customFontWrap');
-
-  customWrap.style.display = special === 'custom' ? 'block' : 'none';
-
-  if (special === 'none' || special === 'custom') {
-    previewEl.style.fontFamily = '';
-    return;
-  }
-
-  const f = selectedOpt ? selectedOpt.dataset.fontName : '';
-  const isSerif = selectedOpt ? selectedOpt.dataset.serif === '1' : false;
-  previewEl.style.fontFamily = f ? (isSerif ? `'${f}', serif` : `'${f}', sans-serif`) : '';
-}
-
-function pickedColor() {
-  const v = vals('color');
-  if (!v) return '';
-  return (v.includes('自訂') || v.toLowerCase().includes('custom'))
-    ? (vals('customColor') || '（請描述你喜歡的配色）')
-    : v;
-}
-
-function toggleCustomColor() {
-  const isCustom = vals('color').includes('自訂') || vals('color').toLowerCase().includes('custom');
-  document.getElementById('customColorWrap').style.display = isCustom ? 'block' : 'none';
-}
-
-function toggleCustomStyle() {
-  const styleSel = document.getElementById('style');
-  const hasCustom = [...styleSel.selectedOptions].some(opt => opt.dataset.special === 'custom');
-  document.getElementById('customStyleWrap').style.display = hasCustom ? 'block' : 'none';
-}
 
 function showOutput(text) {
   const out = document.getElementById('out');
@@ -477,7 +283,7 @@ function gen() {
     if (!vals(r)) { showOutput(L.errRequired); return; }
   }
 
-  const req2 = ['targetCustomers','signatureItems','atmosphereKeywords','consumptionType','address','businessHours','bookingMethod','otherContact','photoFocus','websiteGoal'];
+  const req2 = ['targetCustomers','signatureItems','atmosphereKeywords','consumptionType','address','businessHours','bookingMethod','otherContact','websiteGoal'];
   for (const r of req2) {
     if (!vals(r)) { showOutput(L.errRequired2); return; }
   }
@@ -491,45 +297,16 @@ function gen() {
     return;
   }
 
-  if (vals('color').includes('自訂') || vals('color').toLowerCase().includes('custom')) {
-    if (!vals('customColor')) {
-      showOutput(L.errCustomColor);
-      document.getElementById('customColor').focus();
-      return;
-    }
-  }
-
-  const fontSel = document.getElementById('font');
-  const fontOpt = fontSel.options[fontSel.selectedIndex];
-  if (fontOpt?.dataset.special === 'custom' && !vals('customFont')) {
-    showOutput(L.errCustomFont);
-    document.getElementById('customFont').focus();
+  const designErr = DesignPref.validate();
+  if (designErr) {
+    showOutput(designErr);
     return;
   }
 
-  const styleSelEl = document.getElementById('style');
-  const hasCustomStyle = [...styleSelEl.selectedOptions].some(opt => opt.dataset.special === 'custom');
-  if (hasCustomStyle && !vals('customStyle')) {
-    showOutput(L.errCustomStyle);
-    document.getElementById('customStyle').focus();
-    return;
-  }
-
-  const getFontName = () => {
-    const sel = document.getElementById('font');
-    const opt = sel.options[sel.selectedIndex];
-    const special = opt?.dataset.special;
-    if (special === 'none') return '';
-    if (special === 'custom') return vals('customFont') || L.fontDefault;
-    return opt ? opt.dataset.fontName : L.fontDefault;
-  };
+  const getFontName = () => DesignPref.getFont();
 
   const getStyle = () => {
-    const sel = document.getElementById('style');
-    const opts = [...sel.selectedOptions];
-    const hasCustom = opts.some(o => o.dataset.special === 'custom');
-    const named = opts.filter(o => !o.dataset.special).map(o => o.value);
-    const parts = [...named, ...(hasCustom && vals('customStyle') ? [vals('customStyle')] : [])];
+    const parts = DesignPref.getStyles();
     const sep = currentLang === 'zh' ? '、' : ', ';
     return (parts.join(sep) || (currentLang === 'zh' ? '溫暖' : 'Warm')) + sep + L.styleDefault;
   };
@@ -561,7 +338,6 @@ ${vals('brandStory') ? `- ${zh ? '品牌故事' : 'Brand Story'}：${vals('brand
 ${L.promptTrustSection}
 - ${zh ? '顧客評價' : 'Reviews'}：${smart('reviews')}
 ${vals('mediaMention') ? `- ${zh ? '媒體報導' : 'Press'}：${vals('mediaMention')}` : ''}
-- ${zh ? '建議照片內容' : 'Photo Content'}：${smart('photoFocus')}
 ${vals('faq') ? `- ${zh ? '常見問題' : 'FAQ'}：${vals('faq')}` : ''}
 
 ${L.promptVisitSection}
@@ -578,7 +354,7 @@ ${vals('socialLinks') ? `- ${zh ? '社群' : 'Social'}：${vals('socialLinks')}`
 ${L.promptDesign}
 - ${zh ? '網站主要目標' : 'Website Goal'}：${smart('websiteGoal')}
 - ${zh ? '風格' : 'Style'}：${getStyle()}
-- ${zh ? '配色' : 'Color Palette'}：${pickedColor() || L.colorDefault}
+- ${zh ? '配色' : 'Color Palette'}：${DesignPref.getColor() || L.colorDefault}
 - ${zh ? '字型' : 'Font'}：${getFontName() ? `${getFontName()}${L.fontNote}` : (zh ? '（不指定，請依風格自行搭配）' : '(No preference — let AI decide based on style)')}
 ${vals('referenceSites') ? `- ${zh ? '參考風格' : 'Reference'}：${vals('referenceSites')}` : ''}
 ${L.layoutNote}
@@ -606,21 +382,17 @@ function copyText() {
 const FIELDS = ['shopName','shopType','shopPositioning','shopIntro','shopArea',
   'targetCustomers','signatureItems','customerNeed','mainProducts','shopFeature',
   'customerExperience','atmosphereKeywords','consumptionType','priceRange','brandStory',
-  'reviews','mediaMention','photoFocus','faq',
+  'reviews','mediaMention','faq',
   'address','businessHours','closedDays','transportation','bookingMethod',
   'otherContact','email','mapLink','socialLinks',
-  'color','customColor','font','customFont','customStyle','websiteGoal','referenceSites'];
+  'websiteGoal','referenceSites'];
 
 function saveAll() {
   FIELDS.forEach(id => {
     const el = document.getElementById(id);
     if (el) localStorage.setItem('sppg_' + id, el.value);
   });
-  const style = document.getElementById('style');
-  if (style) {
-    const sel = [...style.options].map(o => o.selected ? '1' : '0').join(',');
-    localStorage.setItem('sppg_style', sel);
-  }
+  localStorage.setItem('sppg_design', JSON.stringify(DesignPref.getState()));
 }
 
 function loadAll() {
@@ -629,17 +401,20 @@ function loadAll() {
     const v = localStorage.getItem('sppg_' + id);
     if (el && v !== null) el.value = v;
   });
-  const style = document.getElementById('style');
-  const sel = localStorage.getItem('sppg_style');
-  if (style && sel) {
-    sel.split(',').forEach((v, i) => {
-      if (style.options[i]) style.options[i].selected = v === '1';
-    });
-  }
-  previewFont();
-  toggleCustomColor();
+  try {
+    const design = JSON.parse(localStorage.getItem('sppg_design') || 'null');
+    if (design) DesignPref.setState(design);
+  } catch (e) { /* 存檔格式不對就略過，用預設值 */ }
 }
 
+// 店家版的自訂欄位範例文字和 Page 版不同，用 text 覆蓋模組預設
+DesignPref.init(document.getElementById('designPref'), {
+  lang: currentLang,
+  text: {
+    zh: { phCustomStyle: i18n.zh.phCustomStyle, phCustomColor: i18n.zh.phCustomColor },
+    en: { phCustomStyle: i18n.en.phCustomStyle, phCustomColor: i18n.en.phCustomColor },
+  },
+});
 setLang(currentLang);
 loadAll();
 

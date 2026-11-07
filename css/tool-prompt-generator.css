@@ -615,6 +615,105 @@ details summary::-webkit-details-marker { display: none; }
   transform: translateX(0);
 }
 
+/* ── 細節區塊（選填，可收合） ── */
+.more-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.more-block {
+  border: 1px solid var(--paper-mid);
+  border-radius: 2px;
+  background: var(--paper);
+}
+.more-block[open] { background: #fff; }
+.more-block > summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+  padding: 1rem 1.3rem;
+  cursor: pointer;
+  list-style: none;
+  font-size: inherit;
+  letter-spacing: normal;
+  color: var(--text-main);
+}
+.more-block > summary::-webkit-details-marker { display: none; }
+.more-block > summary::after {
+  content: '▸';
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--accent2);
+  transition: transform 0.2s ease;
+}
+.more-block[open] > summary::after { transform: rotate(90deg); }
+.more-block > summary:hover { background: var(--paper-warm); }
+.more-block > summary:focus-visible {
+  outline: 2px solid var(--accent2);
+  outline-offset: -2px;
+}
+.more-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.more-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+.more-sub {
+  font-size: 0.74rem;
+  color: var(--text-soft);
+  letter-spacing: 0.03em;
+}
+.more-count {
+  font-size: 0.72rem;
+  color: var(--accent-sage);
+  white-space: nowrap;
+}
+.more-count:empty { display: none; }
+.more-body {
+  padding: 0.4rem 1.3rem 1.5rem;
+  border-top: 1px solid var(--paper-mid);
+}
+.more-body > .grid { margin-top: 1.2rem; }
+.more-desc {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  line-height: 1.9;
+}
+
+/* ── 帶入範例按鈕 ── */
+.example-btn {
+  align-self: flex-start;
+  width: auto;
+  margin-top: 6px;
+  padding: 0.2rem 0.7rem;
+  border: 1px solid var(--paper-mid);
+  background: transparent;
+  color: var(--accent1);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+}
+.example-btn:hover {
+  background: var(--paper-warm);
+  border-color: var(--accent2);
+  color: var(--accent1);
+}
+.example-btn:focus-visible {
+  outline: 2px solid var(--accent2);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .more-block > summary::after { transition: none; }
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 620px) {
   .grid { grid-template-columns: 1fr; }

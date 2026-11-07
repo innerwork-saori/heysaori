@@ -195,27 +195,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
-/* ── Design helpers ── */
-function toggleCustomColor() {
-  const sel = document.getElementById('designColor');
-  const wrap = document.getElementById('customColorWrap');
-  wrap.style.display = sel.value === '自訂配色（請填下方）' ? 'block' : 'none';
-  resetOutput(); saveAll();
-}
-
-function previewFont() {
-  const sel = document.getElementById('designFont');
-  const preview = document.getElementById('fontPreview');
-  preview.style.fontFamily = sel.value;
-  resetOutput(); saveAll();
-}
-
-function getSelectedStyles() {
-  const sel = document.getElementById('designStyle');
-  if (!sel) return '';
-  return [...sel.selectedOptions].map(o => o.value).join('、');
-}
-
 /* ── Pill toggle ── */
 function togglePill(el, val) {
   el.classList.toggle('active');
@@ -249,27 +228,24 @@ function resetOutput() {
 function gen() {
   const toolType = getActivePills() || vals('toolTypeOther');
   if (!toolType) {
-    showOutput('請先選擇工具類型（網頁工具、Chrome 外掛……）再繼續 ✨');
-    return;
-  }
-  if (!vals('toolName')) {
-    showOutput('請填寫工具名稱，哪怕是暫定的描述性名字也可以 ✨');
+    showOutput('第 1 題還沒選：你想做哪一種工具？不確定就選「網頁工具」✨');
     return;
   }
   if (!vals('goalWho')) {
-    showOutput('「這工具幫誰、解決什麼問題」是最重要的一欄，請先填寫 🙏');
+    showOutput('第 2 題「這工具給誰用、幫他解決什麼麻煩」最重要，請先寫一兩句 🙏');
     return;
   }
   if (!vals('inputFields')) {
-    showOutput('請描述使用者需要輸入哪些欄位，才能讓 AI 知道工具的互動方式 📝');
+    showOutput('第 3 題還沒寫：使用的人要輸入或提供什麼？列幾項就好 📝');
     return;
   }
   if (!vals('outputFormat')) {
-    showOutput('請說明工具輸出的結果長什麼樣子，AI 才能做出你想要的畫面 🎯');
+    showOutput('第 4 題還沒寫：按下去之後會看到什麼結果？一句話就好 🎯');
     return;
   }
-  if (!vals('acCorrect')) {
-    showOutput('請至少填一個「這樣做對了」的情境，這樣 AI 才知道目標是什麼 ✅');
+  const designErr = DesignPref.validate();
+  if (designErr) {
+    showOutput(designErr);
     return;
   }
 
@@ -284,7 +260,7 @@ function gen() {
   sections.push(`【工具基本資訊】`);
   sections.push(`${'='.repeat(60)}`);
   sections.push(`工具類型：${toolTypeFull}`);
-  sections.push(`工具名稱：${smart('toolName')}`);
+  sections.push(`工具名稱：${smart('toolName', '（還沒取名，請建議 2–3 個名字讓我選）')}`);
 
   sections.push(`\n【目標與問題】`);
   sections.push(`幫誰、解決什麼問題：\n${smart('goalWho')}`);
@@ -328,17 +304,13 @@ function gen() {
   sections.push(`\n${'='.repeat(60)}`);
   sections.push(`【DESIGN — 設計偏好】`);
   sections.push(`${'='.repeat(60)}`);
-  const styleVal = getSelectedStyles();
-  const colorSel = document.getElementById('designColor');
-  const colorVal = colorSel?.value === '自訂配色（請填下方）'
-    ? (vals('designCustomColor') || '自訂配色（未填寫）')
-    : (colorSel?.value || '');
-  const fontSel = document.getElementById('designFont');
-  const fontLabel = fontSel?.options[fontSel.selectedIndex]?.text || '';
+  const styleVal = DesignPref.getStyles().join('、');
+  const colorVal = DesignPref.getColor();
+  const fontVal = DesignPref.getFont();
   if (styleVal) sections.push(`風格偏好：${styleVal}`);
   else sections.push(`風格偏好：（不指定，請給一個乾淨易用的預設樣式）`);
   if (colorVal) sections.push(`配色：${colorVal}`);
-  if (fontLabel) sections.push(`字型：${fontLabel}`);
+  if (fontVal) sections.push(`字型：${fontVal}`);
 
   sections.push(`\n${'='.repeat(60)}`);
   sections.push(`【ACCEPTANCE CRITERIA — 驗收標準】`);
@@ -398,19 +370,83 @@ function clearAll() {
     if (el) el.value = '';
   });
   document.querySelectorAll('.tool-pill').forEach(p => p.classList.remove('active'));
-  // reset design selects
-  const styleSel = document.getElementById('designStyle');
-  if (styleSel) [...styleSel.options].forEach(o => o.selected = false);
-  const colorSel = document.getElementById('designColor');
-  if (colorSel) { colorSel.value = ''; toggleCustomColor(); }
-  const fontSel = document.getElementById('designFont');
-  if (fontSel) {
-    fontSel.selectedIndex = 0;
-    previewFont();
-  }
+  DesignPref.reset();
   localStorage.clear();
   resetOutput();
 }
+
+/* ── 帶入範例 ──
+ * 範例文字放在這裡，欄位裡的灰字只留一行短提示。
+ * 按「帶入範例」會把範例填進欄位，使用者改內容就好。
+ */
+const FIELD_EXAMPLES = {
+  "inputFields": "- 商品名稱（文字）\n- 單價（數字，例如 1200）\n- 數量（數字，例如 3）\n- 是否含稅（是 / 否）",
+  "outputFormat": "在頁面下方顯示一個結果區塊，包含：\n- 小計金額：8,000 元\n- 稅金（5%）：400 元\n- 總計：8,400 元\n\n並有一個「複製結果」按鈕。",
+  "inputExample": "商品名稱：品牌 Logo 設計\n單價：8000\n數量：1\n是否含稅：否",
+  "inputValidation": "- 單價必須是正整數\n- 數量最少 1，最多 999\n- 是否含稅只能選「是」或「否」",
+  "inputMissing": "- 商品名稱空白：顯示錯誤「請填寫商品名稱」\n- 數量空白：自動帶入 1\n- 是否含稅空白：預設為「否」",
+  "inputSource": "使用者直接在網頁表單手動輸入。\n或：從上傳的 Excel 檔案讀取。\n或：從網頁上複製貼上文字。",
+  "outputExample": "=== 報價結果 ===\n商品：品牌 Logo 設計 × 1\n小計：8,000 元\n稅金：0 元（未稅）\n總計：8,000 元",
+  "outputPrecision": "- 金額要加千分位逗號（8,000）\n- 小數點到整數位即可（不要出現 8000.00）\n- 幣別固定顯示「元」",
+  "outputError": "- 輸入了文字但欄位要數字：顯示「請輸入數字金額」\n- 計算結果為負數：顯示「金額有誤，請重新檢查」",
+  "rulesBiz": "- 稅率固定為 5%（不可讓使用者修改）\n- 數量超過 10 件，單價打 9 折\n- 國際訂單要另加運費 300 元\n- 每張報價單最多 20 項商品",
+  "rulesNot": "- 不能讓使用者修改稅率\n- 不能儲存任何個人資料\n- 結果不能直接發送 Email（只能手動複製）\n- 不顯示小數點後的金額",
+  "edgeEmpty": "顯示提示訊息「請先填寫商品名稱與單價」，\n並把空白的欄位標示為紅色，不執行計算。",
+  "edgeInvalid": "- 單價填了「abc」：提示「請輸入數字」\n- 數量填了 -5：提示「數量不能為負數」\n- 數量填了 99999：提示「數量上限為 999」",
+  "edgeConflict": "- 同時選了「含稅」又填了「稅率 0%」→ 以稅率欄位為主\n- 同時選了「海外訂單」又填了「台灣地址」→ 顯示提醒讓使用者確認",
+  "edgeAmbiguous": "- 使用者在「商品名稱」欄位輸入了表情符號：正常顯示，不需阻擋\n- 貼上的文字包含換行：自動移除換行，合併成一行",
+  "acCorrect": "✓ 輸入商品名稱「Logo 設計」、單價 8000、數量 1、未稅，\n  按下計算，顯示：小計 8,000 元、稅金 0 元、總計 8,000 元\n\n✓ 輸入數量 15 件，系統自動套用 9 折，顯示折扣後金額\n\n✓ 點擊「複製結果」，成功複製到剪貼簿",
+  "acWrong": "✗ 輸入非數字金額，沒有顯示錯誤訊息就直接計算\n✗ 稅率可以被使用者手動修改\n✗ 計算結果出現小數點（例如 8400.0 元）\n✗ 空白送出後沒有任何提示",
+  "acUX": "- 手機上也要能正常使用\n- 計算結果要明顯顯示，不要藏在頁面底部\n- 按鈕要夠大，手指點得到",
+  "acExtra": "- 參考這個網站的計算邏輯：https://...\n- 風格希望簡單乾淨，不要太花\n- 先做最基本的版本就好，不需要登入功能"
+};
+
+function insertExample(id) {
+  const el = document.getElementById(id);
+  if (!el || !FIELD_EXAMPLES[id]) return;
+  if (el.value.trim() && !confirm('要用範例取代你目前寫的內容嗎？')) return;
+  el.value = FIELD_EXAMPLES[id];
+  el.dispatchEvent(new Event('input', { bubbles: true }));
+  el.focus();
+}
+
+function addExampleButtons() {
+  Object.keys(FIELD_EXAMPLES).forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'example-btn';
+    btn.textContent = '帶入範例';
+    btn.addEventListener('click', () => insertExample(id));
+    el.insertAdjacentElement('afterend', btn);
+  });
+}
+
+/* ── 細節區塊：顯示已填幾項 ── */
+function countFilled(block) {
+  let n = 0;
+  block.querySelectorAll('input, textarea, select').forEach(el => {
+    if (el.tagName === 'SELECT') {
+      if (el.multiple ? el.selectedOptions.length > 0 : el.selectedIndex > 0) n++;
+    } else if (el.value.trim()) {
+      n++;
+    }
+  });
+  return n;
+}
+
+function updateMoreCounts(openFilled) {
+  document.querySelectorAll('.more-block').forEach(block => {
+    const n = countFilled(block);
+    const badge = block.querySelector('.more-count');
+    if (badge) badge.textContent = n ? `已填 ${n} 項` : '';
+    if (openFilled && n) block.open = true;
+  });
+}
+
+document.addEventListener('input', e => { if (e.target.closest('.more-block')) updateMoreCounts(false); });
+document.addEventListener('change', e => { if (e.target.closest('.more-block')) updateMoreCounts(false); });
 
 /* ── Persistence ── */
 const FIELDS = [
@@ -420,7 +456,6 @@ const FIELDS = [
   'outputFormat','outputExample','outputPrecision','outputError',
   'rulesBiz','rulesNot',
   'edgeEmpty','edgeInvalid','edgeConflict','edgeAmbiguous',
-  'designCustomColor',
   'acCorrect','acWrong','acUX','acExtra'
 ];
 
@@ -433,16 +468,7 @@ function saveAll() {
   const activePills = [...document.querySelectorAll('#toolTypePills .tool-pill')]
     .map(p => p.classList.contains('active') ? '1' : '0').join(',');
   localStorage.setItem('tpg_pills', activePills);
-  // save design selects
-  const styleSel = document.getElementById('designStyle');
-  if (styleSel) {
-    const selected = [...styleSel.selectedOptions].map(o => o.value);
-    localStorage.setItem('tpg_designStyle', JSON.stringify(selected));
-  }
-  const colorSel = document.getElementById('designColor');
-  if (colorSel) localStorage.setItem('tpg_designColor', colorSel.value);
-  const fontSel = document.getElementById('designFont');
-  if (fontSel) localStorage.setItem('tpg_designFont', fontSel.value);
+  localStorage.setItem('tpg_design', JSON.stringify(DesignPref.getState()));
 }
 
 function loadAll() {
@@ -458,25 +484,10 @@ function loadAll() {
       if (pills[i] && v === '1') pills[i].classList.add('active');
     });
   }
-  // load design selects
-  const savedStyles = localStorage.getItem('tpg_designStyle');
-  if (savedStyles) {
-    const arr = JSON.parse(savedStyles);
-    const styleSel = document.getElementById('designStyle');
-    if (styleSel) [...styleSel.options].forEach(o => { o.selected = arr.includes(o.value); });
-  }
-  const savedColor = localStorage.getItem('tpg_designColor');
-  const colorSel = document.getElementById('designColor');
-  if (colorSel && savedColor !== null) {
-    colorSel.value = savedColor;
-    toggleCustomColor();
-  }
-  const savedFont = localStorage.getItem('tpg_designFont');
-  const fontSel = document.getElementById('designFont');
-  if (fontSel && savedFont) {
-    fontSel.value = savedFont;
-    previewFont();
-  }
+  try {
+    const design = JSON.parse(localStorage.getItem('tpg_design') || 'null');
+    if (design) DesignPref.setState(design);
+  } catch (e) { /* 存檔格式不對就略過，用預設值 */ }
 }
 
 function manualSave() {
@@ -487,12 +498,16 @@ function manualSave() {
   setTimeout(() => { toast.classList.remove('show'); toast.textContent = '✓ 已複製至剪貼簿'; }, 1800);
 }
 
+addExampleButtons();
+DesignPref.init(document.getElementById('designPref'), {
+  lang: 'zh',
+  onChange: () => { resetOutput(); saveAll(); },
+});
 loadAll();
+updateMoreCounts(true);
 
 document.querySelectorAll('input, textarea').forEach(el => {
   if (el.id === 'out') return;
   el.addEventListener('input', () => { resetOutput(); saveAll(); });
 });
 
-// persist design multi-select on change
-document.getElementById('designStyle')?.addEventListener('change', () => { resetOutput(); saveAll(); });
