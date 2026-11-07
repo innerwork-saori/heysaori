@@ -10,6 +10,7 @@
 <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">  <!-- 放這裡 ✓ -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Zen+Maru+Gothic:wght@400;700&family=Shippori+Mincho:wght@400;700&family=Kiwi+Maru:wght@400;700&family=Kosugi+Maru&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/saori-base.css">
+<link rel="stylesheet" href="css/prompt-generator.css">
 <link rel="stylesheet" href="css/tool-prompt-generator.css">
 <link rel="stylesheet" href="css/design-preference.css">
 <!-- Google tag (gtag.js) -->
@@ -25,28 +26,18 @@
 
 <div id="toast">✓ 已複製至剪貼簿</div>
 
-<!-- ── HERO ── -->
+<!-- ── HEADER ── -->
 <header class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-lines" aria-hidden="true">
-    <svg viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <line x1="0" y1="120" x2="320" y2="0" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
-      <line x1="1200" y1="280" x2="900" y2="400" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
-      <circle cx="1050" cy="80" r="150" fill="none" stroke="rgba(250,247,242,0.04)" stroke-width="1"/>
-      <circle cx="120" cy="340" r="90" fill="none" stroke="rgba(196,149,106,0.05)" stroke-width="1"/>
-      <rect x="40" y="40" width="120" height="120" fill="none" stroke="rgba(250,247,242,0.03)" stroke-width="1" transform="rotate(12,100,100)"/>
-    </svg>
-  </div>
+  <div class="hero-bg" aria-hidden="true"></div>
   <div class="hero-inner">
-    <div class="hero-label">tool prompt generator</div>
-    <h1 class="hero-title">工具開發<br>Prompt 產生器</h1>
-    <div class="hero-divider"></div>
-    <p class="hero-desc">不需要寫程式經驗，填完這張表，就能拿到一份清楚的 Prompt<br>交給 AI 幫你把工具做出來</p>
+    <h1 class="hero-title">工具開發 Prompt 產生器</h1>
+    <p class="hero-desc">不需要寫程式經驗，填完這張表，就能拿到一份清楚的 Prompt，交給 AI 幫你把工具做出來</p>
   </div>
 </header>
 
 <!-- ── MAIN ── -->
-<main class="main-wrap">
+<main class="main-wrap pg-layout">
+<div class="pg-form">
 
   <!-- 說明 -->
   <div class="intro-note">
@@ -88,7 +79,6 @@
 
   <!-- 精簡版：回答 4 題就能產生 -->
   <div class="form-block">
-    <div class="section-label">quick start</div>
     <h2 class="section-title">先回答這 4 題</h2>
     <div class="section-rule"></div>
     <p class="section-desc">填完這 4 題就能產生 Prompt。沒寫到的部分，AI 會在動手做之前先問你。</p>
@@ -128,7 +118,6 @@
 
   <!-- 細節：全部選填 -->
   <div class="form-block">
-    <div class="section-label">more details</div>
     <h2 class="section-title">想讓結果更精準？</h2>
     <div class="section-rule"></div>
     <p class="section-desc">下面每一塊都可以跳過。填得越多，AI 要問你的就越少。</p>
@@ -326,28 +315,12 @@
 
   <!-- Actions -->
   <div class="actions">
-    <button class="primary" onclick="gen()">產生 Prompt</button>
     <button onclick="clearAll()">清除重填</button>
   </div>
 
-  <!-- Output -->
-  <div class="output-wrap" id="outputWrap" style="display:none;">
-    <div class="output-label">generated prompt</div>
-    <textarea id="out" spellcheck="false" style="width:100%;min-height:700px;resize:vertical;background:var(--ink);color:rgba(250,247,242,0.85);padding:1.5rem;border:none;border-radius:2px;font-family:monospace;font-size:0.82rem;line-height:1.9;letter-spacing:0.02em;white-space:pre-wrap;"></textarea>
-    <div class="actions" style="margin-top:1rem;">
-      <button onclick="copyText()">複製 Prompt</button>
-    </div>
-    <div style="margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid var(--paper-mid);">
-      <div style="font-size:0.72rem;color:var(--text-soft);letter-spacing:0.12em;margin-bottom:0.7rem;">複製後貼到 AI ↗</div>
-      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
-        <a href="https://manus.im/invitation/TMWHJSKMHUFT?utm_source=invitation&utm_medium=social&utm_campaign=copy_link" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border:1px solid var(--paper-mid);border-radius:2px;font-size:0.75rem;color:var(--text-mid);text-decoration:none;letter-spacing:0.06em;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--paper-mid)';this.style.color='var(--text-mid)'">Manus</a>
-        <a href="https://claude.ai" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border:1px solid var(--paper-mid);border-radius:2px;font-size:0.75rem;color:var(--text-mid);text-decoration:none;letter-spacing:0.06em;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--paper-mid)';this.style.color='var(--text-mid)'">Claude</a>
-        <a href="https://chatgpt.com" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border:1px solid var(--paper-mid);border-radius:2px;font-size:0.75rem;color:var(--text-mid);text-decoration:none;letter-spacing:0.06em;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--paper-mid)';this.style.color='var(--text-mid)'">ChatGPT</a>
-        <a href="https://gemini.google.com" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border:1px solid var(--paper-mid);border-radius:2px;font-size:0.75rem;color:var(--text-mid);text-decoration:none;letter-spacing:0.06em;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--paper-mid)';this.style.color='var(--text-mid)'">Gemini</a>
-        <a href="https://www.perplexity.ai" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border:1px solid var(--paper-mid);border-radius:2px;font-size:0.75rem;color:var(--text-mid);text-decoration:none;letter-spacing:0.06em;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--paper-mid)';this.style.color='var(--text-mid)'">Perplexity</a>
-      </div>
-    </div>
-  </div>
+</div>
+
+<aside id="promptSheet"></aside>
 
 </main>
 
@@ -363,6 +336,7 @@
 </footer>
 
 <script src="js/design-preference.js"></script>
+<script src="js/prompt-sheet.js"></script>
 <script src="js/tool-prompt-generator.js"></script>
 <button class="save-fab" onclick="manualSave()" title="暫存">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

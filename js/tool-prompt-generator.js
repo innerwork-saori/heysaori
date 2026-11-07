@@ -220,35 +220,40 @@ function opt(id) {
 }
 
 function resetOutput() {
-  document.getElementById('out').value = '';
-  document.getElementById('outputWrap').style.display = 'none';
+  PromptSheet.update();
 }
 
-/* ── Validation ── */
-function gen() {
-  const toolType = getActivePills() || vals('toolTypeOther');
-  if (!toolType) {
-    showOutput('第 1 題還沒選：你想做哪一種工具？不確定就選「網頁工具」✨');
-    return;
+/* ── 必填檢查（按「複製 Prompt」時才跑） ── */
+function checkPrompt() {
+  if (!getActivePills() && !vals('toolTypeOther')) {
+    return { message: '第 1 題還沒選：你想做哪一種工具？不確定就選「網頁工具」✨', focusId: 'toolTypeOther' };
   }
   if (!vals('goalWho')) {
-    showOutput('第 2 題「這工具給誰用、幫他解決什麼麻煩」最重要，請先寫一兩句 🙏');
-    return;
+    return { message: '第 2 題「這工具給誰用、幫他解決什麼麻煩」最重要，請先寫一兩句 🙏', focusId: 'goalWho' };
   }
   if (!vals('inputFields')) {
-    showOutput('第 3 題還沒寫：使用的人要輸入或提供什麼？列幾項就好 📝');
-    return;
+    return { message: '第 3 題還沒寫：使用的人要輸入或提供什麼？列幾項就好 📝', focusId: 'inputFields' };
   }
   if (!vals('outputFormat')) {
-    showOutput('第 4 題還沒寫：按下去之後會看到什麼結果？一句話就好 🎯');
-    return;
+    return { message: '第 4 題還沒寫：按下去之後會看到什麼結果？一句話就好 🎯', focusId: 'outputFormat' };
   }
   const designErr = DesignPref.validate();
-  if (designErr) {
-    showOutput(designErr);
-    return;
-  }
+  if (designErr) return { message: designErr };
+  return null;
+}
 
+function promptProgress() {
+  const done = [
+    getActivePills() || vals('toolTypeOther'),
+    vals('goalWho'),
+    vals('inputFields'),
+    vals('outputFormat'),
+  ].filter(Boolean).length;
+  return { done, total: 4 };
+}
+
+/* ── 組出 Prompt ── */
+function buildPrompt() {
   const toolTypeFull = [getActivePills(), vals('toolTypeOther')].filter(Boolean).join('（') + (vals('toolTypeOther') ? '）' : '');
 
   const sections = [];
@@ -341,26 +346,7 @@ function gen() {
   sections.push(`- 所有錯誤訊息請使用繁體中文，語氣友善`);
   sections.push(`- 程式碼請加入適當的中文註解，方便未來修改`);
 
-  const finalPrompt = sections.join('\n');
-  showOutput(finalPrompt);
-}
-
-function showOutput(text) {
-  const out = document.getElementById('out');
-  const wrap = document.getElementById('outputWrap');
-  out.value = text;
-  wrap.style.display = 'block';
-  setTimeout(() => wrap.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
-}
-
-function copyText() {
-  const out = document.getElementById('out');
-  if (!out.value.trim()) return;
-  navigator.clipboard.writeText(out.value).then(() => {
-    const toast = document.getElementById('toast');
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2200);
-  });
+  return sections.join('\n');
 }
 
 function clearAll() {
@@ -506,8 +492,15 @@ DesignPref.init(document.getElementById('designPref'), {
 loadAll();
 updateMoreCounts(true);
 
+PromptSheet.init(document.getElementById('promptSheet'), {
+  lang: 'zh',
+  build: buildPrompt,
+  check: checkPrompt,
+  progress: promptProgress,
+  emptyMarks: ['（請反問我問題協助我釐清）', '（還沒取名，請建議 2–3 個名字讓我選）'],
+});
+
 document.querySelectorAll('input, textarea').forEach(el => {
-  if (el.id === 'out') return;
-  el.addEventListener('input', () => { resetOutput(); saveAll(); });
+  el.addEventListener('input', saveAll);
 });
 

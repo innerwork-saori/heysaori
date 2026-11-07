@@ -3,7 +3,7 @@
 const i18n = {
   zh: {
     pageTitle: '網站 Prompt 產生器 · Saori',
-    heroTitle: '網站<br>Prompt 產生器',
+    heroTitle: '網站 Prompt 產生器',
     heroDesc: '填入你的品牌資訊，自動生成可交給 AI 設計網站的完整 Prompt',
     sec1Title: '關於你',
     sec2Title: '目標客戶與服務',
@@ -75,6 +75,7 @@ const i18n = {
     fontDefault: 'Noto Sans TC',
     fontNote: '，請使用 Google Fonts，標題用粗體',
     snippetGroupLabel: '快速指令範本',
+    btnCopySnippet: '複製這段範本',
     snippetStyleBtn: '調整視覺風格',
     snippetTextBtn: '修改文字內容',
     snippetPhotoBtn: '加入照片',
@@ -100,7 +101,7 @@ https://xxx.github.io/ooo/zzz.webp
   },
   en: {
     pageTitle: 'Website Prompt Generator · Saori',
-    heroTitle: 'Website<br>Prompt Generator',
+    heroTitle: 'Website Prompt Generator',
     heroDesc: 'Fill in your brand info and instantly generate a complete AI prompt for your website design.',
     sec1Title: 'About You',
     sec2Title: 'Target Audience & Services',
@@ -171,6 +172,7 @@ https://xxx.github.io/ooo/zzz.webp
     fontDefault: 'Inter',
     fontNote: ', loaded from Google Fonts; use bold for headings',
     snippetGroupLabel: 'Quick Template Prompts',
+    btnCopySnippet: 'Copy this template',
     snippetStyleBtn: 'Adjust Visual Style',
     snippetTextBtn: 'Edit Text Content',
     snippetPhotoBtn: 'Add a Photo',
@@ -288,9 +290,7 @@ function setLang(lang) {
 
   DesignPref.setLang(lang);
 
-  // Clear output when switching language
-  document.getElementById('out').value = '';
-  document.getElementById('outputWrap').style.display = 'none';
+  PromptSheet.setLang(lang);
 }
 
 /* ── END i18n ── */
@@ -304,40 +304,28 @@ function multi(id) {
   const sep = currentLang === 'zh' ? '、' : ', ';
   return [...document.getElementById(id).selectedOptions].map(o => o.value).join(sep) || (currentLang === 'zh' ? '專業' : 'Professional');
 }
-function showOutput(text) {
-  const out = document.getElementById('out');
-  const wrap = document.getElementById('outputWrap');
-  out.value = text;
-  wrap.style.display = 'block';
-  setTimeout(() => wrap.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+/* ── 必填檢查（按「複製 Prompt」時才跑） ── */
+function checkPrompt() {
+  const L = i18n[currentLang];
+  const firstEmpty = ['name', 'title', 'client', 'email'].find(id => !vals(id));
+  if (firstEmpty) return { message: L.errRequired, focusId: firstEmpty };
+  if (!vals('pain') && !vals('service')) return { message: L.errPainService, focusId: 'pain' };
+  if (!vals('method') && !vals('gain')) return { message: L.errMethodGain, focusId: 'method' };
+  if (emptyCount() > 7) return { message: L.errTooEmpty };
+  const designErr = DesignPref.validate();
+  if (designErr) return { message: designErr };
+  return null;
 }
 
-function gen() {
+function promptProgress() {
+  const done = ['name', 'title', 'client', 'email'].filter(id => vals(id)).length
+    + ((vals('pain') || vals('service')) ? 1 : 0)
+    + ((vals('method') || vals('gain')) ? 1 : 0);
+  return { done, total: 6 };
+}
+
+function buildPrompt() {
   const L = i18n[currentLang];
-  const req = ['email','name','title','client'];
-  for (const r of req) {
-    if (!vals(r)) {
-      showOutput(L.errRequired);
-      return;
-    }
-  }
-  if (!vals('pain') && !vals('service')) {
-    showOutput(L.errPainService);
-    return;
-  }
-  if (!vals('method') && !vals('gain')) {
-    showOutput(L.errMethodGain);
-    return;
-  }
-  if (emptyCount() > 7) {
-    showOutput(L.errTooEmpty);
-    return;
-  }
-  const designErr = DesignPref.validate();
-  if (designErr) {
-    showOutput(designErr);
-    return;
-  }
 
   const smartVal = (id) => { const v = vals(id); return v || L.smartFallback; };
 
@@ -381,18 +369,24 @@ ${LP.note}
 
 ${LP.footer}`;
 
-  showOutput(t);
+  return t;
 }
 
 function setSnippet(type) {
-  showOutput(i18n[currentLang]['snippet' + type.charAt(0).toUpperCase() + type.slice(1) + 'Content']);
+  const key = 'snippet' + type.charAt(0).toUpperCase() + type.slice(1) + 'Content';
+  const box = document.getElementById('snippetBox');
+  const out = document.getElementById('snippetOut');
+  out.value = i18n[currentLang][key];
+  box.hidden = false;
+  out.focus();
 }
 
-function copyText() {
-  const out = document.getElementById('out');
+function copySnippet() {
+  const out = document.getElementById('snippetOut');
   if (!out.value.trim()) return;
   navigator.clipboard.writeText(out.value).then(() => {
     const toast = document.getElementById('toast');
+    toast.textContent = i18n[currentLang].toast;
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 2200);
   });
@@ -425,8 +419,16 @@ DesignPref.init(document.getElementById('designPref'), { lang: currentLang });
 loadAll();
 setLang(currentLang);
 
+PromptSheet.init(document.getElementById('promptSheet'), {
+  lang: currentLang,
+  build: buildPrompt,
+  check: checkPrompt,
+  progress: promptProgress,
+  emptyMarks: [i18n.zh.smartFallback, i18n.en.smartFallback],
+});
+
 document.querySelectorAll('input, textarea, select').forEach(el => {
-  if (el.id === 'out') return;
-  el.addEventListener('input', () => { document.getElementById('out').value = ''; document.getElementById('outputWrap').style.display = 'none'; saveAll(); });
-  el.addEventListener('change', () => { document.getElementById('out').value = ''; document.getElementById('outputWrap').style.display = 'none'; saveAll(); });
+  if (el.id === 'snippetOut') return;
+  el.addEventListener('input', saveAll);
+  el.addEventListener('change', saveAll);
 });

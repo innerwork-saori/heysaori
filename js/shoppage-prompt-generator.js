@@ -3,7 +3,7 @@
 const i18n = {
   zh: {
     pageTitle: '店家網站 Prompt 產生器 · Saori',
-    heroTitle: '店家一頁式網站<br>Prompt 產生器',
+    heroTitle: '店家一頁式網站 Prompt 產生器',
     heroDesc: '填入店家資訊，自動生成可交給 AI 設計網站的完整 Prompt',
     sec1Title: '關於這家店',
     sec2Title: '商品與客群',
@@ -93,6 +93,7 @@ const i18n = {
     layoutNote: '- 版面：包含以下區塊：Hero、About、Menu/Service、Social Proof、Visit Info、Contact',
     phCustomStyle: '例：日系喫茶店感、像選物店一樣乾淨安靜、手繪感溫柔……',
     snippetGroupLabel: '快速指令範本',
+    btnCopySnippet: '複製這段範本',
     snippetStyleBtn: '調整視覺風格',
     snippetTextBtn: '修改文字內容',
     snippetPhotoBtn: '加入照片',
@@ -118,7 +119,7 @@ https://xxx.github.io/ooo/zzz.webp
   },
   en: {
     pageTitle: 'Shop Website Prompt Generator · Saori',
-    heroTitle: 'One-Page Shop Website<br>Prompt Generator',
+    heroTitle: 'One-Page Shop Website Prompt Generator',
     heroDesc: 'Fill in your shop details and instantly generate a complete AI prompt for your website design.',
     sec1Title: 'About the Shop',
     sec2Title: 'Products & Customers',
@@ -208,6 +209,7 @@ https://xxx.github.io/ooo/zzz.webp
     layoutNote: '- Layout: include these sections: Hero, About, Menu/Service, Social Proof, Visit Info, Contact',
     phCustomStyle: 'e.g. Japanese kissaten feel, clean like a concept store, soft hand-drawn aesthetic…',
     snippetGroupLabel: 'Quick Template Prompts',
+    btnCopySnippet: 'Copy this template',
     snippetStyleBtn: 'Adjust Visual Style',
     snippetTextBtn: 'Edit Text Content',
     snippetPhotoBtn: 'Add a Photo',
@@ -258,8 +260,7 @@ function setLang(lang) {
 
   DesignPref.setLang(lang);
 
-  document.getElementById('out').value = '';
-  document.getElementById('outputWrap').style.display = 'none';
+  PromptSheet.setLang(lang);
 }
 
 /* ── END i18n ── */
@@ -267,41 +268,32 @@ function setLang(lang) {
 function vals(id) { return document.getElementById(id).value.trim(); }
 function smart(id) { const v = vals(id); return v || i18n[currentLang].smartFallback; }
 
-function showOutput(text) {
-  const out = document.getElementById('out');
-  const wrap = document.getElementById('outputWrap');
-  out.value = text;
-  wrap.style.display = 'block';
-  setTimeout(() => wrap.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+/* ── 必填檢查（按「複製 Prompt」時才跑） ── */
+const SHOP_REQ1 = ['shopName', 'shopType', 'shopPositioning', 'shopIntro', 'shopArea'];
+const SHOP_REQ2 = ['targetCustomers', 'signatureItems', 'atmosphereKeywords', 'consumptionType', 'address', 'businessHours', 'bookingMethod', 'otherContact', 'websiteGoal'];
+
+function checkPrompt() {
+  const L = i18n[currentLang];
+  const empty1 = SHOP_REQ1.find(id => !vals(id));
+  if (empty1) return { message: L.errRequired, focusId: empty1 };
+  const empty2 = SHOP_REQ2.find(id => !vals(id));
+  if (empty2) return { message: L.errRequired2, focusId: empty2 };
+  if (!vals('customerNeed') && !vals('mainProducts')) return { message: L.errNeedOrProduct, focusId: 'customerNeed' };
+  if (!vals('shopFeature') && !vals('customerExperience')) return { message: L.errFeatureOrGain, focusId: 'shopFeature' };
+  const designErr = DesignPref.validate();
+  if (designErr) return { message: designErr };
+  return null;
 }
 
-function gen() {
+function promptProgress() {
+  const done = [...SHOP_REQ1, ...SHOP_REQ2].filter(id => vals(id)).length
+    + ((vals('customerNeed') || vals('mainProducts')) ? 1 : 0)
+    + ((vals('shopFeature') || vals('customerExperience')) ? 1 : 0);
+  return { done, total: SHOP_REQ1.length + SHOP_REQ2.length + 2 };
+}
+
+function buildPrompt() {
   const L = i18n[currentLang];
-
-  const req1 = ['shopName','shopType','shopPositioning','shopIntro','shopArea'];
-  for (const r of req1) {
-    if (!vals(r)) { showOutput(L.errRequired); return; }
-  }
-
-  const req2 = ['targetCustomers','signatureItems','atmosphereKeywords','consumptionType','address','businessHours','bookingMethod','otherContact','websiteGoal'];
-  for (const r of req2) {
-    if (!vals(r)) { showOutput(L.errRequired2); return; }
-  }
-
-  if (!vals('customerNeed') && !vals('mainProducts')) {
-    showOutput(L.errNeedOrProduct);
-    return;
-  }
-  if (!vals('shopFeature') && !vals('customerExperience')) {
-    showOutput(L.errFeatureOrGain);
-    return;
-  }
-
-  const designErr = DesignPref.validate();
-  if (designErr) {
-    showOutput(designErr);
-    return;
-  }
 
   const getFontName = () => DesignPref.getFont();
 
@@ -361,18 +353,24 @@ ${L.layoutNote}
 
 ${L.promptFooter}`;
 
-  showOutput(t);
+  return t;
 }
 
 function setSnippet(type) {
-  showOutput(i18n[currentLang]['snippet' + type.charAt(0).toUpperCase() + type.slice(1) + 'Content']);
+  const key = 'snippet' + type.charAt(0).toUpperCase() + type.slice(1) + 'Content';
+  const box = document.getElementById('snippetBox');
+  const out = document.getElementById('snippetOut');
+  out.value = i18n[currentLang][key];
+  box.hidden = false;
+  out.focus();
 }
 
-function copyText() {
-  const out = document.getElementById('out');
+function copySnippet() {
+  const out = document.getElementById('snippetOut');
   if (!out.value.trim()) return;
   navigator.clipboard.writeText(out.value).then(() => {
     const toast = document.getElementById('toast');
+    toast.textContent = i18n[currentLang].toast;
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 2200);
   });
@@ -418,8 +416,16 @@ DesignPref.init(document.getElementById('designPref'), {
 setLang(currentLang);
 loadAll();
 
+PromptSheet.init(document.getElementById('promptSheet'), {
+  lang: currentLang,
+  build: buildPrompt,
+  check: checkPrompt,
+  progress: promptProgress,
+  emptyMarks: [i18n.zh.smartFallback, i18n.en.smartFallback],
+});
+
 document.querySelectorAll('input, textarea, select').forEach(el => {
-  if (el.id === 'out') return;
-  el.addEventListener('input', () => { document.getElementById('out').value = ''; document.getElementById('outputWrap').style.display = 'none'; saveAll(); });
-  el.addEventListener('change', () => { document.getElementById('out').value = ''; document.getElementById('outputWrap').style.display = 'none'; saveAll(); });
+  if (el.id === 'snippetOut') return;
+  el.addEventListener('input', saveAll);
+  el.addEventListener('change', saveAll);
 });

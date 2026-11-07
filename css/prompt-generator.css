@@ -1,0 +1,398 @@
+/* ── Prompt 產生器共用樣式 ──
+ * 使用頁面：Page_prompt_generator.html、shoppage_prompt_generator.html、Tool_prompt_generator.html
+ * 三頁的外觀從這裡統一調整；只有單頁才有的元件，才放在各頁自己的 CSS。
+ * 載入順序：saori-base.css → prompt-generator.css → 各頁 CSS → design-preference.css
+ */
+
+/* ── 頁首：和網站其他頁一樣的深色底，但只有原本一半高，第一題仍在第一個畫面內 ── */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 2.8rem 2rem 2.6rem;
+  background: var(--ink);
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 65% 40%, rgba(196,149,106,0.11) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 70% at 20% 80%, rgba(122,140,114,0.07) 0%, transparent 55%),
+    linear-gradient(160deg, #1c1a17 0%, #252018 50%, #1e1b14 100%);
+}
+.hero-inner {
+  position: relative;
+  max-width: 860px;
+  margin: 0 auto;
+}
+.hero-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+  font-weight: 600;
+  color: var(--paper);
+  letter-spacing: 0.06em;
+  line-height: 1.35;
+  margin-bottom: 0.6rem;
+}
+.hero-desc {
+  max-width: 38em;
+  font-size: 0.88rem;
+  color: rgba(250,247,242,0.6);
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+}
+
+/* ── 版面：表單在左、Prompt 預覽在右（寬螢幕） ── */
+.main-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2.6rem 2rem 4rem;
+}
+.pg-form { min-width: 0; }
+
+.section-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(1.3rem, 3vw, 1.65rem);
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+.section-rule {
+  width: 40px; height: 2px;
+  background: var(--accent2);
+  margin-bottom: 2.4rem;
+}
+
+/* ── FORM BLOCKS ── */
+.form-block {
+  margin-bottom: 3.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem 2rem;
+}
+.full { grid-column: 1 / -1; }
+
+/* Field */
+.field { display: flex; flex-direction: column; }
+
+label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--text-soft);
+  margin-bottom: 7px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+label .req {
+  color: var(--accent-rose);
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px 13px;
+  border: 1px solid var(--paper-mid);
+  border-radius: 2px;
+  background: var(--paper-warm);
+  color: var(--text-main);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 300;
+  transition: border-color 0.2s, background 0.2s;
+  appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent2);
+  background: #fff;
+}
+input::placeholder, textarea::placeholder {
+  color: var(--text-soft);
+  opacity: 0.5;
+}
+textarea { min-height: 90px; resize: vertical; }
+
+/* ── DIVIDER LINE ── */
+.form-sep {
+  border: none;
+  border-top: 1px solid var(--paper-mid);
+  margin: 2.8rem 0;
+}
+
+/* ── ACTION ROW ── */
+.actions {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 0.75rem 2rem;
+  border: 1px solid var(--accent3);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--accent1);
+  font-family: 'Noto Serif TC', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+button:hover { background: var(--accent3); color: var(--ink); }
+button.primary {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+button.primary:hover { background: var(--ink-soft); }
+
+/* ── TOAST ── */
+#toast {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%) scale(0.85);
+  background: var(--ink-soft);
+  color: var(--paper);
+  padding: 20px 40px;
+  border-radius: 2px;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+  z-index: 9999;
+}
+#toast.show {
+  opacity: 1;
+  transform: translate(-50%,-50%) scale(1);
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--ink);
+  color: rgba(250,247,242,0.55);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  border-top: 1px solid rgba(250,247,242,0.06);
+  font-size: 0.78rem;
+  line-height: 2;
+  letter-spacing: 0.04em;
+}
+footer .inner { max-width: 600px; margin: 0 auto; }
+.footer-name {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--paper);
+  letter-spacing: 0.12em;
+  margin-bottom: 0.4rem;
+}
+.footer-role {
+  color: var(--accent3);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  margin-bottom: 1rem;
+}
+.footer-rule {
+  width: 32px; height: 1px;
+  background: rgba(250,247,242,0.2);
+  margin: 0.8rem auto;
+}
+.footer-link {
+  color: rgba(250,247,242,0.75);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(250,247,242,0.25);
+  padding-bottom: 1px;
+  transition: color 0.2s, border-color 0.2s;
+  font-family: 'Noto Serif TC', serif;
+  letter-spacing: 0.08em;
+}
+.footer-link:hover { color: var(--accent3); border-color: var(--accent3); }
+.footer-copy {
+  margin-top: 1.2rem;
+  font-size: 0.68rem;
+  color: rgba(250,247,242,0.3);
+  letter-spacing: 0.06em;
+}
+
+/* ── Prompt 預覽面板（js/prompt-sheet.js） ── */
+.pg-sheet {
+  --sheet-progress: 0;
+  display: flex;
+  flex-direction: column;
+}
+.sheet-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.7rem;
+}
+.sheet-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.sheet-status {
+  font-size: 0.75rem;
+  color: var(--accent-rose);
+  letter-spacing: 0.04em;
+}
+.sheet-status.is-ready { color: var(--accent-sage); }
+.pg-sheet .sheet-toggle { display: none; }
+
+.sheet-progress {
+  position: relative;
+  height: 2px;
+  background: var(--paper-mid);
+  margin-bottom: 1.1rem;
+}
+.sheet-progress::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--sheet-progress) * 100%);
+  background: var(--accent-sage);
+  transition: width 0.3s ease;
+}
+
+.sheet-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  min-height: 0;
+  flex: 1;
+}
+/* 紙張：一疊委託單的最上面那一張 */
+.sheet-paper {
+  flex: 1;
+  min-height: 240px;
+  overflow: auto;
+  padding: 1.4rem 1.5rem;
+  background: #fffdf8;
+  border: 1px solid var(--paper-mid);
+  box-shadow: 5px 5px 0 -1px #fffdf8, 5px 5px 0 0 var(--paper-mid);
+}
+.sheet-text {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 0.8rem;
+  line-height: 2;
+  letter-spacing: 0.02em;
+  color: var(--text-main);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.sheet-rule {
+  display: block;
+  margin: 0.7rem 0;
+  border-top: 1px solid var(--paper-mid);
+}
+.sheet-empty {
+  color: var(--text-soft);
+  background: var(--paper-warm);
+}
+.sheet-note {
+  font-size: 0.72rem;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+.sheet-msg {
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  background: rgba(184,124,110,0.08);
+  border-left: 2px solid var(--accent-rose);
+  padding: 0.6rem 0.8rem;
+}
+.pg-sheet .sheet-copy { width: 100%; }
+.sheet-ai {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.9rem;
+  font-size: 0.72rem;
+  color: var(--text-soft);
+}
+.sheet-ai a {
+  color: var(--accent1);
+  text-decoration: none;
+  border-bottom: 1px solid var(--paper-mid);
+}
+.sheet-ai a:hover { border-color: var(--accent2); }
+.pg-sheet button:focus-visible,
+.sheet-ai a:focus-visible {
+  outline: 2px solid var(--accent2);
+  outline-offset: 2px;
+}
+
+/* 寬螢幕：兩欄，預覽固定在右邊跟著捲動 */
+@media (min-width: 1000px) {
+  .hero-inner { max-width: 1240px; }
+  .main-wrap.pg-layout {
+    max-width: 1240px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 0 3.5rem;
+    align-items: start;
+  }
+  .pg-sheet {
+    position: sticky;
+    top: 1.5rem;
+    max-height: calc(100vh - 3rem);
+  }
+}
+
+/* 窄螢幕：預覽收在底部，點「查看」展開 */
+@media (max-width: 999px) {
+  .pg-sheet {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 900;
+    max-height: 100vh;
+    padding: 0.9rem 1.2rem;
+    background: var(--paper);
+    border-top: 1px solid var(--paper-mid);
+    box-shadow: 0 -6px 18px rgba(28,26,23,0.08);
+  }
+  .pg-sheet .sheet-head { padding-bottom: 0; align-items: center; }
+  .pg-sheet .sheet-toggle {
+    display: inline-block;
+    width: auto;
+    padding: 0.45rem 1.2rem;
+    flex-shrink: 0;
+  }
+  .sheet-progress { position: absolute; top: 0; left: 0; right: 0; margin: 0; }
+  .sheet-body { display: none; }
+  .pg-sheet.is-open { top: 6vh; padding-bottom: 1.4rem; }
+  .pg-sheet.is-open .sheet-head { padding-bottom: 0.9rem; }
+  .pg-sheet.is-open .sheet-body { display: flex; }
+  body.sheet-locked { overflow: hidden; }
+  footer { padding-bottom: 6rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet-progress::after { transition: none; }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 620px) {
+  .grid { grid-template-columns: 1fr; }
+  .main-wrap { padding: 3rem 1.2rem 3rem; }
+  .actions { flex-direction: column; align-items: flex-start; }
+  button { width: 100%; text-align: center; }
+}
