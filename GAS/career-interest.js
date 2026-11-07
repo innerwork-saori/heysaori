@@ -1,19 +1,24 @@
 /**
- * career-interest.js — Google Apps Script（職業興趣探索）
+ * career-interest.js — Google Apps Script（職業興趣探索，已合併舊版 career-card 熱情探索）
  * 前端：career-interest.html / js/career-interest.js
  * 部署為 Web App（執行身分：我，存取權：任何人）
  *
  * 試算表：每位使用者一個分頁，分頁名稱 = 使用者的「註冊名稱」
- * 分頁格式（與「職業卡.xlsx」相同，第一列為標題）：
+ * 分頁格式（第一列為標題）：
  *   A: SN   B: 職業名稱   C: 興趣代碼 (Holland Code)
- *   D: 挑選（勾選 TRUE）   E: 排名（1–10）   F: 挑選、排序的原因
+ *   D: 挑選（勾選 TRUE）
+ *   E: 排名／分類（前 10 名寫名次；名次中不是純粹喜歡的寫成「9（他人期望）」；沒名次的寫分類名稱）
+ *   F: 原因／洞察（有名次的寫原因，沒名次的他人期望／僅是有能力做寫洞察）
  *   G1: 送出時間紀錄（每次送出加一行，保留全部歷史）
+ *   H:I: 六大類統計、主要類型、反思問題與回答（每次送出整塊重寫）
  * 若分頁是空白的，送出時會自動補上標題與 100 個職業列。
  *
  * API
  *   GET  ?action=check&token=TOKEN&name=NAME  → { ok: true } / { ok: false, error: 'not_found' }
- *   POST body(JSON, text/plain): { token, action: 'submit', name, picks, ranking, reasons, jobs }
+ *   POST body(JSON, text/plain):
+ *        { token, action: 'submit', name, picks, classifications, ranking, reasons, insights, reflections, jobs }
  *        → { ok: true, submittedAt } / { ok: false, error }
+ *   相容舊版前端：沒有 classifications 時，所有挑選的職業視為「純粹喜歡」。
  */
 
 // ─── 設定 ────────────────────────────────────────────────────────────────────
@@ -25,17 +30,30 @@ const EXCLUDED_SHEETS = ['工作表1', '範本', 'template'];
 
 const PICK_MIN  = 10;
 const PICK_MAX  = 15;
-const RANK_SIZE = 10;
+const PURE_MIN  = 5;
+const RANK_SIZE = 10; // 一律排 10 名，純粹喜歡不足時可用其他挑選的職業補上
 const JOB_COUNT = 100;
+const TEXT_MAX  = 1000;
+const REFLECTION_COUNT = 5;
+
+// 動機分類（key 需與前端 CLS_LABELS 相同）
+const CLS_LABELS = { pure: '純粹喜歡', others: '他人期望', capable: '僅是有能力做' };
+const CLS_ORDER  = { pure: 0, others: 1, capable: 2 };
+
+const HOLLAND_ORDER  = ['R', 'I', 'A', 'S', 'E', 'C'];
+const HOLLAND_LABELS = { R: '實用型', I: '研究型', A: '藝術型', S: '社會型', E: '企業型', C: '事務型' };
 
 const HEADERS = [
   'SN',
   '職業名稱 (Occupation)',
   '興趣代碼 (Holland Code)',
   '挑選至多 15 項打勾',
-  '勾選的職業中，排名至少 10 項',
-  '挑選、排序的原因'
+  '排名／分類',
+  '原因／洞察'
 ];
+
+// H:I 區塊重寫前會先清空的範圍（列數需大於實際寫入的列數）
+const SUMMARY_ROWS = 30;
 
 // ─── 入口 ────────────────────────────────────────────────────────────────────
 function doGet(e) {
@@ -64,7 +82,8 @@ function doPost(e) {
     lock.waitLock(20000);
     const submittedAt = Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy-MM-dd HH:mm');
     try {
-      writeSubmission(sheet, data, body.jobs);
+      const codes = writeSubmission(sheet, data, body.jobs);
+      writeSummary(sheet, data, codes);
       logSubmitTime(sheet, submittedAt);
     } finally {
       lock.releaseLock();
@@ -90,6 +109,8 @@ function validateSubmission(body) {
     const n = Number(v);
     return Number.isInteger(n) && n >= 1 && n <= JOB_COUNT ? n : null;
   };
+  const clean = v => String(v || '').trim().slice(0, TEXT_MAX);
+
   const picks   = (Array.isArray(body.picks) ? body.picks : []).map(toSn);
   const ranking = (Array.isArray(body.ranking) ? body.ranking : []).map(toSn);
   const reasons = body.reasons || {};
@@ -97,59 +118,136 @@ function validateSubmission(body) {
   if (picks.indexOf(null) >= 0 || ranking.indexOf(null) >= 0) return null;
   if (new Set(picks).size !== picks.length || new Set(ranking).size !== ranking.length) return null;
   if (picks.length < PICK_MIN || picks.length > PICK_MAX) return null;
+
+  // 分類：舊版前端沒有這個欄位 → 全部視為純粹喜歡
+  const rawCls = body.classifications;
+  const cls = {};
+  for (let i = 0; i < picks.length; i++) {
+    const c = rawCls ? rawCls[picks[i]] : 'pure';
+    if (!CLS_LABELS[c]) return null;
+    cls[picks[i]] = c;
+  }
+  const pure = picks.filter(sn => cls[sn] === 'pure');
+  if (pure.length < PURE_MIN) return null;
+
+  // 名次：一律 10 名，從挑選的職業中排
   if (ranking.length !== RANK_SIZE) return null;
-  if (!ranking.every(sn => picks.indexOf(sn) >= 0)) return null;
+  if (!ranking.every(sn => cls[sn])) return null;
 
   const cleanReasons = {};
   for (let i = 0; i < ranking.length; i++) {
-    const text = String(reasons[ranking[i]] || '').trim().slice(0, 1000);
+    const text = clean(reasons[ranking[i]]);
     if (!text) return null;
     cleanReasons[ranking[i]] = text;
   }
-  return { picks, ranking, reasons: cleanReasons };
+
+  // 洞察（選填）：只收沒排進名次的他人期望／僅是有能力做
+  const rawInsights = body.insights || {};
+  const insights = {};
+  picks.forEach(sn => {
+    if (cls[sn] !== 'pure' && ranking.indexOf(sn) < 0) {
+      const text = clean(rawInsights[sn]);
+      if (text) insights[sn] = text;
+    }
+  });
+
+  // 反思（選填）：題目文字由前端帶入（含主要類型），回答可空白
+  const rawRefl = Array.isArray(body.reflections) ? body.reflections.slice(0, REFLECTION_COUNT) : [];
+  const reflections = rawRefl.map(r => ({ q: clean(r && r.q).slice(0, 300), a: clean(r && r.a) }))
+    .filter(r => r.q);
+
+  return { picks, cls, ranking, reasons: cleanReasons, insights, reflections };
 }
 
-// ─── 寫入分頁 D/E/F 欄（依 A 欄 SN 對應列）──────────────────────────────────
+// ─── 寫入分頁 A:F（依 A 欄 SN 對應列），回傳 { sn: 興趣代碼 } 供統計用 ────────
 function writeSubmission(sheet, data, jobs) {
   if (sheet.getLastRow() < 2) fillTemplate(sheet, jobs);
-  // 結果不需要挑選說明：既有分頁（舊版或從範本複製）的 B1 也統一成簡短標題
+  // 既有分頁（舊版或從範本複製）的標題統一成目前的格式
   sheet.getRange(1, 2).setValue(HEADERS[1]);
+  sheet.getRange(1, 5, 1, 2).setValues([[HEADERS[4], HEADERS[5]]]);
 
   const lastRow = sheet.getLastRow();
-  const snCol = sheet.getRange(2, 1, lastRow - 1, 1).getValues();
+  const rows = sheet.getRange(2, 1, lastRow - 1, 3).getValues(); // A:C
 
   // 先確認每個挑選的 SN 都找得到對應列
-  const rowBySn = {};
-  snCol.forEach((r, i) => {
+  const codes = {};
+  rows.forEach(r => {
     const sn = Number(r[0]);
-    if (Number.isInteger(sn)) rowBySn[sn] = i;
+    if (Number.isInteger(sn)) codes[sn] = String(r[2] || '');
   });
-  if (!data.picks.every(sn => rowBySn[sn] !== undefined)) {
+  if (!data.picks.every(sn => codes[sn] !== undefined)) {
     throw new Error('sheet rows do not match SN 1–' + JOB_COUNT);
   }
 
-  // 整批重寫 D:F：先清空（支援重新送出），再填入這次的結果
   const rankOf = {};
   data.ranking.forEach((sn, i) => { rankOf[sn] = i + 1; });
-  const values = snCol.map(r => {
+
+  // 整批重寫 A:F（支援重新送出：沒挑選的列 D:F 會被清空）
+  const out = rows.map(r => {
     const sn = Number(r[0]);
-    const picked = data.picks.indexOf(sn) >= 0;
-    return [
-      picked ? true : '', // 空字串：核取方塊欄顯示為未勾選，一般欄則保持空白
-
-      rankOf[sn] || '',
-      rankOf[sn] ? data.reasons[sn] : ''
-    ];
+    const c = data.cls[sn];
+    const picked = !!c;
+    let tag = '';
+    let note = '';
+    if (rankOf[sn]) {
+      tag = c === 'pure' ? rankOf[sn] : `${rankOf[sn]}（${CLS_LABELS[c]}）`;
+      note = data.reasons[sn];
+    } else if (picked) {
+      tag = CLS_LABELS[c];
+      note = data.insights[sn] || '';
+    }
+    return [r[0], r[1], r[2], picked ? true : '', tag, note];
   });
-  sheet.getRange(2, 4, values.length, 3).setValues(values);
 
-  // 排序 A:F（第 2 列以下）：D 有勾的在前 → E 名次 1→10 → C 興趣代碼 A→Z
-  // 列的順序改變不影響重新送出：上面是依 A 欄 SN 對應列，不是依列號
-  sheet.getRange(2, 1, values.length, 6).sort([
-    { column: 4, ascending: false },
-    { column: 5, ascending: true },
-    { column: 3, ascending: true }
-  ]);
+  // 排序：有勾的在前 → 名次 1→10 → 沒名次的純粹喜歡 → 他人期望 → 僅是有能力做 → 興趣代碼 A→Z
+  // 在程式裡排好再寫回，不依賴試算表對數字與文字混排的排序規則
+  const sortKey = row => {
+    const sn = Number(row[0]);
+    const c = data.cls[sn];
+    if (!c) return 1000;
+    if (rankOf[sn]) return rankOf[sn];
+    return 100 + CLS_ORDER[c];
+  };
+  out.sort((a, b) =>
+    sortKey(a) - sortKey(b) ||
+    String(a[2]).localeCompare(String(b[2])) ||
+    Number(a[0]) - Number(b[0])
+  );
+
+  sheet.getRange(2, 1, out.length, 6).setValues(out);
+  return codes;
+}
+
+// ─── H:I 區塊：六大類統計＋主要類型＋反思 ────────────────────────────────────
+function writeSummary(sheet, data, codes) {
+  const count = { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 };
+  data.picks.filter(sn => data.cls[sn] === 'pure').forEach(sn => {
+    String(codes[sn] || '').split('').forEach(ch => {
+      if (count[ch] !== undefined) count[ch]++;
+    });
+  });
+  const ranked = HOLLAND_ORDER.slice().sort((a, b) =>
+    count[b] - count[a] || HOLLAND_ORDER.indexOf(a) - HOLLAND_ORDER.indexOf(b));
+  const top = count[ranked[0]];
+  const primary = top > 0
+    ? ranked.filter(k => count[k] === top).map(k => k + ' ' + HOLLAND_LABELS[k]).join('、')
+    : '—';
+
+  const block = [['六大類統計（純粹喜歡的職業）', '次數']];
+  ranked.forEach(k => block.push([k + ' ' + HOLLAND_LABELS[k], count[k]]));
+  block.push(['主要類型', primary]);
+  const boldRows = [0, block.length - 1];
+
+  if (data.reflections.length) {
+    block.push(['', '']);
+    boldRows.push(block.length);
+    block.push(['反思問題', '回答']);
+    data.reflections.forEach(r => block.push([r.q, r.a]));
+  }
+
+  sheet.getRange(1, 8, SUMMARY_ROWS, 2).clearContent().setFontWeight('normal');
+  sheet.getRange(1, 8, block.length, 2).setValues(block).setWrap(true).setVerticalAlignment('top');
+  boldRows.forEach(i => sheet.getRange(i + 1, 8, 1, 2).setFontWeight('bold'));
 }
 
 // ─── 送出紀錄：G1 保留每一次送出的時間（舊的在上、最新在下）──────────────────
