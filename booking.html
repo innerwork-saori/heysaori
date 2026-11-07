@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hey Saori · 預約諮詢</title>
+  <meta name="description" content="預約 Saori 的 50 分鐘諮詢：挑時間、選方案、填初談表單、加 Line 通知，四步完成預約。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/saori-base.css">
+<link rel="stylesheet" href="css/links.css?v=2">
+<link rel="stylesheet" href="css/booking.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JZJ4RQTVK1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JZJ4RQTVK1');
+</script>
+</head>
+<body>
+
+<!-- ══════════ PROFILE ══════════ -->
+<header class="profile">
+  <div class="profile-bg"></div>
+  <div class="profile-inner">
+    <img class="profile-avatar" src="https://heysaori.com/wp-content/uploads/2025/12/photo_2025-12-07_21-22-15.webp" alt="Saori 謝孟娟" width="112" height="112">
+    <h1 class="profile-name">Book a Session</h1>
+    <div class="profile-role">預約諮詢流程</div>
+    <p class="profile-bio">四個步驟全部完成，才算預約成功喔。</p>
+
+    <!-- 流程總覽：點了會跳到右邊對應的步驟 -->
+    <ol class="flow-overview">
+      <li><a href="#step-1"><span>1</span>挑選諮詢時間</a></li>
+      <li><a href="#step-2"><span>2</span>官網選方案、送出訂單</a></li>
+      <li><a href="#step-3"><span>3</span>填初談表單、交履歷與同意書</a></li>
+      <li><a href="#step-4"><span>4</span>加入 Line 並通知 Saori</a></li>
+    </ol>
+  </div>
+</header>
+
+
+<!-- ══════════ STEPS ══════════ -->
+<main class="links booking">
+
+  <ol class="steps">
+
+    <li class="step" id="step-1">
+      <span class="step-num" aria-hidden="true">1</span>
+      <div class="step-body">
+        <h2 class="step-title">挑選諮詢時間</h2>
+        <p class="step-desc">在下方日曆選一個方便的時段，填好資料送出。Saori 確認後會寄信通知你。</p>
+
+        <!-- Cal.com 內嵌日曆：顏色在下方 script 的 cssVarsPerTheme 調整 -->
+        <div class="cal-embed" id="my-cal-inline-50mins">
+          <p class="cal-fallback">日曆載入中⋯⋯如果一直沒出現，可以<a href="https://cal.com/heysaori/50mins" target="_blank" rel="noopener">直接開啟預約頁</a>。</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="step" id="step-2">
+      <span class="step-num" aria-hidden="true">2</span>
+      <div class="step-body">
+        <h2 class="step-title">到官網選諮詢方案，送出訂單</h2>
+        <p class="step-desc">依你想談的次數選方案，結帳送出訂單。</p>
+        <a class="step-link" href="https://heysaori.com/letscounseling/" target="_blank" rel="noopener">看諮詢方案</a>
+      </div>
+    </li>
+
+    <li class="step" id="step-3">
+      <span class="step-num" aria-hidden="true">3</span>
+      <div class="step-body">
+        <h2 class="step-title">準備諮詢資料</h2>
+        <p class="step-desc">這兩件可以一起做，不用分先後。</p>
+
+        <div class="step-fork">
+          <section class="fork-item">
+            <span class="fork-num">3.1</span>
+            <h3 class="fork-title">填寫初談表單</h3>
+            <a class="step-link" href="https://heysaori.com/application/" target="_blank" rel="noopener">開啟表單</a>
+          </section>
+          <section class="fork-item">
+            <span class="fork-num">3.2</span>
+            <h3 class="fork-title">提供履歷、諮詢同意書</h3>
+            <a class="step-link" href="https://drive.google.com/file/d/1EAZRTDq8gK_-lijAGII3uHcmIsrJm9Ti/view?usp=sharing" target="_blank" rel="noopener">看諮詢同意書</a>
+          </section>
+        </div>
+      </div>
+    </li>
+
+    <li class="step" id="step-4">
+      <span class="step-num" aria-hidden="true">4</span>
+      <div class="step-body">
+        <h2 class="step-title">加入 Line 並通知 Saori</h2>
+        <p class="step-desc">傳個訊息告訴 Saori 你都完成了，預約就成功囉。</p>
+        <a class="step-link step-link--primary" href="https://lin.ee/mG0aU30" target="_blank" rel="noopener">加入 Saori 的 Line</a>
+      </div>
+    </li>
+
+  </ol>
+
+  <a class="booking-back" href="links.html">← 回到所有連結</a>
+
+</main>
+
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="links-footer">
+  <a href="https://heysaori.com">© Saori · 謝孟娟 · heysaori.com</a>
+</footer>
+
+<!-- Cal inline embed code begins（從 Cal.com 複製，主題改成淺色以配合網站） -->
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+  Cal("init", "50mins", {origin:"https://app.cal.com"});
+  Cal.config = Cal.config || {};
+  Cal.config.forwardQueryParams = true;
+
+  Cal.ns["50mins"]("inline", {
+    elementOrSelector: "#my-cal-inline-50mins",
+    config: {"layout":"month_view","useSlotsViewOnSmallScreen":"true","theme":"light"},
+    calLink: "heysaori/50mins",
+  });
+
+  Cal.ns["50mins"]("ui", {
+    "theme": "light",
+    "cssVarsPerTheme": {
+      "light": {
+        "cal-brand": "#8b6f47",
+        "cal-bg": "#ffffff",
+        "cal-bg-muted": "#f5f0e8",
+        "cal-bg-subtle": "#f5f0e8",
+        "cal-bg-emphasis": "#ede7da",
+        "cal-border": "#ede7da",
+        "cal-border-subtle": "#ede7da",
+        "cal-text": "#2e2b26",
+        "cal-text-emphasis": "#1c1a17"
+      },
+      "dark": { "cal-brand": "#d4a96a" }
+    },
+    "hideEventTypeDetails": false,
+    "layout": "month_view"
+  });
+</script>
+<!-- Cal inline embed code ends -->
+
+</body>
+</html>
