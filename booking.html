@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hey Saori · 預約諮詢</title>
-  <meta name="description" content="預約 Saori 的 50 分鐘諮詢：挑時間、選方案、填初談表單、加 Line 通知，四步完成預約。">
+  <meta name="description" content="預約 Saori 的 50 分鐘諮詢：選時間、下訂方案、填初談表單、交履歷與同意書、回報轉帳資訊，六件事完成就預約成功。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
@@ -29,78 +29,115 @@
   <div class="profile-inner">
     <img class="profile-avatar" src="https://heysaori.com/wp-content/uploads/2025/12/photo_2025-12-07_21-22-15.webp" alt="Saori 謝孟娟" width="112" height="112">
     <h1 class="profile-name">Book a Session</h1>
-    <div class="profile-role">預約諮詢流程</div>
-    <p class="profile-bio">四個步驟全部完成，才算預約成功喔。</p>
+    <div class="profile-role">預約諮詢</div>
+    <p class="profile-bio">
+      下面六件事沒有先後順序，全部完成就預約成功了。做完一件就打個勾，這台裝置會記得你的進度。
+    </p>
 
-    <!-- 流程總覽：點了會跳到右邊對應的步驟 -->
-    <ol class="flow-overview">
-      <li><a href="#step-1"><span>1</span>挑選諮詢時間</a></li>
-      <li><a href="#step-2"><span>2</span>官網選方案、送出訂單</a></li>
-      <li><a href="#step-3"><span>3</span>填初談表單、交履歷與同意書</a></li>
-      <li><a href="#step-4"><span>4</span>加入 Line 並通知 Saori</a></li>
-    </ol>
+    <!-- 進度：數字由 js/booking.js 依打勾數更新 -->
+    <div class="booking-progress" aria-live="polite">
+      <p class="progress-text" id="progressText">已完成 <strong id="doneCount">0</strong> / <span id="totalCount">6</span></p>
+      <div class="progress-bar" aria-hidden="true"><span id="progressFill"></span></div>
+    </div>
   </div>
 </header>
 
 
-<!-- ══════════ STEPS ══════════ -->
+<!-- ══════════ CHECKLIST ══════════ -->
+<!-- 每一項的 data-task 是記錄打勾狀態用的 key，改文案不用動它 -->
 <main class="links booking">
 
-  <ol class="steps">
+  <section class="link-group">
+    <h2 class="group-label">Forms &amp; Files <span>表單與文件</span></h2>
+    <ul class="task-list">
 
-    <li class="step" id="step-1">
-      <span class="step-num" aria-hidden="true">1</span>
-      <div class="step-body">
-        <h2 class="step-title">挑選諮詢時間</h2>
-        <p class="step-desc">在下方日曆選一個方便的時段，填好資料送出。Saori 確認後會寄信通知你。</p>
-
-        <!-- Cal.com 內嵌日曆：顏色在下方 script 的 cssVarsPerTheme 調整 -->
-        <div class="cal-embed" id="my-cal-inline-50mins">
-          <p class="cal-fallback">日曆載入中⋯⋯如果一直沒出現，可以<a href="https://cal.com/heysaori/50mins" target="_blank" rel="noopener">直接開啟預約頁</a>。</p>
+      <li class="task" data-task="form">
+        <input class="task-check" type="checkbox" id="task-form">
+        <div class="task-body">
+          <label class="task-title" for="task-form">填寫初談表單</label>
+          <p class="task-desc">需要登入 Google 帳號才能填寫。</p>
+          <div class="task-actions">
+            <a class="task-link" href="https://forms.gle/1m9D9Vw8YXq7quQy5" target="_blank" rel="noopener">開啟表單</a>
+          </div>
         </div>
-      </div>
-    </li>
+      </li>
 
-    <li class="step" id="step-2">
-      <span class="step-num" aria-hidden="true">2</span>
-      <div class="step-body">
-        <h2 class="step-title">到官網選諮詢方案，送出訂單</h2>
-        <p class="step-desc">依你想談的次數選方案，結帳送出訂單。</p>
-        <a class="step-link" href="https://heysaori.com/letscounseling/" target="_blank" rel="noopener">看諮詢方案</a>
-      </div>
-    </li>
-
-    <li class="step" id="step-3">
-      <span class="step-num" aria-hidden="true">3</span>
-      <div class="step-body">
-        <h2 class="step-title">準備諮詢資料</h2>
-        <p class="step-desc">這兩件可以一起做，不用分先後。</p>
-
-        <div class="step-fork">
-          <section class="fork-item">
-            <span class="fork-num">3.1</span>
-            <h3 class="fork-title">填寫初談表單</h3>
-            <a class="step-link" href="https://heysaori.com/application/" target="_blank" rel="noopener">開啟表單</a>
-          </section>
-          <section class="fork-item">
-            <span class="fork-num">3.2</span>
-            <h3 class="fork-title">提供履歷、諮詢同意書</h3>
-            <a class="step-link" href="https://drive.google.com/file/d/1EAZRTDq8gK_-lijAGII3uHcmIsrJm9Ti/view?usp=sharing" target="_blank" rel="noopener">看諮詢同意書</a>
-          </section>
+      <li class="task" data-task="resume">
+        <input class="task-check" type="checkbox" id="task-resume">
+        <div class="task-body">
+          <label class="task-title" for="task-resume">提供履歷／簡歷</label>
+          <p class="task-desc">上傳到 Dropbox，或直接傳 LINE 給 Saori 都可以。</p>
+          <div class="task-actions">
+            <a class="task-link" href="https://www.dropbox.com/request/rJuLakmxnsD76h7wTThX" target="_blank" rel="noopener">上傳履歷</a>
+          </div>
         </div>
-      </div>
-    </li>
+      </li>
 
-    <li class="step" id="step-4">
-      <span class="step-num" aria-hidden="true">4</span>
-      <div class="step-body">
-        <h2 class="step-title">加入 Line 並通知 Saori</h2>
-        <p class="step-desc">傳個訊息告訴 Saori 你都完成了，預約就成功囉。</p>
-        <a class="step-link step-link--primary" href="https://lin.ee/mG0aU30" target="_blank" rel="noopener">加入 Saori 的 Line</a>
-      </div>
-    </li>
+      <li class="task" data-task="consent">
+        <input class="task-check" type="checkbox" id="task-consent">
+        <div class="task-body">
+          <label class="task-title" for="task-consent">簽署諮詢同意書</label>
+          <p class="task-desc">下載後簽名，再上傳到 Dropbox，或傳 LINE 給 Saori。</p>
+          <div class="task-actions">
+            <a class="task-link" href="https://drive.google.com/file/d/1EAZRTDq8gK_-lijAGII3uHcmIsrJm9Ti/view?usp=sharing" target="_blank" rel="noopener">下載同意書</a>
+            <a class="task-link" href="https://www.dropbox.com/request/cqKjShs5aWuPPwTclADk" target="_blank" rel="noopener">上傳簽好的同意書</a>
+          </div>
+        </div>
+      </li>
 
-  </ol>
+    </ul>
+  </section>
+
+  <section class="link-group">
+    <h2 class="group-label">Time &amp; Plan <span>時間與方案</span></h2>
+    <ul class="task-list">
+
+      <li class="task" data-task="order">
+        <input class="task-check" type="checkbox" id="task-order">
+        <div class="task-body">
+          <label class="task-title" for="task-order">下訂諮詢方案</label>
+          <p class="task-desc">到官網選方案，送出訂單。</p>
+          <div class="task-actions">
+            <a class="task-link" href="https://heysaori.com/letscounseling/" target="_blank" rel="noopener">前往官網</a>
+          </div>
+        </div>
+      </li>
+
+      <li class="task" data-task="time">
+        <input class="task-check" type="checkbox" id="task-time">
+        <div class="task-body">
+          <label class="task-title" for="task-time">選諮詢時間</label>
+          <p class="task-desc">從日曆挑一個方便的時段。Saori 確認後會寄信通知你。</p>
+          <div class="task-actions">
+            <!-- 點了會彈出 Cal.com 日曆，設定在 js/booking.js。用 button 不用 a，避免同時另開分頁 -->
+            <button type="button" class="task-link"
+               data-cal-link="heysaori/50mins"
+               data-cal-namespace="50mins"
+               data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true","theme":"light"}'>選時間</button>
+          </div>
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+  <section class="link-group">
+    <h2 class="group-label">On LINE <span>在 LINE 上</span></h2>
+    <ul class="task-list">
+
+      <li class="task" data-task="payment">
+        <input class="task-check" type="checkbox" id="task-payment">
+        <div class="task-body">
+          <label class="task-title" for="task-payment">回報轉帳資訊</label>
+          <p class="task-desc">轉帳後，在 LINE 告訴 Saori 帳號後五碼和轉帳時間。</p>
+          <div class="task-actions">
+            <a class="task-link task-link--primary" href="https://lin.ee/mG0aU30" target="_blank" rel="noopener">打開 Saori 的 LINE</a>
+          </div>
+        </div>
+      </li>
+
+    </ul>
+  </section>
 
   <a class="booking-back" href="links.html">← 回到所有連結</a>
 
@@ -112,40 +149,6 @@
   <a href="https://heysaori.com">© Saori · 謝孟娟 · heysaori.com</a>
 </footer>
 
-<!-- Cal inline embed code begins（從 Cal.com 複製，主題改成淺色以配合網站） -->
-<script type="text/javascript">
-  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
-  Cal("init", "50mins", {origin:"https://app.cal.com"});
-  Cal.config = Cal.config || {};
-  Cal.config.forwardQueryParams = true;
-
-  Cal.ns["50mins"]("inline", {
-    elementOrSelector: "#my-cal-inline-50mins",
-    config: {"layout":"month_view","useSlotsViewOnSmallScreen":"true","theme":"light"},
-    calLink: "heysaori/50mins",
-  });
-
-  Cal.ns["50mins"]("ui", {
-    "theme": "light",
-    "cssVarsPerTheme": {
-      "light": {
-        "cal-brand": "#8b6f47",
-        "cal-bg": "#ffffff",
-        "cal-bg-muted": "#f5f0e8",
-        "cal-bg-subtle": "#f5f0e8",
-        "cal-bg-emphasis": "#ede7da",
-        "cal-border": "#ede7da",
-        "cal-border-subtle": "#ede7da",
-        "cal-text": "#2e2b26",
-        "cal-text-emphasis": "#1c1a17"
-      },
-      "dark": { "cal-brand": "#d4a96a" }
-    },
-    "hideEventTypeDetails": false,
-    "layout": "month_view"
-  });
-</script>
-<!-- Cal inline embed code ends -->
-
+<script src="js/booking.js"></script>
 </body>
 </html>
