@@ -1,0 +1,393 @@
+/* career-interest.css — 職業興趣探索（繼承 saori-base.css）
+ * 唯一的強調色 --heat 只用在「熱血亢奮」相關的提示、已選狀態與名次。
+ */
+:root {
+  --heat: #b4442c;
+  --heat-soft: #f6e6dc;
+  --line: #e4dccd;
+  --nav-h: 3.6rem;
+}
+
+body { padding-bottom: 6rem; }
+
+/* ── Hero ── */
+.ci-hero {
+  background: var(--ink);
+  color: var(--paper);
+  padding: calc(var(--nav-h) + 3.5rem) 1.25rem 3rem;
+}
+.ci-hero-title,
+.ci-hero-desc {
+  max-width: 44rem;
+  margin: 0 auto;
+}
+.ci-hero-title {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 5vw, 2.9rem);
+  line-height: 1.35;
+  letter-spacing: 0.04em;
+}
+.ci-nowrap { white-space: nowrap; }
+.ci-hero-desc {
+  margin-top: 1.25rem;
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: rgba(250,247,242,0.68);
+}
+
+/* ── 全程提示 ── */
+.ci-reminder {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 50;
+  background: var(--heat-soft);
+  border-bottom: 1px solid #ecd2c3;
+}
+.ci-reminder p {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem 0.75rem 2.25rem;
+  position: relative;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+.ci-reminder p::before {
+  content: '';
+  position: absolute;
+  left: 1.25rem;
+  top: 0.85rem;
+  bottom: 0.85rem;
+  width: 3px;
+  background: var(--heat);
+}
+.ci-reminder strong {
+  color: var(--heat);
+  font-weight: 700;
+  font-size: 1.05em;
+}
+
+/* ── Main ── */
+.ci-main {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 2rem;
+}
+
+/* 步驟 */
+.ci-steps {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+.ci-steps button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0 0.5rem;
+  background: none;
+  border: 0;
+  border-top: 3px solid var(--line);
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  text-align: left;
+  cursor: default;
+}
+.ci-step-num {
+  font-family: 'EB Garamond', serif;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+.ci-steps li.is-done button { border-top-color: var(--accent2); color: var(--text-mid); cursor: pointer; }
+.ci-steps li.is-done button:hover { color: var(--ink); }
+.ci-steps li.is-current button { border-top-color: var(--heat); color: var(--ink); font-weight: 500; }
+@media (max-width: 560px) {
+  .ci-steps button { flex-direction: column; align-items: flex-start; gap: 0.15rem; font-size: 0.75rem; }
+}
+
+.ci-resume {
+  font-size: 0.85rem;
+  color: var(--text-mid);
+  margin: -1rem 0 1.5rem;
+}
+
+/* 面板 */
+.ci-panel-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.45rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.45;
+}
+.ci-panel-desc {
+  margin: 0.4rem 0 1.5rem;
+  max-width: 40rem;
+  color: var(--text-mid);
+  font-size: 0.95rem;
+}
+
+/* 表單元素 */
+.ci-label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.4rem; }
+.ci-input {
+  width: 100%;
+  font: inherit;
+  font-weight: 400;
+  font-size: 1rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid #d6ccba;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--ink);
+}
+.ci-input:focus-visible { outline: 2px solid var(--accent1); outline-offset: 1px; border-color: var(--accent1); }
+.ci-name-form { max-width: 32rem; }
+.ci-name-row { display: flex; gap: 0.6rem; }
+@media (max-width: 480px) { .ci-name-row { flex-direction: column; } }
+
+.ci-btn {
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.7rem 1.3rem;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--paper);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.ci-btn:hover:not(:disabled) { background: var(--ink-soft); }
+.ci-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.ci-btn-ghost { background: transparent; color: var(--ink); border-color: #cfc4b1; }
+.ci-btn-ghost:hover:not(:disabled) { background: var(--paper-warm); }
+.ci-btn:focus-visible,
+.ci-link:focus-visible,
+.ci-steps button:focus-visible,
+.ci-job:focus-visible,
+.ci-pool button:focus-visible,
+.ci-rung-actions button:focus-visible { outline: 2px solid var(--heat); outline-offset: 2px; }
+
+.ci-link {
+  font: inherit;
+  font-size: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--accent1);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.ci-msg { min-height: 1.6em; margin-top: 0.6rem; font-size: 0.88rem; color: var(--text-mid); }
+.ci-msg.is-error { color: var(--heat); font-weight: 500; }
+
+.ci-empty { color: var(--text-soft); font-size: 0.9rem; padding: 1rem 0; }
+
+.ci-visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ── Step 2：職業清單 ── */
+.ci-search { max-width: 24rem; margin-bottom: 1.25rem; }
+.ci-jobs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11.5rem, 1fr));
+  gap: 0.5rem;
+}
+@media (max-width: 420px) { .ci-jobs { grid-template-columns: 1fr 1fr; } }
+.ci-job {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  min-height: 4.2rem;
+  padding: 0.65rem 0.8rem;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: var(--ink);
+  position: relative;
+}
+.ci-job:hover { border-color: var(--accent2); }
+.ci-job-zh { font-size: 0.95rem; font-weight: 500; line-height: 1.4; padding-right: 1.2rem; }
+.ci-job-en { font-family: 'EB Garamond', serif; font-size: 0.82rem; color: var(--text-soft); line-height: 1.3; }
+.ci-job[aria-pressed="true"] {
+  background: var(--heat-soft);
+  border-color: var(--heat);
+  box-shadow: inset 3px 0 0 var(--heat);
+}
+.ci-job[aria-pressed="true"]::after {
+  content: '✓';
+  position: absolute;
+  top: 0.5rem;
+  right: 0.65rem;
+  color: var(--heat);
+  font-weight: 700;
+}
+.ci-job:disabled { opacity: 0.4; cursor: not-allowed; }
+.ci-job:disabled:hover { border-color: var(--line); }
+
+/* ── Step 3：排序 ── */
+.ci-rank-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+@media (max-width: 720px) { .ci-rank-layout { grid-template-columns: 1fr; } }
+
+.ci-ladder { list-style: none; border-top: 1px solid var(--line); }
+.ci-rung {
+  display: grid;
+  grid-template-columns: 3rem 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 3.6rem;
+  border-bottom: 1px solid var(--line);
+  padding: 0.35rem 0;
+}
+.ci-rung-num {
+  font-family: 'EB Garamond', serif;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--text-soft);
+  text-align: center;
+}
+.ci-rung.is-filled .ci-rung-num { color: var(--heat); }
+.ci-rung-name { font-weight: 500; line-height: 1.4; }
+.ci-rung-name small { display: block; font-family: 'EB Garamond', serif; font-size: 0.82rem; font-weight: 400; color: var(--text-soft); }
+.ci-rung-placeholder { color: var(--text-soft); font-size: 0.88rem; }
+.ci-rung.is-next .ci-rung-placeholder { color: var(--heat); }
+.ci-rung-actions { display: flex; gap: 0.25rem; }
+.ci-rung-actions button {
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  font-size: 0.9rem;
+  color: var(--text-mid);
+  cursor: pointer;
+}
+.ci-rung-actions button:hover:not(:disabled) { border-color: var(--accent1); color: var(--ink); }
+.ci-rung-actions button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.ci-pool-wrap {
+  position: sticky;
+  top: calc(var(--nav-h) + 6rem);
+}
+@media (max-width: 720px) { .ci-pool-wrap { position: static; } }
+.ci-pool-title { font-size: 0.9rem; font-weight: 500; color: var(--text-mid); margin-bottom: 0.6rem; }
+.ci-pool { list-style: none; display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.ci-pool button {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid #d6ccba;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+}
+.ci-pool button:hover { border-color: var(--heat); color: var(--heat); }
+
+/* ── Step 4：原因 ── */
+.ci-reasons { list-style: none; display: grid; gap: 1.25rem; max-width: 44rem; }
+.ci-reason {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 0.5rem;
+}
+.ci-reason .ci-rung-num { color: var(--heat); padding-top: 0.15rem; }
+.ci-reason label { display: block; font-weight: 500; margin-bottom: 0.35rem; }
+.ci-reason label small { font-family: 'EB Garamond', serif; font-weight: 400; color: var(--text-soft); margin-left: 0.4rem; }
+.ci-reason textarea { min-height: 5.5rem; resize: vertical; line-height: 1.7; }
+
+/* ── 送出前確認 ── */
+.ci-review { list-style: none; max-width: 44rem; border-top: 1px solid var(--line); }
+.ci-review-item {
+  display: grid;
+  grid-template-columns: 3rem 1fr auto;
+  gap: 0.5rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.ci-review-item .ci-rung-num { color: var(--heat); }
+.ci-review-name { font-weight: 500; line-height: 1.4; }
+.ci-review-name small { font-family: 'EB Garamond', serif; font-weight: 400; color: var(--text-soft); margin-left: 0.4rem; }
+.ci-review-reason { margin-top: 0.35rem; line-height: 1.8; color: var(--text-mid); white-space: pre-wrap; overflow-wrap: anywhere; }
+.ci-review-item .ci-link { font-size: 0.88rem; align-self: start; padding-top: 0.15rem; }
+
+/* ── 完成 ── */
+.ci-done-list { margin: 0 0 2rem 1.5rem; max-width: 44rem; }
+.ci-done-list li { margin-bottom: 0.9rem; }
+.ci-done-list li strong { font-weight: 500; }
+.ci-done-list li p { color: var(--text-mid); font-size: 0.9rem; white-space: pre-wrap; }
+.ci-done-actions { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: center; }
+
+/* ── 底部行動列 ── */
+.ci-bar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 60;
+  background: rgba(250,247,242,0.96);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid var(--line);
+}
+.ci-bar-inner {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 0.7rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.ci-bar-count {
+  flex: 1;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-mid);
+}
+.ci-bar-count b { font-family: 'EB Garamond', serif; font-size: 1.35rem; font-weight: 500; color: var(--heat); }
+@media (max-width: 480px) {
+  .ci-bar-inner { gap: 0.5rem; padding: 0.6rem 1rem; }
+  .ci-bar .ci-btn { padding: 0.6rem 0.9rem; font-size: 0.88rem; }
+  .ci-bar-count { font-size: 0.8rem; line-height: 1.4; }
+}
+
+/* ── Toast ── */
+.ci-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 5.5rem;
+  transform: translate(-50%, 1rem);
+  max-width: calc(100% - 2rem);
+  padding: 0.65rem 1.1rem;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.88rem;
+  border-radius: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 80;
+}
+.ci-toast.is-show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ci-toast { transition: none; }
+}
+@media (max-width: 480px) {
+  .ci-reminder p { font-size: 0.82rem; }
+}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>職業興趣探索 · Saori 謝孟娟</title>
+  <meta name="description" content="從 100 個職業中挑出讓你熱血亢奮的工作，排出前 10 名並寫下原因。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/saori-base.css">
+  <link rel="stylesheet" href="css/career-interest.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JZJ4RQTVK1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JZJ4RQTVK1');
+</script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="self-discovery-tools.html" class="nav-back">職涯探索工具</a>
+  <div class="nav-title">職業興趣探索</div>
+</nav>
+
+<header class="ci-hero">
+  <h1 class="ci-hero-title">哪些工作，<br>光是想像<span class="ci-nowrap">就讓你熱血亢奮？</span></h1>
+  <p class="ci-hero-desc">從 100 個職業裡挑出最多 15 個、排出前 10 名，再寫下它們吸引你的原因。大約需要 20–30 分鐘，進度會自動存在這台裝置上，中途離開也能回來繼續。</p>
+</header>
+
+<!-- 全程提示：使用者要求每一步都明顯看得到 -->
+<aside class="ci-reminder" aria-label="挑選原則">
+  <p>請挑選你想像中能讓你感到 <strong>快樂</strong> 的工作內容，不需要考慮收入、能力、他人期望等因素，只需要考慮該職業是否能讓你 <strong>熱血亢奮</strong></p>
+</aside>
+
+<main class="ci-main">
+
+  <ol class="ci-steps" id="ci-steps" aria-label="進度">
+    <li data-step="1"><button type="button"><span class="ci-step-num">1</span>填寫註冊名稱</button></li>
+    <li data-step="2"><button type="button"><span class="ci-step-num">2</span>挑選職業</button></li>
+    <li data-step="3"><button type="button"><span class="ci-step-num">3</span>排出前 10 名</button></li>
+    <li data-step="4"><button type="button"><span class="ci-step-num">4</span>寫下原因</button></li>
+  </ol>
+
+  <p class="ci-resume" id="ci-resume" hidden>
+    已接續你上次的進度。
+    <button type="button" class="ci-link" id="ci-restart">清除進度、重新開始</button>
+  </p>
+
+  <!-- ── Step 1：註冊名稱 ── -->
+  <section class="ci-panel" id="panel-1" data-panel="1">
+    <h2 class="ci-panel-title">填寫註冊名稱</h2>
+    <p class="ci-panel-desc">請輸入 Saori 給你的註冊名稱，需要和登記的名稱完全一致才能繼續。</p>
+    <form class="ci-name-form" id="ci-name-form" novalidate>
+      <label for="ci-name" class="ci-label">註冊名稱</label>
+      <div class="ci-name-row">
+        <input type="text" id="ci-name" class="ci-input" autocomplete="off" placeholder="例如：王小明" maxlength="100" required>
+        <button type="submit" class="ci-btn" id="ci-name-btn">確認並開始</button>
+      </div>
+      <p class="ci-msg" id="ci-name-msg" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <!-- ── Step 2：挑選職業 ── -->
+  <section class="ci-panel" id="panel-2" data-panel="2" hidden>
+    <h2 class="ci-panel-title">挑選讓你熱血亢奮的職業</h2>
+    <p class="ci-panel-desc">憑直覺點選，至少 10 個、最多 15 個。再點一次可以取消。</p>
+    <div class="ci-search">
+      <label for="ci-search" class="ci-visually-hidden">搜尋職業</label>
+      <input type="search" id="ci-search" class="ci-input" placeholder="搜尋職業，例如：設計、engineer">
+    </div>
+    <div class="ci-jobs" id="ci-jobs" role="group" aria-label="職業清單"></div>
+    <p class="ci-empty" id="ci-jobs-empty" hidden>找不到符合的職業，換個關鍵字試試。</p>
+  </section>
+
+  <!-- ── Step 3：排序 ── -->
+  <section class="ci-panel" id="panel-3" data-panel="3" hidden>
+    <h2 class="ci-panel-title">排出你的前 10 名</h2>
+    <p class="ci-panel-desc">從候選職業中依序點選，第 1 名是最讓你熱血亢奮的工作。排好後可以用箭頭調整順序。</p>
+    <div class="ci-rank-layout">
+      <ol class="ci-ladder" id="ci-ladder" aria-label="前 10 名"></ol>
+      <div class="ci-pool-wrap">
+        <h3 class="ci-pool-title">候選職業</h3>
+        <ul class="ci-pool" id="ci-pool"></ul>
+        <p class="ci-empty" id="ci-pool-empty" hidden>候選都排進去了。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Step 4：原因 ── -->
+  <section class="ci-panel" id="panel-4" data-panel="4" hidden>
+    <h2 class="ci-panel-title">寫下它們吸引你的原因</h2>
+    <p class="ci-panel-desc">想像自己正在做這份工作：哪個畫面讓你興奮？為什麼它排在這個名次？幾句話就好。</p>
+    <ol class="ci-reasons" id="ci-reasons"></ol>
+  </section>
+
+  <!-- ── 送出前確認 ── -->
+  <section class="ci-panel" id="panel-review" data-panel="review" hidden>
+    <h2 class="ci-panel-title">送出前，再看一次你的清單</h2>
+    <p class="ci-panel-desc">這是 Saori 會收到的內容。想調整哪一則原因，點旁邊的「修改」；確認沒問題就按下方的送出。</p>
+    <ol class="ci-review" id="ci-review-list"></ol>
+    <p class="ci-msg" id="ci-submit-msg" role="status" aria-live="polite"></p>
+  </section>
+
+  <!-- ── 完成 ── -->
+  <section class="ci-panel ci-done" id="panel-done" data-panel="done" hidden>
+    <h2 class="ci-panel-title">已送出給 Saori</h2>
+    <p class="ci-panel-desc" id="ci-done-desc">謝謝你花時間認真想像。諮詢時我們會一起看這份清單，找出這些職業背後共同的興趣線索。</p>
+    <ol class="ci-done-list" id="ci-done-list"></ol>
+    <div class="ci-done-actions">
+      <button type="button" class="ci-btn ci-btn-ghost" id="ci-edit-again">修改後重新送出</button>
+      <button type="button" class="ci-link" id="ci-clear-done">清除這台裝置上的紀錄</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- 底部行動列：顯示目前步驟的計數與下一步 -->
+<div class="ci-bar" id="ci-bar" hidden>
+  <div class="ci-bar-inner">
+    <button type="button" class="ci-btn ci-btn-ghost" id="ci-prev">上一步</button>
+    <p class="ci-bar-count" id="ci-bar-count" aria-live="polite"></p>
+    <button type="button" class="ci-btn" id="ci-next">下一步</button>
+  </div>
+</div>
+
+<div class="ci-toast" id="ci-toast" role="status" aria-live="polite"></div>
+
+<script src="js/career-interest.js"></script>
+</body>
+</html>
