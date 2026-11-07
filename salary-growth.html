@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>薪資成長計算機 · Saori 謝孟娟</title>
+  <meta name="description" content="輸入起薪、每年調薪幅度和升遷／跳槽年份，看見未來每一年的月薪、年薪與累計收入。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/saori-base.css">
+  <link rel="stylesheet" href="css/salary-growth.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JZJ4RQTVK1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JZJ4RQTVK1');
+</script>
+</head>
+<body>
+
+<!-- ══════════ NAV ══════════ -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">回首頁</a>
+  <div class="nav-title">薪資成長計算機</div>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<header class="hero">
+  <div class="hero-inner">
+    <h1 class="hero-title">薪資成長計算機</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">輸入起薪和每年的調薪幅度<br>再標記可能升遷或跳槽的那一年<br>看看十年後的你，月薪會走到哪裡</p>
+  </div>
+</header>
+
+<!-- ══════════ MAIN ══════════ -->
+<main class="sg-page">
+
+  <!-- ── 輸入區 ── -->
+  <form class="sg-form" id="sgForm" novalidate>
+    <h2 class="sg-section-title">你的條件</h2>
+
+    <div class="sg-fields">
+      <div class="sg-field">
+        <label for="sgBase">起薪（月薪）</label>
+        <div class="sg-input-wrap">
+          <input type="number" id="sgBase" value="40000" min="1" step="1000" inputmode="numeric" required>
+          <span class="sg-unit">元</span>
+        </div>
+      </div>
+
+      <div class="sg-field">
+        <label for="sgRate">每年調薪幅度</label>
+        <div class="sg-input-wrap">
+          <input type="number" id="sgRate" value="3" min="0" step="0.1" inputmode="decimal" required>
+          <span class="sg-unit">%</span>
+        </div>
+      </div>
+
+      <div class="sg-field">
+        <label for="sgMonths">年薪以幾個月計</label>
+        <div class="sg-input-wrap">
+          <input type="number" id="sgMonths" value="14" min="12" step="0.5" inputmode="decimal" required>
+          <span class="sg-unit">個月</span>
+        </div>
+        <p class="sg-hint">12 個月底薪＋年終、三節等，常見是 13–16 個月</p>
+      </div>
+
+      <div class="sg-field">
+        <label for="sgYears">要算幾年</label>
+        <div class="sg-input-wrap">
+          <input type="number" id="sgYears" value="10" min="1" max="50" step="1" inputmode="numeric" required>
+          <span class="sg-unit">年</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 升遷／跳槽 -->
+    <fieldset class="sg-promos">
+      <legend>升遷／跳槽</legend>
+      <p class="sg-hint">那一年改用這裡的調幅，取代每年調薪。可以留空不填。</p>
+      <ol class="sg-promo-list" id="sgPromoList"></ol>
+      <button type="button" class="sg-btn-add" id="sgAddPromo">＋ 加一次升遷或跳槽</button>
+    </fieldset>
+
+    <p class="sg-error" id="sgError" role="alert" hidden></p>
+
+    <button type="submit" class="sg-btn-calc">計算薪資成長</button>
+  </form>
+
+  <!-- ── 結果區 ── -->
+  <section class="sg-results" id="sgResults" hidden aria-live="polite">
+
+    <p class="sg-verdict" id="sgVerdict"></p>
+
+    <dl class="sg-stats">
+      <div class="sg-stat"><dt>第 1 年月薪</dt><dd id="sgStartMonthly"></dd></div>
+      <div class="sg-stat"><dt>最後一年月薪</dt><dd id="sgEndMonthly"></dd></div>
+      <div class="sg-stat"><dt>成長倍數</dt><dd id="sgMultiple"></dd></div>
+      <div class="sg-stat"><dt>第 1 年年薪</dt><dd id="sgStartAnnual"></dd></div>
+      <div class="sg-stat"><dt>最後一年年薪</dt><dd id="sgEndAnnual"></dd></div>
+      <div class="sg-stat"><dt>累計總收入</dt><dd id="sgTotal"></dd></div>
+      <div class="sg-stat"><dt>整體漲幅</dt><dd id="sgOverall"></dd></div>
+      <div class="sg-stat"><dt>年均複合成長率</dt><dd id="sgCagr"></dd></div>
+      <div class="sg-stat"><dt>年薪計算基準</dt><dd id="sgMonthsOut"></dd></div>
+    </dl>
+
+    <figure class="sg-chart-block">
+      <figcaption class="sg-section-title">每年月薪</figcaption>
+      <div class="sg-legend" aria-hidden="true">
+        <span class="sg-key sg-key-regular">一般調薪</span>
+        <span class="sg-key sg-key-promo">升遷／跳槽</span>
+      </div>
+      <div class="sg-chart-scroll">
+        <ol class="sg-chart" id="sgChart"></ol>
+      </div>
+    </figure>
+
+    <div class="sg-table-block">
+      <h2 class="sg-section-title">年度明細</h2>
+      <div class="sg-table-scroll">
+        <table class="sg-table">
+          <thead>
+            <tr>
+              <th scope="col">年資</th>
+              <th scope="col" class="num">月薪</th>
+              <th scope="col" class="num" id="sgAnnualHead">年薪</th>
+              <th scope="col" class="num">調幅</th>
+              <th scope="col" class="num">累計年薪</th>
+            </tr>
+          </thead>
+          <tbody id="sgTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="sg-note">這是用固定比例推算的估計值，實際薪資會受產業、職級與公司制度影響。拿來比較不同選擇，比當成預測更有用。</p>
+  </section>
+
+</main>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="inner">
+    <div class="footer-links">
+      <a href="https://heysaori.com">heysaori.com</a>
+    </div>
+    <div class="footer-copy">© Saori · 謝孟娟 · heysaori.com</div>
+  </div>
+</footer>
+
+<script src="js/salary-growth.js"></script>
+</body>
+</html>
