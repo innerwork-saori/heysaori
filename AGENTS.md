@@ -105,7 +105,6 @@
 - `css/`：樣式檔，包含 base styles 與 page-specific styles
 - `js/`：前端互動邏輯，通常對應各頁功能
 - `GAS/`：Google Apps Script 相關程式碼或對應邏輯
-- `career-card/`：career card 功能或相關元件資源
 
 ### 主要頁面型態
 
