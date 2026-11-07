@@ -225,7 +225,7 @@
 <div class="section" id="step2">
   <div class="section-header">
     <h2>篩選與排序</h2>
-    <p>從你標記的重要卡片中，選出最重要的 10–20 張，再拖曳排序找出你的 Top 10。</p>
+    <p>從你標記的重要卡片中，選出最重要的 10–20 張，再排出你的 Top 10。</p>
   </div>
   <div style="margin-bottom:2rem">
     <h3 style="font-family:'Noto Serif TC',serif;font-size:1rem;margin-bottom:.8rem;color:var(--accent)">Step 2-1：選出最重要的卡片（10–20 張）</h3>
@@ -234,13 +234,18 @@
     <div id="step2-sel-grid" class="step2-sel-grid"></div>
   </div>
   <div id="step2-sort-section" style="display:none">
-    <h3 style="font-family:'Noto Serif TC',serif;font-size:1rem;margin-bottom:.5rem;color:var(--accent)">Step 2-2：拖曳排序，找出你的 Top 10</h3>
-    <p style="font-size:.8rem;color:var(--muted);margin-bottom:.5rem">把卡片拖曳到虛線<strong>上方</strong>並排序，排名第 1 在最上方。至少需要排好 <strong>10 張</strong>才能繼續。</p>
-    <div class="warn-msg" id="warn-sort">⚠️ 請將至少 10 張卡片拖曳到虛線上方完成排序。</div>
+    <h3 style="font-family:'Noto Serif TC',serif;font-size:1rem;margin-bottom:.5rem;color:var(--accent)">Step 2-2：排出你的 Top 10</h3>
+    <p style="font-size:.8rem;color:var(--muted);margin-bottom:.5rem">從候選卡片依序點選，第 1 名是你最在乎的價值觀。排好後可以用箭頭調整順序。至少排滿 <strong>前 10 名</strong>才能繼續，第 11 名以後可以選填。</p>
+    <div class="warn-msg" id="warn-sort">⚠️ 請先排滿前 10 名才能繼續。</div>
     <div id="sort-hint" style="font-size:.75rem;color:var(--muted);margin-bottom:.8rem"></div>
-    <div id="ranked-zone" class="drag-list" style="min-height:80px;border:2px dashed var(--accent3);border-radius:8px;transition:border-color .2s,background .2s;padding:4px 0"></div>
-    <hr class="top10-divider" style="margin:.8rem 0">
-    <div id="unranked-zone" class="drag-list" style="min-height:56px"></div>
+    <div class="lv-rank-layout">
+      <ol class="lv-ladder" id="lv-ladder" aria-label="價值觀排序"></ol>
+      <div class="lv-pool-wrap">
+        <h4 class="lv-pool-title">候選卡片</h4>
+        <ul class="lv-pool" id="lv-pool"></ul>
+        <p class="lv-pool-empty" id="lv-pool-empty" hidden>候選卡片都排進去了。</p>
+      </div>
+    </div>
   </div>
 </div>
 

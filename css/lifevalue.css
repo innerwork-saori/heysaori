@@ -74,20 +74,31 @@
   .step2-sel-card .card-info .name { font-size:.88rem; font-weight:600; }
   .step2-sel-card .card-info .cat { font-size:.65rem; color:var(--muted); margin-top:.15rem; }
   .step2-sel-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:.6rem; margin-bottom:2rem; }
-  .drag-list { display:flex; flex-direction:column; gap:.5rem; max-width:600px; }
-  .drag-item { background:white; border:1.5px solid var(--border); border-radius:8px; padding:.75rem 1rem; display:flex; align-items:center; gap:.8rem; cursor:grab; transition:all .2s; user-select:none; will-change:transform; transform:translateZ(0); }
-  .drag-item
-  .drag-item:active { cursor:grabbing; }
-  .drag-item.dragging { opacity:.3; border-style:dashed; }
-  .drag-item.drag-over { border-color:var(--accent); background:#fff8f6; transform:scale(1.01) translateZ(0); }
-  .drag-rank { font-size:.75rem; font-weight:700; color:white; background:var(--accent); width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-  .drag-rank.top10 { background:var(--accent); }
-  .drag-rank.below10 { background:var(--muted); }
-  .drag-handle { color:var(--border); font-size:1rem; flex-shrink:0; }
-  .drag-name { font-size:.88rem; font-weight:600; flex:1; }
-  .drag-cat { font-size:.65rem; color:var(--muted); }
-  .top10-divider { border:none; border-top:2px dashed var(--accent3); margin:.5rem 0; position:relative; }
-  .top10-divider::after { content:'↑ 拖曳到這裡排序 Top 10 ↑'; position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--paper); padding:0 .8rem; font-size:.65rem; color:var(--accent3); font-weight:700; white-space:nowrap; }
+  /* Step 2-2 排序階梯：左邊名次、右邊候選卡片 */
+  .lv-rank-layout { display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); gap:2rem; align-items:start; }
+  .lv-ladder { list-style:none; margin:0; padding:0; border-top:1px solid var(--border); }
+  .lv-rung { display:grid; grid-template-columns:3rem 1fr auto; align-items:center; gap:.5rem; min-height:3.4rem; border-bottom:1px solid var(--border); padding:.3rem 0; }
+  .lv-rung-num { font-family:'Noto Serif TC',serif; font-size:1.6rem; font-weight:300; line-height:1; color:var(--border); text-align:center; }
+  .lv-rung.is-filled .lv-rung-num { color:var(--accent); font-weight:600; }
+  .lv-rung.is-extra.is-filled .lv-rung-num { color:var(--muted); }
+  .lv-rung-name { font-size:.92rem; font-weight:600; line-height:1.4; }
+  .lv-rung-name small { display:block; font-size:.68rem; font-weight:500; }
+  .lv-rung-placeholder { font-size:.82rem; color:var(--muted); }
+  .lv-rung.is-next .lv-rung-placeholder { color:var(--accent); }
+  .lv-rung-actions { display:flex; gap:.25rem; }
+  .lv-rung-actions button { width:2.2rem; height:2.2rem; border:1px solid var(--border); border-radius:6px; background:white; font-size:.9rem; color:var(--muted); cursor:pointer; }
+  .lv-rung-actions button:hover:not(:disabled) { border-color:var(--accent); color:var(--ink); }
+  .lv-rung-actions button:disabled { opacity:.3; cursor:not-allowed; }
+  .lv-ladder-sep { padding:1.4rem 0 .5rem; font-size:.75rem; font-weight:600; color:var(--muted); border-bottom:1px solid var(--border); }
+  .lv-pool-wrap { position:sticky; top:200px; }
+  .lv-pool-title { font-family:'Noto Serif TC',serif; font-size:.9rem; font-weight:600; color:var(--ink); margin-bottom:.6rem; }
+  .lv-pool { list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:.45rem; }
+  .lv-pool button { font:inherit; font-size:.85rem; padding:.45rem .85rem; border:1.5px solid var(--border); border-radius:999px; background:white; color:var(--ink); cursor:pointer; }
+  .lv-pool button:hover { border-color:var(--accent); color:var(--accent); }
+  .lv-pool-empty { font-size:.8rem; color:var(--muted); }
+  .lv-pool-empty[hidden] { display:none; }
+  .lv-pool button:focus-visible, .lv-rung-actions button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  .lv-visually-hidden { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
   .reason-card { background:white; border:1.5px solid var(--border); border-radius:10px; padding:1.4rem; margin-bottom:1.2rem; position:relative; overflow:hidden; }
   .reason-card::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--accent); }
   .reason-rank { font-size:.65rem; font-weight:700; letter-spacing:.15em; color:var(--accent); margin-bottom:.3rem; }
@@ -237,8 +248,9 @@
     /* Step 2 選卡格：單欄 */
     .step2-sel-grid { grid-template-columns:1fr 1fr; }
 
-    /* 拖曳排序：全寬 */
-    .drag-list { max-width:100%; }
+    /* 排序階梯：候選卡片移到名次下方 */
+    .lv-rank-layout { grid-template-columns:1fr; }
+    .lv-pool-wrap { position:static; }
     .nav-btns { flex-direction:row; justify-content:stretch; }
     .nav-btn { flex:1; text-align:center; padding:.65rem .8rem; }
     .sticky-nav { padding:.65rem 1rem; gap:.5rem; }

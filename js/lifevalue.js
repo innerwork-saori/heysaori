@@ -865,231 +865,120 @@ function showSortSection() {
   // ranked 只保留仍在 selected 中的 id（已排序的保留順序）
   state.ranked = state.ranked.filter(id => state.selected.includes(id));
   // 未排序的卡片（不在 ranked 中）放在 unranked 區，不自動加入 ranked
-  renderDragList();
+  renderRanking();
 }
 
-// ─── DRAG & DROP (Step 2-2) ───────────────────────────────────────────────────
-let dragSrcIdx = null;
+// ─── 排序階梯 (Step 2-2) ──────────────────────────────────────────────────────
+// 從候選卡片依序點選放進下一個名次，再用 ↑ ↓ ✕ 調整。
+// 前 10 名必填；選了超過 10 張時，第 11 名以後選填（結果頁會顯示「其他你重視的價值觀」）。
+const TOP_N = 10;
 
-function renderDragList() {
-  const rankedZone   = document.getElementById('ranked-zone');
-  const unrankedZone = document.getElementById('unranked-zone');
-  if (!rankedZone || !unrankedZone) return;
-  rankedZone.innerHTML   = '';
-  unrankedZone.innerHTML = '';
+function renderRanking() {
+  const ladder = document.getElementById('lv-ladder');
+  const pool   = document.getElementById('lv-pool');
+  if (!ladder || !pool) return;
 
-  const unranked = state.selected.filter(id => !state.ranked.includes(id));
-  const allItems = [...state.ranked, ...unranked];
-
-  // ── 給 ranked-zone 本身加 dragover/drop，讓空白區域也能接收 ──
-  rankedZone.ondragover = (e) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    rankedZone.style.borderColor = 'var(--accent3)';
-    rankedZone.style.background  = 'rgba(212,168,75,.06)';
-  };
-  rankedZone.ondragleave = () => {
-    rankedZone.style.borderColor = 'transparent';
-    rankedZone.style.background  = '';
-  };
-  rankedZone.ondrop = (e) => {
-    e.preventDefault();
-    rankedZone.style.borderColor = 'transparent';
-    rankedZone.style.background  = '';
-    if (dragSrcIdx === null) return;
-    const unrankedNow = state.selected.filter(id => !state.ranked.includes(id));
-    const all = [...state.ranked, ...unrankedNow];
-    const srcWasRanked = dragSrcIdx < state.ranked.length;
-    // drop 到 ranked-zone 空白 → 加到 ranked 末尾
-    if (!srcWasRanked) {
-      const movedId = all[dragSrcIdx];
-      state.ranked.push(movedId);
-      saveState(); renderDragList();
+  const slots = state.selected.length;
+  ladder.innerHTML = '';
+  for (let i = 0; i < slots; i++) {
+    if (i === TOP_N) {
+      const sep = document.createElement('li');
+      sep.className = 'lv-ladder-sep';
+      sep.textContent = '第 11 名以後（選填）';
+      ladder.appendChild(sep);
     }
-  };
-
-  allItems.forEach((id, idx) => {
-    const card = getCard(id);
-    const isRanked = idx < state.ranked.length;
-    const rankNum  = idx + 1;
-    const item = document.createElement('div');
-    item.className = 'drag-item';
-    item.draggable = true;
-    item.dataset.id  = id;
-    item.dataset.idx = idx;
-    item.innerHTML = `
-      <div class="drag-rank ${isRanked ? (rankNum <= 10 ? 'top10' : 'below10') : 'below10'}" style="${!isRanked ? 'background:var(--border);color:var(--muted)' : ''}">${isRanked ? rankNum : '—'}</div>
-      <div class="drag-handle">⠿</div>
-      <div style="flex:1">
-        <div class="drag-name">${card.name}</div>
-        <div class="drag-cat" style="color:${CAT_COLORS[card.cat]||'var(--muted)'}">${card.cat}</div>
-      </div>`;
-    item.addEventListener('dragstart', onDragStart);
-    item.addEventListener('dragenter', onDragEnter);
-    item.addEventListener('dragover',  onDragOver);
-    item.addEventListener('dragleave', onDragLeave);
-    item.addEventListener('drop',      onDrop);
-    item.addEventListener('dragend',   onDragEnd);
-    item.addEventListener('touchstart', onTouchStart, {passive:true});
-    item.addEventListener('touchmove',  onTouchMove,  {passive:false});
-    item.addEventListener('touchend',   onTouchEnd);
-
-    if (isRanked) {
-      rankedZone.appendChild(item);
+    const id   = state.ranked[i];
+    const card = id != null ? getCard(id) : null;
+    const isNext = i === state.ranked.length;
+    const li = document.createElement('li');
+    li.className = 'lv-rung' + (card ? ' is-filled' : '') + (isNext ? ' is-next' : '') + (i >= TOP_N ? ' is-extra' : '');
+    if (card) {
+      li.innerHTML = `
+        <span class="lv-rung-num" aria-hidden="true">${i + 1}</span>
+        <div class="lv-rung-name">
+          <span class="lv-visually-hidden">第 ${i + 1} 名 </span>${card.name}
+          <small style="color:${CAT_COLORS[card.cat] || 'var(--muted)'}">${card.cat}</small>
+        </div>
+        <div class="lv-rung-actions">
+          <button type="button" data-act="up" data-i="${i}" aria-label="把${card.name}往前移" ${i === 0 ? 'disabled' : ''}>↑</button>
+          <button type="button" data-act="down" data-i="${i}" aria-label="把${card.name}往後移" ${i === state.ranked.length - 1 ? 'disabled' : ''}>↓</button>
+          <button type="button" data-act="remove" data-i="${i}" aria-label="把${card.name}移回候選">✕</button>
+        </div>`;
     } else {
-      unrankedZone.appendChild(item);
+      li.innerHTML = `
+        <span class="lv-rung-num" aria-hidden="true">${i + 1}</span>
+        <span class="lv-rung-placeholder">${isNext ? '點選候選卡片放進這裡' : ''}</span>
+        <span></span>`;
     }
+    ladder.appendChild(li);
+  }
+
+  pool.innerHTML = '';
+  const rest = state.selected.filter(id => !state.ranked.includes(id));
+  rest.forEach(id => {
+    const card = getCard(id);
+    const li = document.createElement('li');
+    li.innerHTML = `<button type="button" data-id="${id}">${card.name}</button>`;
+    pool.appendChild(li);
   });
+  const empty = document.getElementById('lv-pool-empty');
+  if (empty) empty.hidden = rest.length > 0;
 
   updateSortHint();
 }
 
 function updateSortHint() {
-  const unranked = state.selected.filter(id => !state.ranked.includes(id));
   const hint = document.getElementById('sort-hint');
-  if (hint) {
-    const top10Count = Math.min(state.ranked.length, 10);
-    hint.textContent = top10Count >= 10
-      ? `✅ 已排好 Top 10，可以繼續`
-      : `請將卡片拖曳到虛線上方排序（已排 ${top10Count} / 10）`;
-    hint.style.color = top10Count >= 10 ? 'var(--accent2)' : 'var(--muted)';
-  }
-}
-
-function onDragStart(e) {
-  dragSrcIdx = parseInt(e.currentTarget.dataset.idx);
-  e.currentTarget.classList.add('dragging');
-  e.dataTransfer.effectAllowed = 'move';
-  e.dataTransfer.setData('text/plain', dragSrcIdx.toString());
-}
-function onDragEnter(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  if (!e.currentTarget.classList.contains('dragging')) {
-    e.currentTarget.classList.add('drag-over');
-  }
-}
-function onDragOver(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  e.dataTransfer.dropEffect = 'move';
-  return false;
-}
-function onDragLeave(e) {
-  // 只在真正離開元素時移除（不是進入子元素）
-  if (e.currentTarget === e.target || !e.currentTarget.contains(e.relatedTarget)) {
-    e.currentTarget.classList.remove('drag-over');
-  }
-}
-function onDrop(e) {
-  e.preventDefault();
-  e.stopPropagation(); // 避免觸發 ranked-zone 的 ondrop
-  e.currentTarget.classList.remove('drag-over');
-  
-  const targetIdx = parseInt(e.currentTarget.dataset.idx);
-  if (dragSrcIdx === null || dragSrcIdx === targetIdx) return;
-
-  // 重建 allItems（ranked + unranked）
-  const unranked = state.selected.filter(id => !state.ranked.includes(id));
-  const allItems = [...state.ranked, ...unranked];
-
-  const movedId = allItems[dragSrcIdx];
-  allItems.splice(dragSrcIdx, 1);
-  allItems.splice(targetIdx, 0, movedId);
-
-  const srcWasRanked = dragSrcIdx < state.ranked.length;
-  const dstIsRanked  = targetIdx  < state.ranked.length;
-  let newLen = state.ranked.length;
-  if (!srcWasRanked && dstIsRanked) newLen = state.ranked.length + 1;
-  else if (srcWasRanked && !dstIsRanked) newLen = state.ranked.length - 1;
-
-  state.ranked = allItems.slice(0, newLen);
-  saveState();
-  renderDragList();
-}
-function onDragEnd(e) {
-  e.currentTarget.classList.remove('dragging');
-  document.querySelectorAll('.drag-item').forEach(el => {
-    el.classList.remove('dragging','drag-over');
-  });
-  dragSrcIdx = null;
-  // 強制重繪以清除殘影
-  requestAnimationFrame(() => {
-    document.querySelectorAll('.drag-item').forEach(el => {
-      el.style.transform = 'translateZ(0)';
-    });
-  });
-}
-
-// Touch drag support
-let touchDragIdx = null, touchClone = null, touchOffsetY = 0;
-function onTouchStart(e) {
-  touchDragIdx = parseInt(e.currentTarget.dataset.idx);
-  const rect = e.currentTarget.getBoundingClientRect();
-  touchOffsetY = e.touches[0].clientY - rect.top;
-  touchClone = e.currentTarget.cloneNode(true);
-  touchClone.style.cssText = `position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;opacity:.8;z-index:9999;pointer-events:none;transform:translateZ(0);`;
-  document.body.appendChild(touchClone);
-  e.currentTarget.style.opacity = '0.3';
-  e.currentTarget.style.pointerEvents = 'none';
-}
-function onTouchMove(e) {
-  e.preventDefault();
-  if (touchClone) {
-    touchClone.style.top = (e.touches[0].clientY - touchOffsetY) + 'px';
-    touchClone.style.transform = 'translateZ(0)';
-  }
-}
-function onTouchEnd(e) {
-  if (touchClone) { touchClone.remove(); touchClone = null; }
-  document.querySelectorAll('.drag-item').forEach(el => {
-    el.style.opacity = '';
-    el.style.pointerEvents = '';
-  });
-  const touch = e.changedTouches[0];
-  const els = document.elementsFromPoint(touch.clientX, touch.clientY);
-  const target = els.find(el => el.classList.contains('drag-item') && parseInt(el.dataset.idx) !== touchDragIdx);
-  if (target) {
-    const targetIdx = parseInt(target.dataset.idx);
-    const unranked = state.selected.filter(id => !state.ranked.includes(id));
-    const allItems = [...state.ranked, ...unranked];
-    const movedId = allItems[touchDragIdx];
-    allItems.splice(touchDragIdx, 1);
-    allItems.splice(targetIdx, 0, movedId);
-    const srcWasRanked = touchDragIdx < state.ranked.length;
-    const dstIsRanked = targetIdx < state.ranked.length;
-    let newLen = state.ranked.length;
-    if (!srcWasRanked && dstIsRanked) newLen = state.ranked.length + 1;
-    else if (srcWasRanked && !dstIsRanked) newLen = state.ranked.length - 1;
-    state.ranked = allItems.slice(0, newLen);
-    saveState();
-    renderDragList();
+  if (!hint) return;
+  const n = Math.min(state.ranked.length, TOP_N);
+  const extra = state.selected.length - TOP_N;
+  if (n < TOP_N) {
+    hint.textContent = `已排 ${n} / ${TOP_N}`;
+    hint.style.color = 'var(--muted)';
   } else {
-    // 沒有 drop 到卡片上，檢查是否 drop 到 ranked-zone 空白區域
-    const rankedZone = document.getElementById('ranked-zone');
-    if (rankedZone) {
-      const rect = rankedZone.getBoundingClientRect();
-      if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
-          touch.clientY >= rect.top  && touch.clientY <= rect.bottom) {
-        const unranked = state.selected.filter(id => !state.ranked.includes(id));
-        const all = [...state.ranked, ...unranked];
-        const srcWasRanked = touchDragIdx < state.ranked.length;
-        if (!srcWasRanked) {
-          const movedId = all[touchDragIdx];
-          state.ranked.push(movedId);
-          saveState(); renderDragList();
-        }
-      }
-    }
+    hint.textContent = extra > 0 && state.ranked.length < state.selected.length
+      ? '✅ 已排好 Top 10，可以繼續。想的話也可以把剩下的卡片排進第 11 名以後。'
+      : '✅ 已排好 Top 10，可以繼續';
+    hint.style.color = 'var(--accent2)';
   }
-  touchDragIdx = null;
-  // 強制重繪清除殘影
-  requestAnimationFrame(() => {
-    document.querySelectorAll('.drag-item').forEach(el => {
-      el.style.transform = 'translateZ(0)';
-    });
-  });
+  if (n >= TOP_N) document.getElementById('warn-sort')?.classList.remove('show');
 }
+
+function addToRanking(id) {
+  if (state.ranked.includes(id) || !state.selected.includes(id)) return;
+  state.ranked.push(id);
+  saveState();
+  renderRanking();
+}
+
+function onLadderAction(act, i) {
+  const r = state.ranked;
+  if (act === 'up' && i > 0) [r[i - 1], r[i]] = [r[i], r[i - 1]];
+  if (act === 'down' && i < r.length - 1) [r[i + 1], r[i]] = [r[i], r[i + 1]];
+  if (act === 'remove') r.splice(i, 1);
+  saveState();
+  renderRanking();
+  // 讓鍵盤使用者的焦點跟著移動的項目
+  if (act !== 'remove') {
+    const target = act === 'up' ? i - 1 : i + 1;
+    const b = document.querySelector(`#lv-ladder [data-act="${act}"][data-i="${target}"]:not(:disabled)`)
+           || document.querySelector(`#lv-ladder [data-i="${target}"]:not(:disabled)`);
+    if (b) b.focus();
+  }
+}
+
+(function bindRankingEvents() {
+  const ladder = document.getElementById('lv-ladder');
+  const pool   = document.getElementById('lv-pool');
+  if (ladder) ladder.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-act]');
+    if (btn && !btn.disabled) onLadderAction(btn.dataset.act, Number(btn.dataset.i));
+  });
+  if (pool) pool.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-id]');
+    if (btn) addToRanking(btn.dataset.id);
+  });
+})();
 
 function goToStep3() {
   if (state.selected.length < 10) {
@@ -1100,7 +989,7 @@ function goToStep3() {
   document.getElementById('warn-sel').classList.remove('show');
   if (state.ranked.length < 10) {
     document.getElementById('warn-sort').classList.add('show');
-    showToast('請將至少 10 張卡片拖曳到虛線上方完成排序');
+    showToast('請先排滿前 10 名');
     return;
   }
   document.getElementById('warn-sort').classList.remove('show');
