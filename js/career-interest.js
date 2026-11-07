@@ -1,5 +1,5 @@
 /* career-interest.js — 職業興趣探索（已合併舊版 career-card 熱情探索工具）
- * 流程：1 註冊名稱（需對應到試算表分頁）→ 2 挑選 10–15 個職業 → 3 分類動機
+ * 流程：1 註冊名稱（需對應到試算表分頁）→ 2 挑選 10–20 個職業 → 3 分類動機
  *      → 4 從挑選的職業排出前 10 名（純粹喜歡排在候選最前面）→ 5 寫原因與洞察 → 6 統計與反思 → 送出到 GAS
  * 進度存在 localStorage，中斷後回來可繼續。
  */
@@ -11,7 +11,7 @@ const CI_TOKEN   = 'saori-ci-2026-hT4qW'; // ← 需與 GAS 中的 TOKEN 相同
 
 const STATE_KEY  = 'career-interest-state-v1'; // 沿用舊 key：舊版進度載入時會補上新欄位
 const PICK_MIN   = 10;
-const PICK_MAX   = 15;
+const PICK_MAX   = 20;  // 上限避免後面分類、洞察的步驟拉太長（需與 GAS 相同）
 const PURE_MIN   = 5;   // 「純粹喜歡」至少幾個才能排序
 const RANK_SIZE  = 10;  // 一律排 10 名：純粹喜歡不足 10 個時，從其他挑選的職業補上
 

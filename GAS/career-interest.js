@@ -37,7 +37,7 @@ const TOKEN          = 'saori-ci-2026-hT4qW'; // ← 需與前端 CI_TOKEN 相�
 const EXCLUDED_SHEETS = ['工作表1', '範本', 'template'];
 
 const PICK_MIN  = 10;
-const PICK_MAX  = 15;
+const PICK_MAX  = 20; // 需與前端 PICK_MAX 相同
 const PURE_MIN  = 5;
 const RANK_SIZE = 10; // 一律排 10 名，純粹喜歡不足時可用其他挑選的職業補上
 const JOB_COUNT = 100;
@@ -55,7 +55,7 @@ const HEADERS = [
   'SN',
   '職業名稱 (Occupation)',
   '興趣代碼 (Holland Code)',
-  '挑選至多 15 項打勾',
+  '挑選 10–20 項打勾',
   '排名／分類',
   '原因／洞察'
 ];
@@ -194,7 +194,7 @@ function writeSubmission(sheet, data, jobs) {
   if (sheet.getLastRow() < 2) fillTemplate(sheet, jobs);
   // 既有分頁（舊版或從範本複製）的標題統一成目前的格式
   sheet.getRange(1, 2).setValue(HEADERS[1]);
-  sheet.getRange(1, 5, 1, 2).setValues([[HEADERS[4], HEADERS[5]]]);
+  sheet.getRange(1, 4, 1, 3).setValues([[HEADERS[3], HEADERS[4], HEADERS[5]]]);
 
   const lastRow = sheet.getLastRow();
   const rows = sheet.getRange(2, 1, lastRow - 1, 3).getValues(); // A:C
