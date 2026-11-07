@@ -135,6 +135,11 @@
     <p class="ci-panel-desc">這是 Saori 會收到的內容。想調整哪一則，點旁邊的「修改」；確認沒問題就按下方的送出。</p>
     <ol class="ci-review" id="ci-review-list"></ol>
     <div id="ci-review-extra"></div>
+    <div class="ci-email">
+      <label for="ci-email" class="ci-label">寄送報告的 Email</label>
+      <input type="email" id="ci-email" class="ci-input" autocomplete="email" inputmode="email" placeholder="例如：you@example.com" maxlength="200" required aria-describedby="ci-email-hint">
+      <p class="ci-email-hint" id="ci-email-hint">送出後，PDF 報告會寄到這個信箱，Saori 也會收到一份。</p>
+    </div>
     <p class="ci-msg" id="ci-submit-msg" role="status" aria-live="polite"></p>
   </section>
 

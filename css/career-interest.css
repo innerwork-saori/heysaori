@@ -487,6 +487,9 @@ body { padding-bottom: 6rem; }
 .ci-review-dl dd { color: var(--text-mid); line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
 .ci-review-dl dd.is-empty { color: var(--text-soft); }
 
+.ci-email { max-width: 28rem; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+.ci-email-hint { margin-top: 0.4rem; font-size: 0.85rem; color: var(--text-soft); }
+
 .ci-done-type { font-family: 'Noto Serif TC', serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 1.5rem; }
 
 /* ── 完成 ── */

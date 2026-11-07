@@ -15,6 +15,8 @@ const PICK_MAX   = 15;
 const PURE_MIN   = 5;   // 「純粹喜歡」至少幾個才能排序
 const RANK_SIZE  = 10;  // 一律排 10 名：純粹喜歡不足 10 個時，從其他挑選的職業補上
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 與 GAS validateEmail 相同
+
 // 動機分類（值會送到 GAS，需與 GAS 的 CLS_LABELS 相同）
 const CLS_LABELS = { pure: '純粹喜歡', others: '他人期望', capable: '僅是有能力做' };
 
@@ -151,6 +153,8 @@ function emptyState() {
     ranking: [],        // 純粹喜歡的名次（sn）
     reasons: {},        // { sn: 原因 }（只送出有名次的）
     insights: {},       // { sn: 洞察 }（他人期望 / 僅是有能力做）
+    email: '',          // 寄送 PDF 報告的信箱
+    emailSent: null,    // 最近一次送出時報告是否寄出
     reflections: [],    // 反思回答，index 對應 REFLECTION_QUESTIONS
     submittedAt: null
   };
@@ -571,6 +575,9 @@ function renderReview() {
     ]));
   });
 
+  const emailInput = $('ci-email');
+  if (emailInput && !emailInput.value) emailInput.value = state.email || '';
+
   const extra = $('ci-review-extra');
   extra.innerHTML = '';
   ['others', 'capable'].forEach(c => {
@@ -598,6 +605,9 @@ function editReason(sn) {
 }
 
 function renderDone() {
+  $('ci-done-desc').textContent = state.emailSent === false
+    ? '你的內容已經存進 Saori 的試算表，但這次 PDF 報告沒有寄出。可以按「修改後重新送出」再試一次，或直接告訴 Saori。'
+    : `PDF 報告已寄到 ${state.email || '你的信箱'}，Saori 也收到了一份。諮詢時我們會一起看這份清單，找出這些職業背後共同的興趣線索。`;
   $('ci-done-type').textContent = pureList().length
     ? `你的主要類型：${primaryTypeText(hollandStats())}`
     : '';
@@ -821,6 +831,7 @@ function buildPayload() {
     token: CI_TOKEN,
     action: 'submit',
     name: state.name,
+    email: state.email.trim(),
     picks: state.picks,
     classifications,
     ranking: state.ranking,
@@ -838,6 +849,14 @@ async function submit() {
   if (!canEnter('review')) {
     msg.textContent = '還有步驟沒完成，請確認每個名次都寫下原因後再送出。';
     msg.classList.add('is-error');
+    return;
+  }
+  if (!EMAIL_RE.test(state.email.trim())) {
+    msg.textContent = state.email.trim()
+      ? 'Email 格式看起來不對，請確認後再送出。'
+      : '請填寫寄送報告的 Email。';
+    msg.classList.add('is-error');
+    $('ci-email').focus();
     return;
   }
   if (!gasConfigured()) {
@@ -858,14 +877,16 @@ async function submit() {
     const result = await res.json();
     if (result && result.ok) {
       state.submittedAt = new Date().toISOString();
+      state.emailSent = result.emailSent === true;
       submitting = false;
       goTo('done');
-      showToast('已送出給 Saori');
+      showToast(state.emailSent ? '已送出，報告寄到你的信箱了' : '已送出給 Saori');
       return;
     }
     const errors = {
       not_found: `試算表裡找不到「${state.name}」分頁，請通知 Saori。你的內容已存在這台裝置上。`,
       invalid_data: '資料不完整，請確認每一步都完成後再送出。',
+      invalid_email: 'Email 格式看起來不對，請確認後再送出。',
       unauthorized: '工具設定有誤，請通知 Saori。'
     };
     msg.textContent = errors[result && result.error] || '送出失敗，請稍後再試。你的內容已存在這台裝置上。';
@@ -884,6 +905,7 @@ function resetAll() {
   clearState();
   $('ci-name').value = '';
   $('ci-search').value = '';
+  $('ci-email').value = '';
   $('ci-resume').hidden = true;
   render();
 }
@@ -924,6 +946,11 @@ function bindEvents() {
     const bucket = ta.dataset.kind === 'insight' ? state.insights : state.reasons;
     bucket[ta.dataset.sn] = ta.value;
     renderBar();
+    saveSoon();
+  });
+
+  $('ci-email').addEventListener('input', e => {
+    state.email = e.target.value;
     saveSoon();
   });
 
