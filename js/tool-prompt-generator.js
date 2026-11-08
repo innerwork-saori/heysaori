@@ -153,46 +153,42 @@ const EXAMPLE_AI_REPLY = `目前我不建議直接開始開發，因為你的需
   是否需要對帳規則：
   是否需要匯出 CSV：`;
 
-function toggleExamplePrompt() {
-  const body = document.getElementById('examplePromptBody');
-  const chevron = document.getElementById('exampleChevron');
-  const toggle = document.getElementById('examplePromptToggle');
-  if (!body || !chevron || !toggle) return;
+/* 範例彈出視窗：用原生 <dialog>，Esc 關閉與焦點鎖定由瀏覽器處理 */
+function openExampleDialog() {
+  const dialog = document.getElementById('exampleDialog');
+  if (!dialog) return;
 
-  const isOpen = !body.hidden;
+  // 第一次打開時才填入範例內容
+  const outputEl = document.getElementById('examplePromptOutput');
+  if (outputEl && !outputEl.textContent) outputEl.textContent = EXAMPLE_PROMPT;
+  const replyEl = document.getElementById('exampleAiReplyOutput');
+  if (replyEl && !replyEl.textContent) replyEl.textContent = EXAMPLE_AI_REPLY;
 
-  if (isOpen) {
-    // 收起
-    body.hidden = true;
-    chevron.classList.remove('open');
-    toggle.setAttribute('aria-expanded', 'false');
-  } else {
-    // 展開，並確保範例內容已填入
-    const outputEl = document.getElementById('examplePromptOutput');
-    if (outputEl && !outputEl.textContent) {
-      outputEl.textContent = EXAMPLE_PROMPT;
-    }
-    const replyEl = document.getElementById('exampleAiReplyOutput');
-    if (replyEl && !replyEl.textContent) {
-      replyEl.textContent = EXAMPLE_AI_REPLY;
-    }
-    body.hidden = false;
-    chevron.classList.add('open');
-    toggle.setAttribute('aria-expanded', 'true');
-  }
+  dialog.showModal();
+  const body = dialog.querySelector('.example-dialog-body');
+  if (body) body.scrollTop = 0;
 }
 
-// 鍵盤支援（Enter / Space 觸發展開）
+function closeExampleDialog() {
+  const dialog = document.getElementById('exampleDialog');
+  if (dialog && dialog.open) dialog.close();
+}
+
+// 看完範例：關掉視窗，直接帶到第 1 題
+function startFromExample() {
+  closeExampleDialog();
+  const firstQuestion = document.getElementById('toolTypePills');
+  if (!firstQuestion) return;
+  firstQuestion.closest('.field').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// 點視窗外的灰色背景也能關閉
 document.addEventListener('DOMContentLoaded', function () {
-  const toggle = document.getElementById('examplePromptToggle');
-  if (toggle) {
-    toggle.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        toggleExamplePrompt();
-      }
-    });
-  }
+  const dialog = document.getElementById('exampleDialog');
+  if (!dialog) return;
+  dialog.addEventListener('click', function (e) {
+    if (e.target === dialog) closeExampleDialog();
+  });
 });
 
 /* ── Pill toggle ── */

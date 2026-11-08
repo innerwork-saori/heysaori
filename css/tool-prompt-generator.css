@@ -169,27 +169,170 @@
   letter-spacing: 0.04em;
 }
 
-.example-prompt-chevron {
-  font-size: 0.75rem;
-  color: var(--accent2);
-  transition: transform 0.25s ease;
+.example-prompt-open {
   flex-shrink: 0;
+  margin-left: 1rem;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--accent3);
+  border-radius: 2px;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--accent1);
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
 }
-.example-prompt-chevron.open {
-  transform: rotate(90deg);
+.example-prompt-toggle:hover .example-prompt-open {
+  background: var(--accent3);
+  color: var(--ink);
+}
+.example-prompt-toggle:focus-visible {
+  outline: 2px solid var(--accent2);
+  outline-offset: -2px;
 }
 
-.example-prompt-body {
-  border-top: 1px solid var(--paper-mid);
+/* ── 範例彈出視窗 ── */
+.example-dialog {
+  width: min(760px, calc(100vw - 2rem));
+  max-height: min(88vh, 900px);
+  margin: auto; /* saori-base 的 * { margin:0 } 會蓋掉 dialog 預設的置中 */
+  padding: 0;
+  border: 1px solid var(--paper-mid);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--text-main);
+  box-shadow: 0 24px 60px rgba(28, 26, 23, 0.28);
+}
+.example-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  animation: example-dialog-in 0.22s ease-out;
+}
+.example-dialog::backdrop {
+  background: rgba(28, 26, 23, 0.55);
+}
+body:has(.example-dialog[open]) { overflow: hidden; }
+
+@keyframes example-dialog-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.example-dialog-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.3rem 1.6rem 1.1rem;
+  border-bottom: 1px solid var(--paper-mid);
+  background: var(--paper-warm);
+}
+.example-dialog-close {
+  flex-shrink: 0;
+  padding: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-mid);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 1.4rem;
+  line-height: 1;
+  letter-spacing: 0;
+}
+.example-dialog-close:hover {
+  background: transparent;
+  border-color: var(--paper-mid);
+  color: var(--ink);
+}
+.example-dialog-close:focus-visible,
+.example-dialog-cta:focus-visible {
+  outline: 2px solid var(--accent2);
+  outline-offset: 2px;
+}
+
+.example-dialog-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 1.6rem;
+}
+
+.example-dialog-foot {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.9rem 1.6rem;
+  border-top: 1px solid var(--paper-mid);
   background: var(--paper);
 }
-.example-prompt-body[hidden] {
-  display: none;
+.example-dialog-cta { width: auto; }
+
+/* 三個步驟：需求 → Prompt → AI 回覆，左側用細線串起來 */
+.example-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: example-step;
+}
+.example-step {
+  position: relative;
+  padding: 0 0 1.8rem 2.4rem;
+  counter-increment: example-step;
+}
+.example-step:last-child { padding-bottom: 0; }
+.example-step::before {
+  content: counter(example-step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--accent3);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--accent1);
+  font-family: 'EB Garamond', serif;
+  font-size: 0.85rem;
+  line-height: 1.4rem;
+  text-align: center;
+}
+.example-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: calc(0.75rem - 0.5px);
+  top: 1.7rem;
+  bottom: 0.2rem;
+  width: 1px;
+  background: var(--paper-mid);
+}
+.example-step-title {
+  margin: 0.1rem 0 0.7rem;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-main);
 }
 
-.example-scenario-header {
-  margin-bottom: 1.4rem;
+@media (max-width: 620px) {
+  /* 手機：從底部滑上來的面板，和「你的 Prompt」底部面板一致 */
+  .example-dialog {
+    width: 100vw;
+    max-width: 100vw;
+    max-height: 92vh;
+    margin: auto 0 0;
+    border-width: 1px 0 0;
+  }
+  .example-dialog-head { padding: 1rem 1.2rem 0.9rem; }
+  .example-dialog-body { padding: 1.2rem; }
+  .example-dialog-foot { padding: 0.8rem 1.2rem; }
+  .example-dialog-cta { width: 100%; }
+  .example-step { padding-left: 2.1rem; }
+  .example-prompt-open { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .example-dialog[open] { animation: none; }
 }
 
 .example-scenario-tag {
@@ -211,23 +354,15 @@
   font-weight: 600;
   color: var(--text-main);
   letter-spacing: 0.06em;
-  margin-bottom: 0.4rem;
+  margin: 0;
 }
 
 .example-scenario-desc {
-  font-size: 0.78rem;
-  color: var(--text-soft);
-  line-height: 1.8;
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-mid);
+  line-height: 1.9;
   letter-spacing: 0.04em;
-}
-
-.example-prompt-divider-label {
-  font-size: 0.7rem;
-  color: var(--accent2);
-  letter-spacing: 0.12em;
-  margin-bottom: 0.8rem;
-  font-family: 'EB Garamond', serif;
-  font-style: italic;
 }
 
 .example-prompt-output {
@@ -240,11 +375,13 @@
   line-height: 1.9;
   letter-spacing: 0.02em;
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
   overflow-x: auto;
   margin: 0 0 1rem;
 }
 
 .example-prompt-note {
+  margin: 0;
   font-size: 0.72rem;
   color: var(--text-soft);
   letter-spacing: 0.04em;
@@ -254,29 +391,6 @@
 }
 
 /* ── AI 回覆區塊 ── */
-.example-ai-reply-header {
-  margin-top: 1.8rem;
-  margin-bottom: 0.8rem;
-  display: flex;
-  align-items: baseline;
-  gap: 0.8rem;
-  flex-wrap: wrap;
-}
-
-.example-ai-reply-label {
-  font-family: 'Noto Serif TC', serif;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--text-main);
-  letter-spacing: 0.08em;
-}
-
-.example-ai-reply-sub {
-  font-size: 0.72rem;
-  color: var(--text-soft);
-  letter-spacing: 0.04em;
-}
-
 .example-ai-reply-output {
   background: #232b2b;
   color: rgba(180,220,200,0.88);
