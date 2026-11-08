@@ -207,6 +207,9 @@ function togglePill(el) {
     document.querySelectorAll('#toolTypePills .tool-pill.active').forEach(p => {
       if (p !== el && !!p.dataset.unsure !== pickedUnsure) p.classList.remove('active');
     });
+    // 選了「我不確定」：順便打開「幫我選」的問題，給使用者一個縮小範圍的機會
+    const helper = document.getElementById('toolHelper');
+    if (pickedUnsure && helper) helper.open = true;
   }
   saveAll();
   resetOutput();
