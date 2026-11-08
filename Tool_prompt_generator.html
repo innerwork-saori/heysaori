@@ -86,15 +86,29 @@
       <div class="field full">
         <label>1. 你想做哪一種工具？<span class="req">必填</span></label>
         <div class="tool-type-group" id="toolTypePills">
-          <span class="tool-pill" onclick="togglePill(this,'網頁工具')">🌐 網頁工具</span>
-          <span class="tool-pill" onclick="togglePill(this,'Chrome 外掛')">🔌 Chrome 外掛</span>
-          <span class="tool-pill" onclick="togglePill(this,'Line Bot')">💬 Line Bot</span>
-          <span class="tool-pill" onclick="togglePill(this,'試算表自動化')">📊 試算表自動化</span>
-          <span class="tool-pill" onclick="togglePill(this,'桌面應用程式')">🖥 桌面應用程式</span>
-          <span class="tool-pill" onclick="togglePill(this,'其他')">✏️ 其他</span>
+          <span class="tool-pill" data-label="🌐 網頁工具" onclick="togglePill(this)"><span class="tool-pill-name">🌐 網頁工具</span><span class="tool-pill-desc">打開一個網址就能用，手機、電腦都可以</span></span>
+          <span class="tool-pill" data-label="🔌 Chrome 外掛" onclick="togglePill(this)"><span class="tool-pill-name">🔌 Chrome 外掛</span><span class="tool-pill-desc">逛某個網站時，旁邊多一個小按鈕幫你做事</span></span>
+          <span class="tool-pill" data-label="💬 Line Bot" onclick="togglePill(this)"><span class="tool-pill-name">💬 Line Bot</span><span class="tool-pill-desc">在 LINE 裡跟它對話，自動回覆或幫你記錄</span></span>
+          <span class="tool-pill" data-label="📊 試算表自動化" onclick="togglePill(this)"><span class="tool-pill-name">📊 試算表自動化</span><span class="tool-pill-desc">讓 Google 試算表自己整理、計算或寄信</span></span>
+          <span class="tool-pill" data-label="🖥 桌面應用程式" onclick="togglePill(this)"><span class="tool-pill-name">🖥 桌面應用程式</span><span class="tool-pill-desc">裝在電腦上，處理電腦裡的檔案，不連網也能用</span></span>
+          <span class="tool-pill" data-label="✏️ 其他" onclick="togglePill(this)"><span class="tool-pill-name">✏️ 其他</span><span class="tool-pill-desc">以上都不像，在下面的欄位說明</span></span>
+          <span class="tool-pill tool-pill-unsure" data-label="🤔 我不確定" data-unsure="1" onclick="togglePill(this)"><span class="tool-pill-name">🤔 我不確定，請 AI 建議</span><span class="tool-pill-desc">AI 會依你填的需求，先推薦適合的形式再動手</span></span>
         </div>
+        <details class="tool-helper" id="toolHelper">
+          <summary>🧭 不知道選哪個？回答一題幫你選</summary>
+          <p class="tool-helper-q">你平常在哪裡做這件事？</p>
+          <div class="tool-helper-options">
+            <button type="button" onclick="pickToolType('📊 試算表自動化')">在 Google 試算表裡整理資料</button>
+            <button type="button" onclick="pickToolType('🔌 Chrome 外掛')">逛某個網站的時候</button>
+            <button type="button" onclick="pickToolType('💬 Line Bot')">在 LINE 跟客人或朋友對話時</button>
+            <button type="button" onclick="pickToolType('🖥 桌面應用程式')">處理電腦裡的檔案</button>
+            <button type="button" onclick="pickToolType('🌐 網頁工具')">都不是，想要一個打開就能用的頁面</button>
+            <button type="button" onclick="pickToolType('🤔 我不確定')">我也說不上來</button>
+          </div>
+        </details>
+        <div class="tool-helper-result" id="toolHelperResult" hidden></div>
         <input id="toolTypeOther" placeholder="選了「其他」的話，在這裡說明是什麼" style="margin-top:8px;">
-        <div class="field-hint">不確定就選「網頁工具」，最容易讓 AI 做出來。</div>
+        <div class="field-hint">看不懂這些也沒關係，選「我不確定」就好，AI 會先幫你判斷。</div>
       </div>
       <div class="field full">
         <label for="goalWho">2. 這工具給誰用、幫他解決什麼麻煩？<span class="req">必填</span></label>

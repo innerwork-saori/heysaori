@@ -196,16 +196,46 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 /* ── Pill toggle ── */
-function togglePill(el, val) {
+function togglePill(el) {
   el.classList.toggle('active');
+  // 使用者自己改了選項，「已幫你選」的提示就收起來
+  const helperResult = document.getElementById('toolHelperResult');
+  if (helperResult) helperResult.hidden = true;
+  // 「我不確定」和其他選項互斥：選了一邊就取消另一邊
+  if (el.classList.contains('active')) {
+    const pickedUnsure = !!el.dataset.unsure;
+    document.querySelectorAll('#toolTypePills .tool-pill.active').forEach(p => {
+      if (p !== el && !!p.dataset.unsure !== pickedUnsure) p.classList.remove('active');
+    });
+  }
   saveAll();
   resetOutput();
 }
 
 function getActivePills() {
-  return [...document.querySelectorAll('#toolTypePills .tool-pill.active')]
-    .map(p => p.textContent.trim())
+  return [...document.querySelectorAll('#toolTypePills .tool-pill.active:not([data-unsure])')]
+    .map(p => p.dataset.label)
     .join('、');
+}
+
+/* ── 「幫我選」：依使用情境直接選好工具類型 ── */
+function pickToolType(label) {
+  const pills = document.querySelectorAll('#toolTypePills .tool-pill');
+  pills.forEach(p => p.classList.toggle('active', p.dataset.label === label));
+  saveAll();
+  resetOutput();
+
+  const helper = document.getElementById('toolHelper');
+  if (helper) helper.open = false;
+  const result = document.getElementById('toolHelperResult');
+  if (result) {
+    result.textContent = `✓ 已幫你選「${label}」。不對的話，直接點上面的選項修改就好。`;
+    result.hidden = false;
+  }
+}
+
+function isToolTypeUnsure() {
+  return !!document.querySelector('#toolTypePills .tool-pill.active[data-unsure]');
 }
 
 /* ── Helpers ── */
@@ -225,8 +255,8 @@ function resetOutput() {
 
 /* ── 必填檢查（按「複製 Prompt」時才跑） ── */
 function checkPrompt() {
-  if (!getActivePills() && !vals('toolTypeOther')) {
-    return { message: '第 1 題還沒選：你想做哪一種工具？不確定就選「網頁工具」✨', focusId: 'toolTypeOther' };
+  if (!getActivePills() && !isToolTypeUnsure() && !vals('toolTypeOther')) {
+    return { message: '第 1 題還沒選：你想做哪一種工具？看不懂的話選「我不確定」就好 ✨', focusId: 'toolTypeOther' };
   }
   if (!vals('goalWho')) {
     return { message: '第 2 題「這工具給誰用、幫他解決什麼麻煩」最重要，請先寫一兩句 🙏', focusId: 'goalWho' };
@@ -244,7 +274,7 @@ function checkPrompt() {
 
 function promptProgress() {
   const done = [
-    getActivePills() || vals('toolTypeOther'),
+    getActivePills() || isToolTypeUnsure() || vals('toolTypeOther'),
     vals('goalWho'),
     vals('inputFields'),
     vals('outputFormat'),
@@ -254,12 +284,20 @@ function promptProgress() {
 
 /* ── 組出 Prompt ── */
 function buildPrompt() {
-  const toolTypeFull = [getActivePills(), vals('toolTypeOther')].filter(Boolean).join('（') + (vals('toolTypeOther') ? '）' : '');
+  const unsure = isToolTypeUnsure();
+  const toolTypeFull = unsure
+    ? '（我不確定，請依下方需求建議最適合的形式）'
+    : [getActivePills(), vals('toolTypeOther')].filter(Boolean).join('（') + (vals('toolTypeOther') ? '）' : '');
 
   const sections = [];
 
   sections.push(`你是一位專業的軟體工程師、UIUX 設計師與系統分析師。`);
-  sections.push(`請先釐清以下需求（如有不完善之處，請提問或提出建議與我確認），確認後再開發工具並輸出完整可直接使用的靜態網頁程式碼。`);
+  if (unsure) {
+    sections.push(`我不是工程師，不確定這個需求適合做成哪一種工具。請先根據下方需求，建議 1–2 種最適合的工具形式（例如：網頁工具、Chrome 外掛、LINE Bot、Google 試算表自動化、桌面應用程式），用白話說明為什麼適合、我需要準備什麼、有什麼限制。`);
+    sections.push(`等我選定工具形式後，再釐清其餘需求（如有不完善之處，請提問或提出建議與我確認），確認後再開發工具並輸出完整可直接使用的程式碼。`);
+  } else {
+    sections.push(`請先釐清以下需求（如有不完善之處，請提問或提出建議與我確認），確認後再開發工具並輸出完整可直接使用的靜態網頁程式碼。`);
+  }
 
   sections.push(`\n${'='.repeat(60)}`);
   sections.push(`【工具基本資訊】`);
@@ -332,7 +370,10 @@ function buildPrompt() {
   const isChrome = getActivePills().includes('Chrome');
   const isWeb = getActivePills().includes('網頁') || !getActivePills();
 
-  if (isChrome) {
+  if (unsure) {
+    sections.push(`- 依我們確認的工具形式輸出完整程式碼；若是網頁工具，請輸出單一 HTML 檔案（CSS 與 JavaScript 全部內嵌）`);
+    sections.push(`- 若需要多個檔案，請逐一輸出，並說明各檔案的用途、存放位置與安裝或部署步驟`);
+  } else if (isChrome) {
     sections.push(`- 請輸出完整的 Chrome Extension 結構（manifest.json、popup.html、popup.js 等）`);
     sections.push(`- 使用 Manifest V3`);
     sections.push(`- 每個檔案請單獨輸出，並說明各檔案的用途與存放位置`);
