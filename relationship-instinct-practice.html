@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>關係底層邏輯對齊練習 · 人生探索手札</title>
+  <meta name="description" content="兩個人各拿一張紙，憑直覺回答三題，再交換對照，看看你們遇到麻煩、面對人情、規劃未來時的本能反應。可直接列印成 A4 練習單。">
+  <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JZJ4RQTVK1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JZJ4RQTVK1');
+</script>
+<style>
+  :root {
+    --desk: #efe7da;
+    --paper: #faf7f2;   /* 同 saori-base.css --paper */
+    --ink: #3b2f26;
+    --ink-soft: #6e5e50;
+    --brown: #8b6f47;   /* 同 saori-base.css --accent1 */
+    --terracotta: #a9674b;
+    --rule: #d8cab7;
+    --rule-soft: #e7dccd;
+
+    --serif: "Noto Serif TC", "Source Han Serif TC", "Songti TC", "PMingLiU", "MingLiU", serif;
+    --sans: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", "Heiti TC", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--desk);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  a { color: var(--brown); }
+
+  :focus-visible {
+    outline: 2px solid var(--terracotta);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* ── 上方工具列（列印時隱藏） ── */
+  .toolbar {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 20px 16px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-home {
+    font-size: 14px;
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+  .toolbar-home:hover { color: var(--brown); text-decoration: underline; }
+
+  .toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-hint {
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  .print-btn {
+    font: inherit;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    color: var(--paper);
+    background: var(--terracotta);
+    border: 0;
+    border-radius: 999px;
+    padding: 9px 22px;
+    cursor: pointer;
+  }
+  .print-btn:hover { background: #955a40; }
+
+  /* ── 練習單本體 ── */
+  .sheet {
+    max-width: 780px;
+    margin: 0 auto;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 48px 56px 40px;
+  }
+
+  .sheet-head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    align-items: center;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .wheel {
+    width: 72px;
+    height: 72px;
+    color: var(--terracotta);
+  }
+
+  .sheet-title {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 1.3;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+  }
+
+  .sheet-sub {
+    margin: 4px 0 0;
+    font-family: var(--serif);
+    font-size: 15px;
+    color: var(--brown);
+    letter-spacing: 0.12em;
+  }
+
+  .intro {
+    margin: 20px 0 0;
+    max-width: 38em;
+    color: var(--ink-soft);
+  }
+
+  .filler {
+    margin: 16px 0 0;
+    font-size: 15px;
+    color: var(--ink-soft);
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .filler span {
+    display: inline-block;
+    min-width: 9em;
+    border-bottom: 1px solid var(--ink-soft);
+    margin-left: 4px;
+  }
+
+  /* ── 各部分 ── */
+  .part { margin-top: 34px; }
+
+  .part-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin: 0 0 14px;
+  }
+
+  .part-no {
+    flex: none;
+    font-family: var(--serif);
+    font-size: 14px;
+    color: var(--terracotta);
+    border: 1px solid var(--terracotta);
+    border-radius: 999px;
+    padding: 0 10px;
+    letter-spacing: 0.1em;
+  }
+
+  .part-title {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 21px;
+    letter-spacing: 0.06em;
+  }
+
+  .part-note {
+    margin: -6px 0 14px;
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+
+  /* 選擇題 */
+  .questions {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .q {
+    padding: 14px 0;
+    border-top: 1px dashed var(--rule);
+    break-inside: avoid;
+  }
+  .q:first-child { border-top: 0; padding-top: 0; }
+
+  .q-text {
+    margin: 0 0 8px;
+    font-weight: 600;
+  }
+  .q-text b {
+    font-family: var(--serif);
+    color: var(--terracotta);
+    margin-right: 6px;
+  }
+
+  .options {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 4px;
+    display: grid;
+    gap: 6px;
+  }
+
+  .opt {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 10px;
+    align-items: start;
+    font-size: 15px;
+  }
+
+  .box {
+    width: 15px;
+    height: 15px;
+    margin-top: 6px;
+    border: 1.5px solid var(--brown);
+    border-radius: 2px;
+  }
+
+  .opt-letter {
+    font-family: var(--serif);
+    font-weight: 600;
+    color: var(--brown);
+  }
+
+  .opt-type {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .opt-icon {
+    display: inline-block;
+    width: 1.05em;
+    height: 1.05em;
+    vertical-align: -0.15em;
+    margin-right: 4px;
+    color: var(--terracotta);
+  }
+
+  /* 對照表 */
+  .compare {
+    width: 100%;
+    max-width: 420px;
+    border-collapse: collapse;
+    font-size: 15px;
+    margin: 0 0 18px;
+  }
+  .compare th,
+  .compare td {
+    border: 1px solid var(--rule);
+    padding: 6px 10px;
+    text-align: center;
+    height: 36px;
+  }
+  .compare thead th {
+    font-family: var(--serif);
+    color: var(--brown);
+    font-weight: 600;
+  }
+  .compare tbody th {
+    text-align: left;
+    font-weight: 500;
+    color: var(--ink-soft);
+    width: 5.5em;
+  }
+
+  .results {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+
+  .result {
+    border-left: 3px solid var(--rule);
+    padding-left: 14px;
+    break-inside: avoid;
+  }
+
+  .result-title {
+    margin: 0 0 4px;
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--brown);
+  }
+
+  .result p {
+    margin: 0;
+    font-size: 15px;
+  }
+  .result p + p { margin-top: 6px; }
+
+  /* 深夜交流小課題 */
+  .prompts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 28px;
+  }
+
+  .prompt { break-inside: avoid; }
+
+  .prompt-text {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.7;
+  }
+
+  .prompt-eg {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  .write-lines { margin-top: 6px; }
+  .write-lines span {
+    display: block;
+    height: 2.4em;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .sheet-foot {
+    margin-top: 36px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+    text-align: center;
+    font-family: var(--serif);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+  }
+
+  /* ── 諮詢入口（列印時隱藏） ── */
+  .after {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 22px 16px 48px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .after p { margin: 0; }
+
+  /* ── 手機 ── */
+  @media (max-width: 640px) {
+    body { font-size: 15px; }
+    .toolbar { padding-top: 14px; }
+    .toolbar-actions { width: 100%; justify-content: space-between; }
+    .sheet {
+      padding: 28px 18px 28px;
+      border-left: 0;
+      border-right: 0;
+    }
+    .sheet-head { gap: 14px; }
+    .wheel { width: 52px; height: 52px; }
+    .sheet-title { font-size: 23px; letter-spacing: 0.04em; }
+    .sheet-sub { font-size: 14px; }
+    .part-title { font-size: 19px; }
+    .results { grid-template-columns: 1fr; gap: 16px; }
+    .compare { max-width: none; }
+    .prompt-text { font-size: 16px; }
+  }
+
+  /* ── 列印：A4、黑白清楚、不吃墨 ── */
+  @page {
+    size: A4;
+    margin: 14mm 16mm 12mm;
+  }
+
+  @media print {
+    :root {
+      --ink: #000;
+      --ink-soft: #333;
+      --brown: #222;
+      --terracotta: #000;
+      --rule: #888;
+    }
+
+    html, body { background: #fff; }
+    body { font-size: 10.5pt; line-height: 1.6; }
+
+    .toolbar,
+    .after { display: none !important; }
+
+    .sheet {
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: #fff;
+    }
+
+    .sheet-head { padding-bottom: 10pt; gap: 14pt; }
+    .wheel { width: 48pt; height: 48pt; }
+    .sheet-title { font-size: 20pt; }
+    .sheet-sub { font-size: 10.5pt; }
+    .intro { margin-top: 10pt; max-width: none; }
+    .filler { margin-top: 8pt; font-size: 10.5pt; }
+    .filler span { border-bottom-color: #000; }
+
+    .part { margin-top: 16pt; }
+    .part-head { margin-bottom: 8pt; }
+    .part-no { font-size: 9.5pt; }
+    .part-title { font-size: 13.5pt; }
+    .part-note { margin: -3pt 0 8pt; font-size: 10pt; }
+
+    .q { padding: 8pt 0; }
+    .opt { font-size: 10.5pt; }
+    .box { width: 10pt; height: 10pt; margin-top: 3pt; border-color: #000; }
+
+    .compare { font-size: 10pt; margin-bottom: 10pt; max-width: 300pt; }
+    .compare th, .compare td { height: 22pt; padding: 3pt 8pt; }
+
+    .results { gap: 16pt; }
+    .result { border-left-color: #888; padding-left: 10pt; }
+    .result-title { font-size: 11pt; }
+    .result p { font-size: 10pt; }
+
+    /* 第三部分另起一頁，留足手寫空間 */
+    .part-talk { break-before: page; margin-top: 0; }
+    .prompts { gap: 22pt; }
+    .prompt-text { font-size: 12.5pt; }
+    .prompt-eg { font-size: 9.5pt; }
+    .write-lines span { height: 29pt; border-bottom: 0.75pt solid #777; }
+
+    .sheet-foot { margin-top: 22pt; font-size: 9.5pt; border-top-color: #888; }
+
+    a { color: #000; text-decoration: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 船舵符號：Q3 船長選項用 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-wheel" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+      <circle cx="12" cy="12" r="6.5"/>
+      <circle cx="12" cy="12" r="1.8"/>
+      <path d="M12 2.5v7.7M12 13.8v7.7M2.5 12h7.7M13.8 12h7.7M5.3 5.3l5.4 5.4M13.3 13.3l5.4 5.4M18.7 5.3l-5.4 5.4M10.7 13.3l-5.4 5.4"/>
+    </g>
+  </symbol>
+  <!-- 船槳符號：Q3 水手選項用 -->
+  <symbol id="i-oar" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 20 14.5 9.5"/>
+      <path d="M14.5 9.5c-.6-2.6.4-5.2 2.6-6.4 1.6-.9 3.4-.2 3.9.3.5.5 1.2 2.3.3 3.9-1.2 2.2-3.8 3.2-6.4 2.6z"/>
+      <path d="M3 18.5l2.5 2.5"/>
+    </g>
+  </symbol>
+</svg>
+
+<nav class="toolbar" aria-label="頁面工具">
+  <a class="toolbar-home" href="index.html">回到 heysaori.com</a>
+  <div class="toolbar-actions">
+    <span class="toolbar-hint">一人一張，建議印兩份</span>
+    <button type="button" class="print-btn" id="print-btn">列印這一頁</button>
+  </div>
+</nav>
+
+<main class="sheet">
+
+  <header class="sheet-head">
+    <svg class="wheel" viewBox="0 0 80 80" aria-hidden="true">
+      <g fill="none" stroke="currentColor" stroke-linecap="round">
+        <circle cx="40" cy="40" r="22" stroke-width="2.4"/>
+        <circle cx="40" cy="40" r="18" stroke-width="1"/>
+        <circle cx="40" cy="40" r="5" stroke-width="2.2"/>
+        <g stroke-width="2.4">
+          <path d="M40 4v31M40 45v31M4 40h31M45 40h31"/>
+          <path d="M14.5 14.5l22 22M43.5 43.5l22 22M65.5 14.5l-22 22M36.5 43.5l-22 22"/>
+        </g>
+      </g>
+      <g fill="currentColor">
+        <circle cx="40" cy="4" r="2.6"/><circle cx="40" cy="76" r="2.6"/>
+        <circle cx="4" cy="40" r="2.6"/><circle cx="76" cy="40" r="2.6"/>
+        <circle cx="14.5" cy="14.5" r="2.6"/><circle cx="65.5" cy="65.5" r="2.6"/>
+        <circle cx="65.5" cy="14.5" r="2.6"/><circle cx="14.5" cy="65.5" r="2.6"/>
+      </g>
+    </svg>
+    <div>
+      <h1 class="sheet-title">關係底層邏輯對齊練習</h1>
+      <p class="sheet-sub">誰掌舵，誰划槳，先對好再出航</p>
+    </div>
+  </header>
+
+  <p class="intro">這不是一份檢測對錯的測驗，而是一份關係運作說明書。找個放鬆的週末晚上，兩個人各拿一張紙，憑直覺寫下答案，再交換對照。</p>
+
+  <p class="filler">
+    <label>填寫人<span></span></label>
+    <label>日期<span></span></label>
+  </p>
+
+  <!-- 第一部分 -->
+  <section class="part" aria-labelledby="part1-title">
+    <div class="part-head">
+      <span class="part-no">第一部分</span>
+      <h2 class="part-title" id="part1-title">三秒直覺選擇題</h2>
+    </div>
+
+    <ol class="questions">
+      <li class="q">
+        <p class="q-text"><b>Q1</b>遇到突發重大麻煩時（例如出國前護照遺失、車子半路壞掉），你的第一反應是？</p>
+        <ul class="options">
+          <li class="opt"><span class="box"></span><span class="opt-letter">A</span><span><span class="opt-type">行動派：</span>立刻冷靜，上網查資料、找備案、聯絡解決方案</span></li>
+          <li class="opt"><span class="box"></span><span class="opt-letter">B</span><span><span class="opt-type">情緒派：</span>先心慌、焦慮崩潰，想暫時逃離現場或靜一靜</span></li>
+        </ul>
+      </li>
+      <li class="q">
+        <p class="q-text"><b>Q2</b>面對親友相關的金錢、時間或人情往來，你的底層準則是？</p>
+        <ul class="options">
+          <li class="opt"><span class="box"></span><span class="opt-letter">A</span><span><span class="opt-type">規則優先：</span>感情歸感情，規則歸規則，邊界講清楚才長久</span></li>
+          <li class="opt"><span class="box"></span><span class="opt-letter">B</span><span><span class="opt-type">感情優先：</span>都是一家人、好朋友，多付出一點無所謂，不計較</span></li>
+        </ul>
+      </li>
+      <li class="q">
+        <p class="q-text"><b>Q3</b>對於兩人未來的規劃（例如買房、職涯、財務目標），你的思考習慣是？</p>
+        <ul class="options">
+          <li class="opt"><span class="box"></span><span class="opt-letter">A</span><span><svg class="opt-icon" aria-hidden="true"><use href="#i-wheel"/></svg><span class="opt-type">船長型：</span>習慣拉出一到三年的具體目標與時間軸</span></li>
+          <li class="opt"><span class="box"></span><span class="opt-letter">B</span><span><svg class="opt-icon" aria-hidden="true"><use href="#i-oar"/></svg><span class="opt-type">水手型：</span>喜歡過好當下，走一步看一步，順其自然</span></li>
+        </ul>
+      </li>
+    </ol>
+  </section>
+
+  <!-- 第二部分 -->
+  <section class="part" aria-labelledby="part2-title">
+    <div class="part-head">
+      <span class="part-no">第二部分</span>
+      <h2 class="part-title" id="part2-title">對照結果</h2>
+    </div>
+    <p class="part-note">兩個人都寫完，再交換紙張，把彼此的答案填進來對照。</p>
+
+    <table class="compare">
+      <thead>
+        <tr><td></td><th scope="col">Q1</th><th scope="col">Q2</th><th scope="col">Q3</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">我</th><td></td><td></td><td></td></tr>
+        <tr><th scope="row">另一半</th><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <div class="results">
+      <div class="result">
+        <h3 class="result-title">答案完全相同（AA 或 BB）</h3>
+        <p>優勢是天然的默契，遇到狀況時反應很同頻。</p>
+        <p>提醒一下，如果兩人在 Q1 或 Q3 都是 B，記得在關鍵時刻指派一個人當「臨時船長」。</p>
+      </div>
+      <div class="result">
+        <h3 class="result-title">答案一 A 一 B</h3>
+        <p>Q1 和 Q3 不同的話，通常是很好的互補，一個能拉方向，一個能給彈性，重點是建立彼此都能接受的運作機制。</p>
+        <p>不過 Q2 不一樣的話，就不太是互補了。這是金錢與邊界的底層準則，建議坐下來好好聊，看看彼此能不能找到都舒服的做法。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 第三部分 -->
+  <section class="part part-talk" aria-labelledby="part3-title">
+    <div class="part-head">
+      <span class="part-no">第三部分</span>
+      <h2 class="part-title" id="part3-title">今晚的深夜交流小課題</h2>
+    </div>
+    <p class="part-note">請各自寫下，並念給對方聽：</p>
+
+    <ol class="prompts">
+      <li class="prompt">
+        <p class="prompt-text">1、「當突發狀況發生，我陷入情緒時，我最希望你做的一件事是：＿＿＿＿。」</p>
+        <p class="prompt-eg">（例如：不要一直逼我回答，給我一段時間冷靜；或是不要罵我，直接給我一個簡單的指令）</p>
+        <div class="write-lines" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      </li>
+      <li class="prompt">
+        <p class="prompt-text">2、「在未來的規劃裡，我最希望你擔任的角色是：＿＿＿＿。」</p>
+        <p class="prompt-eg">（例如：主要拿主意的船長；或是全力配合與支持的水手）</p>
+        <div class="write-lines" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      </li>
+    </ol>
+  </section>
+
+  <footer class="sheet-foot">人生探索手札｜heysaori.com</footer>
+</main>
+
+<aside class="after">
+  <p>寫完發現有些地方卡住，想找人陪你們一起聊聊？<a href="https://heysaori.com/counseling/relationship/?utm_source=practice_page&amp;utm_medium=web&amp;utm_campaign=relationship_instinct_modes&amp;utm_content=cta_counseling">看看關係諮詢</a></p>
+</aside>
+
+<script>
+  (function () {
+    var btn = document.getElementById('print-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      if (typeof gtag === 'function') {
+        gtag('event', 'print_practice', { page: 'relationship_instinct_practice' });
+      }
+      window.print();
+    });
+  })();
+</script>
+</body>
+</html>
