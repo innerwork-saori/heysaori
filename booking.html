@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hey Saori · 預約諮詢</title>
-  <meta name="description" content="預約 Saori 的 50 分鐘諮詢：選時間、下訂方案、填初談表單、交履歷與同意書、回報轉帳資訊，六件事完成就預約成功。">
+  <meta name="description" content="預約 Saori 的 50 分鐘諮詢：填初談表單、選時間，兩件事完成就預約成功。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/saori-base.css">
 <link rel="stylesheet" href="css/links.css?v=2">
-<link rel="stylesheet" href="css/booking.css">
+<link rel="stylesheet" href="css/booking.css?v=2">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JZJ4RQTVK1"></script>
 <script>
@@ -36,7 +36,7 @@
 
     <!-- 進度：數字由 js/booking.js 依打勾數更新 -->
     <div class="booking-progress" aria-live="polite">
-      <p class="progress-text" id="progressText">已完成 <strong id="doneCount">0</strong> / <span id="totalCount">6</span></p>
+      <p class="progress-text" id="progressText">已完成 <strong id="doneCount">0</strong> / <span id="totalCount">2</span></p>
       <div class="progress-bar" aria-hidden="true"><span id="progressFill"></span></div>
     </div>
   </div>
@@ -55,7 +55,7 @@
     <div class="visit-options">
       <label class="visit-option">
         <input type="radio" name="visit" value="first" checked
-               data-hint="第一次諮詢，下面六件事都要完成。">
+               data-hint="第一次諮詢，下面兩件事都要完成。">
         <span>第一次諮詢</span>
       </label>
       <label class="visit-option">
@@ -65,48 +65,29 @@
       </label>
       <label class="visit-option">
         <input type="radio" name="visit" value="renew"
-               data-hint="初談表單和同意書沿用上次的，不用再交。履歷有更新再上傳就好。">
+               data-hint="再填一次初談表單，裡面有費用和匯款資訊。履歷有更新的話，也可以在表單裡上傳。">
         <span>再次諮詢<small>次數用完，要重新購買</small></span>
       </label>
     </div>
-    <p class="visit-hint" id="visitHint" aria-live="polite">第一次諮詢，下面六件事都要完成。</p>
+    <p class="visit-hint" id="visitHint" aria-live="polite">第一次諮詢，下面兩件事都要完成。</p>
   </fieldset>
 
   <section class="link-group">
-    <h2 class="group-label">Forms &amp; Files <span>表單與文件</span></h2>
+    <h2 class="group-label">Form <span>表單</span></h2>
     <ul class="task-list">
 
-      <li class="task" data-task="form" data-modes="first">
+      <li class="task" data-task="form" data-modes="first renew">
         <input class="task-check" type="checkbox" id="task-form">
         <div class="task-body">
           <label class="task-title" for="task-form">填寫初談表單</label>
-          <p class="task-desc">需要登入 Google 帳號才能填寫。</p>
+          <p class="task-desc">表單裡有費用、匯款資訊和諮詢同意書，也可以上傳履歷。需要登入 Google 帳號才能填寫。</p>
           <div class="task-actions">
             <a class="task-link" href="https://forms.gle/1m9D9Vw8YXq7quQy5" target="_blank" rel="noopener">開啟表單</a>
           </div>
-        </div>
-      </li>
-
-      <li class="task" data-task="resume" data-modes="first renew" data-optional="renew">
-        <input class="task-check" type="checkbox" id="task-resume">
-        <div class="task-body">
-          <label class="task-title" for="task-resume">提供履歷／簡歷 <span class="task-optional">有更新再交</span></label>
-          <p class="task-desc">上傳到 Dropbox，或直接傳 LINE 給 Saori 都可以。</p>
-          <div class="task-actions">
-            <a class="task-link" href="https://www.dropbox.com/request/rJuLakmxnsD76h7wTThX" target="_blank" rel="noopener">上傳履歷</a>
-          </div>
-        </div>
-      </li>
-
-      <li class="task" data-task="consent" data-modes="first">
-        <input class="task-check" type="checkbox" id="task-consent">
-        <div class="task-body">
-          <label class="task-title" for="task-consent">簽署諮詢同意書</label>
-          <p class="task-desc">下載後簽名，再上傳到 Dropbox，或傳 LINE 給 Saori。</p>
-          <div class="task-actions">
-            <a class="task-link" href="https://drive.google.com/file/d/1EAZRTDq8gK_-lijAGII3uHcmIsrJm9Ti/view?usp=sharing" target="_blank" rel="noopener">下載同意書</a>
-            <a class="task-link" href="https://www.dropbox.com/request/cqKjShs5aWuPPwTclADk" target="_blank" rel="noopener">上傳簽好的同意書</a>
-          </div>
+          <!-- 表單裡上傳履歷不是必填，沒傳的人從這裡補 -->
+          <p class="task-extra">
+            表單裡沒傳履歷？<a href="https://www.dropbox.com/request/rJuLakmxnsD76h7wTThX" target="_blank" rel="noopener">補上傳履歷</a>，或直接傳 <a href="https://lin.ee/mG0aU30" target="_blank" rel="noopener">LINE</a> 給 Saori。
+          </p>
         </div>
       </li>
 
@@ -114,19 +95,8 @@
   </section>
 
   <section class="link-group">
-    <h2 class="group-label">Time &amp; Plan <span>時間與方案</span></h2>
+    <h2 class="group-label">Book a Time <span>預約時間</span></h2>
     <ul class="task-list">
-
-      <li class="task" data-task="order" data-modes="first renew">
-        <input class="task-check" type="checkbox" id="task-order">
-        <div class="task-body">
-          <label class="task-title" for="task-order">下訂諮詢方案</label>
-          <p class="task-desc">到官網選方案，送出訂單。</p>
-          <div class="task-actions">
-            <a class="task-link" href="https://heysaori.com/letscounseling/" target="_blank" rel="noopener">前往官網</a>
-          </div>
-        </div>
-      </li>
 
       <li class="task" data-task="time" data-modes="first credits renew">
         <input class="task-check" type="checkbox" id="task-time">
@@ -135,28 +105,10 @@
           <p class="task-desc">從日曆挑一個方便的時段。Saori 確認後會寄信通知你。</p>
           <div class="task-actions">
             <!-- 點了會彈出 Cal.com 日曆，設定在 js/booking.js。用 button 不用 a，避免同時另開分頁 -->
-            <button type="button" class="task-link"
+            <button type="button" class="task-link task-link--primary"
                data-cal-link="heysaori/50mins"
                data-cal-namespace="50mins"
                data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true","theme":"light"}'>選時間</button>
-          </div>
-        </div>
-      </li>
-
-    </ul>
-  </section>
-
-  <section class="link-group">
-    <h2 class="group-label">On LINE <span>在 LINE 上</span></h2>
-    <ul class="task-list">
-
-      <li class="task" data-task="payment" data-modes="first renew">
-        <input class="task-check" type="checkbox" id="task-payment">
-        <div class="task-body">
-          <label class="task-title" for="task-payment">回報轉帳資訊</label>
-          <p class="task-desc">轉帳後，在 LINE 告訴 Saori 帳號後五碼和轉帳時間。</p>
-          <div class="task-actions">
-            <a class="task-link task-link--primary" href="https://lin.ee/mG0aU30" target="_blank" rel="noopener">打開 Saori 的 LINE</a>
           </div>
         </div>
       </li>

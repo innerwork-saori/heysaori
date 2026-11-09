@@ -200,6 +200,21 @@
 }
 .task.is-done .task-desc { color: var(--text-soft); }
 
+/* 卡片底部的補充路線（例如補上傳履歷），用虛線和小字跟主要按鈕分開 */
+.task-extra {
+  margin-top: 0.9rem;
+  padding-top: 0.7rem;
+  border-top: 1px dashed var(--accent2);
+  font-size: 0.82rem;
+  color: var(--text-mid);
+}
+.task-extra a {
+  color: var(--accent1);
+  text-underline-offset: 0.2em;
+}
+.task-extra a:hover,
+.task-extra a:focus-visible { color: var(--ink); }
+
 .task-actions {
   display: flex;
   flex-wrap: wrap;
