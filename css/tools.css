@@ -66,7 +66,7 @@
       margin: 0 auto;
     }
 
-    /* 工具清單：每一列是一個 <details>，收合時只看得到工具名稱與分類標籤 */
+    /* 工具清單：每一列是一個 <details>，收合時只看得到痛點與工具名稱 */
     .tool-list {
       border-top: 1px solid rgba(0,0,0,0.1);
     }
@@ -93,29 +93,41 @@
       outline-offset: -2px;
     }
 
-    .tool-name {
+    /* 主角：使用者心裡的那句話 */
+    .tool-pain {
       font-family: 'Noto Serif TC', serif;
       font-size: 1.2rem;
       font-weight: 600;
       color: var(--text-main);
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
       line-height: 1.6;
+      margin-left: -0.5em; /* 讓開頭的「懸掛，文字左緣對齊展開後的內容 */
+      text-wrap: balance;
     }
-    .tool-name-sub {
-      font-size: 0.88rem;
-      font-weight: 400;
-      color: var(--text-soft);
-      margin-left: 0.5em;
+    /* 工具名稱退為第二層 */
+    .tool-name {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--accent1);
+      letter-spacing: 0.06em;
+      line-height: 1.4;
       white-space: nowrap;
     }
+    .tool-name-sub {
+      font-weight: 400;
+      color: var(--text-soft);
+      margin-left: 0.4em;
+    }
     .tool-tag {
+      display: inline-block;
       font-size: 0.72rem;
       letter-spacing: 0.1em;
       padding: 0.22rem 0.65rem;
       background: var(--paper-mid);
       color: var(--text-mid);
       border-radius: 2px;
-      white-space: nowrap;
+      margin-bottom: 0.9rem;
     }
     .tool-tag.highlight {
       background: rgba(196,149,106,0.18);
@@ -245,17 +257,18 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 680px) {
       .nav-title { display: none; }
-      /* 標籤換到工具名稱下方，開合記號留在右側 */
+      /* 工具名稱換到痛點下方，開合記號留在右側 */
       .tool-summary {
         grid-template-columns: 1fr 1.1rem;
-        row-gap: 0.4rem;
+        row-gap: 0.3rem;
         padding: 1.3rem 1rem;
       }
-      .tool-name { grid-column: 1; font-size: 1.1rem; }
-      .tool-tag { grid-column: 1; grid-row: 2; justify-self: start; }
+      .tool-pain { grid-column: 1; }
+      .tool-name { grid-column: 1; grid-row: 2; white-space: normal; }
       .tool-toggle { grid-column: 2; grid-row: 1 / span 2; }
       .tool-body { padding: 0 1rem 1.8rem; }
     }
     @media (max-width: 480px) {
       .tools-section { padding-left: 1rem; padding-right: 1rem; }
+      .tool-pain { font-size: 1.08rem; }
     }
