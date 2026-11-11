@@ -73,137 +73,184 @@
 </section>
 
 
-<!-- ══════════ TOOLS GRID：以使用者的痛點當標題，一個痛點對一個工具 ══════════ -->
+<!-- ══════════ TOOLS LIST：先只看痛點，點一句才展開那個工具的內容 ══════════ -->
 <div class="tools-section">
   <h2 class="tools-heading">你現在卡在哪裡？</h2>
-  <p class="tools-lead">找到最像你的那一句，就從那個工具開始。</p>
-  <div class="tools-grid">
+  <p class="tools-lead">找到最像你的那一句，點開看這個工具怎麼幫你。</p>
+  <div class="tool-list">
 
-    <a href="lifevalue.html" class="tool-card">
-      <p class="tool-pain">「每個選項看起來都可以，<br>我卻一直下不了決定」</p>
-      <div class="tool-name">價值觀探索</div>
-      <div class="tool-subtitle">Life & Work Values Reflection</div>
-      <div class="tool-tag">人生 × 工作 雙模式</div>
-      <div class="tool-desc">
-        你真正在意的是自由、穩定、成就感、還是關係？<br>
-        透過系統化的排序與反思流程，找出驅動你的核心價值觀，並評估現況與理想之間的落差。
+    <details class="tool-item" name="self-discovery-tool">
+      <summary class="tool-summary">
+        <span class="tool-pain">「每個選項看起來都可以，我卻一直下不了決定」</span>
+        <span class="tool-name">價值觀探索</span>
+        <span class="tool-toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-about">
+          <div class="tool-subtitle">Life & Work Values Reflection</div>
+          <div class="tool-tag">人生 × 工作 雙模式</div>
+          <p class="tool-desc">
+          你真正在意的是自由、穩定、成就感、還是關係？<br>
+          透過系統化的排序與反思流程，找出驅動你的核心價值觀，並評估現況與理想之間的落差。
+          </p>
+          <a href="lifevalue.html" class="tool-cta">開始探索</a>
+        </div>
+        <ul class="tool-highlights">
+          <li>人生價值觀 × 工作價值觀雙模式探索</li>
+          <li>重要 / 次要分類 → 篩選排序 → 原因說明</li>
+          <li>滿意度評分，直視現況落差</li>
+          <li>結果可匯出儲存，方便諮詢使用</li>
+        </ul>
       </div>
-      <ul class="tool-highlights">
-        <li>人生價值觀 × 工作價值觀雙模式探索</li>
-        <li>重要 / 次要分類 → 篩選排序 → 原因說明</li>
-        <li>滿意度評分，直視現況落差</li>
-        <li>結果可匯出儲存，方便諮詢使用</li>
-      </ul>
-      <div class="tool-arrow">開始探索 →</div>
-    </a>
+    </details>
 
-    <a href="whatsmytalent.html" class="tool-card">
-      <p class="tool-pain">「我覺得自己好像<br>沒什麼特別的能力」</p>
-      <div class="tool-name">職能盤點</div>
-      <div class="tool-subtitle">Talent & Skills Inventory</div>
-      <div class="tool-tag">能力 × 職場應用</div>
-      <div class="tool-desc">
-        你以為自己沒什麼特別的，但其實你累積了很多。<br>
-        這個工具幫你系統性地盤點職能與優勢，找到還沒被充分使用的潛力，以及值得繼續深耕的方向。
+    <details class="tool-item" name="self-discovery-tool">
+      <summary class="tool-summary">
+        <span class="tool-pain">「我覺得自己好像沒什麼特別的能力」</span>
+        <span class="tool-name">職能盤點</span>
+        <span class="tool-toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-about">
+          <div class="tool-subtitle">Talent & Skills Inventory</div>
+          <div class="tool-tag">能力 × 職場應用</div>
+          <p class="tool-desc">
+          你以為自己沒什麼特別的，但其實你累積了很多。<br>
+          這個工具幫你系統性地盤點職能與優勢，找到還沒被充分使用的潛力，以及值得繼續深耕的方向。
+          </p>
+          <a href="whatsmytalent.html" class="tool-cta">開始盤點</a>
+        </div>
+        <ul class="tool-highlights">
+          <li>全面盤點各類型職能與軟實力</li>
+          <li>標記「擁有」與「想發展」，方向更清晰</li>
+          <li>深入了解每項能力的職場應用</li>
+          <li>支援職缺比對模式，對應求職需求</li>
+        </ul>
       </div>
-      <ul class="tool-highlights">
-        <li>全面盤點各類型職能與軟實力</li>
-        <li>標記「擁有」與「想發展」，方向更清晰</li>
-        <li>深入了解每項能力的職場應用</li>
-        <li>支援職缺比對模式，對應求職需求</li>
-      </ul>
-      <div class="tool-arrow">開始盤點 →</div>
-    </a>
+    </details>
 
-    <a href="career-interest.html" class="tool-card">
-      <p class="tool-pain">「我不知道自己<br>到底想做什麼工作」</p>
-      <div class="tool-name">職業興趣探索</div>
-      <div class="tool-subtitle">Career Interest Cards</div>
-      <div class="tool-tag">直覺挑選 × 排序反思</div>
-      <div class="tool-desc">
-        先不管收入、能力和別人的期待——哪些工作光是想像，就讓你熱血亢奮？<br>
-        從 100 個職業中憑直覺挑選、排序，再寫下它們吸引你的原因，諮詢時一起找出背後的興趣線索。
+    <details class="tool-item" name="self-discovery-tool">
+      <summary class="tool-summary">
+        <span class="tool-pain">「我不知道自己到底想做什麼工作」</span>
+        <span class="tool-name">職業興趣探索</span>
+        <span class="tool-toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-about">
+          <div class="tool-subtitle">Career Interest Cards</div>
+          <div class="tool-tag">直覺挑選 × 排序反思</div>
+          <p class="tool-desc">
+          先不管收入、能力和別人的期待——哪些工作光是想像，就讓你熱血亢奮？<br>
+          從 100 個職業中憑直覺挑選、排序，再寫下它們吸引你的原因，諮詢時一起找出背後的興趣線索。
+          </p>
+          <a href="career-interest.html" class="tool-cta">開始挑選</a>
+        </div>
+        <ul class="tool-highlights">
+          <li>100 個職業，挑出 10–20 個最讓你心動的</li>
+          <li>排出前 10 名，寫下每一個的原因</li>
+          <li>看見你的興趣類型，報告寄到你的信箱</li>
+        </ul>
       </div>
-      <ul class="tool-highlights">
-        <li>100 個職業，挑出 10–20 個最讓你心動的</li>
-        <li>排出前 10 名，寫下每一個的原因</li>
-        <li>看見你的興趣類型，報告寄到你的信箱</li>
-      </ul>
-      <div class="tool-arrow">開始挑選 →</div>
-    </a>
+    </details>
 
-    <!-- 熱情探索：背後是不公開的 Google 表單，刻意不放連結 -->
-    <div class="tool-card" style="cursor: default;">
-      <p class="tool-pain">「好像對很多事都有興趣，<br>卻說不出熱情在哪」</p>
-      <div class="tool-name">熱情探索</div>
-      <div class="tool-subtitle">Passion & Interest Discovery</div>
-      <div class="tool-tag">Holland Code 職業興趣框架</div>
-      <div class="tool-desc">
-        知道自己擅長什麼還不夠——你還需要知道什麼事讓你真正「燃起來」。<br>
-        這個工具以 Holland Code 為核心框架，幫你系統性地探索職業興趣類型，找出與你天生氣質最相符的工作環境與方向。
+    <!-- 熱情探索：背後是不公開的 Google 表單，刻意不放工具連結 -->
+    <details class="tool-item" name="self-discovery-tool">
+      <summary class="tool-summary">
+        <span class="tool-pain">「好像對很多事都有興趣，卻說不出熱情在哪」</span>
+        <span class="tool-name">熱情探索</span>
+        <span class="tool-toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-about">
+          <div class="tool-subtitle">Passion & Interest Discovery</div>
+          <div class="tool-tag">Holland Code 職業興趣框架</div>
+          <p class="tool-desc">
+          知道自己擅長什麼還不夠——你還需要知道什麼事讓你真正「燃起來」。<br>
+          這個工具以 Holland Code 為核心框架，幫你系統性地探索職業興趣類型，找出與你天生氣質最相符的工作環境與方向。
+          </p>
+          <a href="booking.html" class="tool-cta tool-cta-ghost">有興趣請聯繫 Saori</a>
+        </div>
+        <ul class="tool-highlights">
+          <li>依據 Holland Code 六大類型進行興趣探索</li>
+          <li>找出熱情與職能的交集地帶</li>
+          <li>對應適合的職業方向與工作環境</li>
+          <li>結合價值觀與職能結果，形成完整自我圖像</li>
+        </ul>
       </div>
-      <ul class="tool-highlights">
-        <li>依據 Holland Code 六大類型進行興趣探索</li>
-        <li>找出熱情與職能的交集地帶</li>
-        <li>對應適合的職業方向與工作環境</li>
-        <li>結合價值觀與職能結果，形成完整自我圖像</li>
-      </ul>
-      <div class="tool-arrow" style="color: var(--accent-sage);">
-        <a href="booking.html" class="about-link">有興趣請聯繫 Saori →</a>
-      </div>
-    </div>
+    </details>
 
-    <a href="work-style.html" class="tool-card">
-      <p class="tool-pain">「我做事的方式，<br>好像跟身邊的人不太一樣」</p>
-      <div class="tool-name">個人風格檢核表</div>
-      <div class="tool-subtitle">Personal Work Style Checklist</div>
-      <div class="tool-tag">四種行事風格 · 5 分鐘</div>
-      <div class="tool-desc">
-        有人靠邏輯，有人靠條理，有人靠點子，有人靠關係。<br>
-        從 40 個工作要素裡一輪一輪篩選，看見你最自然的做事方式，以及它容易卡住的地方。
+    <details class="tool-item" name="self-discovery-tool">
+      <summary class="tool-summary">
+        <span class="tool-pain">「我做事的方式，好像跟身邊的人不太一樣」</span>
+        <span class="tool-name">個人風格檢核表</span>
+        <span class="tool-toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-about">
+          <div class="tool-subtitle">Personal Work Style Checklist</div>
+          <div class="tool-tag">四種行事風格 · 5 分鐘</div>
+          <p class="tool-desc">
+          有人靠邏輯，有人靠條理，有人靠點子，有人靠關係。<br>
+          從 40 個工作要素裡一輪一輪篩選，看見你最自然的做事方式，以及它容易卡住的地方。
+          </p>
+          <a href="work-style.html" class="tool-cta">開始檢核</a>
+        </div>
+        <ul class="tool-highlights">
+          <li>理智、組織、開創、情感四種風格</li>
+          <li>每組 8 選 4、再選 2、最後留 1 個</li>
+          <li>做完立刻看到四型分數與優勢、盲點</li>
+        </ul>
       </div>
-      <ul class="tool-highlights">
-        <li>理智、組織、開創、情感四種風格</li>
-        <li>每組 8 選 4、再選 2、最後留 1 個</li>
-        <li>做完立刻看到四型分數與優勢、盲點</li>
-      </ul>
-      <div class="tool-arrow">開始檢核 →</div>
-    </a>
+    </details>
 
-    <a href="AgileChange.html" class="tool-card">
-      <p class="tool-pain">「環境一直在變，<br>我總覺得跟不上、很焦慮」</p>
-      <div class="tool-name">Agile Mindset 測驗</div>
-      <div class="tool-subtitle">Agile Mindset Assessment</div>
-      <div class="tool-tag">五大構面 · 即時分析</div>
-      <div class="tool-desc">
-        敏捷不只是方法論，它是面對不確定性的心態系統。<br>
-        這份測驗幫你找到自己現在的位置——哪些構面已夠敏捷、哪些還有成長空間。
+    <details class="tool-item" name="self-discovery-tool">
+      <summary class="tool-summary">
+        <span class="tool-pain">「環境一直在變，我總覺得跟不上、很焦慮」</span>
+        <span class="tool-name">Agile Mindset 測驗</span>
+        <span class="tool-toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-about">
+          <div class="tool-subtitle">Agile Mindset Assessment</div>
+          <div class="tool-tag">五大構面 · 即時分析</div>
+          <p class="tool-desc">
+          敏捷不只是方法論，它是面對不確定性的心態系統。<br>
+          這份測驗幫你找到自己現在的位置——哪些構面已夠敏捷、哪些還有成長空間。
+          </p>
+          <a href="AgileChange.html" class="tool-cta">開始測驗</a>
+        </div>
+        <ul class="tool-highlights">
+          <li>初學者心態、行動導向、擁抱失敗、同理協作、自我照顧</li>
+          <li>15 道題目，約 5 分鐘完成</li>
+          <li>整體分數 + 五大構面個人化回饋</li>
+          <li>具體可執行的下一步建議</li>
+        </ul>
       </div>
-      <ul class="tool-highlights">
-        <li>初學者心態、行動導向、擁抱失敗、同理協作、自我照顧</li>
-        <li>15 道題目，約 5 分鐘完成</li>
-        <li>整體分數 + 五大構面個人化回饋</li>
-        <li>具體可執行的下一步建議</li>
-      </ul>
-      <div class="tool-arrow">開始測驗 →</div>
-    </a>
+    </details>
 
-    <a href="cv-checklist.html" class="tool-card">
-      <p class="tool-pain">「履歷投了很多，<br>卻很少收到面試」</p>
-      <div class="tool-name">履歷優化檢核表</div>
-      <div class="tool-subtitle">CV Checklist</div>
-      <div class="tool-tag">10 分鐘快速版 × 詳細版</div>
-      <div class="tool-desc">
-        方向想清楚了，下一步是讓履歷幫你拿到面試。<br>
-        一項一項打勾，找出履歷裡還沒做到的細節。
+    <details class="tool-item" name="self-discovery-tool">
+      <summary class="tool-summary">
+        <span class="tool-pain">「履歷投了很多，卻很少收到面試」</span>
+        <span class="tool-name">履歷優化檢核表</span>
+        <span class="tool-toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-about">
+          <div class="tool-subtitle">CV Checklist</div>
+          <div class="tool-tag">10 分鐘快速版 × 詳細版</div>
+          <p class="tool-desc">
+          方向想清楚了，下一步是讓履歷幫你拿到面試。<br>
+          一項一項打勾，找出履歷裡還沒做到的細節。
+          </p>
+          <a href="cv-checklist.html" class="tool-cta">開始檢核</a>
+        </div>
+        <ul class="tool-highlights">
+          <li>先用快速版掃一遍，找出還沒做的</li>
+          <li>聯絡資訊、格式、一致性、易讀性逐項檢查</li>
+          <li>再用詳細版補足細節</li>
+        </ul>
       </div>
-      <ul class="tool-highlights">
-        <li>先用快速版掃一遍，找出還沒做的</li>
-        <li>聯絡資訊、格式、一致性、易讀性逐項檢查</li>
-        <li>再用詳細版補足細節</li>
-      </ul>
-      <div class="tool-arrow">開始檢核 →</div>
-    </a>
+    </details>
 
   </div>
 </div>
