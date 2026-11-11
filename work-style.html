@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>個人風格檢核表 · Saori 謝孟娟</title>
+  <meta name="description" content="5 分鐘、40 個工作要素，一輪一輪選出最像你的那一個，看看你做事偏向理智、組織、開創還是情感型。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/saori-base.css">
+  <link rel="stylesheet" href="css/work-style.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JZJ4RQTVK1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JZJ4RQTVK1');
+</script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="self-discovery-tools.html" class="nav-back">職涯探索工具</a>
+  <div class="nav-title">個人風格檢核表</div>
+</nav>
+
+<!-- ══════════ HERO（與其他工具頁相同結構）══════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines" aria-hidden="true">
+    <svg viewBox="0 0 1440 400" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="100" x2="300" y2="0" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <line x1="1440" y1="300" x2="1200" y2="400" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <circle cx="1300" cy="80" r="140" fill="none" stroke="rgba(250,247,242,0.03)" stroke-width="1"/>
+      <circle cx="100" cy="320" r="90" fill="none" stroke="rgba(196,149,106,0.05)" stroke-width="1"/>
+    </svg>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-label">by Saori · work style</div>
+    <h1 class="hero-title">你習慣<span class="ws-nowrap">怎麼做事？</span></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">花 5 分鐘，從 40 個工作要素裡挑出最像你的<br>看見自己做事的優勢，也看見容易卡住的地方</p>
+  </div>
+</section>
+
+<main class="ws-main">
+
+  <!-- ── 開始前 ── -->
+  <section class="ws-panel" id="ws-home">
+    <h2 class="ws-title">怎麼進行</h2>
+    <p class="ws-lead">一共 5 組，每組有 8 個工作要素。每一組都分三輪，越選越少，最後只留下最像你的那一個。</p>
+
+    <!-- 三輪篩選的示意：數字就是每一輪留下的數量 -->
+    <ol class="ws-funnel" aria-label="每一組的三輪篩選">
+      <li><span class="ws-funnel-num">8</span><span class="ws-funnel-text">個工作要素</span></li>
+      <li><span class="ws-funnel-num">4</span><span class="ws-funnel-text">先選出比較像你的</span></li>
+      <li><span class="ws-funnel-num">2</span><span class="ws-funnel-text">再從中留下更像的</span></li>
+      <li><span class="ws-funnel-num">1</span><span class="ws-funnel-text">最後只留一個</span></li>
+    </ol>
+
+    <p class="ws-note">不用想太久，照你平常工作的樣子選，而不是你希望自己成為的樣子。沒有哪一種風格比較好。</p>
+    <button type="button" class="ws-btn" id="ws-start">開始測驗</button>
+  </section>
+
+  <!-- ── 題目 ── -->
+  <section class="ws-panel" id="ws-quiz" hidden>
+    <div class="ws-progress" id="ws-progress" role="img"></div>
+    <p class="ws-set-label" id="ws-set-label"></p>
+    <h2 class="ws-title" id="ws-question" tabindex="-1"></h2>
+    <div class="ws-grid" id="ws-grid"></div>
+    <div class="ws-actions">
+      <p class="ws-count" id="ws-count" role="status" aria-live="polite"></p>
+      <button type="button" class="ws-btn" id="ws-next" disabled>下一步</button>
+    </div>
+  </section>
+
+  <!-- ── 結果 ── -->
+  <section class="ws-panel" id="ws-result" hidden>
+    <p class="ws-set-label">你的行事風格比較偏向</p>
+    <div id="ws-top" tabindex="-1"></div>
+
+    <h3 class="ws-subtitle">四種風格的分數</h3>
+    <p class="ws-note">每一型最高 40 分。分數接近的風格，你多半也用得上。</p>
+    <ul class="ws-bars" id="ws-bars"></ul>
+
+    <div class="ws-result-actions">
+      <a href="booking.html" class="ws-btn">帶著結果預約諮詢</a>
+      <button type="button" class="ws-btn ws-btn-ghost" id="ws-again">重新測驗</button>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/work-style.js"></script>
+</body>
+</html>

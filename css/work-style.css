@@ -1,0 +1,349 @@
+/* work-style.css — 個人風格檢核表（繼承 saori-base.css）
+ * 四種風格各有一個顏色，只用在結果頁的風格名稱與分數條。
+ * 題目頁只用墨色與紙色：選中是墨底，被篩掉的字變淡並劃掉、留在原位。
+ */
+:root {
+  --ws-R: #55708a;            /* 理智 */
+  --ws-O: var(--accent-sage); /* 組織 */
+  --ws-I: #b9822f;            /* 開創 */
+  --ws-F: var(--accent-rose); /* 情感 */
+  --ws-line: #e4dccd;
+  --ws-nav-h: 3.6rem;
+}
+
+/* ── Hero：與 career-interest、cv-checklist 等工具頁相同 ── */
+.hero {
+  background: var(--ink);
+  padding: 9rem 2rem 5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 80%, rgba(196,149,106,0.1) 0%, transparent 65%),
+    linear-gradient(160deg, #1c1a17 0%, #252018 60%, #1e1b14 100%);
+}
+.hero-lines { position: absolute; inset: 0; pointer-events: none; }
+.hero-lines svg { width: 100%; height: 100%; }
+.hero-inner {
+  position: relative; z-index: 2;
+  max-width: 620px;
+  margin: 0 auto;
+}
+.hero-label {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--accent3);
+  letter-spacing: 0.25em;
+  margin-bottom: 1.4rem;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.2s ease forwards;
+}
+.hero-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 600;
+  color: var(--paper);
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  margin-bottom: 1.2rem;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.4s ease forwards;
+}
+.ws-nowrap { white-space: nowrap; }
+.hero-divider {
+  width: 40px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent3), transparent);
+  margin: 0 auto 1.4rem;
+  opacity: 0;
+  animation: fadeIn 0.9s 0.6s ease forwards;
+}
+.hero-desc {
+  font-size: 0.85rem;
+  color: rgba(250,247,242,0.45);
+  letter-spacing: 0.06em;
+  line-height: 2;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.75s ease forwards;
+}
+
+/* ── Main ── */
+.ws-main {
+  max-width: 36rem;
+  margin: 0 auto;
+  padding: 3rem 1.25rem 6rem;
+}
+.ws-panel { scroll-margin-top: calc(var(--ws-nav-h) + 1.5rem); }
+.ws-panel:focus, .ws-title:focus, #ws-top:focus { outline: none; }
+
+.ws-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(1.35rem, 4vw, 1.7rem);
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  scroll-margin-top: calc(var(--ws-nav-h) + 4.5rem);
+}
+.ws-lead {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-main);
+  line-height: 1.9;
+}
+.ws-note {
+  font-size: 0.9rem;
+  color: var(--text-mid);
+  line-height: 1.9;
+}
+.ws-set-label {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--text-soft);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.3rem;
+}
+
+/* ── 開始前：8 → 4 → 2 → 1 ── */
+.ws-funnel {
+  list-style: none;
+  margin: 2rem 0;
+  border-top: 1px solid var(--ws-line);
+}
+.ws-funnel li {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  align-items: baseline;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--ws-line);
+}
+.ws-funnel-num {
+  font-family: 'EB Garamond', serif;
+  font-size: 2.6rem;
+  line-height: 1.15;
+  color: var(--accent1);
+}
+/* 數字越小、顏色越深：留下來的越少，份量越重 */
+.ws-funnel li:first-child .ws-funnel-num { color: #cdbfa6; }
+.ws-funnel li:nth-child(2) .ws-funnel-num { color: var(--accent2); }
+.ws-funnel li:last-child .ws-funnel-num { color: var(--ink); }
+.ws-funnel-text {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--text-mid);
+}
+.ws-funnel li:last-child .ws-funnel-text { color: var(--ink); font-weight: 500; }
+
+/* ── 按鈕 ── */
+.ws-btn {
+  display: inline-block;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.5;
+  padding: 0.75rem 1.6rem;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.ws-btn:hover:not(:disabled) { background: var(--ink-soft); }
+.ws-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.ws-btn-ghost { background: transparent; color: var(--ink); border-color: #cfc4b1; }
+.ws-btn-ghost:hover:not(:disabled) { background: var(--paper-warm); }
+.ws-btn:focus-visible,
+.ws-opt:focus-visible { outline: 2px solid var(--accent1); outline-offset: 2px; }
+#ws-start { margin-top: 1.8rem; }
+
+/* ── 進度：5 組 × 3 輪 ── */
+.ws-progress {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.6rem;
+}
+.ws-progress-set {
+  flex: 1;
+  display: flex;
+  gap: 2px;
+}
+.ws-progress i {
+  flex: 1;
+  height: 3px;
+  background: var(--ws-line);
+}
+.ws-progress i.is-done { background: var(--accent2); }
+.ws-progress i.is-current { background: var(--ink); }
+
+/* ── 選項：兩欄帳本格線，與 self-discovery-tools 的工具格同一種做法 ── */
+.ws-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--ws-line);
+  border: 1px solid var(--ws-line);
+  margin-top: 1.4rem;
+}
+.ws-opt {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+  background: var(--paper);
+  border: 0;
+  border-radius: 0;
+  padding: 1.25rem 0.5rem;
+  min-height: 4.2rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.ws-opt:hover:not(:disabled):not(.is-on) { background: var(--paper-warm); }
+.ws-opt.is-on {
+  background: var(--ink);
+  color: var(--paper);
+}
+.ws-opt.is-out {
+  background: var(--paper-warm);
+  color: #b9ae9d;
+  font-weight: 400;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  cursor: default;
+}
+.ws-opt:focus-visible { position: relative; z-index: 1; }
+
+.ws-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.4rem;
+}
+.ws-count {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--text-mid);
+  font-variant-numeric: tabular-nums;
+}
+.ws-count.is-warn { color: #a23b2a; }
+
+/* ── 結果 ── */
+.ws-type {
+  --type: var(--accent1);
+  border-left: 3px solid var(--type);
+  padding-left: 1.25rem;
+  margin: 0.6rem 0 2rem;
+}
+[data-type="R"] { --type: var(--ws-R); }
+[data-type="O"] { --type: var(--ws-O); }
+[data-type="I"] { --type: var(--ws-I); }
+[data-type="F"] { --type: var(--ws-F); }
+
+.ws-type-name {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(2.4rem, 9vw, 3.4rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.3;
+  color: var(--type);
+  margin-bottom: 0.8rem;
+}
+.ws-type-trait {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.95;
+  color: var(--text-main);
+  margin-bottom: 1.2rem;
+}
+.ws-type-points {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.ws-type-points dt {
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  letter-spacing: 0.08em;
+}
+.ws-type-points dd {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.7;
+}
+
+.ws-subtitle {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.05em;
+  padding-top: 1.8rem;
+  border-top: 1px solid var(--ws-line);
+  margin-bottom: 0.2rem;
+}
+.ws-bars {
+  list-style: none;
+  margin: 1.2rem 0 2.4rem;
+}
+.ws-bar {
+  display: grid;
+  grid-template-columns: 4.2rem 1fr 2rem;
+  align-items: center;
+  column-gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+.ws-bar-name {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.ws-bar-track {
+  height: 10px;
+  background: var(--paper-mid);
+}
+.ws-bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--type);
+}
+.ws-bar-score {
+  font-family: 'EB Garamond', serif;
+  font-size: 1.25rem;
+  line-height: 1;
+  text-align: right;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.ws-bar-pro {
+  grid-column: 2 / -1;
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+
+.ws-result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+@media (max-width: 420px) {
+  .ws-opt { font-size: 1.05rem; letter-spacing: 0.08em; }
+  .ws-type-points { grid-template-columns: 1fr; gap: 0.7rem; }
+  .ws-result-actions .ws-btn { flex: 1 1 100%; text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-label, .hero-title, .hero-divider, .hero-desc { animation: none; opacity: 1; }
+  .ws-opt { transition: none; }
+}

@@ -122,6 +122,10 @@
       display: block;
       color: inherit;
     }
+    /* 工具數為奇數時，最後一張橫跨兩欄，避免格線底色露出一格空白 */
+    .tool-card:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+    }
     .tool-card::before {
       content: '';
       position: absolute;

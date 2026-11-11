@@ -44,6 +44,12 @@
   </url>
 
   <url>
+    <loc>https://lab.heysaori.com/work-style.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
     <loc>https://lab.heysaori.com/AgileChange.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
