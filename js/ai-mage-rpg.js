@@ -117,6 +117,11 @@ const equips = [
 let st = {step: 0, score: 0, userName: '', mySkills: [], myGear: []};
 const certTime = new Date().toLocaleString('zh-TW', {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'});
 
+// GA：只送事件與鑑別等級，不送使用者輸入的名字
+function track(name, params) {
+  if (typeof gtag === 'function') gtag('event', name, params || {});
+}
+
 function show(id) {
   document.querySelectorAll('.screen').forEach((s) => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -129,6 +134,7 @@ function startGame() {
   st = {step: 0, score: 0, userName: n, mySkills: [], myGear: []};
   renderQ();
   show('s-question');
+  track('ai_mage_start');
 }
 
 function renderQ() {
@@ -263,6 +269,7 @@ function goResult() {
     }
   });
   show('s-result');
+  track('ai_mage_complete', { rank: rank });
 }
 
 function openShare() {
@@ -279,6 +286,7 @@ function openShare() {
   document.getElementById('sh-sk').innerHTML = st.mySkills.map((s) => `<span class="badge b-skill">${s}</span>`).join('');
   document.getElementById('sh-ge').innerHTML = st.myGear.map((g) => `<span class="badge b-gear">${g}</span>`).join('');
   document.getElementById('modal').classList.add('open');
+  track('ai_mage_share', { rank: rank });
 }
 
 function closeShare() {

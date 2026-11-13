@@ -14,6 +14,11 @@
   const regenButtons = document.querySelectorAll('.regen-button');
   let isBusy = false;
 
+  // GA：只送語體與模式，不送使用者輸入的文字或 API Key
+  function track(name, params) {
+    if (typeof gtag === 'function') gtag('event', name, params || {});
+  }
+
   function getSelectedStyles() {
     return Array.from(styleBoxes).filter((box) => box.checked).map((box) => box.value);
   }
@@ -105,6 +110,7 @@
       const output = document.getElementById(button.dataset.copyTarget);
       try {
         await navigator.clipboard.writeText(output.textContent);
+        track('style_sim_copy', { style: button.dataset.copyTarget === 'wanAnResult' ? 'wanAn' : 'boYang' });
         status.textContent = `已複製${button.dataset.copyTarget === 'wanAnResult' ? '萬安體' : '伯洋體'}結果。`;
       } catch {
         status.textContent = '無法存取剪貼簿，請手動選取並複製。';
@@ -167,6 +173,10 @@
     else status.textContent = `${done.length ? `${done.join('、')}完成；` : ''}${failed.join('、')}。`;
     isBusy = false;
     syncStylePicker();
+    track('style_sim_generate', {
+      styles: tasks.map(({ style, mode }) => `${style}:${mode}`).join(','),
+      failed: failed.length
+    });
   }
 
   generateButton.addEventListener('click', () => runStyles(getSelectedStyles()));

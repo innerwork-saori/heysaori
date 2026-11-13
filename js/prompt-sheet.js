@@ -48,7 +48,18 @@ const PromptSheet = (function () {
     ['Perplexity', 'https://www.perplexity.ai'],
   ];
 
-  let root, opts, lang = 'zh', pending = false;
+  let root, opts, lang = 'zh', pending = false, started = false;
+
+  // GA：GA 會自動帶頁面網址，所以三個產生器共用同一組事件名稱。只送事件，不送使用者填的內容。
+  function track(name, params) {
+    if (typeof gtag === 'function') gtag('event', name, params || {});
+  }
+  // 第一次動到欄位時記一次「開始填」
+  function trackStart() {
+    if (started) return;
+    started = true;
+    track('prompt_start');
+  }
   const t = key => TEXT[lang][key];
   const $ = sel => root.querySelector(sel);
 
@@ -109,11 +120,13 @@ const PromptSheet = (function () {
     if (problem) {
       showMessage(problem.message);
       if (problem.focusId) focusField(problem.focusId);
+      track('prompt_copy_blocked');
       return;
     }
     showMessage('');
     writeClipboard(opts.build()).then(ok => {
       if (!ok) { showMessage(t('copyFailed')); return; }
+      track('prompt_copy');
       const toast = document.getElementById('toast');
       if (!toast) return;
       toast.textContent = t('copied');
@@ -184,8 +197,12 @@ const PromptSheet = (function () {
       </div>`;
     $('.sheet-copy').addEventListener('click', copy);
     $('.sheet-toggle').addEventListener('click', () => setOpen(!root.classList.contains('is-open')));
-    document.addEventListener('input', () => { showMessage(''); update(); });
-    document.addEventListener('change', () => { showMessage(''); update(); });
+    document.addEventListener('input', () => { trackStart(); showMessage(''); update(); });
+    document.addEventListener('change', () => { trackStart(); showMessage(''); update(); });
+    $('.sheet-ai').addEventListener('click', e => {
+      const link = e.target.closest('a');
+      if (link) track('prompt_open_ai', { ai: link.textContent });
+    });
     applyText();
     render();
   }

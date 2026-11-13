@@ -247,5 +247,18 @@
   </div>
 </footer>
 
+<script>
+  // GA：申請試用與看範例的點擊。position 用來分辨是哪一個連結：頁首按鈕、安裝步驟裡的文字連結、頁尾按鈕
+  function track(name, params) {
+    if (typeof gtag === 'function') gtag('event', name, params || {});
+  }
+  var applyPositions = ['top', 'steps', 'bottom'];
+  document.querySelectorAll('a[href*="forms.gle"]').forEach(function (link, i) {
+    link.addEventListener('click', function () { track('reels_apply_click', { position: applyPositions[i] || 'other' }); });
+  });
+  var exampleLink = document.querySelector('a.btn-ghost[href="#examples"]');
+  if (exampleLink) exampleLink.addEventListener('click', function () { track('reels_view_examples'); });
+</script>
+
 </body>
 </html>
