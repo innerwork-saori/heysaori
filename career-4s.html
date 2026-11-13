@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>轉換期 4S 盤點 · Saori 謝孟娟</title>
+  <meta name="description" content="轉職、換角色、被裁員，心裡很慌卻說不出原因？花 5 分鐘回答 15 題，找出你現在最缺的那一塊，還有這週就能做的一件小事。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/saori-base.css">
+  <link rel="stylesheet" href="css/career-4s.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JZJ4RQTVK1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JZJ4RQTVK1');
+</script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="self-discovery-tools.html" class="nav-back">職涯探索工具</a>
+  <div class="nav-title">轉換期 4S 盤點</div>
+</nav>
+
+<!-- ══════════ HERO（與其他工具頁相同結構）══════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines" aria-hidden="true">
+    <svg viewBox="0 0 1440 400" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="100" x2="300" y2="0" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <line x1="1440" y1="300" x2="1200" y2="400" stroke="rgba(196,149,106,0.07)" stroke-width="1"/>
+      <circle cx="1300" cy="80" r="140" fill="none" stroke="rgba(250,247,242,0.03)" stroke-width="1"/>
+      <circle cx="100" cy="320" r="90" fill="none" stroke="rgba(196,149,106,0.05)" stroke-width="1"/>
+    </svg>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-label">by Saori · career transition</div>
+    <h1 class="hero-title">改變來了，<span class="fs-nowrap">你缺的是哪一塊？</span></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">花 5 分鐘回答 15 題<br>找出讓你卡住的地方，還有這週就能做的一件小事</p>
+  </div>
+</section>
+
+<main class="fs-main">
+
+  <!-- ── 開始前 ── -->
+  <section class="fs-panel" id="fs-home">
+    <h2 class="fs-title">慌，不一定是能力不夠</h2>
+    <p class="fs-lead">把走過改變的你想成一張桌子，靠四隻腳撐著。只要有一隻短了，整張桌子就會晃。這份盤點幫你找出是哪一隻。</p>
+
+    <ul class="fs-legs-intro">
+      <li><span class="fs-intro-name">這件事本身</span><span class="fs-intro-text">是你選的還是突然來的？時機好不好？</span></li>
+      <li><span class="fs-intro-name">你自己</span><span class="fs-intro-text">你對自己有多少把握？這是你在乎的方向嗎？</span></li>
+      <li><span class="fs-intro-name">身邊的人</span><span class="fs-intro-text">有沒有人懂你、能讓你問、能給你後援？</span></li>
+      <li><span class="fs-intro-name">你的做法</span><span class="fs-intro-text">你有在動手處理、調整想法、照顧壓力嗎？</span></li>
+    </ul>
+
+    <label class="fs-field-label" for="fs-change">你正在面對什麼改變？<span class="fs-optional">可以不填</span></label>
+    <input type="text" class="fs-input" id="fs-change" maxlength="60" autocomplete="off"
+           placeholder="例如：工程師轉主管、被裁員">
+
+    <p class="fs-note">每題用 1 到 5 分回答，照現在真實的狀況選就好。答案只留在你的畫面上，不會存檔或送出。</p>
+    <button type="button" class="fs-btn" id="fs-start">開始盤點</button>
+    <p class="fs-source">題目改編自 Nancy K. Schlossberg 的 4S 轉折理論。</p>
+  </section>
+
+  <!-- ── 題目：一次一題 ── -->
+  <section class="fs-panel" id="fs-quiz" hidden>
+    <div class="fs-progress" id="fs-progress" role="img"></div>
+    <p class="fs-part" id="fs-part"></p>
+    <h2 class="fs-title fs-question" id="fs-question" tabindex="-1"></h2>
+    <p class="fs-hint" id="fs-hint"></p>
+
+    <div class="fs-scale" id="fs-scale" role="group" aria-labelledby="fs-question"></div>
+    <div class="fs-ends" aria-hidden="true">
+      <span id="fs-end-low"></span>
+      <span id="fs-end-high"></span>
+    </div>
+
+    <div class="fs-actions">
+      <button type="button" class="fs-btn fs-btn-ghost" id="fs-prev">上一題</button>
+      <button type="button" class="fs-btn" id="fs-next" disabled>下一題</button>
+    </div>
+  </section>
+
+  <!-- ── 結果 ── -->
+  <section class="fs-panel" id="fs-result" hidden>
+    <p class="fs-change-echo" id="fs-change-echo" hidden></p>
+    <p class="fs-part" id="fs-result-label"></p>
+    <div id="fs-weak" tabindex="-1"></div>
+
+    <h3 class="fs-subtitle">你的四隻腳</h3>
+    <p class="fs-note">每隻腳滿分 5 分，越長越穩。虛線是還沒補上的部分。</p>
+    <div class="fs-table">
+      <div class="fs-table-top" aria-hidden="true"></div>
+      <ul class="fs-legs" id="fs-legs"></ul>
+    </div>
+    <p class="fs-strong" id="fs-strong"></p>
+
+    <p class="fs-note fs-review">改變是一段路，不是一個點。兩週後再做一次，看看短的那隻腳有沒有長回來。</p>
+
+    <div class="fs-result-actions">
+      <a href="booking.html" class="fs-btn">帶著結果預約諮詢</a>
+      <button type="button" class="fs-btn fs-btn-ghost" id="fs-again">重新盤點</button>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/career-4s.js"></script>
+</body>
+</html>

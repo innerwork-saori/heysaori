@@ -1,0 +1,428 @@
+/* career-4s.css — 轉換期 4S 盤點（繼承 saori-base.css）
+ * 整頁只用墨色與紙色；唯一的強調色留給結果頁「短掉的那隻腳」。
+ * 結果圖是一張桌子：上面一條桌面，下面四隻腳，長度就是分數。
+ */
+:root {
+  --fs-line: #e4dccd;
+  --fs-weak: #a8543a;
+  --fs-nav-h: 3.6rem;
+  --fs-leg-h: 9.5rem;
+}
+
+/* ── Hero：與 work-style、career-interest 等工具頁相同 ── */
+.hero {
+  background: var(--ink);
+  padding: 9rem 2rem 5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 80%, rgba(196,149,106,0.1) 0%, transparent 65%),
+    linear-gradient(160deg, #1c1a17 0%, #252018 60%, #1e1b14 100%);
+}
+.hero-lines { position: absolute; inset: 0; pointer-events: none; }
+.hero-lines svg { width: 100%; height: 100%; }
+.hero-inner {
+  position: relative; z-index: 2;
+  max-width: 620px;
+  margin: 0 auto;
+}
+.hero-label {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--accent3);
+  letter-spacing: 0.25em;
+  margin-bottom: 1.4rem;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.2s ease forwards;
+}
+.hero-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 600;
+  color: var(--paper);
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  margin-bottom: 1.2rem;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.4s ease forwards;
+}
+.fs-nowrap { white-space: nowrap; }
+.hero-divider {
+  width: 40px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent3), transparent);
+  margin: 0 auto 1.4rem;
+  opacity: 0;
+  animation: fadeIn 0.9s 0.6s ease forwards;
+}
+.hero-desc {
+  font-size: 0.85rem;
+  color: rgba(250,247,242,0.45);
+  letter-spacing: 0.06em;
+  line-height: 2;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.75s ease forwards;
+}
+
+/* ── Main ── */
+.fs-main {
+  max-width: 36rem;
+  margin: 0 auto;
+  padding: 3rem 1.25rem 6rem;
+}
+.fs-panel { scroll-margin-top: calc(var(--fs-nav-h) + 1.5rem); }
+.fs-panel:focus, .fs-title:focus, #fs-weak:focus { outline: none; }
+
+.fs-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(1.35rem, 4vw, 1.7rem);
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+.fs-lead {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-main);
+  line-height: 1.9;
+}
+.fs-note {
+  font-size: 0.9rem;
+  color: var(--text-mid);
+  line-height: 1.9;
+}
+.fs-part {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--text-soft);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.3rem;
+}
+
+/* ── 開始前：四隻腳各是什麼 ── */
+.fs-legs-intro {
+  list-style: none;
+  margin: 2rem 0;
+  border-top: 1px solid var(--fs-line);
+}
+.fs-legs-intro li {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  column-gap: 1rem;
+  align-items: baseline;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--fs-line);
+}
+.fs-intro-name {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.05em;
+}
+.fs-intro-text {
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: var(--text-mid);
+  line-height: 1.7;
+}
+
+.fs-field-label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+.fs-optional {
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: var(--text-soft);
+  margin-left: 0.6rem;
+}
+.fs-input {
+  display: block;
+  width: 100%;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid #cfc4b1;
+  border-radius: 4px;
+  padding: 0.75rem 0.9rem;
+  margin-bottom: 1.4rem;
+}
+.fs-input::placeholder { color: #b9ae9d; }
+.fs-source {
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  line-height: 1.8;
+  margin-top: 2rem;
+}
+
+/* ── 按鈕 ── */
+.fs-btn {
+  display: inline-block;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.5;
+  padding: 0.75rem 1.6rem;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.fs-btn:hover:not(:disabled) { background: var(--ink-soft); }
+.fs-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.fs-btn-ghost { background: transparent; color: var(--ink); border-color: #cfc4b1; }
+.fs-btn-ghost:hover:not(:disabled) { background: var(--paper-warm); }
+.fs-btn:focus-visible,
+.fs-score:focus-visible,
+.fs-input:focus-visible { outline: 2px solid var(--accent1); outline-offset: 2px; }
+#fs-start { margin-top: 1.8rem; }
+
+/* ── 進度：四段，每段的格數就是那個面向的題數 ── */
+.fs-progress {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.6rem;
+}
+.fs-progress-area {
+  display: flex;
+  gap: 2px;
+}
+.fs-progress i {
+  flex: 1;
+  height: 3px;
+  background: var(--fs-line);
+}
+.fs-progress i.is-done { background: var(--accent2); }
+.fs-progress i.is-current { background: var(--ink); }
+
+/* ── 題目 ── */
+/* 題目長短不一，留固定高度，下面的 1–5 才不會每題跳位置 */
+.fs-question { min-height: 3em; margin-bottom: 0.4rem; }
+.fs-hint {
+  font-size: 0.92rem;
+  color: var(--text-mid);
+  line-height: 1.8;
+}
+
+/* 1–5：一排帳本格線，與 work-style 的選項格同一種做法 */
+.fs-scale {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+  background: var(--fs-line);
+  border: 1px solid var(--fs-line);
+  margin-top: 1.6rem;
+}
+.fs-score {
+  font-family: 'EB Garamond', serif;
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--ink);
+  background: var(--paper);
+  border: 0;
+  border-radius: 0;
+  min-height: 4.2rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.fs-score:hover:not(.is-on) { background: var(--paper-warm); }
+.fs-score.is-on { background: var(--ink); color: var(--paper); }
+.fs-score:focus-visible { position: relative; z-index: 1; }
+
+.fs-ends {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 0.6rem;
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: var(--text-mid);
+  line-height: 1.6;
+}
+.fs-ends span:last-child { text-align: right; }
+
+.fs-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2.2rem;
+}
+
+/* ── 結果：最需要補的那一塊 ── */
+.fs-change-echo {
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: var(--text-mid);
+  padding-bottom: 1rem;
+  margin-bottom: 1.4rem;
+  border-bottom: 1px solid var(--fs-line);
+  overflow-wrap: anywhere;
+}
+.fs-weak-item {
+  border-left: 3px solid var(--fs-weak);
+  padding-left: 1.25rem;
+  margin: 0.6rem 0 2rem;
+}
+.fs-weak-name {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(2.2rem, 9vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  color: var(--fs-weak);
+}
+/* 四項同分時沒有「弱項」，不用警示色 */
+.fs-weak-even { border-left-color: var(--accent1); }
+.fs-weak-even .fs-weak-name { color: var(--ink); font-size: clamp(1.8rem, 7vw, 2.4rem); margin-bottom: 0.6rem; }
+.fs-weak-theory {
+  font-size: 0.82rem;
+  color: var(--text-soft);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.9rem;
+}
+.fs-weak-desc {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.95;
+  color: var(--text-main);
+  margin-bottom: 1.3rem;
+}
+.fs-action {
+  background: var(--paper-warm);
+  padding: 1.1rem 1.2rem 1.2rem;
+}
+.fs-action-title {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--accent1);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.3rem;
+}
+.fs-action-text {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1.8;
+  color: var(--ink);
+}
+.fs-action-why {
+  font-size: 0.82rem;
+  color: var(--text-soft);
+  line-height: 1.7;
+  margin-top: 0.6rem;
+}
+
+.fs-subtitle {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.05em;
+  padding-top: 1.8rem;
+  border-top: 1px solid var(--fs-line);
+  margin-bottom: 0.2rem;
+}
+
+/* ── 結果：桌子圖 ── */
+.fs-table { margin: 1.6rem 0 1.4rem; }
+.fs-table-top {
+  height: 10px;
+  background: var(--ink);
+}
+.fs-legs {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.fs-leg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+/* slot 是滿分的長度，bar 是實際分數；slot 底下那條線是地板 */
+.fs-leg-slot {
+  width: 100%;
+  height: var(--fs-leg-h);
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid var(--fs-line);
+  margin-bottom: 0.8rem;
+  background: linear-gradient(#cfc4b1, #cfc4b1) center / 1px 100% no-repeat; /* 沒補上的部分：細線 */
+}
+.fs-leg-bar {
+  display: block;
+  width: 14px;
+  background: var(--ink);
+}
+.fs-leg.is-weak .fs-leg-slot {
+  background: repeating-linear-gradient(var(--fs-weak) 0 5px, transparent 5px 10px) center / 2px 100% no-repeat;
+}
+.fs-leg.is-weak .fs-leg-bar { background: var(--fs-weak); }
+
+.fs-leg-name {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.fs-leg-score {
+  font-family: 'EB Garamond', serif;
+  font-size: 1.7rem;
+  line-height: 1.3;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.fs-leg-status {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-soft);
+}
+.fs-leg.is-weak .fs-leg-name,
+.fs-leg.is-weak .fs-leg-score,
+.fs-leg.is-weak .fs-leg-status { color: var(--fs-weak); }
+
+.fs-strong {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-main);
+  line-height: 1.9;
+}
+.fs-review {
+  margin: 1.6rem 0 2rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--fs-line);
+}
+.fs-result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+@media (max-width: 420px) {
+  .fs-legs-intro li { grid-template-columns: 1fr; row-gap: 0.1rem; }
+  .fs-leg-name { font-size: 0.85rem; }
+  .fs-leg-score { font-size: 1.45rem; }
+  .fs-result-actions .fs-btn { flex: 1 1 100%; text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-label, .hero-title, .hero-divider, .hero-desc { animation: none; opacity: 1; }
+  .fs-score { transition: none; }
+}
