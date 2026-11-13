@@ -255,9 +255,31 @@ function canEnter(step) {
   return false;
 }
 
+// ─── GA 事件 ─────────────────────────────────────────────────────────────────
+// 只送事件名稱與結果類型，不送姓名、Email 或使用者寫的文字。GA 會自動帶頁面網址。
+function track(name, params) {
+  if (typeof gtag === 'function') gtag('event', name, params || {});
+}
+// 點了預約諮詢（booking.html）或 LINE 聯繫 Saori
+document.addEventListener('click', function (e) {
+  const link = e.target.closest && e.target.closest('a[href]');
+  if (!link) return;
+  const href = link.getAttribute('href');
+  if (href.indexOf('booking.html') >= 0) track('booking_click');
+  else if (href.indexOf('lin.ee') >= 0) track('line_contact_click');
+});
+// 每個步驟在同一次造訪中只記第一次到達，來回切換不重複計算
+const trackedSteps = {};
+function trackStep(name, step, params) {
+  if (trackedSteps[step]) return;
+  trackedSteps[step] = true;
+  track(name, Object.assign({ step: String(step) }, params || {}));
+}
+
 function goTo(step) {
   if (step !== 'done' && !canEnter(step)) return;
   state.step = step;
+  trackStep('career_interest_step', step);
   saveState();
   render();
   const main = document.querySelector('.ci-main');
@@ -736,6 +758,7 @@ async function onNameSubmit(e) {
       }
       state.name = name;
       msg.textContent = '';
+      track('career_interest_start');
       goTo(2);
     } else {
       const errors = {
@@ -878,6 +901,7 @@ async function submit() {
     if (result && result.ok) {
       state.submittedAt = new Date().toISOString();
       state.emailSent = result.emailSent === true;
+      track('career_interest_submit', { email_sent: state.emailSent ? 'yes' : 'no' });
       submitting = false;
       goTo('done');
       showToast(state.emailSent ? '已送出，報告寄到你的信箱了' : '已送出給 Saori');

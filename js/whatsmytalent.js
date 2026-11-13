@@ -622,8 +622,33 @@ function buildInlineCardDetail(no) {
 }
 
 /* ── MODE ── */
+// ─── GA 事件 ─────────────────────────────────────────────────────────────────
+// 只送事件名稱與結果類型，不送姓名、Email 或使用者寫的文字。GA 會自動帶頁面網址。
+function track(name, params) {
+  if (typeof gtag === 'function') gtag('event', name, params || {});
+}
+// 點了預約諮詢（booking.html）或 LINE 聯繫 Saori
+document.addEventListener('click', function (e) {
+  const link = e.target.closest && e.target.closest('a[href]');
+  if (!link) return;
+  const href = link.getAttribute('href');
+  if (href.indexOf('booking.html') >= 0) track('booking_click');
+  else if (href.indexOf('lin.ee') >= 0) track('line_contact_click');
+});
+// 列印／存成 PDF（按鈕或 Ctrl+P 都算）
+window.addEventListener('beforeprint', function () { track('talent_export', { format: 'print' }); });
+// 每個步驟在同一次造訪中只記第一次到達，來回切換不重複計算
+let trackedSteps = {};
+function trackStep(name, step, params) {
+  if (trackedSteps[step]) return;
+  trackedSteps[step] = true;
+  track(name, Object.assign({ step: String(step) }, params || {}));
+}
+
 function startMode(mode) {
   currentMode = mode;
+  trackedSteps = {};
+  track('talent_start', { mode: mode });
   document.getElementById('mode-screen').style.display = 'none';
   const pb = document.getElementById('progress-bar');
   pb.classList.add('visible');
@@ -746,6 +771,7 @@ function goToStep(n) {
   }
   updateNavBar(n);
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  trackStep('talent_step', n, { mode: currentMode });
   saveState(); // 自動儲存
 }
 
@@ -1090,6 +1116,7 @@ function exportWmtJSON(mode) {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
   showToast('✅ 已匯出 JSON 檔案！');
+  track('talent_export', { format: 'json' });
 }
 
 /* ── JSON 匯入驗證 ── */
@@ -1274,6 +1301,7 @@ async function sendReport(mode) {
 
     if (result.success) {
       showToast(`✅ 報告已寄送到 ${email}！`);
+      track('talent_report_sent', { mode: mode });
       if (btn) { btn.textContent = '✅ 已寄送！'; }
     } else {
       showToast('❌ 寄送失敗：' + (result.error || '請稍後再試'));

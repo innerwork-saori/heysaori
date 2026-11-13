@@ -146,6 +146,11 @@ function formatScore(avg) {
 function track(name, params) {
   if (typeof gtag === 'function') gtag('event', name, params || {});
 }
+// 點了預約諮詢（事件名稱與其他職涯工具相同，用頁面網址分辨來源）
+document.addEventListener('click', (e) => {
+  const link = e.target.closest && e.target.closest('a[href*="booking.html"]');
+  if (link) track('booking_click');
+});
 
 // ─── 畫面 ────────────────────────────────────────────────────────────────────
 function showPanel(id) {

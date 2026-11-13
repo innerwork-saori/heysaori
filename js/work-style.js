@@ -198,12 +198,27 @@ function renderResult() {
   }).join('');
 }
 
+// ─── GA 事件 ─────────────────────────────────────────────────────────────────
+// 只送事件名稱與結果類型，不送姓名、Email 或使用者寫的文字。GA 會自動帶頁面網址。
+function track(name, params) {
+  if (typeof gtag === 'function') gtag('event', name, params || {});
+}
+// 點了預約諮詢（booking.html）或 LINE 聯繫 Saori
+document.addEventListener('click', function (e) {
+  const link = e.target.closest && e.target.closest('a[href]');
+  if (!link) return;
+  const href = link.getAttribute('href');
+  if (href.indexOf('booking.html') >= 0) track('booking_click');
+  else if (href.indexOf('lin.ee') >= 0) track('line_contact_click');
+});
+
 // ─── 事件 ────────────────────────────────────────────────────────────────────
 function handleStart() {
   resetQuiz();
   showPanel('ws-quiz');
   renderRound();
   focusTop(el('ws-question'));
+  track('work_style_start');
 }
 
 function handleNext() {
@@ -213,6 +228,7 @@ function handleNext() {
     renderResult();
     showPanel('ws-result');
     focusTop(el('ws-top'), el('ws-result'));
+    track('work_style_complete', { type: topTypes().map((t) => WS_TYPES[t].name).join(',') });
     return;
   }
   renderRound();

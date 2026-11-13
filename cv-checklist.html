@@ -499,6 +499,26 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }
 
+  // ── GA 事件：只送事件名稱，不送勾選內容 ──
+  function track(name, params) {
+    if (typeof gtag === 'function') gtag('event', name, params || {});
+  }
+  // 每個事件在同一次造訪中只記一次
+  var tracked = {};
+  function trackOnce(name) {
+    if (tracked[name]) return;
+    tracked[name] = true;
+    track(name);
+  }
+  function allChecked(selector) {
+    var items = document.querySelectorAll(selector);
+    return items.length > 0 && document.querySelectorAll(selector + '.checked').length === items.length;
+  }
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest && e.target.closest('a[href*="booking.html"]');
+    if (link) track('booking_click');
+  });
+
   // ── Update detail progress bar (items NOT in quick-section) ──
   function updateDetailProgress() {
     const items   = document.querySelectorAll('.cl-section .cl-item');
@@ -553,6 +573,10 @@
     } else {
       updateDetailProgress();
     }
+    // 第一次勾選算開始；快速版、詳細版各自全部勾完時記一次
+    trackOnce('cv_checklist_start');
+    if (allChecked('.quick-section .cl-item')) trackOnce('cv_checklist_quick_done');
+    if (allChecked('.cl-section .cl-item')) trackOnce('cv_checklist_detail_done');
   }
 
   // ── Bind all items ──
@@ -573,6 +597,7 @@
     if (!confirm('確定要重置所有勾選（包含快速版）？')) return;
     localStorage.removeItem(STORAGE_KEY);
     applyState({});
+    track('cv_checklist_reset');
   });
 
   // ── Init ──

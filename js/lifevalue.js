@@ -456,9 +456,33 @@ function exportJSON() {
   a.click();
   URL.revokeObjectURL(url);
   showToast('已匯出 JSON 檔案');
+  track('lifevalue_export', { format: 'json' });
 }
 
 // ─── MODE ─────────────────────────────────────────────────────────────────────
+// ─── GA 事件 ─────────────────────────────────────────────────────────────────
+// 只送事件名稱與結果類型，不送姓名、Email 或使用者寫的文字。GA 會自動帶頁面網址。
+function track(name, params) {
+  if (typeof gtag === 'function') gtag('event', name, params || {});
+}
+// 點了預約諮詢（booking.html）或 LINE 聯繫 Saori
+document.addEventListener('click', function (e) {
+  const link = e.target.closest && e.target.closest('a[href]');
+  if (!link) return;
+  const href = link.getAttribute('href');
+  if (href.indexOf('booking.html') >= 0) track('booking_click');
+  else if (href.indexOf('lin.ee') >= 0) track('line_contact_click');
+});
+// 列印／存成 PDF（按鈕或 Ctrl+P 都算）
+window.addEventListener('beforeprint', function () { track('lifevalue_export', { format: 'print' }); });
+// 每個步驟在同一次造訪中只記第一次到達，來回切換不重複計算
+let trackedSteps = {};
+function trackStep(name, step, params) {
+  if (trackedSteps[step]) return;
+  trackedSteps[step] = true;
+  track(name, Object.assign({ step: String(step) }, params || {}));
+}
+
 function startMode(mode) {
   const savedName = state.userName || document.getElementById('user-name')?.value?.trim() || '';
   // 保留跨模式共用的原因與滿意度（key 是 card id，兩個模式共用）
@@ -478,6 +502,8 @@ function startMode(mode) {
   state.cards = pool.map(c => ({ id: c.id, status: 'none' }));
   saveState();
   applyMode(mode);
+  trackedSteps = {};
+  track('lifevalue_start', { mode: mode });
   goToStep(1);
 }
 
@@ -603,6 +629,7 @@ function goToStep(n) {
   saveState();
   updateNavBar(n);
   window.scrollTo(0,0);
+  trackStep('lifevalue_step', n, { mode: state.mode });
 
   if (n === 1) renderStep1();
   if (n === 2) renderStep2();
@@ -1145,6 +1172,7 @@ function goToResult() {
   saveState();
   updateNavBar(5);
   window.scrollTo(0,0);
+  trackStep('lifevalue_complete', 'result', { mode: state.mode });
 }
 
 // ─── RESULT PAGE ──────────────────────────────────────────────────────────────
@@ -1352,10 +1380,12 @@ function downloadMd() {
   a.click();
   URL.revokeObjectURL(url);
   showToast('已下載 Markdown 檔案');
+  track('lifevalue_export', { format: 'markdown' });
 }
 
 function copyText() {
   const txt = buildTextContent();
+  track('lifevalue_export', { format: 'copy' });
   navigator.clipboard.writeText(txt).then(() => {
     showToast('已複製到剪貼簿');
   }).catch(() => {
@@ -1436,6 +1466,7 @@ async function sendReport() {
     document.getElementById('loading-overlay').classList.remove('show');
     document.getElementById('send-btn').disabled = false;
     showToast('✅ 報表已寄送到 ' + email);
+    track('lifevalue_report_sent', { mode: state.mode });
   } catch (err) {
     document.getElementById('loading-overlay').classList.remove('show');
     document.getElementById('send-btn').disabled = false;

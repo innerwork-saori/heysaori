@@ -175,7 +175,22 @@
     // and showSection('start') handles visibility when resetting.
   }
 
+  // ─── GA 事件 ─────────────────────────────────────────────────────────────────
+  // 只送事件名稱與結果類型，不送姓名、Email 或使用者寫的文字。GA 會自動帶頁面網址。
+  function track(name, params) {
+    if (typeof gtag === 'function') gtag('event', name, params || {});
+  }
+  // 點了預約諮詢（booking.html）或 LINE 聯繫 Saori
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest && e.target.closest('a[href]');
+    if (!link) return;
+    var href = link.getAttribute('href');
+    if (href.indexOf('booking.html') >= 0) track('booking_click');
+    else if (href.indexOf('lin.ee') >= 0) track('line_contact_click');
+  });
+
   function startQuiz() {
+    track('agile_start');
     state.phase = 'quiz';
     state.currentIndex = 0;
     showSection('quiz');
@@ -375,6 +390,7 @@
     var result = calculateResults(state.answers, config);
     state.phase = 'result';
     renderResult(result);
+    track('agile_complete', { level: result.overallLevel });
   }
 
   /**
