@@ -378,6 +378,8 @@ const jSel = new Set(), jData = {};
 
 // State management functions
 function saveState() {
+  // 沿用第一次儲存的時間。原本寫成 state?.createdAt，在 state 宣告完成前讀取自己，每次儲存都會丟出錯誤
+  const createdAt = loadState()?.createdAt || Date.now();
   const state = {
     mode: currentMode,
     currentStep: getCurrentStep(),
@@ -395,7 +397,7 @@ function saveState() {
       selected: Array.from(jSel),
       data: {...jData}
     },
-    createdAt: state?.createdAt || Date.now()
+    createdAt
   };
   try { 
     localStorage.setItem(STATE_KEY, JSON.stringify(state)); 
@@ -495,6 +497,8 @@ function restoreState() {
     }
     
     // 跳到對應步驟（不觸發 saveState）
+    // 存取碼過期時只回到 Step 1：Step 2 以上要重新驗證，資料仍然保留
+    if (saved.currentStep >= 2 && !isCodeAuthorized()) saved.currentStep = 1;
     if (saved.currentStep > 0) {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.step-tab').forEach((t, i) => t.classList.toggle('active', i+1 === saved.currentStep));
