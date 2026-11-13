@@ -8,7 +8,7 @@
 
 // ─── 設定 ────────────────────────────────────────────────────────────────────
 // ← 部署 GAS/career-4s.js 後，把 Web App 網址貼在這裡；還沒貼之前，結果頁不顯示「寄 PDF 報告」
-const FS_GAS_URL = 'PASTE_WEB_APP_URL_HERE';
+const FS_GAS_URL = 'https://script.google.com/macros/s/AKfycbxIerpCsUoS5E2NXaQ2pGthkKMs5lmxJ7VxdxhN0NbpazjIf08dd0E5RA2Zw5cPppZu-g/exec';
 const FS_TOKEN   = 'saori-4s-2026-fc978e'; // ← 需與 GAS 中的 TOKEN 相同
 const FS_EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
