@@ -327,5 +327,28 @@
   </div>
 </footer>
 
+<script>
+  // GA 事件：哪個工具被點開、哪個工具的按鈕被點、有沒有點預約諮詢。tool 是頁面上的工具名稱
+  function track(name, params) {
+    if (typeof gtag === 'function') gtag('event', name, params || {});
+  }
+  document.querySelectorAll('details.tool-item').forEach(function (item) {
+    item.addEventListener('toggle', function () {
+      if (item.open) track('tool_open', { tool: toolName(item) });
+    });
+  });
+  function toolName(item) {
+    var name = item.querySelector('.tool-name');
+    return name ? name.textContent.trim() : '';
+  }
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest && e.target.closest('a[href]');
+    if (!link) return;
+    var item = link.closest('details.tool-item');
+    if (item) track('tool_cta_click', { tool: toolName(item) });
+    if (link.getAttribute('href').indexOf('booking.html') >= 0) track('booking_click');
+  });
+</script>
+
 </body>
 </html>

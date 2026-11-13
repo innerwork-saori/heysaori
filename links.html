@@ -245,6 +245,20 @@
       const pageUrl = encodeURIComponent(window.location.href);
       qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${pageUrl}`;
     }
+    if (!isExpanded) track('links_qr_open');
+  });
+
+  // GA 事件：哪一個連結被點。link 是卡片標題；上方的社群圖示沒有標題，用它的名稱（例如 Instagram）
+  function track(name, params) {
+    if (typeof gtag === 'function') gtag('event', name, params || {});
+  }
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest && e.target.closest('a[href]');
+    if (!link) return;
+    const title = link.querySelector('.link-title');
+    const label = title ? title.textContent.trim() : (link.getAttribute('aria-label') || '');
+    if (label) track('link_click', { link: label });
+    if (link.getAttribute('href').indexOf('booking.html') >= 0) track('booking_click');
   });
 </script>
 

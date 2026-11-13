@@ -266,5 +266,15 @@
   </div>
 </footer>
 
+<script>
+  // GA 事件：點預約諮詢。position 用來分辨是頁面上方還是下方的按鈕
+  function track(name, params) {
+    if (typeof gtag === 'function') gtag('event', name, params || {});
+  }
+  document.querySelectorAll('a[href="booking.html"]').forEach(function (link, i) {
+    link.addEventListener('click', function () { track('booking_click', { position: i === 0 ? 'top' : 'bottom' }); });
+  });
+</script>
+
 </body>
 </html>
