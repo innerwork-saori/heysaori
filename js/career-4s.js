@@ -1,10 +1,19 @@
 /* career-4s.js — 轉換期 4S 盤點
  * 流程：15 題（情境 4、自我 4、支持 4、策略 3），每題 1–5 分，一次一題。
  * 各面向取平均（題數不同，不能直接比總分），平均最低的就是最需要補的那一塊。
- * 純前端計算，不存檔、不送出；GA 只記開始、完成與最弱面向，不含使用者輸入的文字。
+ * 盤點本身純前端計算，不存檔。使用者在結果頁主動留信箱時，才把分數送到 GAS 產生 PDF 報告並寄出
+ * （GAS/career-4s.js；Saori 會收到副本）。
+ * GA 只記開始、完成、最弱面向與是否寄報告，不含使用者輸入的文字。
  */
 
+// ─── 設定 ────────────────────────────────────────────────────────────────────
+// ← 部署 GAS/career-4s.js 後，把 Web App 網址貼在這裡；還沒貼之前，結果頁不顯示「寄 PDF 報告」
+const FS_GAS_URL = 'PASTE_WEB_APP_URL_HERE';
+const FS_TOKEN   = 'saori-4s-2026-fc978e'; // ← 需與 GAS 中的 TOKEN 相同
+const FS_EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 // ─── 內容 ────────────────────────────────────────────────────────────────────
+// ⚠ 這一段與 GAS/career-4s.js 的 AREAS 內容相同（PDF 報告用），改題目時兩邊要一起改。
 // 每題的 5 分都代表「這是幫助你的資源」，1 分代表「這在拖住你」。
 // tip：這一題分數低時，建議這週做的一件小事。
 const FS_AREAS = [
@@ -91,6 +100,7 @@ const state = {
   change: ''
 };
 let advanceTimer = null;
+let reportSending = false;
 
 const el = (id) => document.getElementById(id);
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -248,6 +258,75 @@ function renderResult() {
   return sum;
 }
 
+// ─── 寄 PDF 報告 ─────────────────────────────────────────────────────────────
+function gasConfigured() {
+  return !!FS_GAS_URL && FS_GAS_URL.indexOf('PASTE_') !== 0;
+}
+
+function setReportMsg(text, isError) {
+  const msg = el('fs-report-msg');
+  msg.textContent = text;
+  msg.classList.toggle('is-error', Boolean(isError));
+}
+
+// 每次進到結果頁都重設：分數可能不一樣了，可以再寄一次
+function resetReportForm() {
+  el('fs-report').hidden = !gasConfigured();
+  el('fs-send').disabled = false;
+  el('fs-send').textContent = '寄 PDF 報告給我';
+  setReportMsg('');
+}
+
+async function handleReportSubmit(e) {
+  e.preventDefault();
+  if (reportSending) return;
+  const name = el('fs-name').value.trim();
+  const email = el('fs-email').value.trim();
+  if (!name) {
+    setReportMsg('請填寫怎麼稱呼你，報告上會用到。', true);
+    el('fs-name').focus();
+    return;
+  }
+  if (!FS_EMAIL_RE.test(email)) {
+    setReportMsg(email ? 'Email 格式看起來不對，請確認後再寄。' : '請填寫寄送報告的 Email。', true);
+    el('fs-email').focus();
+    return;
+  }
+
+  reportSending = true;
+  el('fs-send').disabled = true;
+  el('fs-send').textContent = '產生報告中，大約 10 秒';
+  setReportMsg('');
+  let sent = false;
+  try {
+    const res = await fetch(FS_GAS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' }, // 簡單請求，避免 CORS preflight
+      body: JSON.stringify({ token: FS_TOKEN, action: 'report', name, email, change: state.change, answers: state.answers })
+    });
+    const result = await res.json();
+    if (result && result.ok) {
+      sent = true;
+      setReportMsg(`PDF 報告已寄到 ${email}。幾分鐘內沒收到的話，看看垃圾信匣。`);
+      track('career_4s_report');
+    } else {
+      const errors = {
+        invalid_email: 'Email 格式看起來不對，請確認後再寄。',
+        invalid_data: '資料不完整，請重新盤點一次再寄。',
+        daily_limit: '今天寄出的報告已達上限，請明天再試，或直接聯繫 Saori。',
+        unauthorized: '工具設定有誤，請通知 Saori。'
+      };
+      setReportMsg(errors[result && result.error] || '報告沒有寄出，請稍後再試。', true);
+    }
+  } catch (err) {
+    setReportMsg('連線失敗，請檢查網路後再試。', true);
+  } finally {
+    reportSending = false;
+    el('fs-send').disabled = sent;
+    el('fs-send').textContent = sent ? '已寄出' : '寄 PDF 報告給我';
+  }
+}
+
 // ─── 事件 ────────────────────────────────────────────────────────────────────
 function handleStart() {
   state.step = 0;
@@ -269,6 +348,7 @@ function goNext() {
     return;
   }
   const sum = renderResult();
+  resetReportForm();
   showPanel('fs-result');
   focusTop(el('fs-weak'), el('fs-result'));
   track('career_4s_complete', { weakest: sum.weakest.map((a) => FS_AREAS[a].key).join(',') });
@@ -304,6 +384,7 @@ function init() {
   el('fs-next').addEventListener('click', goNext);
   el('fs-prev').addEventListener('click', goPrev);
   el('fs-again').addEventListener('click', handleAgain);
+  if (el('fs-report')) el('fs-report').addEventListener('submit', handleReportSubmit);
   el('fs-change').addEventListener('keydown', (e) => { if (e.key === 'Enter') handleStart(); });
   el('fs-scale').addEventListener('click', (e) => {
     const btn = e.target.closest('.fs-score');

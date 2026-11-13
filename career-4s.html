@@ -64,7 +64,7 @@
     <input type="text" class="fs-input" id="fs-change" maxlength="60" autocomplete="off"
            placeholder="例如：工程師轉主管、被裁員">
 
-    <p class="fs-note">每題用 1 到 5 分回答，照現在真實的狀況選就好。答案只留在你的畫面上，不會存檔或送出。</p>
+    <p class="fs-note">每題用 1 到 5 分回答，照現在真實的狀況選就好。答案只留在你的畫面上；做完後想要 PDF 報告，再留信箱寄給自己。</p>
     <button type="button" class="fs-btn" id="fs-start">開始盤點</button>
     <p class="fs-source">題目改編自 Nancy K. Schlossberg 的 4S 轉折理論。</p>
   </section>
@@ -103,6 +103,18 @@
     <p class="fs-strong" id="fs-strong"></p>
 
     <p class="fs-note fs-review">改變是一段路，不是一個點。兩週後再做一次，看看短的那隻腳有沒有長回來。</p>
+
+    <!-- 寄 PDF 報告：js/career-4s.js 的 FS_GAS_URL 還沒設定時，這一塊不會顯示 -->
+    <form class="fs-report" id="fs-report" hidden novalidate>
+      <h3 class="fs-subtitle">把結果寄成 PDF</h3>
+      <p class="fs-note">報告裡有上面的結果，加上 15 題的作答明細，方便兩週後對照。Saori 也會收到一份，預約諮詢時可以直接一起看。</p>
+      <label class="fs-field-label" for="fs-name">怎麼稱呼你</label>
+      <input type="text" class="fs-input" id="fs-name" maxlength="40" autocomplete="name" required>
+      <label class="fs-field-label" for="fs-email">寄送報告的 Email</label>
+      <input type="email" class="fs-input" id="fs-email" maxlength="200" autocomplete="email" inputmode="email" placeholder="例如：you@example.com" required>
+      <button type="submit" class="fs-btn" id="fs-send">寄 PDF 報告給我</button>
+      <p class="fs-report-msg" id="fs-report-msg" role="status" aria-live="polite"></p>
+    </form>
 
     <div class="fs-result-actions">
       <a href="booking.html" class="fs-btn">帶著結果預約諮詢</a>
