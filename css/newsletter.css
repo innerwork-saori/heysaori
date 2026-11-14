@@ -1,0 +1,71 @@
+/* newsletter.html：版面沿用 links.css，這裡只補賣點列表與訂閱表單區 */
+
+/* ── 訂閱後會收到什麼 ── */
+.newsletter-points { list-style: none; }
+.newsletter-points li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.85rem 1rem;
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-mid);
+  border-radius: 14px;
+}
+.newsletter-points li + li { margin-top: 0.6rem; }
+.newsletter-points strong {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-main);
+}
+.newsletter-points span {
+  font-size: 0.85rem;
+  color: var(--text-mid);
+  line-height: 1.8;
+}
+
+/* ── 訂閱表單（Brevo embed 放在這個容器裡） ── */
+.newsletter-form {
+  border: 1px solid var(--paper-mid);
+  border-radius: 14px;
+  overflow: hidden;
+}
+/* Brevo 表單在 iframe 裡，高度沒辦法自動貼合內容；
+   在 Brevo 增減欄位後，如果表單出現內捲軸或下方留白，調這裡的高度 */
+.newsletter-form iframe {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: 540px;
+  border: 0;
+}
+.newsletter-form-placeholder {
+  padding: 1.5rem 0;
+  font-size: 0.9rem;
+  color: var(--text-soft);
+  text-align: center;
+}
+.newsletter-note {
+  margin-top: 0.7rem;
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  text-align: center;
+  line-height: 1.8;
+}
+
+.newsletter-back {
+  display: block;
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: var(--accent1);
+  text-align: center;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+}
+.newsletter-back:hover,
+.newsletter-back:focus-visible { text-decoration: underline; }
+
+/* 手機：表單文字會換行變高，iframe 也要跟著加高 */
+@media (max-width: 480px) {
+  .newsletter-form iframe { height: 620px; }
+}
