@@ -1,0 +1,93 @@
+/* countdown-2026.html：版面沿用 links.css，表單與列表沿用 newsletter.css，這裡只補提問卡與七週列表 */
+
+/* ── 第一題 ── */
+.countdown-question {
+  padding: 1.6rem 1.2rem;
+  background: var(--ink);
+  border-radius: 14px;
+  color: var(--paper);
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.8;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+/* 列表說明文字裡的連結 */
+.newsletter-points a { color: var(--accent1); }
+
+/* ── 七週主題 ── */
+.countdown-weeks { list-style: none; }
+.countdown-weeks li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 0.7rem 0.2rem;
+  border-bottom: 1px solid var(--paper-mid);
+}
+.countdown-weeks li:last-child { border-bottom: 0; }
+.countdown-week-no {
+  flex-shrink: 0;
+  width: 2.2em;
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--accent1);
+  letter-spacing: 0.06em;
+}
+.countdown-week-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+.countdown-week-text strong {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-main);
+}
+.countdown-week-text span {
+  font-size: 0.85rem;
+  color: var(--text-mid);
+  line-height: 1.7;
+}
+
+/* ── 今日進度 ── */
+.countdown-question { text-wrap: balance; }
+.countdown-progress {
+  height: 6px;
+  margin-top: 1rem;
+  background: var(--paper-mid);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.countdown-progress-bar {
+  width: 2.0833%; /* 第 1 天；JS 會依日期更新 */
+  height: 100%;
+  background: var(--accent2);
+  border-radius: 999px;
+}
+.countdown-progress-text {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+/* 七週列表：走過的週淡掉，本週標出來 */
+.countdown-weeks li.is-done { opacity: 0.5; }
+.countdown-weeks li.is-current strong::after {
+  content: '本週';
+  margin-left: 0.5rem;
+  padding: 0.05rem 0.5rem;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--paper);
+  background: var(--accent1);
+  border-radius: 999px;
+  vertical-align: 0.1em;
+}
