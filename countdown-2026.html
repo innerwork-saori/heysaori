@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hey Saori · 48 天新年倒數提問</title>
+  <meta name="description" content="再 48 天，2026 就要結束了。從 11 月 15 日到 1 月 1 日，每天一個問題，陪你回顧這一年、想清楚下一年。訂閱電子報，每週日收到當週的提問。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="shortcut icon" href="/favicon.ico?v=1" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/saori-base.css">
+<link rel="stylesheet" href="css/links.css">
+<link rel="stylesheet" href="css/newsletter.css?v=4">
+<link rel="stylesheet" href="css/countdown-2026.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JZJ4RQTVK1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JZJ4RQTVK1');
+</script>
+</head>
+<body>
+
+<!-- ══════════ PROFILE ══════════ -->
+<header class="profile">
+  <div class="profile-bg"></div>
+  <div class="profile-inner">
+    <img class="profile-avatar" src="https://heysaori.com/wp-content/uploads/2025/12/photo_2025-12-07_21-22-15.webp" alt="Saori 謝孟娟" width="112" height="112">
+    <h1 class="profile-name">48 Days to 2027</h1>
+    <div class="profile-role">48 天新年倒數提問</div>
+    <p class="profile-bio">
+      <span id="countdownIntro">再 <span id="countdownDaysLeft">48</span> 天，2026 就要結束了。</span><br>
+      你有沒有好好問過自己：這一年，到底是怎麼過的？<br>
+      從 11 月 15 日到 1 月 1 日，每天一個問題，<br>
+      不用很久，也不用很正式。
+    </p>
+  </div>
+</header>
+
+
+<!-- ══════════ COUNTDOWN ══════════ -->
+<!-- 提問與週主題的來源是「48 天新年倒數提問日曆」試算表，改題目時兩邊要一起改 -->
+<main class="links">
+
+  <section class="link-group">
+    <!-- 今日提問與進度由 js/countdown-2026.js 依日期更新；下面是第一天的內容，JS 沒跑時也看得到 -->
+    <h2 class="group-label">Today's Question <span id="countdownTodayLabel">W1 回顧</span></h2>
+    <blockquote class="countdown-question" id="countdownQuestion">如果把今年寫成一本書，書名會是什麼？</blockquote>
+    <div class="countdown-progress" role="progressbar" aria-label="倒數進度" aria-valuemin="0" aria-valuemax="48" aria-valuenow="1">
+      <div class="countdown-progress-bar" id="countdownBar"></div>
+    </div>
+    <p class="countdown-progress-text" id="countdownProgressText">第 1 天 / 共 48 天・再 48 天就是 2027</p>
+  </section>
+
+  <section class="link-group">
+    <h2 class="group-label">How It Works <span>怎麼一起玩</span></h2>
+    <ul class="newsletter-points">
+      <li>
+        <strong>每天一個問題</strong>
+        <span>每天晚上在 <a href="https://www.instagram.com/socratescafetw" target="_blank" rel="noopener">IG 限動</a> 發一題，花幾分鐘想一想、寫下來就好。</span>
+      </li>
+      <li>
+        <strong>每週日早上一封信</strong>
+        <span>把當週 7 題一次寄給你，加上我自己對這個主題的經驗與想法。</span>
+      </li>
+      <li>
+        <strong>年底的「2027 人生探索手札」模板</strong>
+        <span>倒數結束時發佈，幫你把這 48 天的答案整理成新一年的方向。</span>
+      </li>
+    </ul>
+  </section>
+
+  <section class="link-group">
+    <h2 class="group-label">7 Weeks <span>七週，七個主題</span></h2>
+    <ol class="countdown-weeks">
+      <li data-week="1">
+        <span class="countdown-week-no">W1</span>
+        <span class="countdown-week-text">
+          <strong>回顧</strong>
+          <span>今年發生了什麼，我從中得到了什麼？</span>
+        </span>
+      </li>
+      <li data-week="2">
+        <span class="countdown-week-no">W2</span>
+        <span class="countdown-week-text">
+          <strong>放下</strong>
+          <span>有什麼可以不再帶進明年？</span>
+        </span>
+      </li>
+      <li data-week="3">
+        <span class="countdown-week-no">W3</span>
+        <span class="countdown-week-text">
+          <strong>價值</strong>
+          <span>我真正在乎的是什麼？</span>
+        </span>
+      </li>
+      <li data-week="4">
+        <span class="countdown-week-no">W4</span>
+        <span class="countdown-week-text">
+          <strong>工作</strong>
+          <span>職涯下一步要往哪走？</span>
+        </span>
+      </li>
+      <li data-week="5">
+        <span class="countdown-week-no">W5</span>
+        <span class="countdown-week-text">
+          <strong>能量</strong>
+          <span>誰與什麼在滋養我？</span>
+        </span>
+      </li>
+      <li data-week="6">
+        <span class="countdown-week-no">W6</span>
+        <span class="countdown-week-text">
+          <strong>想像</strong>
+          <span>我想把 2027 過成什麼樣子？</span>
+        </span>
+      </li>
+      <li data-week="7">
+        <span class="countdown-week-no">W7</span>
+        <span class="countdown-week-text">
+          <strong>行動</strong>
+          <span>怎麼把想法變成第一步？</span>
+        </span>
+      </li>
+    </ol>
+  </section>
+
+  <section class="link-group">
+    <h2 class="group-label">Join <span>想一起的話，輸入 Email 馬上訂閱</span></h2>
+    <div class="newsletter-form" id="newsletter-form">
+      <!-- BREVO FORM：Brevo 的 iframe embed；換表單時只要換這段 iframe -->
+      <iframe title="訂閱電子報表單" width="540" height="305" src="https://a58d95e4.sibforms.com/v2/serve/MUIFAFZO9GSe2xWX7PoQSfrrdxrAJUfsi--RJpEUup8MnlCaVe-2t37z4OfNmcimGpxRkU4Y179XIRzjINEQTIggtU3wK0LwvwpcnWhGyAHUR2AE-_SzJdU0JnL6QqnxbDjFOOEZTs1OP_SSb1nyjkWg7dbg4k6vHHGvMH3tEMvtGKggsqaQxezJq9fiDyUArn_0g3jV-oEN4mFf" frameborder="0" scrolling="auto" allowfullscreen></iframe>
+    </div>
+    <p class="newsletter-note">中途加入也沒關係，從這週的題目開始就好。<br>想聊聊可以直接回信，每一封我都會讀。</p>
+  </section>
+
+  <a class="newsletter-back" href="links.html">← 回到所有連結</a>
+
+</main>
+
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="links-footer">
+  <a href="https://heysaori.com">© Saori · 謝孟娟 · heysaori.com</a>
+</footer>
+
+<script src="js/countdown-2026.js"></script>
+</body>
+</html>

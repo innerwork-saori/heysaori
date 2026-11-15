@@ -27,3 +27,6 @@ ehthumbs.db
 # Node (if ever added)
 node_modules/
 npm-debug.log*
+
+# Social media assets (local only, not published)
+images/social/countdown-2026/
